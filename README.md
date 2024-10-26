@@ -1,5 +1,5 @@
-# TP6_GRUPO_4
-- [TP6\_GRUPO\_4](#tp6_grupo_4)
+# TPINT_GRUPO_4_LAB4
+- [TPINT\_GRUPO\_4\_LAB4](#tpint_grupo_4_lab4)
 	- [Configuración y Dependencias](#configuración-y-dependencias)
 		- [Java Development Kit](#java-development-kit)
 		- [Apache Tomcat](#apache-tomcat)
@@ -86,4 +86,4 @@ db.pass=tupassword
 # Nombre de la base de datos
 db.name=SegurosGroup
 ```
-# TPINT_GRUPO_4_LAB4
+
