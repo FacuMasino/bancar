@@ -2,7 +2,6 @@
      De esta forma podemos importar en todas las demás
      los mismos css y scripts en el <head>
 -->
-
 <%@tag description="Master page" pageEncoding="UTF-8" %>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@attribute name="title" required="true"%>
@@ -12,6 +11,7 @@
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.13/dist/full.min.css" 
           rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/theme.css" />
     <title>TP Integrador Lab4 - ${title}</title>
   </head>
   <body class="flex flex-col h-screen">

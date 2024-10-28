@@ -1,0 +1,41 @@
+:root {
+  /* Primary (Red) */
+  --p: 0.5771 0.2152 27.33;        /* bg-red-600 */
+  --pc: 1 0 0;                     /* white text for contrast */
+  
+  /* Red variations */
+  --p-dark: 0.5171 0.2152 27.33;   /* bg-red-700 */
+  --p-light: 0.6371 0.2152 27.33;  /* bg-red-500 */
+  
+  /* Secondary (Orange) */
+  --s: 0.6331 0.1705 38.37;        /* bg-orange-600 */
+  --sc: 1 0 0;                     /* white text for contrast */
+  
+  /* Accent (Blue) */
+  --a: 0.5561 0.1901 261.12;       /* bg-blue-600 */
+  --ac: 1 0 0;                     /* white text for contrast */
+  
+  /* Neutral (Dark Gray) */
+  --n: 0.3349 0.0086 261.12;       /* bg-gray-800 */
+  --nc: 1 0 0;                     /* white text for contrast */
+  
+  /* Base colors */
+  --b1: 0.9571 0.0086 261.12;      /* bg-gray-100 */
+  --b2: 0.9171 0.0086 261.12;      /* slightly darker */
+  --b3: 0.8771 0.0086 261.12;      /* even darker */
+  --bc: 0.3349 0.0086 261.12;      /* base content - dark gray */
+  
+  /* Status colors */
+  --su: 0.6205 0.1573 142.50;      /* bg-green-600 */
+  --suc: 1 0 0;                    /* white text for contrast */
+  
+  --wa: 0.8005 0.1562 83.87;       /* bg-yellow-500 */
+  --wac: 0.1749 0.0086 261.12;     /* dark text for contrast */
+  
+  --in: 0.6171 0.1901 261.12;      /* bg-blue-500 */
+  --inc: 1 0 0;                    /* white text for contrast */
+  
+  /* Error (using your primary red) */
+  --er: 0.5771 0.2152 27.33;       /* bg-red-600 */
+  --erc: 1 0 0;                    /* white text for contrast */
+}
