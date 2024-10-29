@@ -54,7 +54,55 @@
           </div>
           <p>* Tu contraseña debe contener al menos 1 mayúscula, 1 minúscula y 1 número</p>
         </div>
-        <!-- Agregar resto de inputs -->
+         <!-- DNI -->
+        <div class="flex flex-col w-full">
+            <div class="form-control w-full">
+              <label for="clientDNI" class="label">
+                <span class="label-text font-bold">DNI</span> 
+              </label>
+            </div>
+            <input type="number" name="clientDNI" placeholder="Tu DNI (sin espacios ni puntos)" class="input input-bordered w-full" />
+        </div>
+            <!-- DOMICILIO -->
+        <div class="flex flex-col w-full">
+            <div class="form-control w-full">
+              <label for="clientAdress" class="label">
+                <span class="label-text font-bold">Domicilio</span> 
+              </label>
+            </div>
+            <input type="email" name="clientAdress" placeholder="Tu Domicilio (Calle y número)" class="input input-bordered w-full" />
+        </div>
+           <!-- Provincia -->
+        <div class="flex flex-col w-full gap-2">
+          <div class="flex gap-4">
+            <div class="flex flex-col w-full">
+              <div class="form-control w-full">
+                <label for="clientProvince" class="label">
+                  <span class="label-text font-bold">Provincia</span> 
+                </label>
+              </div>
+              <input type="text" name="clientProvince" placeholder="Provincia" class="input input-bordered w-full" />
+            </div>
+               <!-- Localidad -->
+            <div class="flex flex-col w-full">
+              <div class="form-control w-full">
+                <label for="clientPass2" class="label">
+                  <span class="label-text font-bold">Localidad</span>
+                </label>
+              </div>
+              <input type="text" name="clientLocality" placeholder="Localidad" class="input input-bordered w-full" />
+            </div>
+          </div>
+             </div>
+               <!-- Telefono -->
+        <div class="flex flex-col w-full">
+            <div class="form-control w-full">
+              <label for="clientTelephone" class="label">
+                <span class="label-text font-bold">Telefono</span> 
+              </label>
+            </div>
+            <input type="number" name="clientTelephone" placeholder="Tu teléfono (sin guiones)" class="input input-bordered w-full" />
+        </div>
         <!-- Divisor -->
         <div class="divider m-0"></div>
         <div class="flex justify-end w-full">
