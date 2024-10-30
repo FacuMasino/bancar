@@ -1,0 +1,1 @@
+CREATE DATABASE bancar_db;
