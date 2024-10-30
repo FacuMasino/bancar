@@ -17,7 +17,7 @@
         <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
 	    <title>TP Integrador Lab4 - ${title}</title>
   	</head>
-	<body class="flex flex-col h-screen bg-slate-100">
+	<body class="flex flex-col min-h-screen bg-slate-100">
 	  <%-- Se utiliza el Navbar por defecto excepto que se indique
 	  	El atributo customNavbar=true, entonces la JSP page tendrá
 	  	que usar un NavBar propio --%>
