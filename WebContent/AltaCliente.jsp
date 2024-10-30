@@ -70,7 +70,7 @@
               <span class="label-text font-bold">Domicilio</span> 
             </label>
           </div>
-          <input type="email" name="clientAdress" placeholder="Tu Domicilio (Calle y número)" class="input input-bordered w-full" />
+          <input type="text" name="clientAdress" placeholder=" Domicilio del cliente (Calle y número)" class="input input-bordered w-full" />
       </div>
          <!-- Provincia -->
       <div class="flex flex-col w-full gap-2">
@@ -81,7 +81,11 @@
                 <span class="label-text font-bold">Provincia</span> 
               </label>
             </div>
-            <input type="text" name="clientProvince" placeholder="Provincia" class="input input-bordered w-full" />
+           <select class="select select-bordered w-full max-w-xs">
+  			<option disabled selected></option>
+ 			 <option>Buenos Aires</option>
+ 			 <option>Capital Federal</option>
+			</select>
           </div>
              <!-- Localidad -->
           <div class="flex flex-col w-full">
@@ -90,7 +94,11 @@
                 <span class="label-text font-bold">Localidad</span>
               </label>
             </div>
-            <input type="text" name="clientLocality" placeholder="Localidad" class="input input-bordered w-full" />
+            <select class="select select-bordered w-full max-w-xs">
+  			<option disabled selected></option>
+ 			 <option>Tigre</option>
+ 			 <option>San Fernando</option>
+			</select>
           </div>
         </div>
            </div>
@@ -100,8 +108,8 @@
             <label for="clientTelephone" class="label">
               <span class="label-text font-bold">Telefono</span> 
             </label>
-          </div>
-          <input type="number" name="clientPhone" placeholder="Teléfono de contacto (sin guiones)" class="input input-bordered w-full" />
+          </div> 
+          <input type="tel" name="clientPhone" placeholder="Teléfono de contacto"   required pattern="[0-9]{10}" class="input input-bordered w-full" />
       </div>
       <!-- Divisor -->
       <div class="divider m-0"></div>
