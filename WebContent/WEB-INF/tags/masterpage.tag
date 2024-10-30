@@ -25,12 +25,12 @@
 			Boolean showCustomNavbar = (customNavbar != null) ? customNavbar : Boolean.FALSE;
 			if (!showCustomNavbar) { 
 		%>
-			<jsp:include page="/Componentes/Navbar.jsp" />
+			<jsp:include page="/Components/Navbar.jsp" />
 		<% 
 			}
 		%>
 		<jsp:doBody />
-		<%--@include page="/Componentes/Footer.jsp" --%>
+		<%--@include page="/Components/Footer.jsp" --%>
     <script>
       // Inicializa Lucide y reemplaza los <i data-lucide="...">
       lucide.createIcons();

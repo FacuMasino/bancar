@@ -1,6 +1,6 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags"%>
 <t:masterpage title="Alta de cliente" customNavbar="true">
-  <jsp:include page="/Componentes/NavbarAdmin.jsp" />
+  <jsp:include page="/Components/NavbarAdmin.jsp" />
   <div class="container md:max-w-[800px] mx-auto my-6 px-2">
     <p class="font-bold text-lg mb-3">Alta de cliente</p>
     <form method="post" action="#" class="bg-white rounded rounded-lg flex flex-col gap-4 p-8 w-full">
