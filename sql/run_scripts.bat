@@ -1,6 +1,25 @@
 @echo off
 setlocal enabledelayedexpansion
 
+REM Directorio base de instalación de MySQL
+set "mysqlDir=C:\Program Files\MySQL"
+
+REM Variable para guardar la ruta de MySQL encontrada
+set "mysqlBin="
+
+REM Busca carpetas que empiecen con "MySQL Server" y luego obtiene la más reciente
+for /d %%D in ("%mysqlDir%\MySQL Server *") do (
+    set "mysqlBin=%%D\bin"
+)
+
+REM Si se encontró una carpeta, agregarla al PATH
+if defined mysqlBin (
+    echo Ruta de MySQL encontrada: %mysqlBin%
+    set "PATH=%mysqlBin%;%PATH%"
+) else (
+    echo No se encontró ninguna instalación de MySQL.
+)
+
 :menu
 echo Choose database host:
 echo.
