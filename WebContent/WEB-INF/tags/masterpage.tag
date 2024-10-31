@@ -1,7 +1,7 @@
-<!-- Esta sería la página base del proyecto
+<%-- Esta sería la página base del proyecto
      De esta forma podemos importar en todas las demás
      los mismos css y scripts en el <head>
--->
+--%>
 <%@tag description="Master page" pageEncoding="UTF-8" %>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@attribute name="title" required="true"%>
@@ -15,7 +15,8 @@
 	    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/theme.css" type="text/css"/>
 	    <style type="text/tailwindcss"><%@include file="/css/twstyles.css"%></style>
         <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
-	    <title>TP Integrador Lab4 - ${title}</title>
+        <script src="${pageContext.request.contextPath}/js/main.js"></script>
+	    <title>BancAr - ${title}</title>
   	</head>
 	<body class="flex flex-col min-h-screen bg-slate-100">
 	  <%-- Se utiliza el Navbar por defecto excepto que se indique
