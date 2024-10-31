@@ -21,7 +21,7 @@ CREATE TABLE
         CityName VARCHAR(50) NOT NULL,
         ZipCode VARCHAR(50) NULL,
         ProvinceId INT NOT NULL,
-        CONSTRAINT FK_Province foreign key (ProvinceId) REFERENCES Provinces (ProvinceId),
+        CONSTRAINT FK_Province FOREIGN KEY (ProvinceId) REFERENCES Provinces (ProvinceId),
         CONSTRAINT UC_City UNIQUE (CityName, ProvinceId)
     );
 
@@ -74,7 +74,53 @@ CREATE TABLE
         NationalityId INT NOT NULL,
         AddressId INT NOT NULL,
         UserId INT,
-        CONSTRAINT FK_Nationality foreign key (NationalityId) REFERENCES Countries (CountryId),
+        CONSTRAINT FK_Nationality FOREIGN KEY (NationalityId) REFERENCES Countries (CountryId),
         CONSTRAINT FK_Address FOREIGN KEY (AddressId) REFERENCES Addresses (AddressId),
         CONSTRAINT FK_User_Client FOREIGN KEY (UserId) REFERENCES Users (UserId)
+    );
+
+CREATE TABLE
+    Accounts (
+        AccountId INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+        IsActive BIT DEFAULT 1 NOT NULL,
+        Cbu VARCHAR(50) UNIQUE NOT NULL,
+        CreationDate DATE NOT NULL,
+        Balance DECIMAL NOT NULL,
+        AccountType VARCHAR(50),
+        ClientId INT NOT NULL,
+        CONSTRAINT FK_Client FOREIGN KEY (ClientId) REFERENCES Clients (ClientId)
+    );
+
+CREATE TABLE
+    Installments (
+        InstallmentId INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+        InstallmentNumber INT NOT NULL,
+        Amount DECIMAL NOT NULL,
+        PaymentDate DATE NOT NULL
+    );
+
+CREATE TABLE
+    Loans (
+        LoanId INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+        CreationDate DATE NOT NULL,
+        MonthsLimit INT NOT NULL
+    );
+
+CREATE TABLE
+    InstallmentsToLoans (
+        InstallmentId INT NOT NULL,
+        LoanId INT NOT NULL,
+        CONSTRAINT FK_Installment FOREIGN KEY (InstallmentId) REFERENCES Installments (InstallmentId),
+        CONSTRAINT FK_Loan FOREIGN KEY (LoanId) REFERENCES Loans (LoanId),
+        PRIMARY KEY (InstallmentId, LoanId)
+    );
+
+CREATE TABLE
+    Transfers (
+        TransferId INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+        SenderCbu VARCHAR(50) NOT NULL,
+        RecipientCbu VARCHAR(50) NOT NULL,
+        CreationDate DATE NOT NULL,
+        Details VARCHAR(500) NOT NULL,
+        Amount DECIMAL NOT NULL
     );

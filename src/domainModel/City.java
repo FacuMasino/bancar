@@ -2,9 +2,9 @@ package domainModel;
 
 public class City
 {
-	int id;
-	String name;
-	String zipCode;
+	private int id;
+	private String name;
+	private String zipCode;
 
 	public City()
 	{

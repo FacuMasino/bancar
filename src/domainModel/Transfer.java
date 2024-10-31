@@ -5,6 +5,7 @@ import java.sql.Date;
 
 public class Transfer
 {
+	private int transferId;
 	private String senderCbu;
     private String recipientCbu;
     private Date creationDate;
@@ -64,5 +65,15 @@ public class Transfer
 	public void setAmount(BigDecimal amount)
 	{
 		this.amount = amount;
+	}
+	
+	public int getTransferId()
+	{
+		return transferId;
+	}
+
+	public void setTransferId(int transferId)
+	{
+		this.transferId = transferId;
 	}
 }

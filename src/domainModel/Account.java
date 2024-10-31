@@ -5,13 +5,13 @@ import java.sql.Date;
 
 public class Account
 {
-	int id;
-	boolean isActive;
-	String cbu;
-	Date creationDate;
-	BigDecimal balance;
-	String type;
-	Client client;
+	private int id;
+	private boolean isActive;
+	private String cbu;
+	private Date creationDate;
+	private BigDecimal balance;
+	private String type;
+	private Client client;
 
 	public Account()
 	{

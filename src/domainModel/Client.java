@@ -4,18 +4,18 @@ import java.sql.Date;
 
 public class Client extends User
 {
-    int id;
-    boolean isActive;
-    String dni;
-    String cuil;
-    String firstName;
-    String lastName;
-    String sex;
-    String email;
-    String phone;
-    Date birthDate;
-    Country nationality;
-    Address address;
+	private int id;
+	private boolean isActive;
+	private String dni;
+	private String cuil;
+	private String firstName;
+	private String lastName;
+	private String sex;
+	private String email;
+	private String phone;
+	private Date birthDate;
+	private Country nationality;
+	private Address address;
 
 	public Client()
 	{

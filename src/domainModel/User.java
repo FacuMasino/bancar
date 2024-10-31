@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 public class User
 {
-	int id;
-	boolean isActive;
-	String username;
-	String password;
-	ArrayList<Role> roles;
+	private int id;
+	private boolean isActive;
+	private String username;
+	private String password;
+	private ArrayList<Role> roles;
 
 	public User()
 	{
