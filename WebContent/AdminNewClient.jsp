@@ -81,7 +81,7 @@
                 <span class="label-text font-bold">Provincia</span> 
               </label>
             </div>
-           <select class="select select-bordered w-full max-w-xs">
+           <select class ="bg-white select select-bordered w-full max-w-xs">
   			<option disabled selected></option>
  			 <option>Buenos Aires</option>
  			 <option>Capital Federal</option>
@@ -94,7 +94,7 @@
                 <span class="label-text font-bold">Localidad</span>
               </label>
             </div>
-            <select class="select select-bordered w-full max-w-xs">
+            <select class="bg-white select select-bordered w-full max-w-xs">
   			<option disabled selected></option>
  			 <option>Tigre</option>
  			 <option>San Fernando</option>
