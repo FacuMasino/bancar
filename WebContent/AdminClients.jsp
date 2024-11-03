@@ -14,7 +14,7 @@
           </a>
         </div>
       </div>
-      <div class="flex flex-col bg-white p-2.5 rounded-xl">
+      <div class="flex flex-col bg-white p-2.5 rounded-xl drop-shadow-sm">
         <table class="table">
           <!-- head -->
           <thead>

@@ -9,22 +9,22 @@
 <div class="drawer lg:drawer-open">
   <input id="client-drawer" type="checkbox" class="drawer-toggle" />
   <div class="drawer-content">
-    <div class="navbar bg-white drop-shadow-sm">
+    <div class="navbar bg-red-600 drop-shadow">
       <div class="container-sm justify-items-end w-full">
         <div class="flex-1">
-          <label for="client-drawer" class="btn btn-ghost drawer-button lg:hidden">
+          <label for="client-drawer" class="btn btn-ghost text-white drawer-button lg:hidden">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
               class="inline-block h-5 w-5 stroke-current">  
               <path stroke-linecap="round" stroke-linejoin="round"
                 stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
             </svg>
           </label> 
-          <span class="btn btn-ghost text-xl text-red-600 gap-0 font-bold lg:hidden">
+          <span class="btn btn-ghost text-xl text-white gap-0 font-bold lg:hidden">
             ADMINISTRACIÓN
           </span>
         </div>
         <div class="flex-none">
-          <ul class="menu menu-horizontal px-1 gap-3">
+          <ul class="menu text-white menu-horizontal px-1 gap-3">
             <li>
               <a href="#" class="btn btn-ghost">
                 <i data-lucide="log-out"></i>
