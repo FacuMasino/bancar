@@ -48,6 +48,10 @@ Todas las contribuciones que utilicen las siguientes convenciones serán bienven
 
 - Usar llaves en bloques if de una sola línea.
 
+## Base de datos
+
+- Debido a limitaciones en los servidores gratuitos para desplegar el proyecto, no se permite usar Triggers.
+
 ## Extensiones
 
 ### Prettier SQL VSCode

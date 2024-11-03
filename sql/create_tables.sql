@@ -80,14 +80,21 @@ CREATE TABLE
     );
 
 CREATE TABLE
+    AccountTypes (
+        AccountTypeId INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+        AccountTypeName VARCHAR(50) UNIQUE NOT NULL
+    );
+
+CREATE TABLE
     Accounts (
         AccountId INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
         IsActive BIT DEFAULT 1 NOT NULL,
         Cbu VARCHAR(50) UNIQUE NOT NULL,
-        CreationDate DATE NOT NULL,
-        Balance DECIMAL NOT NULL,
-        AccountType VARCHAR(50),
+        CreationDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+        Balance DECIMAL(15, 2) NOT NULL,
+        AccountTypeId INT NOT NULL,
         ClientId INT NOT NULL,
+        CONSTRAINT FK_AccountType FOREIGN KEY (AccountTypeId) REFERENCES AccountTypes (AccountTypeId),
         CONSTRAINT FK_Client FOREIGN KEY (ClientId) REFERENCES Clients (ClientId)
     );
 
@@ -95,14 +102,14 @@ CREATE TABLE
     Installments (
         InstallmentId INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
         InstallmentNumber INT NOT NULL,
-        Amount DECIMAL NOT NULL,
+        Amount DECIMAL(15, 2) NOT NULL,
         PaymentDate DATE NOT NULL
     );
 
 CREATE TABLE
     Loans (
         LoanId INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-        CreationDate DATE NOT NULL,
+        CreationDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
         MonthsLimit INT NOT NULL
     );
 
@@ -120,7 +127,7 @@ CREATE TABLE
         TransferId INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
         SenderCbu VARCHAR(50) NOT NULL,
         RecipientCbu VARCHAR(50) NOT NULL,
-        CreationDate DATE NOT NULL,
+        CreationDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
         Details VARCHAR(500) NOT NULL,
-        Amount DECIMAL NOT NULL
+        Amount DECIMAL(15, 2) NOT NULL
     );

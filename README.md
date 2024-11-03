@@ -14,6 +14,7 @@ Cuenta con una plataforma para que los clientes puedan realizar operaciones y lo
 		- [Tipos de movimientos disponibles](#tipos-de-movimientos-disponibles)
 	- [UX/UI](#uxui)
 	- [Configuración y compilación](#configuración-y-compilación)
+		- [Base de datos MySQL](#base-de-datos-mysql)
 		- [Java Development Kit](#java-development-kit)
 		- [Apache Tomcat](#apache-tomcat)
 		- [MySQL Connector y .classpath](#mysql-connector-y-classpath)
@@ -70,6 +71,11 @@ Los prototipos de diseño se pueden [visualizar en Figma](https://www.figma.com/
 > [!WARNING]
 > &nbsp;
 > Es necesario que sigas los pasos indicados en [MySQL Connector y .classpath](#jdbc) y en [Propiedades de conexión](#config) para poder compilar el proyecto.
+
+### Base de datos MySQL
+
+&nbsp;
+El proyecto utiliza una base de datos MySQL. Para generarla en un servidor local, ejecutar [**run_scripts.bat**](./sql/run_scripts.bat) en Windows o [**run_scripts.sh**](./sql/run_scripts.sh) en MacOs.
 
 ### Java Development Kit
 
