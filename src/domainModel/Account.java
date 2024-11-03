@@ -10,7 +10,7 @@ public class Account
 	private String cbu;
 	private Date creationDate;
 	private BigDecimal balance;
-	private String type;
+	private AccountType accountType;
 	private Client client;
 
 	public Account()
@@ -68,14 +68,14 @@ public class Account
 		this.balance = balance;
 	}
 
-	public String getType()
+	public AccountType getAccountType()
 	{
-		return type;
+		return accountType;
 	}
 
-	public void setType(String type)
+	public void setAccountType(AccountType accountType)
 	{
-		this.type = type;
+		this.accountType = accountType;
 	}
 
 	public Client getClient()
