@@ -21,7 +21,7 @@
 						<div class="flex">
 							<div class="flex flex-col justify-between w-full">
 								<p class="text-slate-600">Cuota a pagar</p>
-								<p class="text-black">$5000</p>
+								<p class="text-black text-xl font-semibold">$5.000</p>
 							</div>
 							<div class="flex flex-col justify-between w-full">
 								<p class="text-slate-600">Cuota a pagar</p>
@@ -43,8 +43,8 @@
 					</div>
 				</div>
 				<!-- 3ER FLEX FLEX-COL -->
-				<div class="flex flex-col gap-6 w-full">
-					<p class="text-xl text-black text-semibold gap-6">Selecciona una cuenta debito</p>
+				<div class="flex flex-col gap-6 ">
+					<p class="text-xl text-black text-semibold gap-6 w-full" >Selecciona una cuenta debito</p>
 					<div class="flex flex-col gap-6 p-8 bg-white w-full">
 						<select class="select select-bordered w-full max-w-xs">
 							<option disabled selected></option>
