@@ -9,6 +9,7 @@
 <!DOCTYPE html>
 <html data-theme="light">
 	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
 	    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.13/dist/full.min.css" 
 	          rel="stylesheet" type="text/css" />
 	    <script src="https://cdn.tailwindcss.com"></script>
