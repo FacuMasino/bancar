@@ -45,6 +45,34 @@ VALUES
     ('Cuenta corriente');
 
 INSERT INTO
+    Loantypes (LoanTypeName, LoanTypeDescription)
+VALUES
+    (
+        'Préstamo personal',
+        'Préstamo para cubrir gastos personales, como viajes, mejoras en el hogar o eventos importantes sin necesidad de justificar el uso del dinero.'
+    ),
+    (
+        'Préstamo hipotecario',
+        'Préstamo para comprar, construir o remodelar una vivienda. Plazos de hasta 30 años, con tasas de interés fijas o variables y garantía hipotecaria de la vivienda.'
+    ),
+    (
+        'Préstamo automotriz',
+        'Financiamiento de vehículos nuevos o usados. Plazos de hasta 5 años con tasa fija o variable, quedando el vehículo como garantía.'
+    ),
+    (
+        'Préstamo educativo',
+        'Financiamiento de educación universitaria, postgrados, cursos o programas de formación. Tasas de interés bajas y periodos de gracia.'
+    ),
+    (
+        'Préstamo para PYME',
+        'Préstamo para empresas o emprendedores con gastos operativos, capital de trabajo, expansión o adquisición de activos.'
+    ),
+    (
+        'Préstamo para consumo',
+        'Financiamiento de bienes y servicios a corto plazo con altas tasas de interés.'
+    );
+
+INSERT INTO
     LoanStatuses (LoanStatusName)
 VALUES
     ('En revisión'),
