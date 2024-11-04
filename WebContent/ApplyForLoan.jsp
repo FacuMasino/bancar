@@ -59,6 +59,12 @@
           <span class="font-semibold">$ <span id="finalQuota">-</span></span>
         </div>
       </div>
+      <h1 class="font-bold text-lg">Motivo del préstamo</h1>
+      <select class="select select-bordered w-full bg-white drop-shadow">
+        <option selected>Selecciona un motivo</option>
+        <option>Electrodomésticos del hogar</option>
+        <option>Hipotecario</option>
+      </select>
       <h1 class="font-bold text-lg">Dónde vas a recibir el dinero?</h1>
       <select class="select select-bordered w-full bg-white drop-shadow">
         <option selected>Selecciona una cuenta</option>
