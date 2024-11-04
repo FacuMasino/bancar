@@ -8,12 +8,12 @@
     <div class="flex-none">
       <ul class="menu menu-horizontal px-1 gap-3">
         <li>
-          <a href="#" class="btn btn-tertiary bg-base-200">
+          <a href="Home.jsp" class="btn btn-tertiary bg-base-200">
             Quiero ser cliente
           </a>
         </li>
         <li>
-          <a href="Cuenta.jsp" class="btn btn-primary">Home Banking</a>
+          <a href="Account.jsp" class="btn btn-primary">Home Banking</a>
         </li>
       </ul>
     </div>
