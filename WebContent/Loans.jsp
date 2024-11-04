@@ -1,23 +1,23 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags/"%>
-<t:masterpage title="Mis PrÃ©stamos" customNavbar="true">
+<t:masterpage title="Mis Préstamos" customNavbar="true">
   <t:clientwrapper activeMenuItem="loansMenu">
     <div class="p-4">
-      <!-- PrÃ©stamos otorgados -->
+      <!-- Préstamos otorgados -->
       <div class="mb-8">
         <div class="flex justify-between items-center mb-6">
           <h2 class="text-xl font-semibold text-gray-700">
-            Mis prÃ©stamos
+            Mis préstamos
           </h2>
           <button class="btn btn-primary">
-            Solicitar prÃ©stamo
+            Solicitar préstamo
           </button>
         </div>
         <div class="divide-y divide-gray-300 rounded-lg shadow p-6 bg-white">
 
-          <!-- PrÃ©stamo otorgado 1 (reemplazar por for) -->
+          <!-- Préstamo otorgado 1 (reemplazar por for) -->
           <div class="flex justify-between items-center bg-white p-4">
             <div>
-              <h3 class="text-lg font-medium text-gray-800">PrÃ©stamo personal</h3>
+              <h3 class="text-lg font-medium text-gray-800">Préstamo personal</h3>
               <p class="text-gray-600">Saldo otorgado: $150,000</p>
               <p class="text-gray-600">Cuotas pendientes: 23 de 48</p>
             </div>
@@ -31,10 +31,10 @@
             </div>
           </div>
 
-          <!-- PrÃ©stamo otorgado 2 (reemplazar por for) -->
+          <!-- Préstamo otorgado 2 (reemplazar por for) -->
           <div class="flex justify-between items-center bg-white p-4">
             <div>
-              <h3 class="text-lg font-medium text-gray-800">PrÃ©stamo hipotecario</h3>
+              <h3 class="text-lg font-medium text-gray-800">Préstamo hipotecario</h3>
               <p class="text-gray-600">Saldo otorgado: $1,000,000</p>
               <p class="text-gray-600">Cuotas pendientes: 15 de 30</p>
             </div>
@@ -51,37 +51,37 @@
         </div>
       </div>
 
-      <!-- PrÃ©stamos pendientes de aprobaciÃ³n -->
+      <!-- Préstamos pendientes de aprobación -->
       <div>
         <h2 class="text-xl font-semibold text-gray-700 mb-6">
-          Pendientes de aprobaciÃ³n
+          Pendientes de aprobación
         </h2>
         <div class="divide-y divide-gray-300 rounded-lg shadow p-6 bg-white">
 
-          <!-- PrÃ©stamo pendiente 1 (reemplazar por for) -->
+          <!-- Préstamo pendiente 1 (reemplazar por for) -->
           <div class="flex justify-between items-center bg-white p-4">
             <div>
-              <h3 class="text-lg font-medium text-gray-800">PrÃ©stamo automotriz</h3>
+              <h3 class="text-lg font-medium text-gray-800">Préstamo automotriz</h3>
               <p class="text-gray-600">Monto solicitado: $6,000,000.00</p>
               <p class="text-gray-600">Fecha de solicitud: 01/10/24</p>
             </div>
             <div class="text-right flex items-center">
               <span class="px-4 py-2 bg-yellow-200 text-yellow-700 font-medium rounded-lg">
-                En revisiÃ³n
+                En revisión
               </span>
             </div>
           </div>
 
-          <!-- PrÃ©stamo pendiente 2 (reemplazar por for) -->
+          <!-- Préstamo pendiente 2 (reemplazar por for) -->
           <div class="flex justify-between items-center bg-white p-4">
             <div>
-              <h3 class="text-lg font-medium text-gray-800">PrÃ©stamo educativo</h3>
+              <h3 class="text-lg font-medium text-gray-800">Préstamo educativo</h3>
               <p class="text-gray-600">Monto solicitado: $500,000.00</p>
               <p class="text-gray-600">Fecha de solicitud: 10/09/24</p>
             </div>
             <div class="text-right flex items-center">
               <span class="px-4 py-2 bg-yellow-200 text-yellow-700 font-medium rounded-lg">
-                En revisiÃ³n
+                En revisión
               </span>
             </div>
           </div>

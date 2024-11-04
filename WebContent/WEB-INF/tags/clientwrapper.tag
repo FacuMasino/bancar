@@ -26,7 +26,7 @@
         <div class="flex-none">
           <ul class="menu menu-horizontal px-1 gap-3">
             <li>
-              <a id="myProfileMenu" href="MyProfile.jsp" class="p-0">
+              <a id="myProfileMenu" href="Profile.jsp" class="p-0">
                 <button class="btn btn-ghost">
                   <i data-lucide="user"></i>
                   Mi Perfil
