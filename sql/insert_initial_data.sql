@@ -43,3 +43,10 @@ INSERT INTO
 VALUES
     ('Caja de ahorro'),
     ('Cuenta corriente');
+
+INSERT INTO
+    LoanStatuses (LoanStatusName)
+VALUES
+    ('En revisión'),
+    ('Aprobado'),
+    ('Denegado');
