@@ -2,26 +2,25 @@
 <t:masterpage title="Mis Préstamos" customNavbar="true">
   <t:clientwrapper activeMenuItem="loansMenu">
     <div class="p-4">
-      <!-- Sección: Mis Préstamos -->
+      <!-- Préstamos otorgados -->
       <div class="mb-8">
         <div class="flex justify-between items-center mb-6">
-          <h2 class="text-xl font-semibold text-gray-700">Mis Préstamos</h2>
+          <h2 class="text-xl font-semibold text-gray-700">
+            Mis préstamos
+          </h2>
           <button class="btn btn-primary">
-            Solicitar Préstamo
+            Solicitar préstamo
           </button>
         </div>
-
-        <!-- Préstamos Activos -->
         <div class="divide-y divide-gray-300">
-          <!-- Préstamo Individual -->
+
+          <!-- Préstamo otorgado 1 (reemplazar por for) -->
           <div class="flex justify-between items-center bg-gray-50 p-4">
-            <!-- Columna Izquierda -->
             <div>
-              <h3 class="text-lg font-medium text-gray-800">Préstamo Personal</h3>
+              <h3 class="text-lg font-medium text-gray-800">Préstamo personal</h3>
               <p class="text-gray-600">Saldo otorgado: $150,000</p>
               <p class="text-gray-600">Cuotas pendientes: 23 de 48</p>
             </div>
-            <!-- Columna Derecha -->
             <div class="flex flex-col items-end">
               <p class="text-gray-600 font-medium">$5000 / mes</p>
               <p class="text-gray-600">Vencimiento: 23/11/24</p>
@@ -32,10 +31,10 @@
             </div>
           </div>
 
-          <!-- Otro Préstamo Individual -->
+          <!-- Préstamo otorgado 2 (reemplazar por for) -->
           <div class="flex justify-between items-center bg-gray-50 p-4">
             <div>
-              <h3 class="text-lg font-medium text-gray-800">Préstamo Hipotecario</h3>
+              <h3 class="text-lg font-medium text-gray-800">Préstamo hipotecario</h3>
               <p class="text-gray-600">Saldo otorgado: $1,000,000</p>
               <p class="text-gray-600">Cuotas pendientes: 15 de 30</p>
             </div>
@@ -48,24 +47,24 @@
               </button>
             </div>
           </div>
+
         </div>
       </div>
 
-      <!-- Sección: Pendientes de Aprobación -->
+      <!-- Préstamos pendientes de aprobación -->
       <div>
-        <h2 class="text-xl font-semibold text-gray-700 mb-6">Pendientes de Aprobación</h2>
-
-        <!-- Préstamos Pendientes -->
+        <h2 class="text-xl font-semibold text-gray-700 mb-6">
+          Pendientes de aprobación
+        </h2>
         <div class="divide-y divide-gray-300">
-          <!-- Préstamo Pendiente Individual -->
+
+          <!-- Préstamo pendiente 1 (reemplazar por for) -->
           <div class="flex justify-between items-center bg-gray-50 p-4">
-            <!-- Columna Izquierda -->
             <div>
-              <h3 class="text-lg font-medium text-gray-800">Préstamo Automotriz</h3>
+              <h3 class="text-lg font-medium text-gray-800">Préstamo automotriz</h3>
               <p class="text-gray-600">Monto solicitado: $6,000,000.00</p>
               <p class="text-gray-600">Fecha de solicitud: 01/10/24</p>
             </div>
-            <!-- Columna Derecha -->
             <div class="text-right flex items-center">
               <span class="px-4 py-2 bg-yellow-200 text-yellow-700 font-medium rounded-lg">
                 En revisión
@@ -73,10 +72,10 @@
             </div>
           </div>
 
-          <!-- Otro Préstamo Pendiente Individual -->
+          <!-- Préstamo pendiente 2 (reemplazar por for) -->
           <div class="flex justify-between items-center bg-gray-50 p-4">
             <div>
-              <h3 class="text-lg font-medium text-gray-800">Préstamo Educativo</h3>
+              <h3 class="text-lg font-medium text-gray-800">Préstamo educativo</h3>
               <p class="text-gray-600">Monto solicitado: $500,000.00</p>
               <p class="text-gray-600">Fecha de solicitud: 10/09/24</p>
             </div>
@@ -86,6 +85,7 @@
               </span>
             </div>
           </div>
+
         </div>
       </div>
     </div>
