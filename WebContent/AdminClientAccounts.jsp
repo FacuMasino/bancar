@@ -16,6 +16,14 @@
             <span class="font-bold">Cuentas activas:</span>
             <span>2</span>
           </div>
+          <div class="flex justify-between gap-2 text-red-600">
+              <span class="font-bold">Deuda:</span>
+              <span>$ 10.000</span>
+          </div>
+          <div class="flex justify-between gap-2 text-blue-600">
+            <span class="font-bold">Préstamos:</span>
+            <span>1</span>
+          </div>
         </div>
       </div>
       <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -28,14 +36,6 @@
             <div class="flex justify-between gap-2">
               <span>Nro. de cuenta:</span>
               <span>1010</span>
-            </div>
-            <div class="flex justify-between gap-2 text-red-600">
-              <span>Deuda:</span>
-              <span>$ 10.000</span>
-            </div>
-            <div class="flex justify-between gap-2 text-blue-600">
-              <span>Préstamos:</span>
-              <span>1</span>
             </div>
           </div>
           <div class="flex justify-between">
@@ -60,14 +60,6 @@
             <div class="flex justify-between gap-2">
               <span>Nro. de cuenta:</span>
               <span>1011</span>
-            </div>
-            <div class="flex justify-between gap-2 text-red-600">
-              <span>Deuda:</span>
-              <span>$ 0</span>
-            </div>
-            <div class="flex justify-between gap-2 text-blue-600">
-              <span>Préstamos:</span>
-              <span>0</span>
             </div>
           </div>
           <div class="flex justify-between">

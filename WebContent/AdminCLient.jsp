@@ -6,7 +6,7 @@
       <div class="flex justify-between">
         <h1 class="font-bold text-xl">Gestión de Clientes</h1>
         <div class="flex gap-2.5">
-          <a href="AdminEditClient.jsp" class="btn btn-tertiary bg-base-200">
+          <a href="AdminEditClient.jsp" class="btn btn-tertiary bg-base-200 border-gray-200">
             Editar Cliente </a> <a href="AdminClientAccounts.jsp"
             class="btn btn-primary"> Gestionar Cuentas </a>
         </div>
@@ -17,7 +17,7 @@
           <i class="text-sm" data-lucide="user"></i>
           <h2 class="font-bold text-xl mb-6">Informacion Personal</h2>
         </div>
-        <div class="flex flex-col w-fit gap-8">
+        <div class="flex flex-col w-1/2 gap-5">
           <div class="flex flex-row justify-between gap-6">
             <div class="flex w-1/2">
               <span class="font-bold">ID:</span>
@@ -51,7 +51,7 @@
             </div>
           </div>
           <div class="flex flex-row justify-between gap-6">
-            <div class="flex">
+            <div class="flex w-1/2">
               <span class="font-bold">Telefono:</span>
             </div>
             <div class="flex w-1/2">
@@ -82,7 +82,7 @@
       <div class="flex flex-col p-6 bg-white rounded-lg drop-shadow-sm">
         <!-- Resumen de cuentas -->
         <div class="flex gap-2">
-          <i class="text-sm" data-lucide="user"></i>
+          <i class="text-sm" data-lucide="circle-dollar-sign"></i>
           <h2 class="font-bold text-xl mb-6">Resumen de Cuentas</h2>
         </div>
         <div class="flex flex-col w-full">
@@ -120,7 +120,7 @@
       <div class="flex flex-col p-6 bg-white rounded-lg drop-shadow-sm">
         <!-- Prestamos -->
         <div class="flex gap-2">
-          <i class="text-sm" data-lucide="user"></i>
+          <i class="text-sm" data-lucide="credit-card"></i>
           <h2 class="font-bold text-xl mb-6">Prestamos</h2>
         </div>
         <div class="flex flex-col w-full">
@@ -143,21 +143,33 @@
                 <td>Prestamo Personal</td>
                 <td class="text-black-600 font-semibold">$15,000.00</td>
                 <td class="text-black-600 font-semibold">24</td>
-                <td class="flex flex-col items-center w-fit px-2.5 rounded-full border border-yellow-600 text-yellow-600 font-semibold">En revision</td>
+                <td>
+               	  <span class="flex flex-col items-center w-fit px-2.5 rounded-full border border-yellow-500 text-yellow-500 font-semibold">
+                    En Revision
+               	  </span>
+                </td>
               </tr>
               <tr class="hover">
                 <td>9078</td>
                 <td>Prestamo Hipotecario</td>
                 <td class="text-black-600 font-semibold">$850,000.00</td>
                 <td class="text-black-600 font-semibold">60</td>
-                <td class="flex flex-col items-center w-fit px-2.5 rounded-full border border-green-600 text-green-600 font-semibold">Aprobado</td>
+                <td>
+                  <span class="flex flex-col items-center w-fit px-2.5 rounded-full border border-green-600 text-green-600 font-semibold">
+                    Aprobado
+               	  </span>
+                </td>
               </tr>
               <tr class="hover">
                 <td>9101</td>
                 <td>Prestamo Personal</td>
                 <td class="text-black-600 font-semibold">$80,000.00</td>
                 <td class="text-black-600 font-semibold">48</td>
-                <td class="flex flex-col items-center w-fit px-2.5 rounded-full border border-red-600 text-red-600 font-semibold">Desaprobado</td>
+                <td>
+                  <span class="flex flex-col items-center w-fit px-2.5 rounded-full border border-red-600 text-red-600 font-semibold">
+                    Rechazado
+               	  </span>
+                </td>
               </tr>
             </tbody>
           </table>
