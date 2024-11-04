@@ -12,10 +12,10 @@
             Solicitar préstamo
           </button>
         </div>
-        <div class="divide-y divide-gray-300">
+        <div class="divide-y divide-gray-300 rounded-lg shadow p-6 bg-white">
 
           <!-- Préstamo otorgado 1 (reemplazar por for) -->
-          <div class="flex justify-between items-center bg-gray-50 p-4">
+          <div class="flex justify-between items-center bg-white p-4">
             <div>
               <h3 class="text-lg font-medium text-gray-800">Préstamo personal</h3>
               <p class="text-gray-600">Saldo otorgado: $150,000</p>
@@ -32,7 +32,7 @@
           </div>
 
           <!-- Préstamo otorgado 2 (reemplazar por for) -->
-          <div class="flex justify-between items-center bg-gray-50 p-4">
+          <div class="flex justify-between items-center bg-white p-4">
             <div>
               <h3 class="text-lg font-medium text-gray-800">Préstamo hipotecario</h3>
               <p class="text-gray-600">Saldo otorgado: $1,000,000</p>
@@ -56,10 +56,10 @@
         <h2 class="text-xl font-semibold text-gray-700 mb-6">
           Pendientes de aprobación
         </h2>
-        <div class="divide-y divide-gray-300">
+        <div class="divide-y divide-gray-300 rounded-lg shadow p-6 bg-white">
 
           <!-- Préstamo pendiente 1 (reemplazar por for) -->
-          <div class="flex justify-between items-center bg-gray-50 p-4">
+          <div class="flex justify-between items-center bg-white p-4">
             <div>
               <h3 class="text-lg font-medium text-gray-800">Préstamo automotriz</h3>
               <p class="text-gray-600">Monto solicitado: $6,000,000.00</p>
@@ -73,7 +73,7 @@
           </div>
 
           <!-- Préstamo pendiente 2 (reemplazar por for) -->
-          <div class="flex justify-between items-center bg-gray-50 p-4">
+          <div class="flex justify-between items-center bg-white p-4">
             <div>
               <h3 class="text-lg font-medium text-gray-800">Préstamo educativo</h3>
               <p class="text-gray-600">Monto solicitado: $500,000.00</p>
