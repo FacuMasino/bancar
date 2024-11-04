@@ -107,10 +107,18 @@ CREATE TABLE
     );
 
 CREATE TABLE
+    LoanStatuses (
+        LoanStatusId INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+        LoanStatusName VARCHAR(50) NOT NULL
+    );
+
+CREATE TABLE
     Loans (
         LoanId INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
         CreationDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-        MonthsLimit INT NOT NULL
+        MonthsLimit INT NOT NULL,
+        LoanStatusId INT NOT NULL,
+        CONSTRAINT FK_LoanStatus FOREIGN KEY (LoanStatusId) REFERENCES LoanStatuses (LoanStatusId)
     );
 
 CREATE TABLE
