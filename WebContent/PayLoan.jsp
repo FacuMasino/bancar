@@ -9,12 +9,12 @@
 					<p class="font-semibold text-xl">Pagar Préstamo</p>
 				</div>
 				<!-- 2DO FLEX FLEX-COL -->
-				<div class="flex flex-col gap-6 p-8 bg-white rounded">
+				<div class="flex flex-col gap-6 p-8 bg-white rounded drop-shadow-sm">
 					<div class="flex justify-between ">
 						<p class="font-semibold text-xl">Préstamo Personal</p>
 						<div class="flex flex-col">
 							<p class="text-xl text-slate-600">Monto total del préstamo</p>
-							<p class="font-semibold text-xl">$120.000</p>
+							<p class="font-semibold text-xl text-end">$120.000</p>
 						</div>
 					</div>
 					<div class="flex flex-col">
@@ -45,11 +45,11 @@
 				<!-- 3ER FLEX FLEX-COL -->
 				<div class="flex flex-col gap-6 ">
 					<p class="text-xl text-black text-semibold gap-6 w-full" >Selecciona una cuenta debito</p>
-					<div class="flex flex-col gap-6 p-8 bg-white w-full">
-						<select class="select select-bordered w-full max-w-xs">
-							<option disabled selected></option>
-						</select>
-					</div>
+					<select name="originAccount" class="bg-white select text-black select-bordered w-full drop-shadow-sm">
+                      <option>Selecciona una cuenta</option>
+                      <option>Cta. 1001 - $ 10.000</option>
+                      <option>Cta. 1002 - $ 50.000</option>
+                    </select>
 					<button class="btn btn-primary">Confirma Pago</button>
 				</div>
 			</div>
