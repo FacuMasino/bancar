@@ -12,13 +12,13 @@
       <div
         class="flex flex-col border border border-gray-300 rounded-lg w-full bg-white  ">
         <div class="bg-red-600  rounded-t-lg px-6 py-4">
-          <p class="font-bold font-sans text-2xl text-white ">Cuenta de Origen</p>
+          <p class="font-bold font-sans text-lg text-white ">Cuenta de Origen</p>
         </div>
 
         <div class="flex flex-col p-6 gap-4  w-full">
           <div class="form-control w-full">
             <label class="label pt-0">
-              <span class="label-text font-bold text-lg ">Cuenta</span>
+              <span class="label-text font-semibold text-lg ">Cuenta</span>
             </label>
             <select name="originAccount" class="bg-white select text-black select-bordered w-full">
               <option>Cta. 1001 - $ 10.000</option>
@@ -32,19 +32,19 @@
       <div
         class=" flex flex-col w-full bg-white border border-gray-300 rounded-lg">
         <div class="bg-red-600 rounded-t-lg px-6 py-4">
-          <p class="font-bold font-sans text-2xl text-white">Cuenta de destino</p>
+          <p class="font-bold text-lg text-white">Cuenta de destino</p>
         </div>
         <div class="flex flex-col p-6 w-full gap-4">
           <div class="form-control w-full">
             <label for="destinatary" class="label pt-0">
-              <span class="label-text font-bold text-lg ">DNI / Nro.de Cuenta</span>
+              <span class="label-text font-semibold text-lg ">DNI / Nro.de Cuenta</span>
             </label>
             <input type="text" name="destinatary" placeholder="Ingrese DNI o Nro.de Cuenta destino"
               class="input input-bordered w-full" required/>
           </div>
           <div class="form-control w-full">
             <label for="amountTransfer" class="label">
-              <span class="label-text font-bold text-lg  leading-6">Monto a transferir</span>
+              <span class="label-text font-semibold text-lg  leading-6">Monto a transferir</span>
             </label>
             <input type="number" name="amountTransfer" placeholder="Ingrese monto a transferir"
               class="input input-bordered w-full" min="1" required/>
@@ -55,12 +55,12 @@
       <div
         class=" flex flex-col w-full bg-white border border-gray-300 rounded-lg">
         <div class="bg-red-600 rounded-t-lg px-6 py-4">
-          <p class="font-bold font-sans text-2xl text-white">Descripción</p>
+          <p class="font-bold font-sans text-lg text-white">Descripción</p>
         </div>
         <div class="flex flex-col p-6 w-full gap-4">
           <div class="form-control w-full">
             <label class="label pt-0">
-              <span class="label-text font-bold text-lg ">Concepto</span>
+              <span class="label-text font-semibold text-lg ">Concepto</span>
             </label>
             <select name="transferConcept" class="bg-white select text-black select-bordered w-full">
               <option>Seleccione el motivo</option>
@@ -72,7 +72,7 @@
           </div>
           <div class="form-control w-full">
             <label class="label">
-              <span class="label-text font-bold text-lg  leading-6">Referencia</span>
+              <span class="label-text font-semibold text-lg  leading-6">Referencia</span>
             </label>
             <input type="text" name="transferReference" placeholder="Ingrese una referencia"
               class="input input-bordered w-full" required/>
