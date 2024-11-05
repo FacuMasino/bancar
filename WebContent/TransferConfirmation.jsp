@@ -6,16 +6,19 @@
         <p class="font-bold text-3xl">Confirmar transferencia</p>
         <p class="text-gray-600 text-xl">Verifica que los datos sean correctos antes de confirmar</p>
       </div>
-      <div class="flex-col md:max-w-[800px] items-center justify-center bg-white rounded-xl  max-w-md w-full overflow-hidden pb-8">
+      <div
+        class="flex-col md:max-w-[800px] items-center justify-center bg-white rounded-xl  max-w-md w-full overflow-hidden pb-8">
         <div class="flex-col items-start bg-red-600 rounded-t">
-          <p class="font-bold font-sans  text-xl text-white mb-1 py-4 leading-5  px-6">Resumen de transferencia</p>
+          <p
+            class="font-bold font-sans  text-xl text-white mb-1 py-4 leading-5  px-6">Resumen de transferencia</p>
         </div>
         <div class="flex flex-col items-center py-4">
           <p class="text-lg  text-slate-600 ">Monto a transferir</p>
           <p class="font-bold  font-sans text-2xl  text-slate-600 ">$5.000</p>
         </div>
         <div class="flex flex-col items-start px-8 gap-6">
-          <div class="flex flex-rows p-2.5 bg-slate-100 rounded-xl w-full space-x-4 ">
+          <div
+            class="flex flex-rows p-2.5 bg-slate-100 rounded-xl w-full space-x-4 ">
             <div class="flex">
               <i data-lucide="app-window"></i>
             </div>
@@ -31,7 +34,8 @@
           <i data-lucide="arrow-down"></i>
         </div>
         <div class="flex flex-col   px-8 gap-6  ">
-          <div  class="flex flex-rows items-start bg-slate-100  space-x-4  rounded-xl p-2.5  w-full  ">
+          <div
+            class="flex flex-rows items-start bg-slate-100  space-x-4  rounded-xl p-2.5  w-full  ">
             <div class="flex rounded-sm ">
               <i data-lucide="user"></i>
             </div>
@@ -46,7 +50,19 @@
       </div>
       <div class="flex  md:max-w-[800px]  justify-end p-4 flex gap-3  w-full max-w-md overflow-hidden ">
         <button class="btn btn-ghost">Cancelar</button>
-        <button class="btn btn-primary" type="submit">Transferir</button>
+        <button class="btn btn-primary" type="submit" onclick="modal_confirmation_Transfer.showModal()">Transferir</button>
+        <dialog id="modal_confirmation_Transfer" class="modal">
+        <div class="modal-box bg-white">
+          <h3 class="text-lg font-bold">Transferir</h3>
+          <p class="py-4">Esta acción no se puede deshacer,¿Está seguro de continuar?</p>
+          <div class="modal-action">
+            <form method="dialog">
+              <button class="btn">Cancelar</button>
+              <button type="submit" class="btn btn-primary">Continuar</button>
+            </form>
+          </div>
+        </div>
+        </dialog>
       </div>
     </div>
   </t:clientwrapper>
