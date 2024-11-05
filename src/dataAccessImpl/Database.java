@@ -5,18 +5,63 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Properties;
 
 public class Database
 {
-	private static Connection conn;
+	private static Connection connection;
+	private PreparedStatement preparedStatement;
 	private String host;
 	private String user;
 	private String pass;
 	private String dbName;
 	
 	public Database()
+	{
+		configProperties();
+	}
+
+	public void close()
+	{
+		try 
+		{
+			connection.close();
+		}
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	public void setPreparedStatement(String query) throws SQLException
+	{
+		setConnection();
+		preparedStatement = connection.prepareStatement(query);
+	}
+	
+	public PreparedStatement getPreparedStatement()
+	{
+		return preparedStatement;
+	}
+	
+	private void setConnection()
+	{
+		try
+		{
+			if(connection == null || connection.isClosed())
+			{
+				connection = DriverManager.getConnection(host + dbName, user, pass);
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	private void configProperties()
 	{
 		Properties props = new Properties();
 
@@ -38,35 +83,6 @@ public class Database
 			dbName = props.getProperty("db.name");
 		}
 		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-	}
-	
-	public Connection getSQLConexion()
-	{
-		try
-		{
-			if(conn == null || conn.isClosed())
-			{
-				conn = DriverManager.getConnection(host + dbName, user, pass);
-			}
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-
-		return conn;
-	}
-
-	public void close()
-	{
-		try 
-		{
-			conn.close();
-		}
-		catch (SQLException e) 
 		{
 			e.printStackTrace();
 		}
