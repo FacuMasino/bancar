@@ -8,7 +8,7 @@
 <%@attribute name="activeMenuItem" required="true"%>
 <div class="drawer lg:drawer-open">
   <input id="client-drawer" type="checkbox" class="drawer-toggle" />
-  <div class="drawer-content">
+  <div class="drawer-content overflow-y-hidden">
     <div class="navbar bg-red-600 drop-shadow">
       <div class="container-sm justify-items-end w-full">
         <div class="flex-1">
