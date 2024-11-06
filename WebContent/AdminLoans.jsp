@@ -1,15 +1,15 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags/"%>
-<t:masterpage title="Admin - Prï¿½stamos" customNavbar="true">
+<t:masterpage title="Admin - Préstamos" customNavbar="true">
   <t:adminwrapper activeMenuItem="adminLoansMenu">
     <div class="p-4">
       <h1 class="text-xl font-normal mb-6">
-        GestiÃ³n de PrÃ©stamos
+        Gestión de Préstamos
       </h1>
 
-      <!-- PrÃ©stamos en revisiÃ³n -->
+      <!-- Préstamos en revisión -->
       <div class="bg-white rounded-lg shadow-sm mb-6">
         <div class="p-4">
-          <h2 class="text-base font-medium mb-4">PrÃ©stamos en revisiÃ³n</h2>
+          <h2 class="text-base font-medium mb-4">Préstamos en revisión</h2>
           <div class="overflow-x-auto">
             <table class="w-full">
               <thead>
@@ -17,7 +17,7 @@
                   <th class="text-left py-2 font-normal">ID</th>
                   <th class="text-left py-2 font-normal">DNI</th>
                   <th class="text-left py-2 font-normal">Nombre y Apellido</th>
-                  <th class="text-left py-2 font-normal">Tipo de prÃ©stamo</th>
+                  <th class="text-left py-2 font-normal">Tipo de préstamo</th>
                   <th class="text-left py-2 font-normal">Monto Solicitado</th>
                   <th class="text-left py-2 font-normal">Cuotas</th>
                   <th class="text-left py-2 font-normal">Acciones</th>
@@ -34,10 +34,10 @@
                   <td class="py-3">
                     <div class="flex gap-2">
                       <button class="p-1.5 bg-green-500 text-white rounded-md">
-                        âœ“
+                        <i data-lucide="check"></i>
                       </button>
                       <button class="p-1.5 bg-red-500 text-white rounded-md">
-                        âœ•
+                        <i data-lucide="x"></i>
                       </button>
                     </div>
                   </td>
@@ -52,10 +52,10 @@
                   <td class="py-3">
                     <div class="flex gap-2">
                       <button class="p-1.5 bg-green-500 text-white rounded-md">
-                        âœ“
+                        <i data-lucide="check"></i>
                       </button>
                       <button class="p-1.5 bg-red-500 text-white rounded-md">
-                        âœ•
+                        <i data-lucide="x"></i>
                       </button>
                     </div>
                   </td>
@@ -70,10 +70,10 @@
                   <td class="py-3">
                     <div class="flex gap-2">
                       <button class="p-1.5 bg-green-500 text-white rounded-md">
-                        âœ“
+                        <i data-lucide="check"></i>
                       </button>
                       <button class="p-1.5 bg-red-500 text-white rounded-md">
-                        âœ•
+                        <i data-lucide="x"></i>
                       </button>
                     </div>
                   </td>
@@ -84,10 +84,10 @@
         </div>
       </div>
 
-      <!-- PrÃ©stamos activos -->
+      <!-- Préstamos activos -->
       <div class="bg-white rounded-lg shadow-sm mb-6">
         <div class="p-4">
-          <h2 class="text-base font-medium mb-4">PrÃ©stamos Activos</h2>
+          <h2 class="text-base font-medium mb-4">Préstamos Activos</h2>
           <div class="overflow-x-auto">
             <table class="w-full">
               <thead>
@@ -95,7 +95,7 @@
                   <th class="text-left py-2 font-normal">ID</th>
                   <th class="text-left py-2 font-normal">DNI</th>
                   <th class="text-left py-2 font-normal">Nombre y Apellido</th>
-                  <th class="text-left py-2 font-normal">Tipo de prÃ©stamo</th>
+                  <th class="text-left py-2 font-normal">Tipo de préstamo</th>
                   <th class="text-left py-2 font-normal">Monto Solicitado</th>
                   <th class="text-left py-2 font-normal">Deuda Pendiente</th>
                 </tr>
@@ -123,17 +123,17 @@
         </div>
       </div>
 
-      <!-- Resumen de prÃ©stamos -->
+      <!-- Resumen de préstamos -->
       <div class="bg-white rounded-lg shadow-sm">
         <div class="p-4">
-          <h2 class="text-base font-medium mb-4">Resumen de PrÃ©stamos</h2>
+          <h2 class="text-base font-medium mb-4">Resumen de Préstamos</h2>
           <div class="space-y-4">
             <div>
-              <p class="text-sm text-gray-500">Monto total solicitado (prÃ©stamos pendientes):</p>
+              <p class="text-sm text-gray-500">Monto total solicitado (préstamos pendientes):</p>
               <p class="text-lg text-blue-600 font-medium">$ 1.350.000</p>
             </div>
             <div>
-              <p class="text-sm text-gray-500">Monto total adeudado (prÃ©stamos activos):</p>
+              <p class="text-sm text-gray-500">Monto total adeudado (préstamos activos):</p>
               <p class="text-lg text-red-600 font-medium">$ 1.000.000</p>
             </div>
           </div>
