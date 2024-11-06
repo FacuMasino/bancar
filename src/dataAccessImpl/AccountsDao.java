@@ -7,8 +7,6 @@ import domainModel.Account;
 
 public class AccountsDao extends DataAccessObject implements IAccountsDao
 {
-	private Database db;
-	
 	public AccountsDao()
 	{
 		db = new Database();
