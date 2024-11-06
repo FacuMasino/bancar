@@ -39,7 +39,7 @@
             <label for="destinatary" class="label pt-0">
               <span class="label-text font-semibold text-lg ">DNI / Nro.de Cuenta</span>
             </label>
-            <input type="text" name="destinatary" placeholder="Ingrese DNI o Nro.de Cuenta destino"
+            <input type="number" name="destinatary" placeholder="Ingrese DNI o Nro.de Cuenta destino"
               class="input input-bordered w-full" required/>
           </div>
           <div class="form-control w-full">

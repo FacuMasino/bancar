@@ -28,12 +28,30 @@
 		</div>
      	<div>
 			<div class="mb-4">
+              <div class="flex justify-between p-2.5 mb-2">
+                  <label class="input input-sm input-bordered flex items-center gap-2">
+                    <input type="text" class="grow" placeholder="Buscar cuenta, monto" name="searchInput">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="search" class="lucide lucide-search"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+                  </label>
+                  <div class="flex gap-2.5" name="transactionDate">
+                    <input type="date" class="border p-1 rounded border-gray-200">
+                    <select 
+                      class="select select-bordered select-sm w-fit bg-white"
+                      name="transactionType">
+                    <option selected>Seleccione tipo</option>
+                    <option>Transferencia</option>
+                    <option>Pago</option>
+                    <option>Crédito</option>
+                  </select>
+                  </div>
+                </div>
 				<table class="table bg-white w-full">
 				<thead>
 					<tr>
-    					<th class="text-gray-700">Fecha</th>
-    					<th class="text-gray-700">Descripción</th>
-    					<th class="text-gray-700">Monto</th>
+    					<th>Fecha</th>
+    					<th>Descripción</th>
+    					<th>Monto</th>
+                        <th>Acciones</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -41,21 +59,45 @@
     					<td>01/10/2024</td>
     					<td>Depósito de nómina</td>
     					<td class="text-green-600 font-semibold">+$1,500.00</td>
+                        <td>
+                          <a href="TransactionDetails.jsp?id=123&successAlert=false"
+                            class="btn btn-ghost" title="Ver detalle">
+                            <i data-lucide="eye"></i>
+                          </a>
+                        </td>              
 					</tr>
 					<tr class="hover">
     					<td>03/10/2024</td>
     					<td>Pago de servicios</td>
     					<td class="text-red-600 font-semibold">-$200.00</td>
+                        <td>
+                          <a href="TransactionDetails.jsp?id=123&successAlert=false"
+                            class="btn btn-ghost" title="Ver detalle">
+                            <i data-lucide="eye"></i>
+                          </a>
+                        </td>              
 					</tr>
 					<tr class="hover">
     					<td>05/10/2024</td>
     					<td>Transferencia recibida</td>
     					<td class="text-green-600 font-semibold">+$300.00</td>
+                        <td>
+                          <a href="TransactionDetails.jsp?id=123&successAlert=false"
+                            class="btn btn-ghost" title="Ver detalle">
+                            <i data-lucide="eye"></i>
+                          </a>
+                        </td>              
 					</tr>
 					<tr class="hover">
     					<td>07/10/2024</td>
     					<td>Pago tarjeta de crédito</td>
     					<td class="text-red-600 font-semibold">-$500.00</td>
+                        <td>
+                          <a href="TransactionDetails.jsp?id=123&successAlert=false"
+                            class="btn btn-ghost" title="Ver detalle">
+                            <i data-lucide="eye"></i>
+                          </a>
+                        </td>
 					</tr>
 				</tbody>
 				</table>
@@ -70,22 +112,6 @@
 			</div>
 		</div>
 	</div>
-	<div class="flex justify-end">
-		<div role="alert" class="alert alert-success mt-20 w-80">
-			<svg
-			  xmlns="http://www.w3.org/2000/svg"
-			  class="h-6 w-6 shrink-0 stroke-current"
-			  fill="none"
-			  viewBox="0 0 24 24">
-			  <path
-			    stroke-linecap="round"
-			    stroke-linejoin="round"
-			    stroke-width="2"
-			    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-			</svg>
- 			<span>Transferencia realizada con éxito!</span>
-		</div>
-	</div>  
 </div>
   </t:clientwrapper>
 </t:masterpage>
