@@ -59,6 +59,8 @@ public class Database
 		{
 			e.printStackTrace();
 		}
+
+		callDriver();
 	}
 	
 	private void configProperties()
@@ -83,6 +85,18 @@ public class Database
 			dbName = props.getProperty("db.name");
 		}
 		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	private void callDriver()
+	{
+		try
+		{
+			Class.forName("com.mysql.jdbc.Driver");
+		}
+		catch(ClassNotFoundException e)
 		{
 			e.printStackTrace();
 		}

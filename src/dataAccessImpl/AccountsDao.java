@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import dataAccess.IAccountsDao;
 import domainModel.Account;
 
-public class AccountsDao extends DataAccessObject implements IAccountsDao
+public class AccountsDao implements IAccountsDao
 {
+	private Database db;
+
 	public AccountsDao()
 	{
 		db = new Database();
@@ -15,8 +17,6 @@ public class AccountsDao extends DataAccessObject implements IAccountsDao
 	@Override
 	public boolean create(Account account)
 	{
-		callDriver();
-
 		int rows = 0;
 		
 		try
