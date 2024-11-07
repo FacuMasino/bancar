@@ -50,6 +50,8 @@ public class Database
 	{
 		try
 		{
+			callDriver();
+
 			if(connection == null || connection.isClosed())
 			{
 				connection = DriverManager.getConnection(host + dbName, user, pass);
@@ -60,7 +62,6 @@ public class Database
 			e.printStackTrace();
 		}
 
-		callDriver();
 	}
 	
 	private void configProperties()
