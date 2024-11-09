@@ -1,9 +1,12 @@
 package businessLogicImpl;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import businessLogic.IClientsBusiness;
 import dataAccessImpl.ClientsDao;
 import domainModel.Client;
+import exceptions.BusinessException;
+import exceptions.SQLOperationException;
 
 public class ClientsBusiness implements IClientsBusiness {
 
@@ -15,40 +18,120 @@ private ClientsDao clientsDao;
 	}
 
 	@Override
-	public boolean create(Client client)
+	public boolean create(Client client)  throws BusinessException 
 	{
-		return clientsDao.create(client);
+		try
+		{
+			return clientsDao.create(client);
+		}
+		catch (SQLException ex)
+		{
+			throw new SQLOperationException();
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+			throw new BusinessException
+				("Ocurrió un error desconocido al crear el cliente");
+		}
+		
+		
 	}
 
 	@Override
-	public Client read(int clientId)
+	public Client read(int clientId) throws BusinessException 
 	{
-		return clientsDao.read(clientId);
+		try 
+		{
+			return clientsDao.read(clientId);		
+		}
+		catch (SQLException ex)
+		{
+			throw new SQLOperationException();
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+			throw new BusinessException
+				("Ocurrió un error desconocido al leer el cliente");
+		}
+		
 	}
 
 	@Override
-	public void update(Client client)
+	public boolean update(Client client) throws BusinessException 
 	{
-		clientsDao.update(client);
+		try
+	{
+			return clientsDao.update(client);
+	}
+	catch (SQLException ex)
+	{
+		throw new SQLOperationException();
+	}
+	catch (Exception ex) {
+		ex.printStackTrace();
+		throw new BusinessException
+			("Ocurrió un error desconocido al actualizar los datos  del cliente");
+	}
+		
 	}
 
 	@Override
-	public void delete(int clientId)
-	{
-		clientsDao.delete(clientId);
+	public boolean delete(int clientId) throws BusinessException  
+	{ //TODO:  Ver ELIMINACION INTEGRAL
+		try
+		{
+			return clientsDao.delete(clientId);			
+		}
+		catch (SQLException ex)
+		{
+			throw new SQLOperationException();
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+			throw new BusinessException
+				("Ocurrió un error desconocido al eliminar el cliente ");
+		}
+		
 	}
 
 	@Override
-	public ArrayList<Client> list()
+	public ArrayList<Client> list() throws BusinessException 
 	{
-		return clientsDao.list();
+		try
+		{
+			return clientsDao.list();			
+		}
+		catch (SQLException ex)
+		{
+			throw new SQLOperationException();
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+			throw new BusinessException
+				("Ocurrió un error desconocido al obtener los clientes");
+		}
+	
 	}
 
 	@Override
-	public int getId(Client client)
+	public int getId(Client client) throws BusinessException 
 	{
-		return clientsDao.getId(client);
+		try 
+		{
+			return clientsDao.getId(client);			
+		}
+		catch (SQLException ex)
+		{
+			throw new SQLOperationException();
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+			throw new BusinessException
+				("Ocurrió un error desconocido al obtener ID del cliente");
+		}
+	
 	}
 }
 
-}
+

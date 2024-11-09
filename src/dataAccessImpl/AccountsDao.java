@@ -4,7 +4,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Optional;
-
 import dataAccess.IAccountsDao;
 import domainModel.Account;
 import domainModel.AccountType;

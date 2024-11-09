@@ -2,14 +2,15 @@ package businessLogic;
 
 import java.util.ArrayList;
 import domainModel.Client;
+import exceptions.BusinessException;
 
 public interface IClientsBusiness {
 	
-	public boolean create(Client client);
-	public Client read(int clientId);
-	public void update(Client client);
-	public void delete(int clientId);
-	public ArrayList<Client> list();
-	public int getId(Client client);
+	public boolean create(Client client)  throws BusinessException ;
+	public Client read(int clientId) throws BusinessException ;
+	public boolean update(Client client)  throws BusinessException ;
+	public boolean delete(int clientId) throws BusinessException ;
+	public ArrayList<Client> list() throws BusinessException ;
+	public int getId(Client client) throws BusinessException ;
 
 }
