@@ -12,4 +12,5 @@ public interface IAccountsDao
 	public boolean delete(int accountId) throws SQLException;
 	public ArrayList<Account> list() throws SQLException;
 	public int getId(Account account) throws SQLException;
+	public int getLastId() throws SQLException;
 }

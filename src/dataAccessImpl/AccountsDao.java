@@ -144,6 +144,29 @@ public class AccountsDao implements IAccountsDao
 		return 0;
 	}
 	
+	@Override
+	public int getLastId() throws SQLException
+	{
+		int lastId = 0;
+		
+		try
+		{
+			db.setPreparedStatement("SELECT MAX(AccountId) from Accounts");
+			ResultSet rs = db.getPreparedStatement().executeQuery();
+			if(rs.next())
+			{
+				lastId = rs.getInt(1);
+			}
+		}
+		catch(SQLException ex)
+		{
+			ex.printStackTrace();
+			throw ex;
+		}
+		
+		return lastId;
+	}
+	
 	private void setParameters(Account account) throws SQLException
 	{
 		db.getPreparedStatement().setString(1, account.getCbu());

@@ -24,6 +24,10 @@ public class AccountsBusiness implements IAccountsBusiness
 	{
 		try
 		{
+			// Asignar CBU
+			int nextId = accountsDao.getLastId() + 1;
+			account.setCbu(generateCBU(nextId));
+			
 			return accountsDao.create(account);
 		}
 		catch (SQLException ex)
@@ -126,4 +130,20 @@ public class AccountsBusiness implements IAccountsBusiness
 				("Ocurrió un error desconocido al obtener ID de cuenta");
 		}
 	}
+	
+	/*
+	 * Genera un CBU ficticio basado en el nro de cuenta (ID)
+	 */
+	private String generateCBU(int accountId)
+	{
+		String entity = "919"; // Pos 1-3
+		String branch = "0001"; // Pos 4-7
+		String firstDV = "9"; // Pos 8,  DV = digito verificador
+		String lastDV = "1"; // Pos 22
+		// Completar el ID de la cuenta con 0 a la izquierda para llegar a 13 posiciones
+		String accNumber = String.format("%013d", accountId);
+		
+		return entity + branch + firstDV + accNumber + lastDV;
+	}
+	
 }
