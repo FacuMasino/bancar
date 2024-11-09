@@ -18,7 +18,7 @@ public class ClientsDao implements IClientsDao {
 	}
 	
 	public boolean create(Client client) throws SQLException
-	{
+	{//TODO: PENDIENTE CREACION DEL USUARIO A LA VEZ QUE SE CREA CLIENTE
 		int rows = 0;
 		
 		try
@@ -47,6 +47,8 @@ public class ClientsDao implements IClientsDao {
 			db.getPreparedStatement().setInt(1, clientId);
 			rsClient = db.getPreparedStatement().executeQuery();
 			
+			if(!rsClient.next()) return auxClient; // no se encontró, devuelve null
+			
 			// TODO: IMPORTANTE leer pais con su ID usando CountryBussiness, ahora está vacía
 			// TODO: IMPORTANTE leer direccion con su ID usando AddressBussiness, ahora está vacía
 					
@@ -56,6 +58,7 @@ public class ClientsDao implements IClientsDao {
 			auxClient = getClient(rsClient, auxNationality,auxAddress);
 		}
 		catch (Exception ex) {
+			
 			ex.printStackTrace();
 			throw ex;
 		}
@@ -84,7 +87,7 @@ public class ClientsDao implements IClientsDao {
 
 	@Override
 	public boolean delete(int clientId) throws SQLException
-	{
+	{//TODO: PENDIENTE ELIMINACION DE INFO ASOCIADA A ESE CLIENTE (USUARIO, DIRECCION)
 		int rows = 0;
 		
 		try 
