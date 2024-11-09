@@ -2,13 +2,14 @@ package businessLogic;
 
 import java.util.ArrayList;
 import domainModel.Account;
+import exceptions.BusinessException;
 
 public interface IAccountsBusiness
 {
-	public boolean create(Account account);
-	public Account read(int accountId);
-	public void update(Account account);
-	public void delete(int accountId);
-	public ArrayList<Account> list();
-	public int getId(Account account);
+	public boolean create(Account account) throws BusinessException;
+	public Account read(int accountId) throws BusinessException;
+	public boolean update(Account account) throws BusinessException;
+	public boolean delete(int accountId) throws BusinessException;
+	public ArrayList<Account> list() throws BusinessException;
+	public int getId(Account account) throws BusinessException;
 }

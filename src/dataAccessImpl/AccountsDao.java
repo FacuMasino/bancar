@@ -3,6 +3,8 @@ package dataAccessImpl;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Optional;
+
 import dataAccess.IAccountsDao;
 import domainModel.Account;
 import domainModel.AccountType;
@@ -18,7 +20,7 @@ public class AccountsDao implements IAccountsDao
 	}
 
 	@Override
-	public boolean create(Account account)
+	public boolean create(Account account) throws SQLException
 	{
 		int rows = 0;
 		
@@ -28,25 +30,29 @@ public class AccountsDao implements IAccountsDao
 			setParameters(account);
 			rows = db.getPreparedStatement().executeUpdate();
 		}
-		catch(Exception exception)
+		catch(SQLException ex)
 		{
-			exception.printStackTrace();
+			ex.printStackTrace();
+			throw ex;
 		}
 		
 		return (rows > 0);
 	}
 
 	@Override
-	public Account read(int accountId)
+	public Account read(int accountId) throws SQLException
 	{
 		ResultSet rsAccount;
 		// El negocio debe verificar que lo devuelto != null
 		Account auxAccount = null;
 		
-		try {
-			db.setPreparedStatement("Select * from Accounts where AccountId = ?");
+		try 
+		{
+			db.setPreparedStatement("SELECT * FROM Accounts WHERE AccountId = ?");
 			db.getPreparedStatement().setInt(1, accountId);
 			rsAccount = db.getPreparedStatement().executeQuery();
+			
+			if(!rsAccount.next()) return auxAccount; // no se encontró, devuelve null
 			
 			// TODO: IMPORTANTE leer cliente con su ID usando ClientsBusiness, ahora está vacío
 			Client auxClient = new Client();
@@ -55,37 +61,66 @@ public class AccountsDao implements IAccountsDao
 				
 			auxAccount = getAccount(rsAccount, auxClient, auxAccType);
 		}
-		catch (Exception ex) {
+		catch (SQLException ex) 
+		{
 			ex.printStackTrace();
+			throw ex;
 		}
 		
 		return auxAccount;
 	}
 
 	@Override
-	public void update(Account account)
+	public boolean update(Account account) throws SQLException
 	{
+		int rows = 0;
 		
+		try 
+		{
+			db.setPreparedStatement("{CALL update_account(?, ?, ?, ?)}");
+			setUpdateParameters(account);
+			rows = db.getPreparedStatement().executeUpdate();
+		}
+		catch (SQLException ex) {
+			ex.printStackTrace();
+			throw ex;
+		}
+		
+		return (rows > 0);
 	}
 
 	@Override
-	public void delete(int accountId)
+	public boolean delete(int accountId) throws SQLException
 	{
+		int rows = 0;
 		
+		try 
+		{
+			db.setPreparedStatement("UPDATE Accounts SET IsActive = 0 WHERE AccountId = ?");
+			db.getPreparedStatement().setInt(1, accountId);
+			rows = db.getPreparedStatement().executeUpdate();
+		}
+		catch (SQLException ex) {
+			ex.printStackTrace();
+			throw ex;
+		}
+		
+		return (rows > 0);
 	}
 
 	@Override
-	public ArrayList<Account> list()
+	public ArrayList<Account> list() throws SQLException
 	{
 		ResultSet rsAccounts;
 		ArrayList<Account> accounts = new ArrayList<Account>();
 		
-		try {
-			db.setPreparedStatement("Select * from Accounts");
+		try 
+		{
+			db.setPreparedStatement("SELECT * FROM Accounts WHERE isActive = 1");
 			rsAccounts = db.getPreparedStatement().executeQuery();
 			
-			while(rsAccounts.next()) {
-				
+			while(rsAccounts.next()) 
+			{
 				// TODO: IMPORTANTE leer cliente con su ID usando ClientsBusiness, ahora está vacío
 				Client auxClient = new Client();
 				// TODO: IMPORTANTE leer tipo de cuenta con su ID usando AccountTypeBusiness, ahora está vacía
@@ -94,15 +129,17 @@ public class AccountsDao implements IAccountsDao
 				accounts.add(getAccount(rsAccounts, auxClient, auxAccType));
 			}
 		}
-		catch (Exception ex) {
+		catch (SQLException ex) 
+		{
 			ex.printStackTrace();
+			throw ex;
 		}
 		
 		return accounts;
 	}
 
 	@Override
-	public int getId(Account account)
+	public int getId(Account account) throws SQLException
 	{
 		return 0;
 	}
@@ -115,17 +152,33 @@ public class AccountsDao implements IAccountsDao
 		db.getPreparedStatement().setInt(4, account.getClient().getId());
 	}
 	
-	private Account getAccount(ResultSet rs, Client client, AccountType accType) throws SQLException {
-		
+	private void setUpdateParameters(Account account) throws SQLException
+	{
+		db.getPreparedStatement().setString(1, account.getCbu());
+		db.getPreparedStatement().setBigDecimal(2, account.getBalance());
+		db.getPreparedStatement().setInt(3, account.getAccountType().getId());
+		db.getPreparedStatement().setInt(4, account.getId());
+	}
+	
+	private Account getAccount(ResultSet rs, Client client, AccountType accType) throws SQLException
+	{
 		Account auxAccount = new Account();
 		
-		auxAccount.setAccountType(accType);
-		auxAccount.setActive(rs.getBoolean("IsActive"));
-		auxAccount.setBalance(rs.getBigDecimal("Balance"));
-		auxAccount.setCbu(rs.getString("Cbu"));
-		auxAccount.setClient(client);
-		auxAccount.setCreationDate(rs.getDate("CreationDate"));
-		auxAccount.setId(rs.getInt("AccountId"));
+		try 
+		{
+			auxAccount.setAccountType(accType);
+			auxAccount.setId(rs.getInt("AccountId"));
+			auxAccount.setActive(rs.getBoolean("IsActive"));
+			auxAccount.setBalance(rs.getBigDecimal("Balance"));
+			auxAccount.setCbu(rs.getString("Cbu"));
+			auxAccount.setClient(client);
+			auxAccount.setCreationDate(rs.getDate("CreationDate"));
+		} 
+		catch (SQLException ex)
+		{
+			ex.printStackTrace();
+			throw ex;
+		}
 		
 		return auxAccount;
 	}

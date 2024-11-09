@@ -1,14 +1,15 @@
 package dataAccess;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import domainModel.Account;
 
 public interface IAccountsDao
 {
-	public boolean create(Account account);
-	public Account read(int accountId);
-	public void update(Account account);
-	public void delete(int accountId);
-	public ArrayList<Account> list();
-	public int getId(Account account);
+	public boolean create(Account account) throws SQLException;
+	public Account read(int accountId) throws SQLException;
+	public boolean update(Account account) throws SQLException;
+	public boolean delete(int accountId) throws SQLException;
+	public ArrayList<Account> list() throws SQLException;
+	public int getId(Account account) throws SQLException;
 }
