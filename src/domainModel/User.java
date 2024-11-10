@@ -12,7 +12,13 @@ public class User
 
 	public User()
 	{
-		roles = new ArrayList<Role>();
+		setRoles(new ArrayList<Role>());
+	}
+	
+	public User(String username,String password)
+	{
+		this.username = username;
+		this.password = password;
 	}
 
 	public int getId()
@@ -53,5 +59,13 @@ public class User
 	public void setPassword(String password)
 	{
 		this.password = password;
+	}
+
+	public ArrayList<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(ArrayList<Role> roles) {
+		this.roles = roles;
 	}
 }

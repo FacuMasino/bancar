@@ -3,7 +3,7 @@
   <t:adminwrapper activeMenuItem="adminClientsMenu">
     <div class="container md:max-w-[1400px] mx-auto my-6 px-2">
     <p class="font-bold text-xl mb-6">Editar información del cliente</p>
-    <form method="post" action="#" class="bg-white rounded rounded-lg flex flex-col gap-4 p-8 w-full">
+    <form method="post" action="AdminClientsServlet?action=editClient" class="bg-white rounded rounded-lg flex flex-col gap-4 p-8 w-full">
       <div class="flex justify-between">
     	<p class="font-bold">Editando cliente ID 1</p>
     	<button class="btn mr-4 btn-neutral" type="submit">Dar de baja</button>

@@ -1,6 +1,7 @@
 package domainModel;
 
 import java.sql.Date;
+import java.util.ArrayList;
 
 public class Client extends User
 {
@@ -16,6 +17,10 @@ public class Client extends User
 	private Date birthDate;
 	private Country nationality;
 	private Address address;
+	
+	//TODO: debatir con equipo estos 2 atributos
+	private User user;
+	private ArrayList<Account> accounts;
 
 	public Client()
 	{
@@ -140,5 +145,21 @@ public class Client extends User
 	public void setAddress(Address address)
 	{
 		this.address = address;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public ArrayList<Account> getAccounts() {
+		return accounts;
+	}
+
+	public void setAccounts(ArrayList<Account> accounts) {
+		this.accounts = accounts;
 	}
 }
