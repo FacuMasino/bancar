@@ -76,5 +76,6 @@ INSERT INTO
     LoanStatuses (LoanStatusName)
 VALUES
     ('En revisión'),
-    ('Aprobado'),
-    ('Denegado');
+    ('Vigente'),
+    ('Finalizado'),
+    ('Rechazado');

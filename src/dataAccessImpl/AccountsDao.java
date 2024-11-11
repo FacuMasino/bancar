@@ -3,7 +3,6 @@ package dataAccessImpl;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Optional;
 import dataAccess.IAccountsDao;
 import domainModel.Account;
 import domainModel.AccountType;
@@ -45,22 +44,25 @@ public class AccountsDao implements IAccountsDao
 		// El negocio debe verificar que lo devuelto != null
 		Account auxAccount = null;
 		
-		try 
+		try
 		{
 			db.setPreparedStatement("SELECT * FROM Accounts WHERE AccountId = ?");
 			db.getPreparedStatement().setInt(1, accountId);
 			rsAccount = db.getPreparedStatement().executeQuery();
 			
-			if(!rsAccount.next()) return auxAccount; // no se encontró, devuelve null
+			if(!rsAccount.next())
+			{
+				return auxAccount;
+			}
 			
 			// TODO: IMPORTANTE leer cliente con su ID usando ClientsBusiness, ahora está vacío
 			Client auxClient = new Client();
 			// TODO: IMPORTANTE leer tipo de cuenta con su ID usando AccountTypeBusiness, ahora está vacía
 			AccountType auxAccType = new AccountType();
-				
+			
 			auxAccount = getAccount(rsAccount, auxClient, auxAccType);
 		}
-		catch (SQLException ex) 
+		catch (SQLException ex)
 		{
 			ex.printStackTrace();
 			throw ex;
@@ -74,13 +76,14 @@ public class AccountsDao implements IAccountsDao
 	{
 		int rows = 0;
 		
-		try 
+		try
 		{
 			db.setPreparedStatement("{CALL update_account(?, ?, ?, ?)}");
 			setUpdateParameters(account);
 			rows = db.getPreparedStatement().executeUpdate();
 		}
-		catch (SQLException ex) {
+		catch (SQLException ex)
+		{
 			ex.printStackTrace();
 			throw ex;
 		}
@@ -93,13 +96,14 @@ public class AccountsDao implements IAccountsDao
 	{
 		int rows = 0;
 		
-		try 
+		try
 		{
 			db.setPreparedStatement("UPDATE Accounts SET IsActive = 0 WHERE AccountId = ?");
 			db.getPreparedStatement().setInt(1, accountId);
 			rows = db.getPreparedStatement().executeUpdate();
 		}
-		catch (SQLException ex) {
+		catch (SQLException ex)
+		{
 			ex.printStackTrace();
 			throw ex;
 		}
@@ -113,12 +117,12 @@ public class AccountsDao implements IAccountsDao
 		ResultSet rsAccounts;
 		ArrayList<Account> accounts = new ArrayList<Account>();
 		
-		try 
+		try
 		{
 			db.setPreparedStatement("SELECT * FROM Accounts WHERE isActive = 1");
 			rsAccounts = db.getPreparedStatement().executeQuery();
 			
-			while(rsAccounts.next()) 
+			while(rsAccounts.next())
 			{
 				// TODO: IMPORTANTE leer cliente con su ID usando ClientsBusiness, ahora está vacío
 				Client auxClient = new Client();
@@ -128,7 +132,7 @@ public class AccountsDao implements IAccountsDao
 				accounts.add(getAccount(rsAccounts, auxClient, auxAccType));
 			}
 		}
-		catch (SQLException ex) 
+		catch (SQLException ex)
 		{
 			ex.printStackTrace();
 			throw ex;

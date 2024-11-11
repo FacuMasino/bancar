@@ -8,9 +8,9 @@ import domainModel.Client;
 import exceptions.BusinessException;
 import exceptions.SQLOperationException;
 
-public class ClientsBusiness implements IClientsBusiness {
-
-private ClientsDao clientsDao;
+public class ClientsBusiness implements IClientsBusiness
+{
+	private ClientsDao clientsDao;
 	
 	public ClientsBusiness()
 	{
@@ -18,7 +18,7 @@ private ClientsDao clientsDao;
 	}
 
 	@Override
-	public boolean create(Client client)  throws BusinessException 
+	public boolean create(Client client) throws BusinessException
 	{
 		try
 		{
@@ -32,10 +32,8 @@ private ClientsDao clientsDao;
 		{
 			ex.printStackTrace();
 			throw new BusinessException
-				("Ocurrió un error desconocido al crear el cliente");
+				("Ocurrió un error desconocido al crear el cliente.");
 		}
-		
-		
 	}
 
 	@Override
@@ -49,36 +47,36 @@ private ClientsDao clientsDao;
 		{
 			throw new SQLOperationException();
 		}
-		catch (Exception ex) {
+		catch (Exception ex)
+		{
 			ex.printStackTrace();
 			throw new BusinessException
-				("Ocurrió un error desconocido al leer el cliente");
-		}
-		
+				("Ocurrió un error desconocido al leer el cliente.");
+		}	
 	}
 
 	@Override
 	public boolean update(Client client) throws BusinessException 
 	{
 		try
-	{
+		{
 			return clientsDao.update(client);
-	}
-	catch (SQLException ex)
-	{
-		throw new SQLOperationException();
-	}
-	catch (Exception ex) {
-		ex.printStackTrace();
-		throw new BusinessException
-			("Ocurrió un error desconocido al actualizar los datos  del cliente");
-	}
-		
+		}
+		catch (SQLException ex)
+		{
+			throw new SQLOperationException();
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+			throw new BusinessException
+				("Ocurrió un error desconocido al actualizar los datos  del cliente.");
+		}
 	}
 
 	@Override
 	public boolean delete(int clientId) throws BusinessException  
-	{ //TODO:  Ver ELIMINACION INTEGRAL
+	{//TODO:  Ver ELIMINACION INTEGRAL
 		try
 		{
 			return clientsDao.delete(clientId);			
@@ -87,12 +85,12 @@ private ClientsDao clientsDao;
 		{
 			throw new SQLOperationException();
 		}
-		catch (Exception ex) {
+		catch (Exception ex)
+		{
 			ex.printStackTrace();
 			throw new BusinessException
-				("Ocurrió un error desconocido al eliminar el cliente ");
+				("Ocurrió un error desconocido al eliminar el cliente.");
 		}
-		
 	}
 
 	@Override
@@ -106,12 +104,12 @@ private ClientsDao clientsDao;
 		{
 			throw new SQLOperationException();
 		}
-		catch (Exception ex) {
+		catch (Exception ex)
+		{
 			ex.printStackTrace();
 			throw new BusinessException
-				("Ocurrió un error desconocido al obtener los clientes");
+				("Ocurrió un error desconocido al obtener los clientes.");
 		}
-	
 	}
 
 	@Override
@@ -125,13 +123,11 @@ private ClientsDao clientsDao;
 		{
 			throw new SQLOperationException();
 		}
-		catch (Exception ex) {
+		catch (Exception ex)
+		{
 			ex.printStackTrace();
 			throw new BusinessException
-				("Ocurrió un error desconocido al obtener ID del cliente");
+				("Ocurrió un error desconocido al obtener ID del cliente.");
 		}
-	
 	}
 }
-
-

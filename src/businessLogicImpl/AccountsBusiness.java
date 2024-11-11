@@ -34,17 +34,18 @@ public class AccountsBusiness implements IAccountsBusiness
 		{
 			throw new SQLOperationException();
 		}
-		catch (Exception ex) {
+		catch (Exception ex)
+		{
 			ex.printStackTrace();
 			throw new BusinessException
-				("Ocurrió un error desconocido al crear la cuenta");
+				("Ocurrió un error desconocido al crear la cuenta.");
 		}
 	}
 
 	@Override
 	public Account read(int accountId) throws BusinessException
 	{
-		try 
+		try
 		{
 			return accountsDao.read(accountId);			
 		}
@@ -52,10 +53,11 @@ public class AccountsBusiness implements IAccountsBusiness
 		{
 			throw new SQLOperationException();
 		}
-		catch (Exception ex) {
+		catch (Exception ex)
+		{
 			ex.printStackTrace();
 			throw new BusinessException
-				("Ocurrió un error desconocido al leer la cuenta");
+				("Ocurrió un error desconocido al leer la cuenta.");
 		}
 	}
 
@@ -70,10 +72,11 @@ public class AccountsBusiness implements IAccountsBusiness
 		{
 			throw new SQLOperationException();
 		}
-		catch (Exception ex) {
+		catch (Exception ex)
+		{
 			ex.printStackTrace();
 			throw new BusinessException
-				("Ocurrió un error desconocido al actualizar la cuenta");
+				("Ocurrió un error desconocido al actualizar la cuenta.");
 		}
 	}
 
@@ -88,10 +91,11 @@ public class AccountsBusiness implements IAccountsBusiness
 		{
 			throw new SQLOperationException();
 		}
-		catch (Exception ex) {
+		catch (Exception ex)
+		{
 			ex.printStackTrace();
 			throw new BusinessException
-				("Ocurrió un error desconocido al eliminar la cuenta");
+				("Ocurrió un error desconocido al eliminar la cuenta.");
 		}
 	}
 
@@ -106,28 +110,30 @@ public class AccountsBusiness implements IAccountsBusiness
 		{
 			throw new SQLOperationException();
 		}
-		catch (Exception ex) {
+		catch (Exception ex)
+		{
 			ex.printStackTrace();
 			throw new BusinessException
-				("Ocurrió un error desconocido al obtener las cuentas");
+				("Ocurrió un error desconocido al obtener las cuentas.");
 		}
 	}
 
 	@Override
 	public int getId(Account account) throws BusinessException
 	{
-		try 
+		try
 		{
-			return accountsDao.getId(account);			
+			return accountsDao.getId(account);
 		}
 		catch (SQLException ex)
 		{
 			throw new SQLOperationException();
 		}
-		catch (Exception ex) {
+		catch (Exception ex)
+		{
 			ex.printStackTrace();
 			throw new BusinessException
-				("Ocurrió un error desconocido al obtener ID de cuenta");
+				("Ocurrió un error desconocido al obtener ID de cuenta.");
 		}
 	}
 	
@@ -145,5 +151,4 @@ public class AccountsBusiness implements IAccountsBusiness
 		
 		return entity + branch + firstDV + accNumber + lastDV;
 	}
-	
 }

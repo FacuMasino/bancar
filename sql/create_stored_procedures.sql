@@ -1,7 +1,8 @@
 DELIMITER $$
 
 USE bancar_db
--- Account 
+
+-- Account
 
 CREATE PROCEDURE insert_account (
     IN _Cbu VARCHAR(22),
@@ -39,13 +40,11 @@ CREATE PROCEDURE insert_client (
     IN _BirthDate DATE,
     IN _NationalityId INT,
     IN _AddressId INT
-    
 )
 BEGIN
 	INSERT INTO Clients (Dni, Cuil, FirstName, LastName, Sex, Email, Phone, BirthDate, NationalityId, AddressId)
-    VALUES (_Dni,_Cuil,_FirstName,_LastName,_Sex,_Email,_Phone,_BirthDate,_NationalityId, _AddressId);
+    VALUES (_Dni, _Cuil, _FirstName, _LastName, _Sex, _Email, _Phone, _BirthDate, _NationalityId, _AddressId);
 END $$
-
 
 CREATE PROCEDURE update_client (
 	IN _Dni VARCHAR(50),
@@ -59,7 +58,6 @@ CREATE PROCEDURE update_client (
     IN _NationalityId INT,
     IN _AddressId INT,
     IN _ClientId INT
-    
 )
 BEGIN
 	UPDATE Clients

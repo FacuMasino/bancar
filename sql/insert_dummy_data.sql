@@ -55,3 +55,4 @@ INSERT INTO
     Accounts (Cbu, Balance, AccountTypeId, ClientId)
 VALUES
     ('0123456789012345678901', 10000, 1, 1);
+    

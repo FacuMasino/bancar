@@ -8,8 +8,8 @@ import domainModel.Address;
 import domainModel.Client;
 import domainModel.Country;
 
-public class ClientsDao implements IClientsDao {
-	
+public class ClientsDao implements IClientsDao
+{	
 	private Database db;
 
 	public ClientsDao()
@@ -42,7 +42,8 @@ public class ClientsDao implements IClientsDao {
 		// El negocio debe verificar que lo devuelto != null
 		Client auxClient = null;
 		
-		try {
+		try
+		{
 			db.setPreparedStatement("Select * from Clients where ClientId = ?");
 			db.getPreparedStatement().setInt(1, clientId);
 			rsClient = db.getPreparedStatement().executeQuery();
@@ -55,10 +56,10 @@ public class ClientsDao implements IClientsDao {
 			Country auxNationality = new Country();
 			Address auxAddress = new Address();
 			
-			auxClient = getClient(rsClient, auxNationality,auxAddress);
+			auxClient = getClient(rsClient, auxNationality, auxAddress);
 		}
-		catch (Exception ex) {
-			
+		catch (Exception ex)
+		{
 			ex.printStackTrace();
 			throw ex;
 		}
@@ -71,18 +72,19 @@ public class ClientsDao implements IClientsDao {
 	{
 		int rows = 0;
 		
-		try 
+		try
 		{
 			db.setPreparedStatement("{CALL update_client(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}");
 			setUpdateParameters(client);
 			rows = db.getPreparedStatement().executeUpdate();
 		}
-		catch (SQLException ex) {
+		catch (SQLException ex)
+		{
 			ex.printStackTrace();
 			throw ex;
 		}
 		
-		return (rows > 0);	
+		return (rows > 0);
 	}
 
 	@Override
@@ -90,21 +92,20 @@ public class ClientsDao implements IClientsDao {
 	{//TODO: PENDIENTE ELIMINACION DE INFO ASOCIADA A ESE CLIENTE (USUARIO, DIRECCION)
 		int rows = 0;
 		
-		try 
+		try
 		{
 			db.setPreparedStatement("UPDATE Clients SET IsActive = 0 WHERE ClientId = ?");
 			db.getPreparedStatement().setInt(1, clientId);
 			rows = db.getPreparedStatement().executeUpdate();
 		}
-		catch (SQLException ex) {
+		catch (SQLException ex)
+		{
 			ex.printStackTrace();
 			throw ex;
 		}
 		
 		return (rows > 0);
 	}
-		
-	
 
 	@Override
 	public ArrayList<Client> list() throws SQLException
@@ -112,12 +113,13 @@ public class ClientsDao implements IClientsDao {
 		ResultSet rsClients;
 		ArrayList<Client> clients = new ArrayList<Client>();
 		
-		try {
+		try
+		{
 			db.setPreparedStatement("Select * from Clients WHERE isActive = 1");
 			rsClients = db.getPreparedStatement().executeQuery();
 			
-			while(rsClients.next()) {
-				
+			while(rsClients.next())
+			{
 				// TODO: IMPORTANTE leer pais con su ID usando CountryBussiness, ahora está vacía
 				Country auxNationality = new Country ();
 				// TODO: IMPORTANTE leer direccion con su ID usando AddressBussiness, ahora está vacía
@@ -126,7 +128,8 @@ public class ClientsDao implements IClientsDao {
 				clients.add(getClient(rsClients, auxNationality, auxAddress));
 			}
 		}
-		catch (Exception ex) {
+		catch (Exception ex)
+		{
 			ex.printStackTrace();
 		}
 		
@@ -138,8 +141,6 @@ public class ClientsDao implements IClientsDao {
 	{
 		return 0; 
 	}
-	
-
 	
 	private void setParameters(Client client) throws SQLException
 	{
@@ -153,7 +154,6 @@ public class ClientsDao implements IClientsDao {
 		db.getPreparedStatement().setDate(8, client.getBirthDate());
 		db.getPreparedStatement().setInt(9, client.getNationality().getId());
 		db.getPreparedStatement().setInt (10, client.getAddress().getId());
-		
 	}
 	
 	private void setUpdateParameters(Client client) throws SQLException
@@ -169,15 +169,14 @@ public class ClientsDao implements IClientsDao {
 		db.getPreparedStatement().setInt(9, client.getNationality().getId());
 		db.getPreparedStatement().setInt (10, client.getAddress().getId());
 		db.getPreparedStatement().setInt(11, client.getId());
-		
 	}
 	
-	private Client getClient(ResultSet rs, Country nationality, Address address) throws SQLException {
+	private Client getClient(ResultSet rs, Country nationality, Address address) throws SQLException
+	{
+		Client auxClient = new Client();
 		
-		Client auxClient = new Client ();
-		
-		try { 
-			 
+		try
+		{
 			auxClient.setDni(rs.getString("Dni"));
 			auxClient.setActive(rs.getBoolean("IsActive"));
 			auxClient.setCuil(rs.getString("Cuil"));
@@ -190,7 +189,6 @@ public class ClientsDao implements IClientsDao {
 			auxClient.setNationality(nationality);
 			auxClient.setAddress(address);
 			auxClient.setId(rs.getInt("ClientId"));
-		
 		}
 		catch (SQLException ex)
 		{
@@ -201,4 +199,3 @@ public class ClientsDao implements IClientsDao {
 		return auxClient;
 	}
 }
-
