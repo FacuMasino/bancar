@@ -18,13 +18,13 @@ public class ClientsDao implements IClientsDao
 	}
 	
 	public boolean create(Client client) throws SQLException
-	{//TODO: PENDIENTE CREACION DEL USUARIO A LA VEZ QUE SE CREA CLIENTE
+	{
 		int rows = 0;
 		
 		try
 		{
-			db.setPreparedStatement("{CALL insert_client(?, ?, ?, ?, ?, ?, ?, ?, ? ,? )}");
-			setParameters(client);
+			db.setPreparedStatement("{CALL insert_client(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}");
+			setParameters(client, false);
 			rows = db.getPreparedStatement().executeUpdate();
 		}
 		catch(Exception exception)
@@ -39,7 +39,6 @@ public class ClientsDao implements IClientsDao
 	public Client read(int clientId) throws SQLException
 	{
 		ResultSet rsClient;
-		// El negocio debe verificar que lo devuelto != null
 		Client auxClient = null;
 		
 		try
@@ -48,14 +47,13 @@ public class ClientsDao implements IClientsDao
 			db.getPreparedStatement().setInt(1, clientId);
 			rsClient = db.getPreparedStatement().executeQuery();
 			
-			if(!rsClient.next()) return auxClient; // no se encontró, devuelve null
+			if(!rsClient.next())
+			{
+				return auxClient;
+			}
 			
-			// TODO: IMPORTANTE leer pais con su ID usando CountryBussiness, ahora está vacía
-			// TODO: IMPORTANTE leer direccion con su ID usando AddressBussiness, ahora está vacía
-					
 			Country auxNationality = new Country();
 			Address auxAddress = new Address();
-			
 			auxClient = getClient(rsClient, auxNationality, auxAddress);
 		}
 		catch (Exception ex)
@@ -75,7 +73,7 @@ public class ClientsDao implements IClientsDao
 		try
 		{
 			db.setPreparedStatement("{CALL update_client(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}");
-			setUpdateParameters(client);
+			setParameters(client, true);
 			rows = db.getPreparedStatement().executeUpdate();
 		}
 		catch (SQLException ex)
@@ -89,7 +87,7 @@ public class ClientsDao implements IClientsDao
 
 	@Override
 	public boolean delete(int clientId) throws SQLException
-	{//TODO: PENDIENTE ELIMINACION DE INFO ASOCIADA A ESE CLIENTE (USUARIO, DIRECCION)
+	{
 		int rows = 0;
 		
 		try
@@ -120,11 +118,8 @@ public class ClientsDao implements IClientsDao
 			
 			while(rsClients.next())
 			{
-				// TODO: IMPORTANTE leer pais con su ID usando CountryBussiness, ahora está vacía
 				Country auxNationality = new Country ();
-				// TODO: IMPORTANTE leer direccion con su ID usando AddressBussiness, ahora está vacía
 				Address auxAddress = new Address ();
-				
 				clients.add(getClient(rsClients, auxNationality, auxAddress));
 			}
 		}
@@ -142,7 +137,7 @@ public class ClientsDao implements IClientsDao
 		return 0; 
 	}
 	
-	private void setParameters(Client client) throws SQLException
+	private void setParameters(Client client, boolean isUpdate) throws SQLException
 	{
 		db.getPreparedStatement().setString(1, client.getDni());
 		db.getPreparedStatement().setString(2, client.getCuil());
@@ -154,21 +149,11 @@ public class ClientsDao implements IClientsDao
 		db.getPreparedStatement().setDate(8, client.getBirthDate());
 		db.getPreparedStatement().setInt(9, client.getNationality().getId());
 		db.getPreparedStatement().setInt (10, client.getAddress().getId());
-	}
-	
-	private void setUpdateParameters(Client client) throws SQLException
-	{
-		db.getPreparedStatement().setString(1, client.getDni());
-		db.getPreparedStatement().setString(2, client.getCuil());
-		db.getPreparedStatement().setString(3, client.getFirstName());
-		db.getPreparedStatement().setString(4, client.getLastName());
-		db.getPreparedStatement().setString(5, client.getSex());
-		db.getPreparedStatement().setString(6, client.getEmail());
-		db.getPreparedStatement().setString(7, client.getPhone());
-		db.getPreparedStatement().setDate(8, client.getBirthDate());
-		db.getPreparedStatement().setInt(9, client.getNationality().getId());
-		db.getPreparedStatement().setInt (10, client.getAddress().getId());
-		db.getPreparedStatement().setInt(11, client.getId());
+		
+		if (isUpdate)
+		{
+			db.getPreparedStatement().setInt(11, client.getId());
+		}
 	}
 	
 	private Client getClient(ResultSet rs, Country nationality, Address address) throws SQLException

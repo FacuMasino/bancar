@@ -3,6 +3,7 @@ package dataAccessImpl;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -13,6 +14,7 @@ public class Database
 {
 	private static Connection connection;
 	private PreparedStatement preparedStatement;
+	private CallableStatement callableStatement;
 	private String host;
 	private String user;
 	private String pass;
@@ -35,15 +37,26 @@ public class Database
 		}
 	}
 	
+	public void setCallableStatement(String query) throws SQLException
+	{
+		setConnection();
+		this.callableStatement = connection.prepareCall(query);
+	}
+	
+	public CallableStatement getCallableStatement()
+	{
+		return this.callableStatement;
+	}
+	
 	public void setPreparedStatement(String query) throws SQLException
 	{
 		setConnection();
-		preparedStatement = connection.prepareStatement(query);
+		this.preparedStatement = connection.prepareStatement(query);
 	}
 	
 	public PreparedStatement getPreparedStatement()
 	{
-		return preparedStatement;
+		return this.preparedStatement;
 	}
 	
 	private void setConnection()

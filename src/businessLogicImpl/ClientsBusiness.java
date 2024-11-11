@@ -76,7 +76,7 @@ public class ClientsBusiness implements IClientsBusiness
 
 	@Override
 	public boolean delete(int clientId) throws BusinessException  
-	{//TODO:  Ver ELIMINACION INTEGRAL
+	{
 		try
 		{
 			return clientsDao.delete(clientId);			
