@@ -1,4 +1,5 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags/"%>
+<%@ page contentType="text/html; charset=UTF-8" %>
 <t:masterpage title="Admin - Panel" customNavbar="true">
   <t:adminwrapper activeMenuItem="adminPanelMenu">
     <script async src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
@@ -14,7 +15,7 @@
         </div>
         <div class="bg-white rounded rounded-lg flex flex-col justify-between gap-2.5 px-8 py-6">
           <div class="flex justify-between">
-            <p>Préstamos Activos</p>
+            <p>PrÃ©stamos Activos</p>
             <i data-lucide="credit-card"></i>
           </div>
           <p class="text-red-600 text-xl font-bold">100</p>
@@ -39,7 +40,7 @@
           <div class="flex flex-col gap-4 rounded-lg p-8 bg-white">
             <p class="font-semibold">Flujo de dinero</p>
             <div class="flex justify-between">
-              <p class="font-semibold">Período</p>
+              <p class="font-semibold">PerÃ­odo</p>
               <form class="flex justify-between">
                 <div class="flex justify-around">
                   <input type="date"> <input type="date">
@@ -61,80 +62,10 @@
         </div>
       </div>
     </div>
-    <script defer>
-      var options = {
-              series: [{
-              name: 'Prestamos Otorgados',
-              data: [44, 55, 57, 56, 61, 58, 63, 60, 66]
-            }, {
-              name: 'Transferencias Realizadas',
-              data: [76, 85, 101, 98, 87, 105, 91, 114, 94]
-            }],
-              chart: {
-              type: 'bar',
-              height: 350
-            },
-            plotOptions: {
-              bar: {
-                horizontal: false,
-                columnWidth: '55%',
-                endingShape: 'rounded'
-              },
-            },
-            dataLabels: {
-              enabled: false
-            },
-            stroke: {
-              show: true,
-              width: 2,
-              colors: ['transparent']
-            },
-            xaxis: {
-              categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
-            },
-            yaxis: {
-              title: {
-                text: '$ (Miles)'
-              }
-            },
-            fill: {
-              opacity: 1
-            },
-            tooltip: {
-              y: {
-                formatter: function (val) {
-                  return "$ " + val + " mil"
-                }
-              }
-            }
-            };
-      
-      var chart = new ApexCharts(document.querySelector("#chartColumns"), options);
-      chart.render();
-    </script>
-    <script defer>
-      var options = {
-              series: [25, 25, 50],
-              chart: {
-              width: 400,
-              type: 'pie',
-            },
-            labels: ['Córdoba', 'Mendoza', 'Buenos Aires'],
-            responsive: [{
-              breakpoint: 480,
-              options: {
-                chart: {
-                  width: 200
-                },
-                legend: {
-                  position: 'bottom'
-                }
-              }
-            }]
-            };
-      
-      var chart = new ApexCharts(document.querySelector("#chartDonut"), options);
-      chart.render();
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/adminPanel.js"></script>
+    <script>
+      	drawBarChart("chartColumns");
+    	drawDonutChart("chartDonut");
     </script>
   </t:adminwrapper>
 </t:masterpage>
