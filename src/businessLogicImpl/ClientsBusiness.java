@@ -70,7 +70,7 @@ public class ClientsBusiness implements IClientsBusiness
 		{
 			ex.printStackTrace();
 			throw new BusinessException
-				("Ocurrió un error desconocido al actualizar los datos  del cliente.");
+				("Ocurrió un error desconocido al actualizar los datos del cliente.");
 		}
 	}
 

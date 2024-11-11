@@ -17,9 +17,6 @@ public class Client extends User
 	private Date birthDate;
 	private Country nationality;
 	private Address address;
-	
-	//TODO: debatir con equipo estos 2 atributos
-	private User user;
 	private ArrayList<Account> accounts;
 
 	public Client()
