@@ -11,50 +11,60 @@ import domainModel.Country;
 public class ClientsDao implements IClientsDao
 {	
 	private Database db;
+	private CountriesDao countriesDao;
+	private AddressesDao addressesDao;
 
 	public ClientsDao()
 	{
 		db = new Database();
+		countriesDao = new CountriesDao();
+		addressesDao = new AddressesDao();
 	}
 	
-	public boolean create(Client client) throws SQLException
+	public int create(Client client) throws SQLException
 	{
-		int rows = 0;
-		
+		countriesDao.handleId(client.getNationality());
+		addressesDao.handleId(client.getAddress());
+
 		try
 		{
-			db.setPreparedStatement("{CALL insert_client(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}");
+			db.setCallableStatement("{CALL insert_client(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}");
 			setParameters(client, false);
-			rows = db.getPreparedStatement().executeUpdate();
+			db.getCallableStatement().executeUpdate();
+			return db.getCallableStatement().getInt(1);
 		}
 		catch(Exception exception)
 		{
 			exception.printStackTrace();
 		}
 		
-		return (rows > 0);
+		return 0;
 	}
 
 	@Override
 	public Client read(int clientId) throws SQLException
 	{
-		ResultSet rsClient;
-		Client auxClient = null;
+		Client client = new Client();
+		ResultSet rs;
 		
 		try
 		{
 			db.setPreparedStatement("Select * from Clients where ClientId = ?");
 			db.getPreparedStatement().setInt(1, clientId);
-			rsClient = db.getPreparedStatement().executeQuery();
+			rs = db.getPreparedStatement().executeQuery();
 			
-			if(!rsClient.next())
+			if(!rs.next())
 			{
-				return auxClient;
+				return null;
 			}
 			
-			Country auxNationality = new Country();
-			Address auxAddress = new Address();
-			auxClient = getClient(rsClient, auxNationality, auxAddress);
+			assignResultSet(client, rs);
+			
+			int nationalityId = rs.getInt("NationalityId");
+			client.setNationality(countriesDao.read(nationalityId));
+			
+			int addressId = rs.getInt("AddressId");
+			client.setAddress(addressesDao.read(addressId));
 		}
 		catch (Exception ex)
 		{
@@ -62,7 +72,7 @@ public class ClientsDao implements IClientsDao
 			throw ex;
 		}
 		
-		return auxClient;
+		return client;
 	}
 
 	@Override
@@ -72,7 +82,7 @@ public class ClientsDao implements IClientsDao
 		
 		try
 		{
-			db.setPreparedStatement("{CALL update_client(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}");
+			db.setPreparedStatement("{CALL update_client(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}");
 			setParameters(client, true);
 			rows = db.getPreparedStatement().executeUpdate();
 		}
@@ -130,57 +140,49 @@ public class ClientsDao implements IClientsDao
 		
 		return clients;
 	}
-
-	@Override
-	public int getId (Client client) throws SQLException
-	{
-		return 0; 
-	}
 	
 	private void setParameters(Client client, boolean isUpdate) throws SQLException
 	{
-		db.getPreparedStatement().setString(1, client.getDni());
-		db.getPreparedStatement().setString(2, client.getCuil());
-		db.getPreparedStatement().setString(3, client.getFirstName());
-		db.getPreparedStatement().setString(4, client.getLastName());
-		db.getPreparedStatement().setString(5, client.getSex());
-		db.getPreparedStatement().setString(6, client.getEmail());
-		db.getPreparedStatement().setString(7, client.getPhone());
-		db.getPreparedStatement().setDate(8, client.getBirthDate());
-		db.getPreparedStatement().setInt(9, client.getNationality().getId());
-		db.getPreparedStatement().setInt (10, client.getAddress().getId());
-		
 		if (isUpdate)
 		{
-			db.getPreparedStatement().setInt(11, client.getId());
+			db.getCallableStatement().setInt(1, client.getId());
 		}
+		else
+		{
+			db.getCallableStatement().registerOutParameter(1, java.sql.Types.INTEGER);
+		}
+
+		db.getPreparedStatement().setString(2, client.getDni());
+		db.getPreparedStatement().setString(3, client.getCuil());
+		db.getPreparedStatement().setString(4, client.getFirstName());
+		db.getPreparedStatement().setString(5, client.getLastName());
+		db.getPreparedStatement().setString(6, client.getSex());
+		db.getPreparedStatement().setString(7, client.getEmail());
+		db.getPreparedStatement().setString(8, client.getPhone());
+		db.getPreparedStatement().setDate(9, client.getBirthDate());
+		db.getPreparedStatement().setInt(10, client.getNationality().getId());
+		db.getPreparedStatement().setInt (11, client.getAddress().getId());
 	}
 	
-	private Client getClient(ResultSet rs, Country nationality, Address address) throws SQLException
+	private void assignResultSet(Client client, ResultSet rs) throws SQLException
 	{
-		Client auxClient = new Client();
-		
 		try
 		{
-			auxClient.setDni(rs.getString("Dni"));
-			auxClient.setActive(rs.getBoolean("IsActive"));
-			auxClient.setCuil(rs.getString("Cuil"));
-			auxClient.setFirstName(rs.getString("FirtsName"));
-			auxClient.setLastName(rs.getString("LastName"));
-			auxClient.setSex(rs.getString("Sex"));
-			auxClient.setEmail(rs.getString("Email"));
-			auxClient.setPhone(rs.getString("Phone"));
-			auxClient.setBirthDate(rs.getDate("BirthDate"));
-			auxClient.setNationality(nationality);
-			auxClient.setAddress(address);
-			auxClient.setId(rs.getInt("ClientId"));
+			client.setId(rs.getInt("ClientId"));
+			client.setActive(rs.getBoolean("IsActive"));
+			client.setDni(rs.getString("Dni"));
+			client.setCuil(rs.getString("Cuil"));
+			client.setFirstName(rs.getString("FirtsName"));
+			client.setLastName(rs.getString("LastName"));
+			client.setSex(rs.getString("Sex"));
+			client.setEmail(rs.getString("Email"));
+			client.setPhone(rs.getString("Phone"));
+			client.setBirthDate(rs.getDate("BirthDate"));
 		}
 		catch (SQLException ex)
 		{
 			ex.printStackTrace();
 			throw ex;
 		}
-		
-		return auxClient;
 	}
 }

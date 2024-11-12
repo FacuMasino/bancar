@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import dataAccess.IAddressesDao;
 import domainModel.Address;
+import domainModel.City;
 
 public class AddressesDao implements IAddressesDao
 {
@@ -24,9 +25,9 @@ public class AddressesDao implements IAddressesDao
 	@Override	
 	public int create(Address address) throws SQLException
 	{
-		countriesDao.HandleId(address.getCountry());
-		provincesDao.HandleId(address.getProvince(), address.getCountry().getId());
-		citiesDao.HandleId(address.getCity(), address.getProvince().getId());
+		countriesDao.handleId(address.getCountry());
+		provincesDao.handleId(address.getProvince(), address.getCountry().getId());
+		citiesDao.handleId(address.getCity(), address.getProvince().getId());
 		
 		try
 		{
@@ -96,6 +97,69 @@ public class AddressesDao implements IAddressesDao
 	public ArrayList<Address> list() throws SQLException
 	{
 		return null;
+	}
+	
+	public int getId(Address address) throws SQLException
+	{
+		return getId(
+				address.getStreetName(),
+				address.getStreetNumber(),
+				address.getCity().getId());
+	}
+	
+	public int getId(String streetName, String streetNumber, int cityId) throws SQLException
+	{
+		ResultSet rs;
+		
+		try
+		{
+			db.setPreparedStatement("SELECT AddressId FROM Addresses WHERE StreetName = ? AND StreetNumber = ? AND CityId = ?;");
+			db.getPreparedStatement().setString(1, streetName);
+			db.getPreparedStatement().setString(2, streetNumber);
+			db.getPreparedStatement().setInt(3, cityId);
+			rs = db.getPreparedStatement().executeQuery();
+			
+			if(!rs.next())
+			{
+				return 0;
+			}
+			
+			return rs.getInt("AddressId");
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+			throw ex;
+		}
+	}
+	
+	public void handleId(Address address) throws SQLException
+	{
+		try
+		{
+			if (address != null)
+		    {
+		        int foundId = getId(address);
+
+		        if (foundId == 0)
+		        {
+		        	address.setId(create(address));
+		        }
+		        else if (foundId == address.getId())
+		        {
+		            update(address);
+		        }
+		        else
+		        {
+		        	address.setId(foundId);
+		        }
+		    }
+		}
+		catch (SQLException ex)
+		{
+			ex.printStackTrace();
+			throw ex;
+		}
 	}
 	
 	private void setParameters(Address address, boolean isUpdate) throws SQLException

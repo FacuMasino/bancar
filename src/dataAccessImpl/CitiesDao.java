@@ -4,9 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import dataAccess.ICitiesDao;
-import domainModel.Address;
 import domainModel.City;
-import domainModel.Province;
 
 public class CitiesDao implements ICitiesDao
 {
@@ -111,7 +109,7 @@ public class CitiesDao implements ICitiesDao
 		}
 	}
 	
-	public void HandleId(City city, int provinceId) throws SQLException
+	public void handleId(City city, int provinceId) throws SQLException
 	{
 		try
 		{

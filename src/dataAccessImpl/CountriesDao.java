@@ -132,7 +132,7 @@ public class CountriesDao implements ICountriesDao
 		}
 	}
 	
-	public void HandleId(Country country) throws SQLException
+	public void handleId(Country country) throws SQLException
 	{
 		try
 		{

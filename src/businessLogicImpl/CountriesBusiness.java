@@ -27,9 +27,11 @@ public class CountriesBusiness implements ICountriesBusiness
 				return true;
 			}
 		}
-		catch (SQLException e)
+		catch (Exception ex)
 		{
-			e.printStackTrace();
+			ex.printStackTrace();
+			throw new BusinessException
+				("Ocurrió un error desconocido al crear el país.");
 		}
 
 		return false;

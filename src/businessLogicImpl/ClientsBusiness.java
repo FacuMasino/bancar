@@ -22,7 +22,10 @@ public class ClientsBusiness implements IClientsBusiness
 	{
 		try
 		{
-			return clientsDao.create(client);
+			if (0 < clientsDao.create(client))
+			{
+				return true;
+			}
 		}
 		catch (SQLException ex)
 		{
@@ -34,6 +37,8 @@ public class ClientsBusiness implements IClientsBusiness
 			throw new BusinessException
 				("Ocurrió un error desconocido al crear el cliente.");
 		}
+		
+		return false;
 	}
 
 	@Override

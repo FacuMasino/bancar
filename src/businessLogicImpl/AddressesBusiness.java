@@ -27,9 +27,11 @@ public class AddressesBusiness implements IAddressesBusiness
 				return true;
 			}
 		}
-		catch (SQLException e)
+		catch (Exception ex)
 		{
-			e.printStackTrace();
+			ex.printStackTrace();
+			throw new BusinessException
+				("Ocurrió un error desconocido al crear el domicilio.");
 		}
 
 		return false;

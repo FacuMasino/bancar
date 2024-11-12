@@ -4,9 +4,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import dataAccess.IProvincesDao;
-import domainModel.Address;
-import domainModel.City;
-import domainModel.Country;
 import domainModel.Province;
 
 public class ProvincesDao implements IProvincesDao
@@ -136,7 +133,7 @@ public class ProvincesDao implements IProvincesDao
 		}
 	}
 	
-	public void HandleId(Province province, int countryId) throws SQLException
+	public void handleId(Province province, int countryId) throws SQLException
 	{
 		try
 		{

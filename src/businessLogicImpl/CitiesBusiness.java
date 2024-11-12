@@ -27,9 +27,11 @@ public class CitiesBusiness implements ICitiesBusiness
 				return true;
 			}
 		}
-		catch (SQLException e)
+		catch (Exception ex)
 		{
-			e.printStackTrace();
+			ex.printStackTrace();
+			throw new BusinessException
+				("Ocurrió un error desconocido al crear la localidad.");
 		}
 
 		return false;
@@ -50,7 +52,7 @@ public class CitiesBusiness implements ICitiesBusiness
 		{
 			ex.printStackTrace();
 			throw new BusinessException
-				("Ocurrió un error desconocido al leer la ciudad.");
+				("Ocurrió un error desconocido al leer la localidad.");
 		}
 	}
 

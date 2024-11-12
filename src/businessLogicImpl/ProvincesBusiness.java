@@ -27,9 +27,11 @@ public class ProvincesBusiness implements IProvincesBusiness
 				return true;
 			}
 		}
-		catch (SQLException e)
+		catch (Exception ex)
 		{
-			e.printStackTrace();
+			ex.printStackTrace();
+			throw new BusinessException
+				("Ocurrió un error desconocido al crear la provincia.");
 		}
 
 		return false;
