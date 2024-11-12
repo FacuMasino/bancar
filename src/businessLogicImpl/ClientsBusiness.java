@@ -57,7 +57,7 @@ public class ClientsBusiness implements IClientsBusiness
 			ex.printStackTrace();
 			throw new BusinessException
 				("Ocurrió un error desconocido al leer el cliente.");
-		}	
+		}
 	}
 
 	@Override
