@@ -5,8 +5,8 @@ import java.util.ArrayList;
 
 public class Client extends User
 {
-	private int id;
-	private boolean isActive;
+	private int clientId;
+	private boolean activeStatus;
 	private String dni;
 	private String cuil;
 	private String firstName;
@@ -24,24 +24,24 @@ public class Client extends User
 		
 	}
 
-	public int getId()
+	public int getClientId()
 	{
-		return id;
+		return clientId;
 	}
 
-	public void setId(int id)
+	public void setClientId(int clientId)
 	{
-		this.id = id;
+		this.clientId = clientId;
 	}
 
-	public boolean isActive()
+	public boolean getActiveStatus()
 	{
-		return isActive;
+		return activeStatus;
 	}
 
-	public void setActive(boolean isActive)
+	public void setActiveStatus(boolean activeStatus)
 	{
-		this.isActive = isActive;
+		this.activeStatus = activeStatus;
 	}
 
 	public String getDni()

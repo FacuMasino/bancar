@@ -6,12 +6,14 @@ import java.sql.Date;
 public class Account
 {
 	private int id;
-	private boolean isActive;
+	private boolean activeStatus;
 	private String cbu;
 	private Date creationDate;
 	private BigDecimal balance;
 	private AccountType accountType;
 	private Client client;
+	
+	private int clientId;
 
 	public Account()
 	{
@@ -28,14 +30,14 @@ public class Account
 		this.id = id;
 	}
 
-	public boolean isActive()
+	public boolean getActiveStatus()
 	{
-		return isActive;
+		return activeStatus;
 	}
 
-	public void setActive(boolean isActive)
+	public void setActiveStatus(boolean activeStatus)
 	{
-		this.isActive = isActive;
+		this.activeStatus = activeStatus;
 	}
 
 	public String getCbu()
@@ -86,5 +88,13 @@ public class Account
 	public void setClient(Client client)
 	{
 		this.client = client;
+	}
+
+	public int getClientId() {
+		return clientId;
+	}
+
+	public void setClientId(int clientId) {
+		this.clientId = clientId;
 	}
 }

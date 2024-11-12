@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import dataAccess.IAddressesDao;
 import domainModel.Address;
-import domainModel.City;
 
 public class AddressesDao implements IAddressesDao
 {

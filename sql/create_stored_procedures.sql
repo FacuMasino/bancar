@@ -104,6 +104,30 @@ BEGIN
     WHERE AddressId = _AddressId;
 END $$
 
+-- User
+
+CREATE PROCEDURE insert_user (
+    OUT _NewUserId INT,
+	IN _Username VARCHAR(50),
+    IN _UserPassword VARCHAR(50)
+)
+BEGIN
+	INSERT INTO Users (Username, UserPassword)
+    VALUES (_Username, _UserPassword);
+    SET _NewUserId = LAST_INSERT_ID();
+END $$
+
+CREATE PROCEDURE update_user (
+    IN _UserId INT,
+	IN _Username VARCHAR(50),
+    IN _UserPassword VARCHAR(50)
+)
+BEGIN
+	UPDATE Users
+	SET Username = _Username,  UserPassword = _UserPassword
+    WHERE UserId = _UserId;
+END $$
+
 -- Client
 
 CREATE PROCEDURE insert_client (

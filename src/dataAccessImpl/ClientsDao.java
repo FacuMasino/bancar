@@ -145,7 +145,7 @@ public class ClientsDao implements IClientsDao
 	{
 		if (isUpdate)
 		{
-			db.getCallableStatement().setInt(1, client.getId());
+			db.getCallableStatement().setInt(1, client.getClientId());
 		}
 		else
 		{
@@ -168,8 +168,8 @@ public class ClientsDao implements IClientsDao
 	{
 		try
 		{
-			client.setId(rs.getInt("ClientId"));
-			client.setActive(rs.getBoolean("IsActive"));
+			client.setClientId(rs.getInt("ClientId"));
+			client.setActiveStatus(rs.getBoolean("ActiveStatus"));
 			client.setDni(rs.getString("Dni"));
 			client.setCuil(rs.getString("Cuil"));
 			client.setFirstName(rs.getString("FirtsName"));
