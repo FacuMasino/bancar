@@ -4,8 +4,7 @@ import java.util.ArrayList;
 
 public class User
 {
-	private int id;
-	private boolean isActive;
+	private int userId;
 	private String username;
 	private String password;
 	private ArrayList<Role> roles;
@@ -21,24 +20,14 @@ public class User
 		this.password = password;
 	}
 
-	public int getId()
+	public int getUserId()
 	{
-		return id;
+		return userId;
 	}
 
-	public void setId(int id)
+	public void setUserId(int userId)
 	{
-		this.id = id;
-	}
-
-	public boolean isActive()
-	{
-		return isActive;
-	}
-
-	public void setActive(boolean isActive)
-	{
-		this.isActive = isActive;
+		this.userId = userId;
 	}
 
 	public String getUsername()

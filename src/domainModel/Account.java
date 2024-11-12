@@ -6,7 +6,7 @@ import java.sql.Date;
 public class Account
 {
 	private int id;
-	private boolean isActive;
+	private boolean activeStatus;
 	private String cbu;
 	private Date creationDate;
 	private BigDecimal balance;
@@ -28,14 +28,14 @@ public class Account
 		this.id = id;
 	}
 
-	public boolean isActive()
+	public boolean getActiveStatus()
 	{
-		return isActive;
+		return activeStatus;
 	}
 
-	public void setActive(boolean isActive)
+	public void setActiveStatus(boolean activeStatus)
 	{
-		this.isActive = isActive;
+		this.activeStatus = activeStatus;
 	}
 
 	public String getCbu()
