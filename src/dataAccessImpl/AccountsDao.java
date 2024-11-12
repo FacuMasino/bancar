@@ -11,6 +11,7 @@ import domainModel.Client;
 public class AccountsDao implements IAccountsDao
 {
 	private Database db;
+	private AccountTypeDao accountTypeDao;
 
 	public AccountsDao()
 	{

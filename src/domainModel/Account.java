@@ -12,6 +12,8 @@ public class Account
 	private BigDecimal balance;
 	private AccountType accountType;
 	private Client client;
+	
+	private int clientId;
 
 	public Account()
 	{
@@ -86,5 +88,13 @@ public class Account
 	public void setClient(Client client)
 	{
 		this.client = client;
+	}
+
+	public int getClientId() {
+		return clientId;
+	}
+
+	public void setClientId(int clientId) {
+		this.clientId = clientId;
 	}
 }
