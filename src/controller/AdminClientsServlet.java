@@ -127,10 +127,12 @@ public class AdminClientsServlet extends HttpServlet {
 		
 		// Lista de prueba
 		ArrayList<Client> clientsList = new ArrayList<Client>();
-		ArrayList<Account> auxAccounts = new ArrayList<Account>(3);
+		ArrayList<Account> auxAccounts;
 		
 		for(int i = 0; i <= 25; i++) {
 			Client auxClient = new Client();
+			auxAccounts = new ArrayList<Account>();
+			if(i<12) auxAccounts.add(new Account()); // solo para tener distintos clientes
 			auxClient.setId(i);
 			auxClient.setFirstName("Cliente");
 			auxClient.setLastName("de Prueba " + i);
