@@ -79,6 +79,64 @@ public class UsersDao implements IUsersDao
 		return null;
 	}
 	
+	public int getUserId(User user) throws SQLException
+	{
+		return getUserId(user.getPassword());
+	}
+	
+	public int getUserId(String username) throws SQLException
+	{
+		ResultSet rs;
+		
+		try
+		{
+			db.setPreparedStatement("SELECT UserId FROM Useres WHERE Username= ?;");
+			db.getPreparedStatement().setString(1, username);
+			rs = db.getPreparedStatement().executeQuery();
+			
+			if(!rs.next())
+			{
+				return 0;
+			}
+			
+			return rs.getInt("UserId");
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+			throw ex;
+		}
+	}
+	
+	public void handleId(User user) throws SQLException
+	{
+		try
+		{
+			if (user != null)
+		    {
+		        int foundId = getUserId(user);
+
+		        if (foundId == 0)
+		        {
+		        	user.setUserId(create(user));
+		        }
+		        else if (foundId == user.getUserId())
+		        {
+		            update(user);
+		        }
+		        else
+		        {
+		        	user.setUserId(foundId);
+		        }
+		    }
+		}
+		catch (SQLException ex)
+		{
+			ex.printStackTrace();
+			throw ex;
+		}
+	}
+	
 	private void setParameters(User user, boolean isUpdate) throws SQLException
 	{
 		if (isUpdate)
