@@ -7,9 +7,9 @@
         <h2 class="text-xl font-semibold text-gray-700">
           Mis préstamos
         </h2>
-        <button class="btn btn-primary">
+        <a href="ApplyForLoan.jsp" class="btn btn-primary">
           Solicitar préstamo
-        </button>
+        </a>
       </div>
       <div class="divide-y divide-gray-300 rounded-lg shadow p-6 bg-white">
 
@@ -23,10 +23,10 @@
           <div class="flex flex-col items-end">
             <p class="text-gray-600 font-medium">$5000 / mes</p>
             <p class="text-gray-600">Vencimiento: 23/11/24</p>
-            <button class="mt-2 text-blue-600 hover:underline flex items-center">
+            <a href="PayLoan.jsp?id=AcaElIdDePrestamo" class="mt-2 text-blue-600 hover:underline flex items-center">
               Pagar
               <span class="ml-1">&#8594;</span> <!-- Flecha derecha -->
-            </button>
+            </a>
           </div>
         </div>
 
@@ -40,10 +40,10 @@
           <div class="flex flex-col items-end">
             <p class="text-gray-600 font-medium">$20000 / mes</p>
             <p class="text-gray-600">Vencimiento: 15/12/24</p>
-            <button class="mt-2 text-blue-600 hover:underline flex items-center">
+            <a href="PayLoan.jsp?id=AcaElIdDePrestamo" class="mt-2 text-blue-600 hover:underline flex items-center">
               Pagar
               <span class="ml-1">&#8594;</span> <!-- Flecha derecha -->
-            </button>
+            </a>
           </div>
         </div>
 

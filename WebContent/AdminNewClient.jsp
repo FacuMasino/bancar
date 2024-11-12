@@ -3,7 +3,7 @@
   <t:adminwrapper activeMenuItem="adminClientsMenu">
     <div class="container md:max-w-[800px] mx-auto my-6 px-2">
       <p class="font-bold text-lg mb-3">Alta de cliente</p>
-      <form method="post" action="AdminClientsServlet?action=newClient"
+      <form method="post" action="AdminClientsServlet"
         class="bg-white rounded rounded-lg flex flex-col gap-4 p-8 w-full">
         <!-- Nombre y Apellido -->
         <div class="flex gap-4">
@@ -178,8 +178,8 @@
         <!-- Divisor -->
         <div class="divider m-0"></div>
         <div class="flex justify-end w-full">
-          <button class="btn btn-primary" type="submit">Dar de
-            alta</button>
+          <button class="btn btn-primary" type="submit" name="action"
+            value="newClient" >Dar de alta</button>
         </div>
       </form>
     </div>

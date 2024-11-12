@@ -1,7 +1,7 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags/"%>
 <t:masterpage title="Pagar Préstamos" customNavbar="true">
   <t:clientwrapper activeMenuItem="loansMenu">
-  	<form method="get" action="#" class="container flex flex-col gap-4 mx-auto p-4 max-w-7xl mb-8">
+  	<form method="post" action="LoansServlet" class="container flex flex-col gap-4 mx-auto p-4 max-w-7xl mb-8">
     	<div class="flex justify-between">
     	<!-- FLEX FLEX-COL GRAL -->
 			<div class="flex flex-col gap-6 w-full">
@@ -45,12 +45,15 @@
 				<!-- 3ER FLEX FLEX-COL -->
 				<div class="flex flex-col gap-6 ">
 					<p class="text-xl text-black text-semibold gap-6 w-full" >Selecciona una cuenta debito</p>
-					<select name="originAccount" class="bg-white select text-black select-bordered w-full drop-shadow-sm">
+					<select name="debitAccountId" class="bg-white select text-black select-bordered w-full drop-shadow-sm">
                       <option>Selecciona una cuenta</option>
                       <option>Cta. 1001 - $ 10.000</option>
                       <option>Cta. 1002 - $ 50.000</option>
                     </select>
-					<button class="btn btn-primary">Confirma Pago</button>
+					<button type="submit" class="btn btn-primary"
+                      name="action" value="payLoan">
+                      Confirmar Pago
+                    </button>
 				</div>
 			</div>
 		</div>

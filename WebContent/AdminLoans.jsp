@@ -7,10 +7,11 @@
       </h1>
 
       <!-- Préstamos en revisión -->
-      <div class="bg-white rounded-lg shadow-sm mb-6">
+      <form id="pendingLoansForm" method="post" action="AdminLoansServlet" class="bg-white rounded-lg shadow-sm mb-6">
         <div class="p-4">
           <h2 class="text-base font-medium mb-4">Préstamos en revisión</h2>
           <div class="overflow-x-auto">
+            <input type="hidden" id="selectedLoanId" name="selectedLoanId" /> 
             <table class="w-full">
               <thead>
                 <tr class="text-sm border-b border-gray-200">
@@ -33,10 +34,12 @@
                   <td class="py-3">6</td>
                   <td class="py-3">
                     <div class="flex gap-2">
-                      <button class="p-1.5 bg-green-500 text-white rounded-md">
+                      <button type="submit" class="p-1.5 bg-green-500 text-white rounded-md"
+                        onclick="setSelectedLoan('1')" name="action" value="approve">
                         <i data-lucide="check"></i>
                       </button>
-                      <button class="p-1.5 bg-red-500 text-white rounded-md">
+                      <button type="submit" class="p-1.5 bg-red-500 text-white rounded-md"
+                        onclick="setSelectedLoan('1')" name="action" value="reject">
                         <i data-lucide="x"></i>
                       </button>
                     </div>
@@ -51,10 +54,12 @@
                   <td class="py-3">48</td>
                   <td class="py-3">
                     <div class="flex gap-2">
-                      <button class="p-1.5 bg-green-500 text-white rounded-md">
+                      <button type="submit" class="p-1.5 bg-green-500 text-white rounded-md"
+                        onclick="setSelectedLoan('2')" name="action" value="approve">
                         <i data-lucide="check"></i>
                       </button>
-                      <button class="p-1.5 bg-red-500 text-white rounded-md">
+                      <button type="submit" class="p-1.5 bg-red-500 text-white rounded-md"
+                        onclick="setSelectedLoan('2')" name="action" value="reject">
                         <i data-lucide="x"></i>
                       </button>
                     </div>
@@ -69,10 +74,12 @@
                   <td class="py-3">24</td>
                   <td class="py-3">
                     <div class="flex gap-2">
-                      <button class="p-1.5 bg-green-500 text-white rounded-md">
+                      <button type="submit" class="p-1.5 bg-green-500 text-white rounded-md"
+                        onclick="setSelectedLoan('3')" name="action" value="approve">
                         <i data-lucide="check"></i>
                       </button>
-                      <button class="p-1.5 bg-red-500 text-white rounded-md">
+                      <button type="submit" class="p-1.5 bg-red-500 text-white rounded-md"
+                        onclick="setSelectedLoan('3')" name="action" value="reject">
                         <i data-lucide="x"></i>
                       </button>
                     </div>
@@ -82,7 +89,7 @@
             </table>
           </div>
         </div>
-      </div>
+      </form>
 
       <!-- Préstamos activos -->
       <div class="bg-white rounded-lg shadow-sm mb-6">
@@ -140,5 +147,12 @@
         </div>
       </div>
     </div>
+    <script>
+    	const setSelectedLoan = (id) => {
+    		const selectedLoan = document.getElementById("selectedLoanId");
+    		selectedLoan.value = id;
+    		document.getElementById("pendingLoansForm").submit();
+    	}
+    </script>
   </t:adminwrapper>
 </t:masterpage>

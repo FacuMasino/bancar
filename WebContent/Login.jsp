@@ -5,7 +5,7 @@
     <h2 class="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">Inicio de sesión</h2>
   </div>
   <div class="mt-10 p-6 sm:mx-auto sm:w-full sm:max-w-sm bg-white drop-shadow-sm rounded-lg">
-    <form class="space-y-6" action="#" method="POST">
+    <form class="space-y-6" action="LoginServlet" method="POST">
       <div>
       <h3 class="font-bold">Usuario</h3>
         <label class="input input-bordered flex items-center gap-2">

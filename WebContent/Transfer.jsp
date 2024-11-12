@@ -1,7 +1,7 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags/"%>
 <t:masterpage title="Transferir" customNavbar="true">
   <t:clientwrapper activeMenuItem="transferMenu">
-    <form method="get" action="#" class="container flex flex-col gap-4 mx-auto p-4 max-w-5xl mb-8">
+    <form method="post" action="TransferServlet" class="container flex flex-col gap-4 mx-auto p-4 max-w-5xl mb-8">
       <!-- DIV TITULO -->
       <div class=" gap-2.5 w-full ">
         <p class="font-bold text-3xl">Transferir dinero</p>
@@ -37,16 +37,16 @@
         <div class="flex flex-col p-6 w-full gap-4">
           <div class="form-control w-full">
             <label for="destinatary" class="label pt-0">
-              <span class="label-text font-semibold text-lg ">DNI / Nro.de Cuenta</span>
+              <span class="label-text font-semibold text-lg ">DNI / CBU</span>
             </label>
-            <input type="number" name="destinatary" placeholder="Ingrese DNI o Nro.de Cuenta destino"
+            <input type="number" name="destinatary" placeholder="Ingrese DNI o CBU destino"
               class="input input-bordered w-full" required/>
           </div>
           <div class="form-control w-full">
-            <label for="amountTransfer" class="label">
+            <label for="transferAmount" class="label">
               <span class="label-text font-semibold text-lg  leading-6">Monto a transferir</span>
             </label>
-            <input type="number" name="amountTransfer" placeholder="Ingrese monto a transferir"
+            <input type="number" name="transferAmount" placeholder="Ingrese monto a transferir"
               class="input input-bordered w-full" min="1" required/>
           </div>
         </div>
@@ -82,8 +82,11 @@
       <!-- DIV BOTON-->
       <div
         class="flex justify-end p-4 flex gap-3 w-full">
-        <button class="btn btn-ghost">Cancelar</button>
-        <button class="btn btn-primary">Continuar</button>
+        <a href="Account.jsp" class="btn btn-ghost">Cancelar</a>
+        <button type="submit" class="btn btn-primary"
+          name="action" value="goToConfirmation">
+          Continuar
+        </button>
       </div>
       <!-- CIERRES DIV PADRE-->
     </form>

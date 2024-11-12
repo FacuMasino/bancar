@@ -1,7 +1,7 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags/"%>
 <t:masterpage title="Pedir Préstamo" customNavbar="true">
   <t:clientwrapper activeMenuItem="loansMenu">
-    <form method="get" action="#" class="container flex flex-col gap-4 mx-auto p-4 max-w-7xl mb-8">
+    <form method="post" action="LoansServlet" class="container flex flex-col gap-4 mx-auto p-4 max-w-7xl mb-8">
       <div class="flex justify-between">
         <h1 class="font-bold text-xl">Solicitar Préstamo</h1>
         <button class="btn btn-primary">
@@ -60,19 +60,20 @@
         </div>
       </div>
       <h1 class="font-bold text-lg">Motivo del préstamo</h1>
-      <select class="select select-bordered w-full bg-white drop-shadow">
+      <select class="select select-bordered w-full bg-white drop-shadow" name="loanType">
         <option selected>Selecciona un motivo</option>
         <option>Electrodomésticos del hogar</option>
         <option>Hipotecario</option>
       </select>
       <h1 class="font-bold text-lg">Dónde vas a recibir el dinero?</h1>
-      <select class="select select-bordered w-full bg-white drop-shadow">
+      <select class="select select-bordered w-full bg-white drop-shadow" name="destinationAccountId">
         <option selected>Selecciona una cuenta</option>
         <option>Cta. 1001 - $ 55.000</option>
         <option>Cta. 1002 - $ 200.000</option>
       </select>
-      <button type="submit" class="btn btn-primary">
-        Confirmar Pago
+      <button type="submit" class="btn btn-primary"
+        name="action" value="requestLoan">
+        Solicitar préstamo
       </button>
     </form>
   </t:clientwrapper>
