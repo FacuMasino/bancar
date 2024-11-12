@@ -3,7 +3,6 @@
 <%@page import="java.util.ArrayList"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags/"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <%-- Variables JSTL --%>
 <c:set var="clientsList" value="${requestScope.clients != null ? requestScope.clients : emptyList}" />
@@ -89,31 +88,20 @@
             </c:choose>
           </tbody>
         </table>
+        <div class="flex w-full items-center">
+          <span class="w-full">
+            Mostrando 
+            ${requestScope.startElement + 1} a ${requestScope.endElement}
+            de ${requestScope.totalElements - 1}
+          </span>
+          <div class="join flex justify-end w-full">
+             <c:set var="max" value="${requestScope.maxElements}" />
+             <c:forEach var="i" begin="1" end="${requestScope.totalPages}">
+                <a href="?page=${i}&max=${max}" class="join-item btn">${i}</a>
+            </c:forEach>
+          </div>
+        </div>
       </div>
     </form>
-    <script>
-        new DataTable('#clientsList', {
-            responsive: true,
-            searching: false,
-            language: {
-              decimal: "",
-              emptyTable: "No hay información",
-              info: "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
-              infoEmpty: "Mostrando 0 to 0 of 0 Entradas",
-              infoFiltered: "(Filtrado de _MAX_ total entradas)",
-              infoPostFix: "",
-              thousands: ",",
-              lengthMenu: "Mostrar _MENU_ Entradas",
-              loadingRecords: "Cargando...",
-              processing: "Procesando...",
-              search: "Buscar:",
-              zeroRecords: "Sin resultados encontrados",
-                paginate: {
-                    previous: '&lt;',
-                    next: '&gt;'
-                }
-            }
-        });
-    </script>
   </t:adminwrapper>
 </t:masterpage>

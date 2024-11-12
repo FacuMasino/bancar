@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -25,9 +26,11 @@ import exceptions.BusinessException;
 @WebServlet("/AdminClients")
 public class AdminClientsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+	private ClientsBusiness clientsBiz;
+	
 	public AdminClientsServlet() {
 		super();
+		clientsBiz= new ClientsBusiness();
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -123,8 +126,46 @@ public class AdminClientsServlet extends HttpServlet {
 	private void listClients(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException 
 	{
-		// TODO: Listar clientes
+		int page = Optional.ofNullable(request.getParameter("page"))
+				.map(Integer::parseInt)
+				.orElse(1);
+		int max = Optional.ofNullable(request.getParameter("max"))
+				.map(Integer::parseInt)
+				.orElse(10);
 		
+		int listSize = 0, totalPages = 0;
+		int startPos = (page-1) * max; // Posicion inicial del array
+		int endPos = startPos + max; // Posicion final excluyente
+		
+		//ArrayList<Client> clientsList = clientsBiz.list();
+		ArrayList<Client> clientsList = clientsListMock();
+		listSize = clientsList.size();
+		totalPages = (int)Math.ceil((double)listSize / max);
+
+		if(endPos < listSize) 
+		{
+			clientsList.subList(0, startPos).clear();
+			clientsList.subList(endPos - startPos, listSize - startPos).clear();
+		} else {
+			int restElements = listSize % max;
+			if(restElements == 0) clientsList.subList(0, listSize - max).clear();
+			if(restElements != 0) clientsList.subList(0, listSize - restElements).clear();
+			endPos = listSize - 1;
+		}
+		
+		request.setAttribute("clients", clientsList);
+		request.setAttribute("actualPage", page);
+		request.setAttribute("totalPages", totalPages);
+		request.setAttribute("maxElements", max);
+		request.setAttribute("startElement", startPos);
+		request.setAttribute("endElement", endPos);
+		request.setAttribute("totalElements", listSize);
+		RequestDispatcher rd = request.getRequestDispatcher("AdminClients.jsp");		
+		rd.forward(request, response);
+	}
+	
+	// TODO: ELIMINAR esto cuando funciones ClientsBusiness.list();
+	private ArrayList<Client> clientsListMock() {
 		// Lista de prueba
 		ArrayList<Client> clientsList = new ArrayList<Client>();
 		ArrayList<Account> auxAccounts;
@@ -132,7 +173,7 @@ public class AdminClientsServlet extends HttpServlet {
 		for(int i = 0; i <= 25; i++) {
 			Client auxClient = new Client();
 			auxAccounts = new ArrayList<Account>();
-			if(i<12) auxAccounts.add(new Account()); // solo para tener distintos clientes
+			if(i<12) auxAccounts.add(new Account()); // Hasta el 11 tienen 1 cuenta
 			auxClient.setId(i);
 			auxClient.setFirstName("Cliente");
 			auxClient.setLastName("de Prueba " + i);
@@ -142,9 +183,6 @@ public class AdminClientsServlet extends HttpServlet {
 			clientsList.add(auxClient);
 		}
 		
-		request.setAttribute("clients", clientsList);
-		RequestDispatcher rd = request.getRequestDispatcher("AdminClients.jsp");		
-		rd.forward(request, response);
+		return clientsList;
 	}
-
 }
