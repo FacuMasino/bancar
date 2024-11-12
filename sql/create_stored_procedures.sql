@@ -5,8 +5,8 @@ USE bancar_db
 -- Country
 
 CREATE PROCEDURE insert_country (
-    IN _CountryName VARCHAR(50),
-    OUT _NewCountryId INT
+    OUT _NewCountryId INT,
+    IN _CountryName VARCHAR(50)
 )
 BEGIN
     INSERT INTO Countries (CountryName)
@@ -15,8 +15,8 @@ BEGIN
 END $$
 
 CREATE PROCEDURE update_country (
-    IN _CountryName VARCHAR(50),
-    IN _CountryId INT
+    IN _CountryId INT,
+    IN _CountryName VARCHAR(50)
 )
 BEGIN
     UPDATE Countries
@@ -27,9 +27,9 @@ END $$
 -- Province
 
 CREATE PROCEDURE insert_province (
+    OUT _NewProvinceId INT,
     IN _ProvinceName VARCHAR(50),
-    IN _CountryId INT,
-    OUT _NewProvinceId INT
+    IN _CountryId INT
 )
 BEGIN
     INSERT INTO Provinces (ProvinceName, CountryId)
@@ -38,9 +38,9 @@ BEGIN
 END $$
 
 CREATE PROCEDURE update_province (
+    IN _ProvinceId INT,
     IN _ProvinceName VARCHAR(50),
-    IN _CountryId INT,
-    IN _ProvinceId INT
+    IN _CountryId INT
 )
 BEGIN
     UPDATE Provinces
@@ -51,10 +51,10 @@ END $$
 -- City
 
 CREATE PROCEDURE insert_city (
+    OUT _NewCityId INT,
     IN _CityName VARCHAR(50),
     IN _ZipCode VARCHAR(50),
-    IN _ProvinceId INT,
-    OUT _NewCityId INT
+    IN _ProvinceId INT
 )
 BEGIN
     INSERT INTO Cities (CityName, ZipCode, ProvinceId)
@@ -63,10 +63,10 @@ BEGIN
 END $$
 
 CREATE PROCEDURE update_city (
+    IN _CityId INT,
     IN _CityName VARCHAR(50),
     IN _ZipCode VARCHAR(50),
-    IN _ProvinceId INT,
-    IN _CityId INT
+    IN _ProvinceId INT
 )
 BEGIN
     UPDATE Cities
@@ -77,12 +77,12 @@ END $$
 -- Address
 
 CREATE PROCEDURE insert_address (
+    OUT _NewAddressId INT,
     IN _StreetName VARCHAR(50),
     IN _StreetNumber VARCHAR(50),
     IN _Flat VARCHAR(50),
     IN _Details VARCHAR(500),
-    IN _CityId INT,
-    OUT _NewAddressId INT
+    IN _CityId INT
 )
 BEGIN
     INSERT INTO Addresses (StreetName, StreetNumber, Flat, Details, CityId)
@@ -91,12 +91,12 @@ BEGIN
 END $$
 
 CREATE PROCEDURE update_address (
+    IN _AddressId INT,
     IN _StreetName VARCHAR(50),
     IN _StreetNumber VARCHAR(50),
     IN _Flat VARCHAR(50),
     IN _Details VARCHAR(500),
-    IN _CityId INT,
-    IN _AddressId INT
+    IN _CityId INT
 )
 BEGIN
     UPDATE Addresses
@@ -107,6 +107,7 @@ END $$
 -- Client
 
 CREATE PROCEDURE insert_client (
+    OUT _NewClientId INT,
 	IN _Dni VARCHAR(50),
     IN _Cuil VARCHAR(50),
     IN _FirstName VARCHAR(50),
@@ -121,9 +122,11 @@ CREATE PROCEDURE insert_client (
 BEGIN
 	INSERT INTO Clients (Dni, Cuil, FirstName, LastName, Sex, Email, Phone, BirthDate, NationalityId, AddressId)
     VALUES (_Dni, _Cuil, _FirstName, _LastName, _Sex, _Email, _Phone, _BirthDate, _NationalityId, _AddressId);
+    SET _NewClientId = LAST_INSERT_ID();
 END $$
 
 CREATE PROCEDURE update_client (
+    IN _ClientId INT,
 	IN _Dni VARCHAR(50),
     IN _Cuil VARCHAR(50),
     IN _FirstName VARCHAR(50),
@@ -133,8 +136,7 @@ CREATE PROCEDURE update_client (
     IN _Phone VARCHAR(50),
     IN _BirthDate DATE,
     IN _NationalityId INT,
-    IN _AddressId INT,
-    IN _ClientId INT
+    IN _AddressId INT
 )
 BEGIN
 	UPDATE Clients
@@ -145,6 +147,7 @@ END $$
 -- Account
 
 CREATE PROCEDURE insert_account (
+    OUT _NewAccountId INT,
     IN _Cbu VARCHAR(22),
     IN _Balance DECIMAL(10, 2),
     IN _AccountTypeId INT,
@@ -153,13 +156,14 @@ CREATE PROCEDURE insert_account (
 BEGIN
     INSERT INTO Accounts (Cbu, Balance, AccountTypeId, ClientId)
     VALUES (_Cbu, _Balance, _AccountTypeId, _ClientId);
+    SET _NewAccountId = LAST_INSERT_ID();
 END $$
 
 CREATE PROCEDURE update_account (
+    IN _AccountId INT,
     IN _Cbu VARCHAR(22),
     IN _Balance DECIMAL(10, 2),
-    IN _AccountTypeId INT,
-    IN _AccountId INT
+    IN _AccountTypeId INT
 ) 
 BEGIN
     UPDATE Accounts
