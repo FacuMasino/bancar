@@ -41,12 +41,13 @@
             <p class="font-semibold">Flujo de dinero</p>
             <div class="flex justify-between">
               <p class="font-semibold">Período</p>
-              <form class="flex justify-between">
-                <div class="flex justify-around">
-                  <input type="date"> <input type="date">
+              <form method="get" action="AdminReportsServlet" class="flex justify-between gap-4">
+                <div class="flex justify-around gap-4">
+                  <input type="date" name="startDate">
+                  <input type="date" name="endDate">
                 </div>
-                <button type="submit" class="btn btn-primary">Aplicar
-                  filtro</button>
+                <button type="submit" class="btn btn-primary"
+                  name="action" value="updateDateRange">Aplicar filtro</button>
               </form>
             </div>
               <div id="chartColumns"></div>

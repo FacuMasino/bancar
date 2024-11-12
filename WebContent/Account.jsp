@@ -28,23 +28,23 @@
 		</div>
      	<div>
 			<div class="mb-4">
-              <div class="flex justify-between p-2.5 mb-2">
+              <form method="get" action="AccountServlet" class="flex justify-between p-2.5 mb-2">
                   <label class="input input-sm input-bordered flex items-center gap-2">
                     <input type="text" class="grow" placeholder="Buscar cuenta, monto" name="searchInput">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="search" class="lucide lucide-search"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
                   </label>
-                  <div class="flex gap-2.5" name="transactionDate">
-                    <input type="date" class="border p-1 rounded border-gray-200">
+                  <div class="flex gap-2.5">
+                    <input name="transactionDate" type="date" class="border p-1 rounded border-gray-200">
                     <select 
                       class="select select-bordered select-sm w-fit bg-white"
                       name="transactionType">
-                    <option selected>Seleccione tipo</option>
-                    <option>Transferencia</option>
-                    <option>Pago</option>
-                    <option>Crédito</option>
-                  </select>
+                      <option selected>Seleccione tipo</option>
+                      <option>Transferencia</option>
+                      <option>Pago</option>
+                      <option>Crédito</option>
+                    </select>
                   </div>
-                </div>
+              </form>
 				<table class="table bg-white w-full">
 				<thead>
 					<tr>

@@ -3,10 +3,10 @@
   <t:adminwrapper activeMenuItem="adminClientsMenu">
     <div class="container md:max-w-[1400px] mx-auto my-6 px-2">
     <p class="font-bold text-xl mb-6">Editar información del cliente</p>
-    <form method="post" action="AdminClientsServlet?action=editClient" class="bg-white rounded rounded-lg flex flex-col gap-4 p-8 w-full">
+    <form method="post" action="AdminClientsServlet" class="bg-white rounded rounded-lg flex flex-col gap-4 p-8 w-full">
       <div class="flex justify-between">
     	<p class="font-bold">Editando cliente ID 1</p>
-    	<button class="btn mr-4 btn-neutral" type="submit">Dar de baja</button>
+    	<button class="btn mr-4 btn-neutral" type="submit" name="action" value="cancelClient">Dar de baja</button>
       </div>
       <!-- Nombre y Apellido -->
       <div class="flex gap-4">
@@ -99,8 +99,8 @@
       <!-- Divisor -->
       <div class="divider m-0"></div>
       <div class="flex justify-end w-full">
-      	<button class="btn mr-4 btn-neutral" type="submit">Cancelar</button>
-        <button class="btn btn-primary" type="submit">Guardar cambios</button>
+      	<a href="AdminClient.jsp?id=AcaVaElId" class="btn mr-4 btn-neutral">Cancelar</a>
+        <button class="btn btn-primary" type="submit" name="action" value="save">Guardar cambios</button>
       </div>
     </form>
   </div>

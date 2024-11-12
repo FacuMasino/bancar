@@ -2,6 +2,8 @@ package controller;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import businessLogicImpl.ClientsBusiness;
+import domainModel.Account;
 import domainModel.Address;
 import domainModel.City;
 import domainModel.Client;
@@ -19,7 +22,7 @@ import domainModel.Province;
 import domainModel.User;
 import exceptions.BusinessException;
 
-@WebServlet("/AdminClientsServlet")
+@WebServlet("/AdminClients")
 public class AdminClientsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -29,34 +32,29 @@ public class AdminClientsServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
-		String action = request.getParameter("action");
-
-		switch (action) {
-		case "newClient":
-			//TODO algunas validaciones de negocio, por ejemplo: verificar nombre de usuario disponible
-			//TODO implementar BusinessException
-			newClient(request, response);
-			break;
-		case "editClient":
-			// TODO
-			editClient(request, response);
-			break;
-		case "createAccount":
-			// TODO
-			createAccount(request, response);
-			break;
-		case "manageLoans":
-			// TODO
-			manageLoans(request, response);
-		}
-
+		// Si solo se accedió a esta ruta, se redirige al listado de clientes
+		listClients(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		doGet(request, response);
+		String action = request.getParameter("action");
+
+		switch (action) 
+		{
+			case "newClient":
+				//TODO algunas validaciones de negocio, por ejemplo: verificar nombre de usuario disponible
+				//TODO implementar BusinessException
+				newClient(request, response);
+				break;
+			case "editClient":
+				// TODO
+				editClient(request, response);
+				break;
+			default:
+				listClients(request, response);
+		}
 	}
 
 	private void newClient(HttpServletRequest request, HttpServletResponse response)
@@ -121,16 +119,30 @@ public class AdminClientsServlet extends HttpServlet {
 		// TODO Aca edito un cliente...Venimos de AdminEditClient.jsp
 
 	}
-
-	private void createAccount(HttpServletRequest request, HttpServletResponse response) {
-		// TODO: Aca creo una cuenta del cliente en cuestion, con validaciones de
-		// negocio. Venimos de AdminClientAccounts.jsp
-
-	}
-
-	private void manageLoans(HttpServletRequest request, HttpServletResponse response) {
-		// TODO Aca aceptamos o rechazamos prestamos. Venimos de AdminLoans.jsp
-
+	
+	private void listClients(HttpServletRequest request, HttpServletResponse response) 
+			throws ServletException, IOException 
+	{
+		// TODO: Listar clientes
+		
+		// Lista de prueba
+		ArrayList<Client> clientsList = new ArrayList<Client>();
+		ArrayList<Account> auxAccounts = new ArrayList<Account>(3);
+		
+		for(int i = 0; i <= 25; i++) {
+			Client auxClient = new Client();
+			auxClient.setId(i);
+			auxClient.setFirstName("Cliente");
+			auxClient.setLastName("de Prueba " + i);
+			auxClient.setDni("3800000" + i);
+			auxClient.setActive(i < 10);
+			auxClient.setAccounts(auxAccounts);
+			clientsList.add(auxClient);
+		}
+		
+		request.setAttribute("clients", clientsList);
+		RequestDispatcher rd = request.getRequestDispatcher("AdminClients.jsp");		
+		rd.forward(request, response);
 	}
 
 }
