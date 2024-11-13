@@ -1,6 +1,5 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags/"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <c:set var="client" value="${requestScope.client}" />
 
@@ -42,7 +41,8 @@
               <span class="label-text font-bold">DNI</span> 
             </label>
           </div>
-          <input type="text" name="clientDNI" placeholder="DNI del cliente (sin espacios ni puntos)" class="input input-bordered w-full" />
+          <input type="text" name="clientDNI" placeholder="DNI del cliente (sin espacios ni puntos)" class="input input-bordered w-full"
+           value="${client.dni}" />
         </div>
         <div class="flex flex-col w-full">
           <div class="form-control w-full">
@@ -50,7 +50,7 @@
               <span class="label-text font-bold">Email</span>
             </label>
           </div>
-          <input type="text" name="clientEmail" placeholder="Email del cliente" class="input input-bordered w-full" />
+          <input type="text" name="clientEmail" placeholder="Email del cliente" class="input input-bordered w-full" value="${client.email}" />
         </div>
       </div>
       <!-- Teléfono y dirección -->
@@ -61,7 +61,7 @@
               <span class="label-text font-bold">Teléfono</span> 
             </label>
           </div>
-          <input type="text" name="clientTelephone" placeholder="DNI del cliente (sin espacios ni puntos)" class="input input-bordered w-full" />
+          <input type="text" name="clientTelephone" placeholder="Telefono del cliente" class="input input-bordered w-full" value="${client.phone}" />
         </div>
         <div class="flex flex-col w-full">
           <div class="form-control w-full">
@@ -69,7 +69,7 @@
               <span class="label-text font-bold">Dirección</span>
             </label>
           </div>
-          <input type="text" name="clientAdress" placeholder="Email del cliente" class="input input-bordered w-full" />
+          <input type="text" name="clientAddress" placeholder="Dirección del cliente" class="input input-bordered w-full" value="${client.address.streetName} ${client.address.streetNumber}"/>
         </div>
       </div>
          <!-- Provincia y localidad -->
