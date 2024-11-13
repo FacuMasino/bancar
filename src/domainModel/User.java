@@ -1,23 +1,15 @@
 package domainModel;
 
-import java.util.ArrayList;
-
 public class User
 {
 	private int userId;
 	private String username;
 	private String password;
-	private ArrayList<Role> roles;
+	private Role role;
 
 	public User()
 	{
-		setRoles(new ArrayList<Role>());
-	}
-	
-	public User(String username, String password)
-	{
-		this.username = username;
-		this.password = password;
+		
 	}
 
 	public int getUserId()
@@ -50,13 +42,13 @@ public class User
 		this.password = password;
 	}
 
-	public ArrayList<Role> getRoles()
+	public Role getRole()
 	{
-		return roles;
+		return role;
 	}
 
-	public void setRoles(ArrayList<Role> roles)
+	public void setRole(Role role)
 	{
-		this.roles = roles;
+		this.role = role;
 	}
 }

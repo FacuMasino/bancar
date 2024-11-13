@@ -9,10 +9,12 @@ import domainModel.User;
 public class UsersDao implements IUsersDao
 {
 	private Database db;
+	private RolesDao rolesDao;
 
 	public UsersDao()
 	{
 		db = new Database();
+		rolesDao = new RolesDao();
 	}
 
 	@Override
@@ -159,6 +161,9 @@ public class UsersDao implements IUsersDao
 			user.setUserId(rs.getInt("UserId"));
 			user.setUsername(rs.getString("Username"));
 			user.setPassword(rs.getString("UserPassword"));
+			
+			int roleId = rs.getInt("RoleId");
+			user.setRole(rolesDao.read(roleId));
 		}
 		catch (SQLException ex)
 		{

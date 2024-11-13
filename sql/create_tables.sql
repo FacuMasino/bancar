@@ -47,16 +47,9 @@ CREATE TABLE
     Users (
         UserId INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
         Username VARCHAR(50) NULL,
-        UserPassword VARCHAR(50) NOT NULL
-    );
-
-CREATE TABLE
-    RolesToUsers (
-        UserId INT NOT NULL,
-        RoleId INT NOT NULL,
-        CONSTRAINT FK_User FOREIGN KEY (UserId) REFERENCES Users (UserId),
-        CONSTRAINT FK_Role FOREIGN KEY (RoleId) REFERENCES Roles (RoleId),
-        PRIMARY KEY (UserId, RoleId)
+        UserPassword VARCHAR(50) NOT NULL,
+        RoleId INT DEFAULT 2 NOT NULL,
+        CONSTRAINT FK_Role FOREIGN KEY (RoleId) REFERENCES Roles (RoleId)
     );
 
 CREATE TABLE
@@ -73,10 +66,10 @@ CREATE TABLE
         BirthDate DATE NOT NULL,
         NationalityId INT NOT NULL,
         AddressId INT NOT NULL,
-        UserId INT,
+        UserId INT NOT NULL,
         CONSTRAINT FK_Nationality FOREIGN KEY (NationalityId) REFERENCES Countries (CountryId),
         CONSTRAINT FK_Address FOREIGN KEY (AddressId) REFERENCES Addresses (AddressId),
-        CONSTRAINT FK_User_Client FOREIGN KEY (UserId) REFERENCES Users (UserId)
+        CONSTRAINT FK_User FOREIGN KEY (UserId) REFERENCES Users (UserId)
     );
 
 CREATE TABLE
