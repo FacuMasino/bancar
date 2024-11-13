@@ -46,7 +46,7 @@ public class ClientsBusiness implements IClientsBusiness
 	{
 		try 
 		{
-			return clientsDao.read(clientId);		
+			return clientsDao.read(clientId);
 		}
 		catch (SQLException ex)
 		{
@@ -84,7 +84,7 @@ public class ClientsBusiness implements IClientsBusiness
 	{
 		try
 		{
-			return clientsDao.delete(clientId);			
+			return clientsDao.delete(clientId);
 		}
 		catch (SQLException ex)
 		{
@@ -103,7 +103,7 @@ public class ClientsBusiness implements IClientsBusiness
 	{
 		try
 		{
-			return clientsDao.list();			
+			return clientsDao.list();
 		}
 		catch (SQLException ex)
 		{
@@ -114,25 +114,6 @@ public class ClientsBusiness implements IClientsBusiness
 			ex.printStackTrace();
 			throw new BusinessException
 				("Ocurrió un error desconocido al obtener los clientes.");
-		}
-	}
-
-	@Override
-	public int getId(Client client) throws BusinessException 
-	{
-		try 
-		{
-			return clientsDao.getId(client);			
-		}
-		catch (SQLException ex)
-		{
-			throw new SQLOperationException();
-		}
-		catch (Exception ex)
-		{
-			ex.printStackTrace();
-			throw new BusinessException
-				("Ocurrió un error desconocido al obtener ID del cliente.");
 		}
 	}
 }

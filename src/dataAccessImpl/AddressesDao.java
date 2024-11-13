@@ -61,15 +61,6 @@ public class AddressesDao implements IAddressesDao
 			}
 			
 			assignResultSet(address, rs);
-			
-			int cityId = rs.getInt("CityId");
-			address.setCity(citiesDao.read(cityId));
-
-			int provinceId = provincesDao.getId(cityId);
-			address.setProvince(provincesDao.read(provinceId));
-
-			int countryId = countriesDao.getId(provinceId);
-			address.setCountry(countriesDao.read(countryId));
 		}
 		catch (SQLException ex)
 		{
@@ -188,6 +179,15 @@ public class AddressesDao implements IAddressesDao
 			address.setStreetNumber(rs.getString("StreetNumber"));
 			address.setFlat(rs.getString("Flat"));
 			address.setDetails(rs.getString("Details"));
+			
+			int cityId = rs.getInt("CityId");
+			address.setCity(citiesDao.read(cityId));
+
+			int provinceId = provincesDao.getId(cityId);
+			address.setProvince(provincesDao.read(provinceId));
+
+			int countryId = countriesDao.getId(provinceId);
+			address.setCountry(countriesDao.read(countryId));
 		}
 		catch (SQLException ex)
 		{
