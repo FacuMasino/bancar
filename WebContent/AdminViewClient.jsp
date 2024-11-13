@@ -1,13 +1,17 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags/"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<c:set var="client" value="${requestScope.client}" />
+
 <t:masterpage title="Admin - Detalles Cliente" customNavbar="true">
   <t:adminwrapper activeMenuItem="adminClientsMenu">
-    <form method="get" action="#"
+    <form method="get" action="AdminClients"
       class="container flex flex-col gap-4 mx-auto p-4 max-w-7xl mb-8">
       <div class="flex justify-between">
         <h1 class="font-bold text-xl">Gestión de Clientes</h1>
         <div class="flex gap-2.5">
-          <a href="AdminEditClient.jsp" class="btn btn-tertiary bg-base-200 border-gray-200">
-            Editar Cliente </a> <a href="AdminClientAccounts.jsp"
+          <button name="action" value="edit" class="btn btn-tertiary bg-base-200 border-gray-200">
+            Editar Cliente </button> <a href="/AdminClientAccounts?clientId=${client.clientId}"
             class="btn btn-primary"> Gestionar Cuentas </a>
         </div>
       </div>
@@ -23,7 +27,8 @@
               <span class="font-bold">ID:</span>
             </div>
             <div class="flex w-1/2">
-              <span>4</span>
+              <input type="hidden" name="clientId" value="${client.clientId}" />
+              <span>${client.clientId}</span>
             </div>
           </div>
           <div class="flex flex-row justify-between gap-6">
@@ -31,7 +36,7 @@
               <span class="font-bold">DNI:</span>
             </div>
             <div class="flex w-1/2">
-              <span>33123456</span>
+              <span>${client.dni}</span>
             </div>
           </div>
           <div class="flex flex-row justify-between gap-6">
@@ -39,7 +44,7 @@
               <span class="font-bold">Nombres:</span>
             </div>
             <div class="flex w-1/2">
-              <span>Bianchini Gonzalo</span>
+              <span>${client.firstName} ${client.lastName}</span>
             </div>
           </div>
           <div class="flex flex-row justify-between gap-6">

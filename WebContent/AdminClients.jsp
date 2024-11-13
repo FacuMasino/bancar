@@ -5,36 +5,43 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%-- Variables JSTL --%>
-<c:set var="clientsList" value="${requestScope.clients != null ? requestScope.clients : emptyList}" />
+<c:set var="clientsList" value="${requestScope.page.content != null ? requestScope.page.content : emptyList}" />
+<c:set var="listPage" value="${requestScope.page}" />
 
 <t:masterpage title="Admin - Clientes" customNavbar="true">
   <t:adminwrapper activeMenuItem="adminClientsMenu">
-    <!-- Enlace a CSS y scripts DataTable.js -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" />
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
-      crossorigin="anonymous">
-    </script>
-    <script type="text/javascript" charset="utf8" 
-      src="https:////cdn.datatables.net/2.1.8/js/dataTables.min.js">
-    </script>
     
-    <form method="get" action="#" class="container flex flex-col gap-4 mx-auto p-4 max-w-7xl mb-8">
+    <form method="get" action="AdminClients" class="container flex flex-col gap-4 mx-auto p-4 max-w-7xl mb-8">
       <div class="flex justify-between">
         <h1 class="font-bold text-xl">Gestión de Clientes</h1>
-        <div class="flex gap-2.5">
-          <label class="input input-bordered flex items-center gap-2">
-            <input type="text" class="grow" placeholder="Buscar cliente" name="searchInput" />
-            <i data-lucide="search"></i>
-          </label>
           <a href="AdminNewClient.jsp" class="btn btn-primary">
             Nuevo Cliente
           </a>
-        </div>
       </div>
       
       <!-- Tabla de clientes -->
       <div class="flex flex-col bg-white p-2.5 rounded-xl drop-shadow-sm">
+        <div class="flex justify-between p-2.5">
+          <div class="flex items-center gap-4">
+            <span>Clientes por página: </span>
+            <select class="select select-bordered w-fit bg-white"
+              name="pageSize" onchange="this.form.submit()">
+              <option value="10" ${listPage.pageSize == 10 ? 'selected':''}>
+                10
+              </option>
+              <option value="20" ${listPage.pageSize == 20 ? 'selected':''}>
+                20
+              </option>
+              <option value="30" ${listPage.pageSize == 30 ? 'selected':''}>
+                30
+              </option>
+            </select>
+          </div>
+          <label class="input input-bordered flex items-center gap-2">
+            <input type="text" class="grow" placeholder="Buscar cliente" name="searchInput" />
+            <i data-lucide="search"></i>
+          </label>
+         </div>
         <table id="clientsList" class="table">
           <!-- head -->
           <thead>
@@ -59,12 +66,12 @@
               <c:otherwise>
                 <c:forEach var="client" items="${clientsList}">
                   <tr class="hover">
-                    <th>${client.id}</th>
+                    <th>${client.clientId}</th>
                     <td>${client.dni}</td>
                     <td>${client.firstName} ${client.lastName}</td>
                     <td>
-                      <c:set var="statusClass" value="${client.active ? 'border-green-600 text-green-600' : 'border-red-600 text-red-600'}" />
-                      <c:set var="statusText" value="${client.active ? 'Activo' : 'Baja'}" />
+                      <c:set var="statusClass" value="${client.activeStatus ? 'border-green-600 text-green-600' : 'border-red-600 text-red-600'}" />
+                      <c:set var="statusText" value="${client.activeStatus ? 'Activo' : 'Baja'}" />
                       <span class="flex flex-col items-center w-fit px-2.5 rounded-full border ${statusClass} font-semibold">
                         ${statusText}
                       </span>
@@ -76,9 +83,9 @@
                           <i class="text-sm" data-lucide="ellipsis-vertical"></i>
                         </div>
                         <ul tabindex="0" class="dropdown-content menu bg-white rounded-box z-[1] w-52 p-2 border-slate-200 drop-shadow">
-                          <li><a href="AdminClient.jsp?id=${client.id}">Ver cliente</a></li>
-                          <li><a href="AdminEditClient.jsp?id=${client.id}">Editar cliente</a></li>
-                          <li><a href="AdminClientAccounts.jsp?id=${client.id}">Gestionar cuentas</a></li>
+                          <li><a href="AdminClients?clientId=${client.clientId}&action=view">Ver cliente</a></li>
+                          <li><a href="AdminClients?clientId=${client.clientId}&action=edit">Editar cliente</a></li>
+                          <li><a href="AdminAccounts?clientId=${client.clientId}">Gestionar cuentas</a></li>
                         </ul>
                       </div>
                     </td>
@@ -88,16 +95,15 @@
             </c:choose>
           </tbody>
         </table>
-        <div class="flex w-full items-center">
+        <div class="flex w-full items-center p-2.5">
           <span class="w-full">
             Mostrando 
-            ${requestScope.startElement + 1} a ${requestScope.endElement}
-            de ${requestScope.totalElements - 1}
+            ${listPage.startElementPos + 1} a ${listPage.endElementPos}
+            de ${listPage.totalElements}
           </span>
           <div class="join flex justify-end w-full">
-             <c:set var="max" value="${requestScope.maxElements}" />
-             <c:forEach var="i" begin="1" end="${requestScope.totalPages}">
-                <a href="?page=${i}&max=${max}" class="join-item btn">${i}</a>
+             <c:forEach var="i" begin="1" end="${listPage.totalPages}">
+                <button value="${i}" name="page" class="join-item btn">${i}</button>
             </c:forEach>
           </div>
         </div>

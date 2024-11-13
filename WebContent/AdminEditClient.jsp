@@ -1,11 +1,16 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags/"%>
-<t:masterpage title="Admin - Edit Client" customNavbar="true">
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<c:set var="client" value="${requestScope.client}" />
+
+<t:masterpage title="Admin - Editar Cliente" customNavbar="true">
   <t:adminwrapper activeMenuItem="adminClientsMenu">
     <div class="container md:max-w-[1400px] mx-auto my-6 px-2">
     <p class="font-bold text-xl mb-6">Editar información del cliente</p>
-    <form method="post" action="AdminClientsServlet" class="bg-white rounded rounded-lg flex flex-col gap-4 p-8 w-full">
+    <form method="post" action="AdminClients" class="bg-white rounded rounded-lg flex flex-col gap-4 p-8 w-full">
       <div class="flex justify-between">
-    	<p class="font-bold">Editando cliente ID 1</p>
+    	<p class="font-bold">Editando cliente ID ${client.clientId}</p>
     	<button class="btn mr-4 btn-neutral" type="submit" name="action" value="cancelClient">Dar de baja</button>
       </div>
       <!-- Nombre y Apellido -->
@@ -16,7 +21,8 @@
               <span class="label-text font-bold">Nombre</span> 
             </label>
           </div>
-          <input type="text" name="clientName" placeholder="Ingresá el nombre" class="input input-bordered w-full" />
+          <input type="text" name="clientName" placeholder="Ingresá el nombre" 
+            class="input input-bordered w-full" value="${client.firstName}" />
         </div>
         <div class="flex flex-col w-full">
           <div class="form-control w-full">
@@ -24,7 +30,8 @@
               <span class="label-text font-bold">Apellido</span>
             </label>
           </div>
-          <input type="text" name="clientSurname" placeholder="Ingresá el apellido" class="input input-bordered w-full" />
+          <input type="text" name="clientSurname" placeholder="Ingresá el apellido" 
+            class="input input-bordered w-full" value="${client.lastName}"/>
         </div>
       </div>
       <!-- DNI y Email -->
@@ -100,7 +107,7 @@
       <div class="divider m-0"></div>
       <div class="flex justify-end w-full">
       	<a href="AdminClient.jsp?id=AcaVaElId" class="btn mr-4 btn-neutral">Cancelar</a>
-        <button class="btn btn-primary" type="submit" name="action" value="save">Guardar cambios</button>
+        <button class="btn btn-primary" type="submit" name="action" value="saveClient">Guardar cambios</button>
       </div>
     </form>
   </div>

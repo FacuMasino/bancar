@@ -55,7 +55,7 @@
           </a>  
         </li>
         <li>
-          <a href="AdminClients.jsp" id="adminClientsMenu">
+          <a href="AdminClients" id="adminClientsMenu">
             <i data-lucide="users"></i>
             Clientes
           </a>
