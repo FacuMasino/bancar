@@ -76,7 +76,27 @@ public class ProvincesDao implements IProvincesDao
 	@Override
 	public ArrayList<Province> list() throws SQLException
 	{
-		return null;
+		ResultSet rs;
+		ArrayList<Province> provinces = new ArrayList<Province>();
+		
+		try
+		{
+			db.setPreparedStatement("SELECT * FROM Provinces;");
+			rs = db.getPreparedStatement().executeQuery();
+			
+			while(rs.next())
+			{
+				Province province = new Province();
+				assignResultSet(province, rs);
+				provinces.add(province);
+			}
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+		
+		return provinces;
 	}
 	
 	public int getId(Province province, int countryId) throws SQLException

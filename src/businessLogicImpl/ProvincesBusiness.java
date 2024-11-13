@@ -71,6 +71,19 @@ public class ProvincesBusiness implements IProvincesBusiness
 	@Override
 	public ArrayList<Province> list() throws BusinessException
 	{
-		return null;
+		try
+		{
+			return provincesDao.list();
+		}
+		catch (SQLException ex)
+		{
+			throw new SQLOperationException();
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+			throw new BusinessException
+				("Ocurrió un error desconocido al obtener las provincias.");
+		}
 	}
 }

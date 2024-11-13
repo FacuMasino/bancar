@@ -132,7 +132,7 @@ public class ClientsDao implements IClientsDao
 		
 		try
 		{
-			db.setPreparedStatement("Select * from Clients;");
+			db.setPreparedStatement("SELECT * FROM Clients;");
 			rs = db.getPreparedStatement().executeQuery();
 			
 			while(rs.next())
