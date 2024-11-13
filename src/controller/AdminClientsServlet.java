@@ -38,7 +38,6 @@ public class AdminClientsServlet extends HttpServlet
 
 		if(action == null)
 		{
-			// Si no se especifica accion, solo mostrar listado
 			try
 			{
 				listClients(request, response);
@@ -100,12 +99,12 @@ public class AdminClientsServlet extends HttpServlet
 	{
 		Client client = new Client();
 
-		client.setUsername(request.getParameter("clientUser"));
-		client.setPassword(request.getParameter("clientPass"));
-		client.setDni(request.getParameter("clientDNI"));
+		client.setUsername(request.getParameter("clientUsername"));
+		client.setPassword(request.getParameter("clientPassword"));
+		client.setDni(request.getParameter("clientDni"));
 		client.setCuil(request.getParameter("clientCuil"));
-		client.setFirstName(request.getParameter("clientName"));
-		client.setLastName(request.getParameter("clientSurname"));
+		client.setFirstName(request.getParameter("clientFirstName"));
+		client.setLastName(request.getParameter("clientLastName"));
 		client.setSex(request.getParameter("clientSex"));
 		client.setEmail(request.getParameter("clientEmail"));
 		client.setPhone(request.getParameter("clientPhone"));

@@ -23,6 +23,7 @@ public class ClientsDao implements IClientsDao
 	
 	public int create(Client client) throws SQLException
 	{
+		System.out.println("PRUEBA 1:" + client.toString()); // TODO: borrar luego de testear create()
 		countriesDao.handleId(client.getNationality());
 		addressesDao.handleId(client.getAddress());
 		usersDao.handleId(client);
@@ -50,7 +51,7 @@ public class ClientsDao implements IClientsDao
 		
 		try
 		{
-			db.setPreparedStatement("Select * from Clients where ClientId = ?;");
+			db.setPreparedStatement("SELECT * FROM Clients WHERE ClientId = ?;");
 			db.getPreparedStatement().setInt(1, clientId);
 			rs = db.getPreparedStatement().executeQuery();
 			
