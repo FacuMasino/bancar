@@ -102,21 +102,13 @@
               </tr>
             </thead>
             <tbody>
-              <tr class="hover">
-                <td>1001</td>
-                <td>Caja de Ahorros</td>
-                <td class="text-green-600 font-semibold">$1,500.00</td>
-              </tr>
-              <tr class="hover">
-                <td>1005</td>
-                <td>Cuenta Corriente</td>
-                <td class="text-red-600 font-semibold">-$200.00</td>
-              </tr>
-              <tr class="hover">
-                <td>1008</td>
-                <td>Caja de Ahorros</td>
-                <td class="text-green-600 font-semibold">$300.00</td>
-              </tr>
+            <c:forEach var="account" items="${client.accounts}" varStatus="status">
+             <tr class="hover">
+              <td>${account.id}</td>
+              <td>${account.accountType.name}</td>
+              <td class="text-green-600 font-semibold">${account.balance}</td>
+             </tr>
+            </c:forEach>
             </tbody>
           </table>
         </div>
