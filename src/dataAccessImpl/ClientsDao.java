@@ -4,27 +4,28 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import dataAccess.IClientsDao;
-import domainModel.Address;
 import domainModel.Client;
-import domainModel.Country;
 
 public class ClientsDao implements IClientsDao
 {	
 	private Database db;
 	private CountriesDao countriesDao;
 	private AddressesDao addressesDao;
+	private UsersDao usersDao;
 
 	public ClientsDao()
 	{
 		db = new Database();
 		countriesDao = new CountriesDao();
 		addressesDao = new AddressesDao();
+		usersDao = new UsersDao();
 	}
 	
 	public int create(Client client) throws SQLException
 	{
 		countriesDao.handleId(client.getNationality());
 		addressesDao.handleId(client.getAddress());
+		usersDao.handleId(client);
 
 		try
 		{
@@ -59,12 +60,6 @@ public class ClientsDao implements IClientsDao
 			}
 			
 			assignResultSet(client, rs);
-			
-			int nationalityId = rs.getInt("NationalityId");
-			client.setNationality(countriesDao.read(nationalityId));
-			
-			int addressId = rs.getInt("AddressId");
-			client.setAddress(addressesDao.read(addressId));
 		}
 		catch (Exception ex)
 		{
@@ -75,9 +70,18 @@ public class ClientsDao implements IClientsDao
 		return client;
 	}
 
+	// TODO: Desarrollar los métodos update() en los DAO correspondientes
+	// para la actualización de la información del cliente en las tablas relacionadas.
+	// No es necesario modificar nada en este método, ya que los handleId() se encargan.
+	// Para realizar esto, se recomienda primero: probar los métodos create(),
+	// read() y list() y definir responsabilidades de las capas en la arquitectura.
 	@Override
 	public boolean update(Client client) throws SQLException
 	{
+		countriesDao.handleId(client.getNationality());
+		addressesDao.handleId(client.getAddress());
+		usersDao.handleId(client);
+		
 		int rows = 0;
 		
 		try
@@ -95,6 +99,11 @@ public class ClientsDao implements IClientsDao
 		return (rows > 0);
 	}
 
+	// TODO: Desarrollar los métodos delete() en los DAO correspondientes
+	// para la baja lógica de la información del cliente de las tablas relacionadas.
+	// Es necesario, además, implementar la lógica en este método.
+	// Para realizar esto, se recomienda primero: probar los métodos create(),
+	// read() y list() y definir responsabilidades de las capas en la arquitectura.
 	@Override
 	public boolean delete(int clientId) throws SQLException
 	{
@@ -118,19 +127,19 @@ public class ClientsDao implements IClientsDao
 	@Override
 	public ArrayList<Client> list() throws SQLException
 	{
-		ResultSet rsClients;
+		ResultSet rs;
 		ArrayList<Client> clients = new ArrayList<Client>();
 		
 		try
 		{
-			db.setPreparedStatement("Select * from Clients WHERE isActive = 1");
-			rsClients = db.getPreparedStatement().executeQuery();
+			db.setPreparedStatement("Select * from Clients WHERE ActiveStatus = 1");
+			rs = db.getPreparedStatement().executeQuery();
 			
-			while(rsClients.next())
+			while(rs.next())
 			{
-				Country auxNationality = new Country ();
-				Address auxAddress = new Address ();
-				clients.add(getClient(rsClients, auxNationality, auxAddress));
+				Client client = new Client();
+				assignResultSet(client, rs);				
+				clients.add(client);
 			}
 		}
 		catch (Exception ex)
@@ -178,6 +187,15 @@ public class ClientsDao implements IClientsDao
 			client.setEmail(rs.getString("Email"));
 			client.setPhone(rs.getString("Phone"));
 			client.setBirthDate(rs.getDate("BirthDate"));
+			
+			int nationalityId = rs.getInt("NationalityId");
+			client.setNationality(countriesDao.read(nationalityId));
+			
+			int addressId = rs.getInt("AddressId");
+			client.setAddress(addressesDao.read(addressId));
+			
+			int userId = rs.getInt("UserId");
+			client.setUser(usersDao.read(userId));
 		}
 		catch (SQLException ex)
 		{

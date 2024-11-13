@@ -144,19 +144,29 @@ public class Client extends User
 		this.address = address;
 	}
 
-	public User getUser() {
-		return user;
+	public User getUser()
+	{
+		return (User) this;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setUser(User user)
+	{
+		if (user != null)
+		{			
+			this.setUserId(user.getUserId());
+			this.setUsername(user.getUsername());
+			this.setPassword(user.getPassword());
+			this.setRoles(user.getRoles());
+		}
 	}
 
-	public ArrayList<Account> getAccounts() {
+	public ArrayList<Account> getAccounts()
+	{
 		return accounts;
 	}
 
-	public void setAccounts(ArrayList<Account> accounts) {
+	public void setAccounts(ArrayList<Account> accounts)
+	{
 		this.accounts = accounts;
 	}
 }
