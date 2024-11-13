@@ -52,7 +52,7 @@
               <span class="font-bold">Email:</span>
             </div>
             <div class="flex w-1/2">
-              <span>gonzabianchini@gmail.com</span>
+              <span>${client.email}</span>
             </div>
           </div>
           <div class="flex flex-row justify-between gap-6">
@@ -60,7 +60,7 @@
               <span class="font-bold">Telefono:</span>
             </div>
             <div class="flex w-1/2">
-              <span>11-1234-5678</span>
+              <span>${client.phone}</span>
             </div>
           </div>
           <div class="flex flex-row justify-between gap-6">
@@ -68,7 +68,7 @@
               <span class="font-bold">Direccion:</span>
             </div>
             <div class="flex w-1/2">
-              <span>Av SiempreViva 123</span>
+              <span>${client.address.streetName} ${client.address.streetNumber} ${client.address.flat}</span>
             </div>
           </div>
           <div class="flex flex-row justify-between gap-6">
@@ -77,9 +77,8 @@
             </div>
             <div class="flex w-1/2">
               <!-- Falta darle vida al ACTIVO-INACTIVO -->
-              <span class="flex flex-col items-center w-fit px-2.5 rounded-full border border-green-600 text-green-600 font-semibold">
-                  Activo
-              </span>
+              <span class="flex flex-col items-center w-fit px-2.5 rounded-full border border-green-600 text-green-600 font-semibold">${client.activeStatus ? 'Activo' : 'Inactivo'}</span>
+            
             </div>
           </div>
         </div>
