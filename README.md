@@ -17,8 +17,8 @@ Cuenta con una plataforma para que los clientes puedan realizar operaciones y lo
 		- [Base de datos MySQL](#base-de-datos-mysql)
 		- [Java Development Kit](#java-development-kit)
 		- [Apache Tomcat](#apache-tomcat)
-		- [MySQL Connector y .classpath](#mysql-connector-y-classpath)
 		- [Propiedades de conexión](#propiedades-de-conexión)
+		- [Variables de entorno](#variables-de-entorno)
 	- [Licencia y contribuciones](#licencia-y-contribuciones)
 
 ## Funcionalidades
@@ -70,7 +70,7 @@ Los prototipos de diseño se pueden [visualizar en Figma](https://www.figma.com/
 
 > [!WARNING]
 > &nbsp;
-> Es necesario que sigas los pasos indicados en [MySQL Connector y .classpath](#jdbc) y en [Propiedades de conexión](#config) para poder compilar el proyecto.
+> Es necesario que sigas los pasos indicados en las secciones [Propiedades de conexión](#config) y [Variables de entorno](#classpath) para poder compilar el proyecto.
 
 ### Base de datos MySQL
 
@@ -93,15 +93,44 @@ Se recomienda instalar la versión 8.5, que puede ser descargada desde el [repos
 La versión 9 del [sitio oficial de Apache Tomcat](https://tomcat.apache.org/download-90.cgi) no fue probada pero podría ser una alternativa viable.
 Versiones posteriores pueden tener problemas de compatibilidad con versiones antiguas del JDK, debido a cambios en los nombres de algunas bibliotecas que necesitan ser importadas en el código fuente.
 
-### <a name="jdbc"></a>MySQL Connector y .classpath
-
-&nbsp;
-Es necesario descargar MySQL Connector (JDBC) desde el [sitio oficial de MySQL](https://dev.mysql.com/downloads/).
+### <a name="config"></a>Propiedades de conexión
 
 > [!IMPORTANT]
 > &nbsp;
-> El archivo `.classpath` que indica la ruta de MySQL Connector no está siendo versionado para que no haya que configurar la ubicación del mismo cada vez que otro contribuidor la cambia.
-> Es necesario crear en el [**directorio raíz**](./) un archivo llamado `.classpath` (sin extensión) que contenga el siguiente código reemplazando `/tu/ruta/al/mysqlconnector.jar` por la ubicación correspondiente.
+> Se deben configurar las credenciales de acceso a la base de datos.
+
+&nbsp;
+Para ello, hay que crear un archivo llamado `config.properties` en el [**directorio src**](./src) con el siguiente código, reemplazando `tupassword` por la contraseña de la base de datos.
+
+```properties
+# Dirección del host de la base de datos
+db.host=jdbc:mysql://localhost:3306/
+
+# Usuario de la base de datos
+db.user=root
+
+# Contraseña del usuario
+db.pass=tupassword
+
+# Nombre de la base de datos
+db.name=bancar_db
+```
+
+### <a name="classpath"></a>Variables de entorno
+
+&nbsp;
+Es necesario descargar MySQL Connector (JDBC) desde el [sitio oficial de MySQL](https://dev.mysql.com/downloads/).
+La biblioteca externa [Standard Tag Library (JSTL)](./jstl-1.2.jar) también es necesaria, y se encuentra en el directorio raíz. En el [siguiente enlace](https://rafacabeza.gitbooks.io/dws/content/java-ee/spring/jstl.html) se encuentra un resumen de su documentación.
+
+&nbsp;
+Las rutas a estos archivos deben ser agregadas al Build Path y el Deployment Assembly manualmente desde el IDE.
+
+> [!IMPORTANT]
+> &nbsp;
+> El archivo `.classpath` no está siendo versionado para que las rutas no cambien cada vez que otro contribuidor modifica las variables de entorno.
+
+&nbsp;
+Por lo tanto, es necesario crear en el [**directorio raíz**](./) un archivo llamado `.classpath` (sin extensión) que contenga el siguiente código reemplazando `/tu/ruta/al/mysqlconnector.jar` y `/tu/ruta/al/jstl.jar` por las ubicaciones correspondientes.
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -125,29 +154,17 @@ Es necesario descargar MySQL Connector (JDBC) desde el [sitio oficial de MySQL](
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="/tu/ruta/al/jstl.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
 ```
 
-### <a name="config"></a>Propiedades de conexión
-
 &nbsp;
-Se deben configurar las credenciales de acceso a la base de datos.
-Para ello, hay que crear un archivo llamado `config.properties` en el [**directorio src**](./src) con el siguiente código, reemplazando `tupassword` por la contraseña de la base de datos.
-
-```properties
-# Dirección del host de la base de datos
-db.host=jdbc:mysql://localhost:3306/
-
-# Usuario de la base de datos
-db.user=root
-
-# Contraseña del usuario
-db.pass=tupassword
-
-# Nombre de la base de datos
-db.name=bancar_db
-```
+Si sos contribuidor del proyecto, podés dejar anotadas tus rutas [acá](./doc/paths.md) junto con tu nombre de usuario para futura referencia.
 
 ## Licencia y contribuciones
 
