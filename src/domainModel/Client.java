@@ -144,11 +144,16 @@ public class Client extends User
 		this.address = address;
 	}
 
-	public User getUser()
+	public ArrayList<Account> getAccounts()
 	{
-		return (User) this;
+		return accounts;
 	}
 
+	public void setAccounts(ArrayList<Account> accounts)
+	{
+		this.accounts = accounts;
+	}
+	
 	public void setUser(User user)
 	{
 		if (user != null)
@@ -160,20 +165,11 @@ public class Client extends User
 		}
 	}
 
-	public ArrayList<Account> getAccounts()
-	{
-		return accounts;
-	}
-
-	public void setAccounts(ArrayList<Account> accounts)
-	{
-		this.accounts = accounts;
-	}
-
 	@Override
 	public String toString()
 	{
-		return "clientId: " + getClientId() +
+		return super.toString() +
+				" clientId: " + getClientId() +
 				" activeStatus: " + getActiveStatus() +
 				" dni: " + getDni() +
 				" cuil: " + getCuil() +
@@ -185,6 +181,6 @@ public class Client extends User
 				" birthDate: " + getBirthDate() +
 				" nationality: [" + getNationality().toString() +
 				"] address: [" + getAddress().toString() +
-				"] user: [" + getUser().toString() + "]";
+				"]";
 	}
 }

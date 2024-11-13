@@ -63,7 +63,17 @@ public class Address
     
     public String getDetails(int characters)
     {
-        return details.substring(0, characters) + "...";
+    	if (this.details == null)
+    	{
+    		return "NULL";
+    	}
+    	
+    	if (this.details.length() <= characters)
+    	{
+    		return this.details;
+    	}
+
+    	return details.substring(0, characters) + "...";
     }
 
     public void setDetails(String details)
@@ -110,8 +120,8 @@ public class Address
     			" flat: " + getFlat() +
     			" details: " + getDetails(5) +
     			" city: [" + getCity().toString() +
-    			" province: [" + getProvince().toString() +
-    			" country: [" + getCountry().toString() +
+    			"] province: [" + getProvince().toString() +
+    			"] country: [" + getCountry().toString() +
     			"]";
 	}
 }

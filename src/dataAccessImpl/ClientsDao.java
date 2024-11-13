@@ -50,7 +50,7 @@ public class ClientsDao implements IClientsDao
 		
 		try
 		{
-			db.setPreparedStatement("Select * from Clients where ClientId = ?");
+			db.setPreparedStatement("Select * from Clients where ClientId = ?;");
 			db.getPreparedStatement().setInt(1, clientId);
 			rs = db.getPreparedStatement().executeQuery();
 			
@@ -111,7 +111,7 @@ public class ClientsDao implements IClientsDao
 		
 		try
 		{
-			db.setPreparedStatement("UPDATE Clients SET IsActive = 0 WHERE ClientId = ?");
+			db.setPreparedStatement("UPDATE Clients SET IsActive = 0 WHERE ClientId = ?;");
 			db.getPreparedStatement().setInt(1, clientId);
 			rows = db.getPreparedStatement().executeUpdate();
 		}
@@ -127,20 +127,18 @@ public class ClientsDao implements IClientsDao
 	@Override
 	public ArrayList<Client> list() throws SQLException
 	{
-		System.out.println("Hola mundo."); // TODO: borrar línea luego de realizar pruebas de Backend
 		ResultSet rs;
 		ArrayList<Client> clients = new ArrayList<Client>();
 		
 		try
 		{
-			db.setPreparedStatement("Select * from Clients WHERE ActiveStatus = 1");
+			db.setPreparedStatement("Select * from Clients;");
 			rs = db.getPreparedStatement().executeQuery();
 			
 			while(rs.next())
 			{
 				Client client = new Client();
 				assignResultSet(client, rs);
-				System.out.println(client.toString()); // TODO: borrar línea luego de realizar pruebas de Backend
 				clients.add(client);
 			}
 		}
