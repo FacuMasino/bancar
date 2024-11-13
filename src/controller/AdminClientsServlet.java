@@ -3,50 +3,50 @@ package controller;
 import java.io.IOException;
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
-
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import businessLogicImpl.ClientsBusiness;
-import domainModel.Account;
 import domainModel.Address;
 import domainModel.City;
 import domainModel.Client;
 import domainModel.Country;
 import domainModel.Province;
-import domainModel.User;
 import exceptions.BusinessException;
+import utils.Helper;
 import utils.Page;
 
 @WebServlet("/AdminClients")
-public class AdminClientsServlet extends HttpServlet {
+public class AdminClientsServlet extends HttpServlet
+{
 	private static final long serialVersionUID = 1L;
-	private ClientsBusiness clientsBiz;
+	private ClientsBusiness clientsBusiness;
 	
-	public AdminClientsServlet() {
+	public AdminClientsServlet()
+	{
 		super();
-		clientsBiz= new ClientsBusiness();
+		clientsBusiness = new ClientsBusiness();
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		
+			throws ServletException, IOException
+	{	
 		String action = request.getParameter("action");
-		if(action == null) {
+
+		if(action == null)
+		{
 			// Si no se especifica accion, solo mostrar listado
-			try {
+			try
+			{
 				listClients(request, response);
-			} catch (ServletException | IOException | BusinessException e) {
-				// TODO Auto-generated catch block
+			}
+			catch (ServletException | IOException | BusinessException e)
+			{
 				e.printStackTrace();
 			}
-			return;
 		}
 
 		switch (action) 
@@ -57,18 +57,20 @@ public class AdminClientsServlet extends HttpServlet {
 			case "edit":
 				editClient(request,response);
 			default:
-			try {
-				listClients(request, response);
-			} catch (ServletException | IOException | BusinessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+				try
+				{
+					listClients(request, response);
+				}
+				catch (ServletException | IOException | BusinessException e)
+				{
+					e.printStackTrace();
+				}
 		}
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
+			throws ServletException, IOException
+	{
 		String action = request.getParameter("action");
 
 		switch (action) 
@@ -79,155 +81,130 @@ public class AdminClientsServlet extends HttpServlet {
 				newClient(request, response);
 				break;
 			case "saveClient":
-				// TODO
 				saveClient(request, response);
 				break;
 			default:
-			try {
-				listClients(request, response);
-			} catch (ServletException | IOException | BusinessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+				try
+				{
+					listClients(request, response);
+				}
+				catch (ServletException | IOException | BusinessException e)
+				{
+					e.printStackTrace();
+				}
 		}
 	}
 
 	private void newClient(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+			throws ServletException, IOException
+	{
+		Client client = new Client();
 
-		ClientsBusiness cb = new ClientsBusiness();
-		Client auxClient = new Client();
+		client.setUsername(request.getParameter("clientUser"));
+		client.setPassword(request.getParameter("clientPass"));
+		client.setDni(request.getParameter("clientDNI"));
+		client.setCuil(request.getParameter("clientCuil"));
+		client.setFirstName(request.getParameter("clientName"));
+		client.setLastName(request.getParameter("clientSurname"));
+		client.setSex(request.getParameter("clientSex"));
+		client.setEmail(request.getParameter("clientEmail"));
+		client.setPhone(request.getParameter("clientPhone"));
+		client.setBirthDate(Date.valueOf(request.getParameter("clientBirth")));
 
-		auxClient.setFirstName(request.getParameter("clientName"));
-		auxClient.setLastName(request.getParameter("clientSurname"));
-		auxClient.setSex(request.getParameter("clientSex"));
-		auxClient.setBirthDate(Date.valueOf(request.getParameter("clientBirthdate")));
-		auxClient.setEmail(request.getParameter("clientEmail"));
-
-		User u = new User();
-		u.setUsername(request.getParameter("clientUser"));
-		u.setPassword(request.getParameter("clientPass"));
-		auxClient.setUser(u);
-
-		auxClient.setDni(request.getParameter("clientDNI"));
-		auxClient.setCuil(request.getParameter("clientCuil"));
-
-		// Cargamos toda la direccion del cliente
 		Address address = new Address();
-		address.setId(1);
 		address.setStreetName(request.getParameter("clientStreetName"));
 		address.setStreetNumber(request.getParameter("clientStreetNumber"));
-
-		Province province = new Province();
-		province.setName(request.getParameter("clientProvince"));
-		address.setProvince(province);
 
 		City city = new City();
 		city.setName(request.getParameter("clientCity"));
 		address.setCity(city);
+
+		Province province = new Province();
+		province.setName(request.getParameter("clientProvince"));
+		address.setProvince(province);
 
 		Country country = new Country();
 		country.setId(1);
 		country.setName("Argentina");
 		address.setCountry(country);
 
-		auxClient.setNationality(country);
-		auxClient.setAddress(address);
+		client.setAddress(address);
+		client.setNationality(country);
 
-		auxClient.setPhone(request.getParameter("clientPhone"));
-
-		try {
-			cb.create(auxClient);
-			System.out.println("Cree un cliente");
-		} catch (BusinessException e) {
+		try
+		{
+			clientsBusiness.create(client);
+			// TODO: reemplazar println() por modal "Cliente creado exitosamente."
+			System.out.println("Cliente creado exitosamente.");
+			Helper.redirect("AdminPanel.jsp", request, response);
+		}
+		catch (BusinessException e)
+		{
 			e.printStackTrace();
 		}
-
-		// TODO: redirigir a pagina que corresponda o modal (CLIENTE AGREGADO
-		// EXITOSAMENTE?)
-		RequestDispatcher rd = request.getRequestDispatcher("Home.jsp");
-		rd.forward(request, response);
 	}
 
-	private void editClient(HttpServletRequest request, HttpServletResponse response) 
+	private void editClient(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException
 	{
 		int id = Optional.ofNullable(request.getParameter("clientId"))
 				.map(Integer::parseInt)
 				.orElse(0);
 		
-		// TODO: Cambiar por metodo read cuando esté listo el negocio de clientes
-		//Client auxClient = clientsBiz.read(id);
-		Client auxClient = clientsListMock().get(id);
-
-		request.setAttribute("client", auxClient);
-		RequestDispatcher rd = request.getRequestDispatcher("AdminEditClient.jsp");		
-		rd.forward(request, response);
+		try
+		{
+			Client client = clientsBusiness.read(id);
+			request.setAttribute("client", client);
+			Helper.redirect("AdminEditClient.jsp", request, response);
+		}
+		catch (BusinessException e)
+		{
+			e.printStackTrace();
+		}
 	}
 	
-	private void saveClient(HttpServletRequest request, HttpServletResponse response) 
+	private void saveClient(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException
 	{
-		
-		Client auxClient = new Client();
+		Client client = new Client();
 		
 		// TODO: Mapear parametros, actualizar el cliente, devolver mensaje de estado
 	}
 	
-	private void listClients(HttpServletRequest request, HttpServletResponse response) 
+	private void listClients(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, BusinessException 
 	{
 		int page = Optional.ofNullable(request.getParameter("page"))
 				.map(Integer::parseInt)
 				.orElse(1);
+
 		int pageSize = Optional.ofNullable(request.getParameter("pageSize"))
 				.map(Integer::parseInt)
 				.orElse(10);
 		
-		ArrayList<Client> clientsList = clientsBiz.list();
-		//ArrayList<Client> clientsList = clientsListMock();
+		ArrayList<Client> clientsList = clientsBusiness.list();
 		Page<Client> clientsPage = new Page<Client>(page,pageSize, clientsList);
 
 		request.setAttribute("page", clientsPage);
-		RequestDispatcher rd = request.getRequestDispatcher("AdminClients.jsp");		
-		rd.forward(request, response);
+		Helper.redirect("AdminClients.jsp", request, response);
 	}
 	
-	private void viewClient(HttpServletRequest request, HttpServletResponse response) 
-			throws ServletException, IOException 
+	private void viewClient(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException
 	{
-		int id = Optional.ofNullable(request.getParameter("clientId"))
+		int clientId = Optional.ofNullable(request.getParameter("clientId"))
 				.map(Integer::parseInt)
 				.orElse(0);
-		
-		// TODO: Cambiar por metodo read cuando esté listo el negocio de clientes
-		//Client auxClient = clientsBiz.read(id);
-		Client auxClient = clientsListMock().get(id);
 
-		request.setAttribute("client", auxClient);
-		RequestDispatcher rd = request.getRequestDispatcher("AdminViewClient.jsp");		
-		rd.forward(request, response);
-	}
-	
-	// TODO: ELIMINAR esto cuando funciones ClientsBusiness.list();
-	private ArrayList<Client> clientsListMock() {
-		// Lista de prueba
-		ArrayList<Client> clientsList = new ArrayList<Client>();
-		ArrayList<Account> auxAccounts;
-		
-		for(int i = 0; i <= 25; i++) {
-			Client auxClient = new Client();
-			auxAccounts = new ArrayList<Account>();
-			if(i<12) auxAccounts.add(new Account()); // Hasta el 11 tienen 1 cuenta
-			auxClient.setClientId(i);
-			auxClient.setFirstName("Cliente");
-			auxClient.setLastName("de Prueba " + i);
-			auxClient.setDni("3800000" + i);
-			auxClient.setActiveStatus(i < 10);
-			auxClient.setAccounts(auxAccounts);
-			clientsList.add(auxClient);
+		try
+		{
+			Client client = clientsBusiness.read(clientId);
+			request.setAttribute("client", client);
+			Helper.redirect("AdminViewClient.jsp", request, response);
 		}
-		
-		return clientsList;
+		catch (BusinessException e)
+		{
+			e.printStackTrace();
+		}
 	}
 }
