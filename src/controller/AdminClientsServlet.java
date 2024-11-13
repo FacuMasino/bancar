@@ -40,7 +40,12 @@ public class AdminClientsServlet extends HttpServlet {
 		String action = request.getParameter("action");
 		if(action == null) {
 			// Si no se especifica accion, solo mostrar listado
-			listClients(request, response);
+			try {
+				listClients(request, response);
+			} catch (ServletException | IOException | BusinessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			return;
 		}
 
@@ -52,7 +57,12 @@ public class AdminClientsServlet extends HttpServlet {
 			case "edit":
 				editClient(request,response);
 			default:
+			try {
 				listClients(request, response);
+			} catch (ServletException | IOException | BusinessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -73,7 +83,12 @@ public class AdminClientsServlet extends HttpServlet {
 				saveClient(request, response);
 				break;
 			default:
+			try {
 				listClients(request, response);
+			} catch (ServletException | IOException | BusinessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -160,7 +175,7 @@ public class AdminClientsServlet extends HttpServlet {
 	}
 	
 	private void listClients(HttpServletRequest request, HttpServletResponse response) 
-			throws ServletException, IOException 
+			throws ServletException, IOException, BusinessException 
 	{
 		int page = Optional.ofNullable(request.getParameter("page"))
 				.map(Integer::parseInt)
@@ -169,9 +184,8 @@ public class AdminClientsServlet extends HttpServlet {
 				.map(Integer::parseInt)
 				.orElse(10);
 		
-		// TODO: cambiar por el método lista() cuando esté listo el negocio
-		//ArrayList<Client> clientsList = clientsBiz.list();
-		ArrayList<Client> clientsList = clientsListMock();
+		ArrayList<Client> clientsList = clientsBiz.list();
+		//ArrayList<Client> clientsList = clientsListMock();
 		Page<Client> clientsPage = new Page<Client>(page,pageSize, clientsList);
 
 		request.setAttribute("page", clientsPage);

@@ -40,4 +40,10 @@ public class City
 	{
 		this.zipCode = zipCode;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return "id: " + getId() + " name: " + getName();
+	}
 }

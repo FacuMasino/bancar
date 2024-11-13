@@ -60,6 +60,11 @@ public class Address
     {
         return details;
     }
+    
+    public String getDetails(int characters)
+    {
+        return details.substring(0, characters) + "...";
+    }
 
     public void setDetails(String details)
     {
@@ -95,4 +100,18 @@ public class Address
     {
         this.country = country;
     }
+    
+    @Override
+	public String toString()
+	{
+    	return "id: " + getId() +
+    			" streetName: " + getStreetName() +
+    			" streetNumber: " + getStreetNumber() +
+    			" flat: " + getFlat() +
+    			" details: " + getDetails(5) +
+    			" city: [" + getCity().toString() +
+    			" province: [" + getProvince().toString() +
+    			" country: [" + getCountry().toString() +
+    			"]";
+	}
 }

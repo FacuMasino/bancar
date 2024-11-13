@@ -51,4 +51,14 @@ public class User
 	{
 		this.role = role;
 	}
+	
+	@Override
+	public String toString()
+	{
+    	return "userId: " + getUserId() +
+    			" username: " + getUsername() +
+    			" password: " + getPassword() +
+    			" role: [" + getRole().toString() +
+    			"]";
+	}
 }

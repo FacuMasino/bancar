@@ -127,6 +127,7 @@ public class ClientsDao implements IClientsDao
 	@Override
 	public ArrayList<Client> list() throws SQLException
 	{
+		System.out.println("Hola mundo."); // TODO: borrar línea luego de realizar pruebas de Backend
 		ResultSet rs;
 		ArrayList<Client> clients = new ArrayList<Client>();
 		
@@ -138,7 +139,8 @@ public class ClientsDao implements IClientsDao
 			while(rs.next())
 			{
 				Client client = new Client();
-				assignResultSet(client, rs);				
+				assignResultSet(client, rs);
+				System.out.println(client.toString()); // TODO: borrar línea luego de realizar pruebas de Backend
 				clients.add(client);
 			}
 		}
@@ -181,7 +183,7 @@ public class ClientsDao implements IClientsDao
 			client.setActiveStatus(rs.getBoolean("ActiveStatus"));
 			client.setDni(rs.getString("Dni"));
 			client.setCuil(rs.getString("Cuil"));
-			client.setFirstName(rs.getString("FirtsName"));
+			client.setFirstName(rs.getString("FirstName"));
 			client.setLastName(rs.getString("LastName"));
 			client.setSex(rs.getString("Sex"));
 			client.setEmail(rs.getString("Email"));

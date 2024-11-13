@@ -156,7 +156,7 @@ public class Client extends User
 			this.setUserId(user.getUserId());
 			this.setUsername(user.getUsername());
 			this.setPassword(user.getPassword());
-			this.setRoles(user.getRoles());
+			this.setRole(user.getRole());
 		}
 	}
 
@@ -168,5 +168,23 @@ public class Client extends User
 	public void setAccounts(ArrayList<Account> accounts)
 	{
 		this.accounts = accounts;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "clientId: " + getClientId() +
+				" activeStatus: " + getActiveStatus() +
+				" dni: " + getDni() +
+				" cuil: " + getCuil() +
+				" firstName: " + getFirstName() +
+				" lastName: " + getLastName() +
+				" sex: " + getSex() +
+				" email: " + getEmail() +
+				" phone: " + getPhone() +
+				" birthDate: " + getBirthDate() +
+				" nationality: [" + getNationality().toString() +
+				"] address: [" + getAddress().toString() +
+				"] user: [" + getUser().toString() + "]";
 	}
 }
