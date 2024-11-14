@@ -13,4 +13,5 @@ public interface IAccountsDao
 	public ArrayList<Account> list() throws SQLException;
 	public int getId(Account account) throws SQLException;
 	public int getLastId() throws SQLException;
+	public ArrayList<Account> listByIdClient(int clientId) throws SQLException;
 }

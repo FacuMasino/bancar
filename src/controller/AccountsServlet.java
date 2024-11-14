@@ -56,7 +56,7 @@ public class AccountsServlet extends HttpServlet
 			Account account = new Account();
 			
 			Client client = new Client();
-			client.setId(1);
+			client.setClientId(1);
 			account.setClient(client);
 			
 			AccountType accountType = new AccountType();

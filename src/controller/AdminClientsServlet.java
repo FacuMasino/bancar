@@ -9,7 +9,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import businessLogicImpl.AccountsBusiness;
 import businessLogicImpl.ClientsBusiness;
+import domainModel.Account;
 import domainModel.Address;
 import domainModel.City;
 import domainModel.Client;
@@ -25,11 +28,13 @@ public class AdminClientsServlet extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
 	private ClientsBusiness clientsBusiness;
+	private AccountsBusiness accountsBusiness;
 	
 	public AdminClientsServlet()
 	{
 		super();
 		clientsBusiness = new ClientsBusiness();
+		accountsBusiness = new AccountsBusiness();
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -209,7 +214,17 @@ public class AdminClientsServlet extends HttpServlet
 		try
 		{
 			Client client = clientsBusiness.read(clientId);
+			
+			
+			ArrayList<Account> accountsList = new ArrayList<Account>();
+			accountsList = accountsBusiness.listByIdClient(clientId);
+		
+			client.setAccounts(accountsList);
+			
+			//TODO: Aca habria que cargarle los LOANS al cliente...
+			
 			request.setAttribute("client", client);
+			
 			Helper.redirect("/WEB-INF/AdminViewClient.jsp", request, response);
 		}
 		catch (BusinessException e)

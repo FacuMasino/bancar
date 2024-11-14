@@ -151,4 +151,16 @@ public class AccountsBusiness implements IAccountsBusiness
 		
 		return entity + branch + firstDV + accNumber + lastDV;
 	}
+
+	@Override
+	public ArrayList<Account> listByIdClient(int clientId) throws BusinessException {
+		try {
+			return accountsDao.listByIdClient(clientId);
+		} catch (SQLException ex) {
+			throw new SQLOperationException();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			throw new BusinessException("Ocurrió un error desconocido al leer LAS cuentas...");
+		}
+	}
 }
