@@ -76,14 +76,29 @@ public class UsersDao implements IUsersDao
 	}
 
 	@Override
-	public boolean delete(int userId) throws SQLException
+	public boolean toggleActiveStatus(int userId, boolean currentActiveStatus) throws SQLException
 	{
-		return false;
+		int rows = 0;
+		
+		try
+		{
+			db.setPreparedStatement("UPDATE Users SET ActiveStatus = ? WHERE UserId = ?;");
+			db.getPreparedStatement().setBoolean(1, !currentActiveStatus);
+			db.getPreparedStatement().setInt(2, userId);
+			rows = db.getPreparedStatement().executeUpdate();
+		}
+		catch (SQLException ex)
+		{
+			ex.printStackTrace();
+			throw ex;
+		}
+		
+		return (rows > 0);
 	}
 	
 	public int getUserId(User user) throws SQLException
 	{
-		return getUserId(user.getPassword());
+		return getUserId(user.getUsername());
 	}
 	
 	public int getUserId(String username) throws SQLException
@@ -92,8 +107,32 @@ public class UsersDao implements IUsersDao
 		
 		try
 		{
-			db.setPreparedStatement("SELECT UserId FROM Users WHERE Username= ?;");
+			db.setPreparedStatement("SELECT UserId FROM Users WHERE Username = ?;");
 			db.getPreparedStatement().setString(1, username);
+			rs = db.getPreparedStatement().executeQuery();
+			
+			if(!rs.next())
+			{
+				return 0;
+			}
+			
+			return rs.getInt("UserId");
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+			throw ex;
+		}
+	}
+	
+	public int getUserId(int clientId) throws SQLException
+	{
+		ResultSet rs;
+		
+		try
+		{
+			db.setPreparedStatement("SELECT UserId FROM Clients WHERE ClientId = ?;");
+			db.getPreparedStatement().setInt(1, clientId);
 			rs = db.getPreparedStatement().executeQuery();
 			
 			if(!rs.next())

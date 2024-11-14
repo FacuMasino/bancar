@@ -69,12 +69,13 @@ public class ClientsDao implements IClientsDao
 		
 		return client;
 	}
+	
+	@Override
+	public Client readByUserId(int userId) throws SQLException
+	{
+		return read(getClientId(userId));
+	}
 
-	// TODO: Desarrollar los métodos update() en los DAO correspondientes
-	// para la actualización de la información del cliente en las tablas relacionadas.
-	// No es necesario modificar nada en este método, ya que los handleId() se encargan.
-	// Para realizar esto, se recomienda primero: probar los métodos create(),
-	// read() y list() y definir responsabilidades de las capas en la arquitectura.
 	@Override
 	public boolean update(Client client) throws SQLException
 	{
@@ -99,20 +100,23 @@ public class ClientsDao implements IClientsDao
 		return (rows > 0);
 	}
 
-	// TODO: Desarrollar los métodos delete() en los DAO correspondientes
-	// para la baja lógica de la información del cliente de las tablas relacionadas.
-	// Es necesario, además, implementar la lógica en este método.
-	// Para realizar esto, se recomienda primero: probar los métodos create(),
-	// read() y list() y definir responsabilidades de las capas en la arquitectura.
-	@Override
-	public boolean delete(int clientId) throws SQLException
+	public boolean toggleActiveStatus(int clientId, boolean currentActiveStatus) throws SQLException
 	{
+		int userId = usersDao.getUserId(clientId);
+		boolean rtn = usersDao.toggleActiveStatus(userId, currentActiveStatus);
+		
+		if (rtn == false)
+		{
+			return rtn;
+		}
+		
 		int rows = 0;
 		
 		try
 		{
-			db.setPreparedStatement("UPDATE Clients SET IsActive = 0 WHERE ClientId = ?;");
-			db.getPreparedStatement().setInt(1, clientId);
+			db.setPreparedStatement("UPDATE Clients SET ActiveStatus = ? WHERE ClientId = ?;");
+			db.getPreparedStatement().setBoolean(1, !currentActiveStatus);
+			db.getPreparedStatement().setInt(2, clientId);
 			rows = db.getPreparedStatement().executeUpdate();
 		}
 		catch (SQLException ex)
@@ -148,6 +152,30 @@ public class ClientsDao implements IClientsDao
 		}
 		
 		return clients;
+	}
+	
+	public int getClientId(int userId) throws SQLException
+	{
+		ResultSet rs;
+		
+		try
+		{
+			db.setPreparedStatement("SELECT ClientId FROM Clients WHERE UserId = ?;");
+			db.getPreparedStatement().setInt(1, userId);
+			rs = db.getPreparedStatement().executeQuery();
+			
+			if(!rs.next())
+			{
+				return 0;
+			}
+			
+			return rs.getInt("ClientId");
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+			throw ex;
+		}
 	}
 	
 	private void setParameters(Client client, boolean isUpdate) throws SQLException

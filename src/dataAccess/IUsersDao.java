@@ -1,7 +1,6 @@
 package dataAccess;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import domainModel.User;
 
 public interface IUsersDao
@@ -10,5 +9,5 @@ public interface IUsersDao
 	public User read(int userId) throws SQLException;
 	public User read(String username) throws SQLException;
 	public boolean update(User user) throws SQLException;
-	public boolean delete(int userId) throws SQLException;
+	public boolean toggleActiveStatus(int userId, boolean currentActiveStatus) throws SQLException;
 }
