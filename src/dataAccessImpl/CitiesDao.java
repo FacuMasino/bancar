@@ -2,7 +2,6 @@ package dataAccessImpl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import dataAccess.ICitiesDao;
 import domainModel.City;
 
@@ -65,18 +64,6 @@ public class CitiesDao implements ICitiesDao
 	public boolean update(City city) throws SQLException
 	{
 		return false;
-	}
-
-	@Override
-	public boolean delete(int cityId) throws SQLException
-	{
-		return false;
-	}
-
-	@Override
-	public ArrayList<City> list() throws SQLException
-	{
-		return null;
 	}
 	
 	public int getId(City city, int provinceId) throws SQLException

@@ -68,12 +68,6 @@ public class ProvincesDao implements IProvincesDao
 	}
 
 	@Override
-	public boolean delete(int provinceId) throws SQLException
-	{
-		return false;
-	}
-
-	@Override
 	public ArrayList<Province> list() throws SQLException
 	{
 		ResultSet rs;

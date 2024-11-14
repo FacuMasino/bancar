@@ -2,7 +2,6 @@ package dataAccessImpl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import dataAccess.IAddressesDao;
 import domainModel.Address;
 
@@ -75,18 +74,6 @@ public class AddressesDao implements IAddressesDao
 	public boolean update(Address address) throws SQLException
 	{
 		return false;
-	}
-
-	@Override
-	public boolean delete(int addressId) throws SQLException
-	{
-		return false;
-	}
-
-	@Override
-	public ArrayList<Address> list() throws SQLException
-	{
-		return null;
 	}
 	
 	public int getId(Address address) throws SQLException

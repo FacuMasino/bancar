@@ -2,7 +2,6 @@ package dataAccessImpl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import dataAccess.ICountriesDao;
 import domainModel.Country;
 
@@ -65,18 +64,6 @@ public class CountriesDao implements ICountriesDao
 	public boolean update(Country country) throws SQLException
 	{
 		return false;
-	}
-
-	@Override
-	public boolean delete(int countryId) throws SQLException
-	{
-		return false;
-	}
-
-	@Override
-	public ArrayList<Country> list() throws SQLException
-	{
-		return null;
 	}
 	
 	public int getId(Country country) throws SQLException
