@@ -2,18 +2,32 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <c:set var="client" value="${requestScope.client}" />
+<c:set var="setIsDisabled" value="${!client.activeStatus ? 'disabled':''}" />
 
 <t:masterpage title="Admin - Detalles Cliente" customNavbar="true">
   <t:adminwrapper activeMenuItem="adminClientsMenu">
     <form method="get" action="Clients"
       class="container flex flex-col gap-4 mx-auto p-4 max-w-7xl mb-8">
       <div class="flex justify-between">
-        <h1 class="font-bold text-xl">Gestión de Clientes</h1>
+        <div class="flex gap-1 items-center">
+          <a href="Clients" title="Volver">
+            <i data-lucide="circle-chevron-left"></i>
+          </a>
+          <h1 class="font-bold text-xl">Gestión de Clientes</h1>
+        </div>
         <div class="flex gap-2.5">
           <button name="action" value="edit"
-            class="btn btn-tertiary bg-base-200 border-gray-200">
-            Editar Cliente</button>
-          <a href="${pageContext.request.contextPath}/AdminClientAccounts.jsp?id=${client.clientId}" class="btn btn-primary"> Gestionar Cuentas </a>
+            class="btn btn-tertiary bg-base-200 border-gray-200" ${setIsDisabled}>
+            Editar Cliente
+          </button>
+          <c:choose>
+            <c:when test="${client.activeStatus}">
+              <a href="${pageContext.request.contextPath}/AdminClientAccounts.jsp?id=${client.clientId}" 
+                class="btn btn-primary"> 
+                Gestionar Cuentas
+              </a>
+            </c:when>
+          </c:choose>
         </div>
       </div>
       <div class="flex flex-col p-6 bg-white rounded-lg drop-shadow-sm">
@@ -29,7 +43,7 @@
                 <span class="font-bold"  >ID:</span>
               </div>
               <div class="flex w-1/2">
-                <input type="hidden" name="clientId" value="${client.clientId} " />
+                <input type="hidden" name="clientId" value="${client.clientId}" />
                 <span class="${client.activeStatus == false ? 'text-red-500' : 'text-green-500'} font-semibold" >${client.clientId}</span>
               </div>
             </div>
@@ -134,7 +148,8 @@
               </div>
               <div class="flex w-1/2">
                 <span
-                  class="flex flex-col items-center w-fit px-2.5 rounded-full ${client.activeStatus ? 'border-green-600 text-green-600' : 'border-red-600 text-red-600'} font-semibold    border-2">
+                  class="flex flex-col items-center w-fit px-2.5 rounded-full border font-semibold 
+                  ${client.activeStatus ? 'border-green-600 text-green-600' : 'border-red-600 text-red-600'}">
                   ${client.activeStatus ? 'Activo' : 'Baja'} </span>
               </div>
             </div>

@@ -2,6 +2,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <c:set var="client" value="${requestScope.client}" />
+<c:set var="setIsDisabled" value="${!client.activeStatus ? 'disabled':''}" />
+
 <t:masterpage title="Admin - Editar Cliente" customNavbar="true">
   <t:adminwrapper activeMenuItem="adminClientsMenu">
     <div class="container md:max-w-[1400px] mx-auto my-6 px-2">
@@ -11,91 +13,105 @@
         <div class="flex justify-between">
           <div>
             <p class="font-bold">Editando cliente ID ${client.clientId}</p>
+            <c:set var="statusClass" value="${client.activeStatus ? 
+              'border-green-600 text-green-600 text-green-600' 
+              : 'border-red-600 text-red-600'}" />
             <span
-              class="flex flex-col items-center w-fit px-2.5 rounded-full ${client.activeStatus ? 'border-green-600 text-green-600 bg-green-600 text-white' : 'border-red-600 bg-red-600  text-black'} font-semibold    border-2">
-              ${client.activeStatus ? 'Activo' : 'Baja'} </span>
+              class="flex flex-col items-center w-fit px-2.5 rounded-full border font-semibold ${statusClass}">
+              ${client.activeStatus ? 'Activo' : 'Baja'}
+            </span>
           </div>
           <button class="btn mr-4 btn-neutral" type="submit" name="action"
-            value="cancelClient" ${!client.activeStatus ? 'disabled' : ''}>Dar
-            de baja</button>
+            value="cancelClient" ${setIsDisabled}>
+            Dar de baja
+          </button>
         </div>
 
         <!-- Nombre y Apellido -->
         <div class="flex gap-4">
           <div class="flex flex-col w-full">
             <div class="form-control w-full">
-              <label for="clientName" class="label"> <span
-                class="label-text font-bold">Nombre</span>
+              <label for="clientName" class="label">
+                <span class="label-text font-bold">Nombre</span>
               </label>
             </div>
             <input type="text" name="clientName" placeholder="Ingresá el nombre"
-              class="input input-bordered w-full" value="${client.firstName}" />
+              class="input input-bordered w-full" value="${client.firstName}" 
+              ${setIsDisabled} />
           </div>
           <div class="flex flex-col w-full">
             <div class="form-control w-full">
-              <label for="clientSurname" class="label"> <span
-                class="label-text font-bold">Apellido</span>
+              <label for="clientSurname" class="label">
+                <span class="label-text font-bold">Apellido</span>
               </label>
             </div>
             <input type="text" name="clientSurname"
               placeholder="Ingresá el apellido"
-              class="input input-bordered w-full" value="${client.lastName}" />
+              class="input input-bordered w-full" value="${client.lastName}" 
+              ${setIsDisabled} />
           </div>
         </div>
         <!-- DNI y CUIL -->
         <div class="flex gap-4">
           <div class="flex flex-col w-full">
             <div class="form-control w-full">
-              <label for="clientDNI" class="label"> <span
-                class="label-text font-bold">DNI</span>
+              <label for="clientDNI" class="label">
+                <span class="label-text font-bold">DNI</span>
               </label>
             </div>
             <input type="text" name="clientDNI"
               placeholder="DNI del cliente (sin espacios ni puntos)"
-              class="input input-bordered w-full" value="${client.dni}" />
+              class="input input-bordered w-full" value="${client.dni}" 
+              ${setIsDisabled} />
           </div>
           <div class="flex flex-col w-full">
             <div class="form-control w-full">
-              <label for="clientCuil" class="label"> <span
-                class="label-text font-bold">CUIL</span>
+              <label for="clientCuil" class="label">
+                <span class="label-text font-bold">CUIL</span>
               </label>
             </div>
             <input type="text" name="clientCuil"
               placeholder="Cuil del cliente (sin espacios ni puntos)"
-              class="input input-bordered w-full" value="${client.cuil}" />
+              class="input input-bordered w-full" value="${client.cuil}"
+              ${setIsDisabled} />
           </div>
         </div>
         <!-- Genero y Nacionalidad -->
         <div class="flex gap-4">
           <div class="flex flex-col w-full">
             <div class="form-control w-full">
-              <label for="clientSex" class="label"> <span
-                class="label-text font-bold">Género</span>
+              <label for="clientSex" class="label">
+                <span class="label-text font-bold">Género</span>
               </label>
             </div>
             <input type="text" name="clientSex" placeholder="Genero del cliente"
-              class="input input-bordered w-full" value="${client.sex}" />
+              class="input input-bordered w-full" value="${client.sex}"
+              ${setIsDisabled} />
           </div>
           <div class="flex flex-col w-full">
             <div class="form-control w-full">
-              <label for="clientNationality" class="label"> <span
-                class="label-text font-bold">Nacionalidad</span>
+              <label for="clientNationality" class="label">
+                <span class="label-text font-bold">Nacionalidad</span>
               </label>
             </div>
             <input type="text" name="clientNationality"
               placeholder="Nacionalidad del cliente"
               class="input input-bordered w-full"
-              value="${client.nationality.name}" />
+              value="${client.nationality.name}"
+              ${setIsDisabled} />
           </div>
           <div class="flex flex-col w-full">
             <div class="form-control w-full">
-              <label for="clientBirthDate class="label"> <span
-                class="label-text font-bold">Fecha de Nacimiento</span>
+              <label for="clientBirthDate" class="label"> 
+                <span class="label-text font-bold">
+                  Fecha de Nacimiento
+                </span>
               </label>
             </div>
             <input type="text" name="clientBirthDate"
               placeholder="Fecha de nacimiento"
-              class="input input-bordered w-full" value="${client.birthDate}" />
+              class="input input-bordered w-full" value="${client.birthDate}"
+              ${setIsDisabled} />
           </div>
         </div>
 
@@ -103,23 +119,25 @@
         <div class="flex gap-4">
           <div class="flex flex-col w-full">
             <div class="form-control w-full">
-              <label for="clientEmail" class="label"> <span
-                class="label-text font-bold">Email</span>
+              <label for="clientEmail" class="label">
+                <span class="label-text font-bold">Email</span>
               </label>
             </div>
             <input type="text" name="clientEmail"
               placeholder="Email del cliente"
-              class="input input-bordered w-full" value="${client.email}" />
+              class="input input-bordered w-full" value="${client.email}"
+              ${setIsDisabled} />
           </div>
           <div class="flex flex-col w-full">
             <div class="form-control w-full">
-              <label for="clientTelephone" class="label"> <span
-                class="label-text font-bold">Teléfono</span>
+              <label for="clientTelephone" class="label">
+                <span class="label-text font-bold">Teléfono</span>
               </label>
             </div>
             <input type="text" name="clientTelephone"
               placeholder="Telefono del cliente"
-              class="input input-bordered w-full" value="${client.phone}" />
+              class="input input-bordered w-full" value="${client.phone}"
+              ${setIsDisabled} />
           </div>
         </div>
 
@@ -128,37 +146,40 @@
 
           <div class="flex flex-col w-full">
             <div class="form-control w-full">
-              <label for="clientAdress" class="label"> <span
-                class="label-text font-bold">Domicilio</span>
+              <label for="clientAdress" class="label">
+                <span class="label-text font-bold">Domicilio</span>
               </label>
             </div>
             <input type="text" name="clientStreet"
               placeholder="Dirección del cliente (Calle)"
               class="input input-bordered w-full"
-              value="${client.address.streetName}" />
+              value="${client.address.streetName}"
+              ${setIsDisabled} />
           </div>
           <div class="flex gap-4">
             <div class="flex flex-col w-full">
               <div class="form-control w-full">
-                <label for="clientAdressNumber" class="label"> <span
-                  class="label-text font-bold">Nro</span>
+                <label for="clientAdressNumber" class="label">
+                  <span class="label-text font-bold">Nro</span>
                 </label>
               </div>
               <input type="text" name="clientAdressNumber"
                 placeholder="Numeración Domicilio"
                 class="input input-bordered w-full"
-                value="${client.address.streetNumber}" />
+                value="${client.address.streetNumber}"
+                ${setIsDisabled} />
             </div>
             <div class="flex flex-col w-full">
               <div class="form-control w-full">
-                <label for="clientAdressFlat" class="label"> <span
-                  class="label-text font-bold">Piso/Depto</span>
+                <label for="clientAdressFlat" class="label">
+                  <span class="label-text font-bold">Piso/Depto</span>
                 </label>
               </div>
               <input type="text" name="clientAdressFlat"
                 placeholder="Piso/Departamento"
                 class="input input-bordered w-full"
-                value="${client.address.flat}" />
+                value="${client.address.flat}"
+                ${setIsDisabled} />
             </div>
           </div>
         </div>
@@ -169,24 +190,25 @@
             <!-- Detalles -->
             <div class="flex flex-col w-full">
               <div class="form-control w-full">
-                <label for="clientDetails" class="label"> <span
-                  class="label-text font-bold">Obervaciones</span>
+                <label for="clientDetails" class="label">
+                  <span class="label-text font-bold">Obervaciones</span>
                 </label>
               </div>
               <input type="text" name="clientDetails"
                 placeholder="Detalles del domicilio del cliente"
                 class="input input-bordered w-full"
-                value="${client.address.details}" />
+                value="${client.address.details}"
+                ${setIsDisabled} />
             </div>
 
             <!-- Localidad -->
             <div class="flex flex-col w-full">
               <div class="form-control w-full">
-                <label for="clientLocality" class="label"> <span
-                  class="label-text font-bold">Localidad</span>
+                <label for="clientLocality" class="label">
+                  <span class="label-text font-bold">Localidad</span>
                 </label>
               </div>
-              <select class="bg-white select select-bordered w-full">
+              <select class="bg-white select select-bordered w-full" ${setIsDisabled}>
                 <option disabled selected></option>
                 <option>Tigre</option>
                 <option>San Fernando</option>
@@ -200,7 +222,7 @@
                   class="label-text font-bold">Provincia</span>
                 </label>
               </div>
-              <select class="bg-white select select-bordered w-full">
+              <select class="bg-white select select-bordered w-full" ${setIsDisabled}>
                 <option disabled selected></option>
                 <option>client.address.province.name</option>
                 <option>Capital Federal</option>
@@ -213,9 +235,13 @@
         <div class="divider m-0"></div>
         <div class="flex justify-end w-full">
           <a href="Clients?clientId=${client.clientId}&action=view"
-            class="btn mr-4 btn-neutral">Cancelar</a>
+            class="btn mr-4 btn-neutral">
+            ${client.activeStatus ? 'Cancelar':'Volver'}
+          </a>
           <button class="btn btn-primary" type="submit" name="action"
-            value="saveClient">Guardar cambios</button>
+            value="saveClient" ${setIsDisabled}>
+            Guardar cambios
+          </button>
         </div>
       </form>
     </div>
