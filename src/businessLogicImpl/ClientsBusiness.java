@@ -116,4 +116,10 @@ public class ClientsBusiness implements IClientsBusiness
 				("Ocurrió un error desconocido al obtener los clientes.");
 		}
 	}
+
+	@Override
+	public boolean findClientByUser(String userName) throws BusinessException {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

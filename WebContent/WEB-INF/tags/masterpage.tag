@@ -4,8 +4,12 @@
 --%>
 <%@tag description="Master page" pageEncoding="UTF-8" %>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@attribute name="title" required="true"%>
 <%@attribute name="customNavbar" required="false" type="java.lang.Boolean" %>
+
+<c:set var="msg" value="${requestScope.message != null ? requestScope.message : null}" />
+
 <!DOCTYPE html>
 <html data-theme="light">
 	<head>
@@ -32,6 +36,18 @@
 			}
 		%>
 		<jsp:doBody />
+        <!-- Notificación Toast -->
+        <c:choose>
+          <%-- Si hay atributo "message" se muestra la notificación --%>
+          <c:when test="${not empty msg}">
+            <c:set var="alertType" value="${msg.type == 'ERROR' ? 'error' : 'success'}" />
+            <script type="module">
+            	import { startWindToast } from "${pageContext.request.contextPath}/js/wind-notify/index.js"
+
+				startWindToast("Mensaje", "${msg.message}", "${alertType}", 5, "bottom-end");
+			</script>
+          </c:when>
+        </c:choose>
 		<%--@include page="/Components/Footer.jsp" --%>
     <script>
       // Inicializa Lucide y reemplaza los <i data-lucide="...">

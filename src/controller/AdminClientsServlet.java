@@ -19,7 +19,7 @@ import exceptions.BusinessException;
 import utils.Helper;
 import utils.Page;
 
-@WebServlet("/AdminClients")
+@WebServlet(urlPatterns = {"/Admin/Clients","/Admin/Clients/"})
 public class AdminClientsServlet extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
@@ -35,8 +35,7 @@ public class AdminClientsServlet extends HttpServlet
 			throws ServletException, IOException
 	{	
 		String action = request.getParameter("action");
-
-		if(action == null)
+		if(action == null || action.isEmpty())
 		{
 			try
 			{
@@ -46,15 +45,20 @@ public class AdminClientsServlet extends HttpServlet
 			{
 				e.printStackTrace();
 			}
+			return;
 		}
 
 		switch (action) 
 		{
+			case "new":
+				Helper.redirect("/WEB-INF/AdminNewClient.jsp", request, response);
+				break;
 			case "view":
 				viewClient(request, response);
 				break;
 			case "edit":
 				editClient(request,response);
+				break;
 			default:
 				try
 				{
@@ -135,7 +139,7 @@ public class AdminClientsServlet extends HttpServlet
 			clientsBusiness.create(client);
 			// TODO: reemplazar println() por modal "Cliente creado exitosamente."
 			System.out.println("Cliente creado exitosamente.");
-			Helper.redirect("AdminPanel.jsp", request, response);
+			Helper.redirect("/WEB-INF/AdminPanel.jsp", request, response);
 		}
 		catch (BusinessException e)
 		{
@@ -154,7 +158,7 @@ public class AdminClientsServlet extends HttpServlet
 		{
 			Client client = clientsBusiness.read(id);
 			request.setAttribute("client", client);
-			Helper.redirect("AdminEditClient.jsp", request, response);
+			Helper.redirect("/WEB-INF/AdminEditClient.jsp", request, response);
 		}
 		catch (BusinessException e)
 		{
@@ -185,7 +189,7 @@ public class AdminClientsServlet extends HttpServlet
 		Page<Client> clientsPage = new Page<Client>(page,pageSize, clientsList);
 
 		request.setAttribute("page", clientsPage);
-		Helper.redirect("AdminClients.jsp", request, response);
+		Helper.redirect("/WEB-INF/AdminClients.jsp", request, response);
 	}
 	
 	private void viewClient(HttpServletRequest request, HttpServletResponse response)
@@ -199,7 +203,7 @@ public class AdminClientsServlet extends HttpServlet
 		{
 			Client client = clientsBusiness.read(clientId);
 			request.setAttribute("client", client);
-			Helper.redirect("AdminViewClient.jsp", request, response);
+			Helper.redirect("/WEB-INF/AdminViewClient.jsp", request, response);
 		}
 		catch (BusinessException e)
 		{

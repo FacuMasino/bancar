@@ -11,4 +11,5 @@ public interface IClientsBusiness
 	public boolean update(Client client) throws BusinessException;
 	public boolean delete(int clientId) throws BusinessException;
 	public ArrayList<Client> list() throws BusinessException;
+	public boolean findClientByUser(String username) throws BusinessException;
 }

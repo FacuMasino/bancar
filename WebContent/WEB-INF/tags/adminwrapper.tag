@@ -23,16 +23,16 @@
             ADMINISTRACIÓN
           </span>
         </div>
-        <div class="flex-none">
+        <form method="post" action="${pageContext.request.contextPath}/Login" class="flex-none">
           <ul class="menu text-white menu-horizontal px-1 gap-3">
             <li>
-              <a href="#" class="btn btn-ghost">
+              <button value="logout" name="action" class="btn btn-ghost">
                 <i data-lucide="log-out"></i>
                 Salir
-              </a>
+              </button>
             </li>
           </ul>
-        </div>
+        </form>
       </div>
     </div>
     <!-- Drawer Content -->
@@ -49,13 +49,13 @@
       <!-- MENU -->
       <ul class="menu text-lg gap-4">
         <li>
-          <a href="AdminPanel.jsp" id="adminPanelMenu">
+          <a href="${pageContext.request.contextPath}/Admin" id="adminPanelMenu">
             <i data-lucide="layout-dashboard"></i>
             Inicio
           </a>  
         </li>
         <li>
-          <a href="AdminClients" id="adminClientsMenu">
+          <a href="${pageContext.request.contextPath}/Admin/Clients" id="adminClientsMenu">
             <i data-lucide="users"></i>
             Clientes
           </a>

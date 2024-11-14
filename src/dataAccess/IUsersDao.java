@@ -11,4 +11,5 @@ public interface IUsersDao
 	public boolean update(User user) throws SQLException;
 	public boolean delete(int userId) throws SQLException;
 	public ArrayList<User> list() throws SQLException;
+	public User read(String username) throws SQLException;
 }

@@ -11,12 +11,12 @@
 <t:masterpage title="Admin - Clientes" customNavbar="true">
   <t:adminwrapper activeMenuItem="adminClientsMenu">
     
-    <form method="get" action="AdminClients" class="container flex flex-col gap-4 mx-auto p-4 max-w-7xl mb-8">
+    <form method="get" action="Clients" class="container flex flex-col gap-4 mx-auto p-4 max-w-7xl mb-8">
       <div class="flex justify-between">
         <h1 class="font-bold text-xl">Gestión de Clientes</h1>
-          <a href="AdminNewClient.jsp" class="btn btn-primary">
+          <button name="action" value="new" class="btn btn-primary">
             Nuevo Cliente
-          </a>
+          </button>
       </div>
       
       <!-- Tabla de clientes -->
@@ -83,8 +83,8 @@
                           <i class="text-sm" data-lucide="ellipsis-vertical"></i>
                         </div>
                         <ul tabindex="0" class="dropdown-content menu bg-white rounded-box z-[1] w-52 p-2 border-slate-200 drop-shadow">
-                          <li><a href="AdminClients?clientId=${client.clientId}&action=view">Ver cliente</a></li>
-                          <li><a href="AdminClients?clientId=${client.clientId}&action=edit">Editar cliente</a></li>
+                          <li><a href="Clients?clientId=${client.clientId}&action=view">Ver cliente</a></li>
+                          <li><a href="Clients?clientId=${client.clientId}&action=edit">Editar cliente</a></li>
                           <li><a href="AdminAccounts?clientId=${client.clientId}">Gestionar cuentas</a></li>
                         </ul>
                       </div>

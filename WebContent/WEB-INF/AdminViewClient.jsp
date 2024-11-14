@@ -5,13 +5,13 @@
 
 <t:masterpage title="Admin - Detalles Cliente" customNavbar="true">
   <t:adminwrapper activeMenuItem="adminClientsMenu">
-    <form method="get" action="AdminClients"
+    <form method="get" action="Clients"
       class="container flex flex-col gap-4 mx-auto p-4 max-w-7xl mb-8">
       <div class="flex justify-between">
         <h1 class="font-bold text-xl">Gestión de Clientes</h1>
         <div class="flex gap-2.5">
           <button name="action" value="edit" class="btn btn-tertiary bg-base-200 border-gray-200">
-            Editar Cliente </button> <a href="/AdminClientAccounts?clientId=${client.clientId}"
+            Editar Cliente </button> <a href="${pageContext.request.contextPath}/AdminClientAccounts.jsp?id=${client.clientId}"
             class="btn btn-primary"> Gestionar Cuentas </a>
         </div>
       </div>

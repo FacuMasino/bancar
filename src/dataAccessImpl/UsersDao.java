@@ -64,6 +64,34 @@ public class UsersDao implements IUsersDao
 	}
 
 	@Override
+	public User read(String username) throws SQLException
+	{
+		User user = new User();
+		ResultSet rs;
+		
+		try
+		{
+			db.setPreparedStatement("Select * from Users where Username = ?");
+			db.getPreparedStatement().setString(1, username);
+			rs = db.getPreparedStatement().executeQuery();
+			
+			if(!rs.next())
+			{
+				return null;
+			}
+			
+			assignResultSet(user, rs);
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+			throw ex;
+		}
+		
+		return user;
+	}
+	
+	@Override
 	public boolean update(User user) throws SQLException
 	{
 		return false;

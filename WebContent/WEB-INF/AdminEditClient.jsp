@@ -7,7 +7,7 @@
   <t:adminwrapper activeMenuItem="adminClientsMenu">
     <div class="container md:max-w-[1400px] mx-auto my-6 px-2">
     <p class="font-bold text-xl mb-6">Editar información del cliente</p>
-    <form method="post" action="AdminClients" class="bg-white rounded rounded-lg flex flex-col gap-4 p-8 w-full">
+    <form method="post" action="Clients" class="bg-white rounded rounded-lg flex flex-col gap-4 p-8 w-full">
       <div class="flex justify-between">
     	<p class="font-bold">Editando cliente ID ${client.clientId}</p>
     	<button class="btn mr-4 btn-neutral" type="submit" name="action" value="cancelClient">Dar de baja</button>
@@ -106,7 +106,7 @@
       <!-- Divisor -->
       <div class="divider m-0"></div>
       <div class="flex justify-end w-full">
-      	<a href="AdminClient.jsp?id=AcaVaElId" class="btn mr-4 btn-neutral">Cancelar</a>
+      	<a href="Clients?clientId=${client.clientId}&action=view" class="btn mr-4 btn-neutral">Cancelar</a>
         <button class="btn btn-primary" type="submit" name="action" value="saveClient">Guardar cambios</button>
       </div>
     </form>

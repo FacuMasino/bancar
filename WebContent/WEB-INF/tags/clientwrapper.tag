@@ -6,6 +6,7 @@
   pageEncoding="UTF-8"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags"%>
 <%@attribute name="activeMenuItem" required="true"%>
+
 <div class="drawer lg:drawer-open">
   <input id="client-drawer" type="checkbox" class="drawer-toggle" />
   <div class="drawer-content overflow-y-hidden">
@@ -23,7 +24,7 @@
             BANC<span class="font-bold">AR</span>
           </span>
         </div>
-        <div class="flex-none">
+        <form method="post" action="${pageContext.request.contextPath}/Login" class="flex-none">
           <ul class="menu menu-horizontal px-1 gap-3">
             <li>
               <a id="myProfileMenu" href="Profile.jsp" class="p-0">
@@ -34,13 +35,13 @@
               </a>
             </li>
             <li>
-              <a href="#" class="btn btn-ghost">
-                <i data-lucide="log-out"></i>
-                Salir
-              </a>
+                <button value="logout" name="action" class="btn btn-ghost">
+                  <i data-lucide="log-out"></i>
+                  Salir
+                </button>
             </li>
           </ul>
-        </div>
+        </form>
       </div>
     </div>
     <!-- Drawer Content -->
@@ -58,9 +59,9 @@
       <!-- MENU -->
       <ul class="menu text-lg gap-4">
         <li>
-          <a href="Account.jsp" id="accountMenu">
+          <a href="${pageContext.request.contextPath}/Client" id="accountMenu">
             <i data-lucide="layout-dashboard"></i>
-            Cuenta
+            Mi Cuenta
           </a>
         </li>
         <li>
