@@ -80,11 +80,11 @@ public class ClientsBusiness implements IClientsBusiness
 	}
 
 	@Override
-	public boolean delete(int clientId) throws BusinessException  
+	public boolean toggleActiveStatus(int clientId, boolean currentActiveStatus) throws BusinessException
 	{
 		try
 		{
-			return clientsDao.delete(clientId);
+			return clientsDao.toggleActiveStatus(clientId, currentActiveStatus);
 		}
 		catch (SQLException ex)
 		{
