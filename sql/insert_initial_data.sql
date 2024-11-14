@@ -32,17 +32,27 @@ VALUES
     ('Tierra del Fuego', 1),
     ('Tucumán', 1);
 
+-- dummy_data.sql: Cities
+
+-- dummy_data.sql: Addresses
+
 INSERT INTO
     Roles (RoleName)
 VALUES
     ('Administrador'),
     ('Cliente');
 
+-- dummy_data.sql: Users
+
+-- dummy_data.sql: Clients
+
 INSERT INTO
     AccountTypes (AccountTypeName)
 VALUES
     ('Caja de ahorro'),
     ('Cuenta corriente');
+
+-- dummy_data.sql: Accounts
 
 INSERT INTO
     Loantypes (LoanTypeName, LoanTypeDescription)
@@ -79,3 +89,17 @@ VALUES
     ('Vigente'),
     ('Finalizado'),
     ('Rechazado');
+
+-- dummy_data.sql: Loans
+
+-- dummy_data.sql: Installments
+
+INSERT INTO
+    MovementTypes (MovementTypeName)
+VALUES
+    ('Alta de cuenta'),
+    ('Alta de préstamo'),
+    ('Pago de préstamo'),
+    ('Transferencia');
+
+-- dummy_data.sql: Movements

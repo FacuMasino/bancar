@@ -92,14 +92,6 @@ CREATE TABLE
     );
 
 CREATE TABLE
-    Installments (
-        InstallmentId INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-        InstallmentNumber INT NOT NULL,
-        Amount DECIMAL(15, 2) NOT NULL,
-        PaymentDate DATE NOT NULL
-    );
-
-CREATE TABLE
     LoanTypes (
         LoanTypeId INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
         LoanTypeName VARCHAR(50) NOT NULL,
@@ -116,28 +108,41 @@ CREATE TABLE
     Loans (
         LoanId INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
         CreationDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-        MonthsLimit INT NOT NULL,
+        InstallmentsQuantity INT NOT NULL,
+        RequestedAmount DECIMAL(15, 2) NOT NULL,
+        InterestRate DECIMAL(3, 2) DEFAULT 1.65 NOT NULL,
         LoanTypeId INT NOT NULL,
         LoanStatusId INT NOT NULL,
+        AccountId INT NOT NULL,
         CONSTRAINT FK_LoanType FOREIGN KEY (LoanTypeId) REFERENCES LoanTypes (LoanTypeId),
-        CONSTRAINT FK_LoanStatus FOREIGN KEY (LoanStatusId) REFERENCES LoanStatuses (LoanStatusId)
+        CONSTRAINT FK_LoanStatus FOREIGN KEY (LoanStatusId) REFERENCES LoanStatuses (LoanStatusId),
+        CONSTRAINT FK_Account FOREIGN KEY (AccountId) REFERENCES Accounts (AccountId)
     );
 
 CREATE TABLE
-    InstallmentsToLoans (
-        InstallmentId INT NOT NULL,
+    Installments (
+        InstallmentId INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+        InstallmentNumber INT NOT NULL,
+        Amount DECIMAL(15, 2) NOT NULL,
+        PaymentDate DATE NOT NULL,
         LoanId INT NOT NULL,
-        CONSTRAINT FK_Installment FOREIGN KEY (InstallmentId) REFERENCES Installments (InstallmentId),
-        CONSTRAINT FK_Loan FOREIGN KEY (LoanId) REFERENCES Loans (LoanId),
-        PRIMARY KEY (InstallmentId, LoanId)
+        CONSTRAINT FK_Loan FOREIGN KEY (LoanId) REFERENCES Loans (LoanId)
     );
 
 CREATE TABLE
-    Transfers (
-        TransferId INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-        SenderCbu VARCHAR(50) NOT NULL,
-        RecipientCbu VARCHAR(50) NOT NULL,
-        CreationDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    MovementTypes (
+        MovementTypeId INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+        MovementTypeName VARCHAR(50) NOT NULL
+    );
+
+CREATE TABLE
+    Movements (
+        MovementId INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+        MovementDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
         Details VARCHAR(500) NOT NULL,
-        Amount DECIMAL(15, 2) NOT NULL
+        Amount DECIMAL(15, 2) NOT NULL,
+        MovementTypeId INT NOT NULL,
+        AccountId INT NOT NULL,
+        CONSTRAINT FK_MovementType FOREIGN KEY (MovementTypeId) REFERENCES MovementTypes (MovementTypeId),
+        CONSTRAINT FK_Account_Movement FOREIGN KEY (AccountId) REFERENCES Accounts (AccountId)
     );
