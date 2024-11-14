@@ -18,7 +18,8 @@ public class Client extends User
 	private Country nationality;
 	private Address address;
 	private ArrayList<Account> accounts;
-
+	private ArrayList<Loan> loans;
+	
 	public Client()
 	{
 		
@@ -182,5 +183,13 @@ public class Client extends User
 				" nationality: [" + getNationality().toString() +
 				"] address: [" + getAddress().toString() +
 				"]";
+	}
+
+	public ArrayList<Loan> getLoans() {
+		return loans;
+	}
+
+	public void setLoans(ArrayList<Loan> loans) {
+		this.loans = loans;
 	}
 }

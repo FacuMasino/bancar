@@ -3,6 +3,14 @@ package domainModel;
 import java.math.BigDecimal;
 import java.sql.Date;
 
+
+/*No va segun profe
+No va segun profe
+No va segun profe
+No va segun profe
+*/
+
+
 public class Transfer
 {
 	private int transferId;

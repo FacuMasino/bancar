@@ -5,53 +5,56 @@ import java.sql.Date;
 
 public class Installment
 {
-	private int id;
+	private int installmentId;
 	private int number;
 	private BigDecimal amount;
 	private Date paymentDate;
+	private int loanId;
 
 	public Installment()
 	{
 		
 	}
 
-	public int getId()
-	{
-		return id;
+	public int getInstallmentId() {
+		return installmentId;
 	}
 
-	public void setId(int id)
-	{
-		this.id = id;
+	public void setInstallmentId(int installmentId) {
+		this.installmentId = installmentId;
 	}
 
-	public int getNumber()
-	{
+	public int getNumber() {
 		return number;
 	}
 
-	public void setNumber(int number)
-	{
+	public void setNumber(int number) {
 		this.number = number;
 	}
 
-	public BigDecimal getAmount()
-	{
+	public BigDecimal getAmount() {
 		return amount;
 	}
 
-	public void setAmount(BigDecimal amount)
-	{
+	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
 	}
 
-	public Date getPaymentDate()
-	{
+	public Date getPaymentDate() {
 		return paymentDate;
 	}
 
-	public void setPaymentDate(Date paymentDate)
-	{
+	public void setPaymentDate(Date paymentDate) {
 		this.paymentDate = paymentDate;
 	}
+
+	public int getLoanId() {
+		return loanId;
+	}
+
+	public void setLoanId(int loanId) {
+		this.loanId = loanId;
+	}
+
+	
 }
