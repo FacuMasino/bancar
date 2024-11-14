@@ -23,7 +23,6 @@ public class ClientsDao implements IClientsDao
 	
 	public int create(Client client) throws SQLException
 	{
-		System.out.println("PRUEBA 1:" + client.toString()); // TODO: borrar luego de testear create()
 		countriesDao.handleId(client.getNationality());
 		addressesDao.handleId(client.getAddress());
 		usersDao.handleId(client);
@@ -162,16 +161,17 @@ public class ClientsDao implements IClientsDao
 			db.getCallableStatement().registerOutParameter(1, java.sql.Types.INTEGER);
 		}
 
-		db.getPreparedStatement().setString(2, client.getDni());
-		db.getPreparedStatement().setString(3, client.getCuil());
-		db.getPreparedStatement().setString(4, client.getFirstName());
-		db.getPreparedStatement().setString(5, client.getLastName());
-		db.getPreparedStatement().setString(6, client.getSex());
-		db.getPreparedStatement().setString(7, client.getEmail());
-		db.getPreparedStatement().setString(8, client.getPhone());
-		db.getPreparedStatement().setDate(9, client.getBirthDate());
-		db.getPreparedStatement().setInt(10, client.getNationality().getId());
-		db.getPreparedStatement().setInt (11, client.getAddress().getId());
+		db.getCallableStatement().setString(2, client.getDni());
+		db.getCallableStatement().setString(3, client.getCuil());
+		db.getCallableStatement().setString(4, client.getFirstName());
+		db.getCallableStatement().setString(5, client.getLastName());
+		db.getCallableStatement().setString(6, client.getSex());
+		db.getCallableStatement().setString(7, client.getEmail());
+		db.getCallableStatement().setString(8, client.getPhone());
+		db.getCallableStatement().setDate(9, client.getBirthDate());
+		db.getCallableStatement().setInt(10, client.getNationality().getId());
+		db.getCallableStatement().setInt (11, client.getAddress().getId());
+		db.getCallableStatement().setInt (12, client.getUserId());
 	}
 	
 	private void assignResultSet(Client client, ResultSet rs) throws SQLException

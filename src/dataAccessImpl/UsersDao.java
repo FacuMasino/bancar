@@ -43,7 +43,7 @@ public class UsersDao implements IUsersDao
 		
 		try
 		{
-			db.setPreparedStatement("Select * from Users where UserId = ?");
+			db.setPreparedStatement("SELECT * FROM Users WHERE UserId = ?");
 			db.getPreparedStatement().setInt(1, userId);
 			rs = db.getPreparedStatement().executeQuery();
 			
@@ -71,7 +71,7 @@ public class UsersDao implements IUsersDao
 		
 		try
 		{
-			db.setPreparedStatement("Select * from Users where Username = ?");
+			db.setPreparedStatement("SELECT * FROM Users WHERE Username = ?;");
 			db.getPreparedStatement().setString(1, username);
 			rs = db.getPreparedStatement().executeQuery();
 			
@@ -120,7 +120,7 @@ public class UsersDao implements IUsersDao
 		
 		try
 		{
-			db.setPreparedStatement("SELECT UserId FROM Useres WHERE Username= ?;");
+			db.setPreparedStatement("SELECT UserId FROM Users WHERE Username= ?;");
 			db.getPreparedStatement().setString(1, username);
 			rs = db.getPreparedStatement().executeQuery();
 			
@@ -178,8 +178,8 @@ public class UsersDao implements IUsersDao
 			db.getCallableStatement().registerOutParameter(1, java.sql.Types.INTEGER);
 		}
 
-		db.getPreparedStatement().setString(2, user.getUsername());
-		db.getPreparedStatement().setString(3, user.getPassword());
+		db.getCallableStatement().setString(2, user.getUsername());
+		db.getCallableStatement().setString(3, user.getPassword());
 	}
 	
 	private void assignResultSet(User user, ResultSet rs) throws SQLException

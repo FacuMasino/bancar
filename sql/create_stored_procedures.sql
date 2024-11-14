@@ -141,11 +141,12 @@ CREATE PROCEDURE insert_client (
     IN _Phone VARCHAR(50),
     IN _BirthDate DATE,
     IN _NationalityId INT,
-    IN _AddressId INT
+    IN _AddressId INT,
+    IN _UserId INT
 )
 BEGIN
-	INSERT INTO Clients (Dni, Cuil, FirstName, LastName, Sex, Email, Phone, BirthDate, NationalityId, AddressId)
-    VALUES (_Dni, _Cuil, _FirstName, _LastName, _Sex, _Email, _Phone, _BirthDate, _NationalityId, _AddressId);
+	INSERT INTO Clients (Dni, Cuil, FirstName, LastName, Sex, Email, Phone, BirthDate, NationalityId, AddressId, UserId)
+    VALUES (_Dni, _Cuil, _FirstName, _LastName, _Sex, _Email, _Phone, _BirthDate, _NationalityId, _AddressId, _UserId);
     SET _NewClientId = LAST_INSERT_ID();
 END $$
 
@@ -160,11 +161,12 @@ CREATE PROCEDURE update_client (
     IN _Phone VARCHAR(50),
     IN _BirthDate DATE,
     IN _NationalityId INT,
-    IN _AddressId INT
+    IN _AddressId INT,
+    IN _UserId INT
 )
 BEGIN
 	UPDATE Clients
-	SET Dni = _Dni,  Cuil = _Cuil, FirstName = _FirstName, LastName = _LastName, Sex = _Sex, Email = _Email, Phone = _Phone, BirthDate = _BirthDate, NationalityId = _NationalityId, AddressId = _AddressId
+	SET Dni = _Dni,  Cuil = _Cuil, FirstName = _FirstName, LastName = _LastName, Sex = _Sex, Email = _Email, Phone = _Phone, BirthDate = _BirthDate, NationalityId = _NationalityId, AddressId = _AddressId, UserId = _UserId
     WHERE ClientId = _ClientId;
 END $$
 

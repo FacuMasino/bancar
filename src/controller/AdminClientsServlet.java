@@ -15,6 +15,7 @@ import domainModel.City;
 import domainModel.Client;
 import domainModel.Country;
 import domainModel.Province;
+import domainModel.Role;
 import exceptions.BusinessException;
 import utils.Helper;
 import utils.Page;
@@ -105,6 +106,12 @@ public class AdminClientsServlet extends HttpServlet
 
 		client.setUsername(request.getParameter("clientUsername"));
 		client.setPassword(request.getParameter("clientPassword"));
+		
+		Role role = new Role();
+		role.setId(2);
+		role.setName("Cliente");
+		client.setRole(role);
+		
 		client.setDni(request.getParameter("clientDni"));
 		client.setCuil(request.getParameter("clientCuil"));
 		client.setFirstName(request.getParameter("clientFirstName"));
