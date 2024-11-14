@@ -1,115 +1,223 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags/"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <c:set var="client" value="${requestScope.client}" />
-
 <t:masterpage title="Admin - Editar Cliente" customNavbar="true">
   <t:adminwrapper activeMenuItem="adminClientsMenu">
     <div class="container md:max-w-[1400px] mx-auto my-6 px-2">
-    <p class="font-bold text-xl mb-6">Editar información del cliente</p>
-    <form method="post" action="Clients" class="bg-white rounded rounded-lg flex flex-col gap-4 p-8 w-full">
-      <div class="flex justify-between">
-    	<p class="font-bold">Editando cliente ID ${client.clientId}</p>
-    	<button class="btn mr-4 btn-neutral" type="submit" name="action" value="cancelClient">Dar de baja</button>
-      </div>
-      <!-- Nombre y Apellido -->
-      <div class="flex gap-4">
-        <div class="flex flex-col w-full">
-          <div class="form-control w-full">
-            <label for="clientName" class="label">
-              <span class="label-text font-bold">Nombre</span> 
-            </label>
+      <p class="font-bold text-xl mb-6">Editar información del cliente</p>
+      <form method="post" action="Clients"
+        class="bg-white rounded rounded-lg flex flex-col gap-4 p-8 w-full">
+        <div class="flex justify-between">
+          <div>
+            <p class="font-bold">Editando cliente ID ${client.clientId}</p>
+            <span
+              class="flex flex-col items-center w-fit px-2.5 rounded-full ${client.activeStatus ? 'border-green-600 text-green-600 bg-green-600 text-white' : 'border-red-600 bg-red-600  text-black'} font-semibold    border-2">
+              ${client.activeStatus ? 'Activo' : 'Baja'} </span>
           </div>
-          <input type="text" name="clientName" placeholder="Ingresá el nombre" 
-            class="input input-bordered w-full" value="${client.firstName}" />
+          <button class="btn mr-4 btn-neutral" type="submit" name="action"
+            value="cancelClient" ${!client.activeStatus ? 'disabled' : ''}>Dar
+            de baja</button>
         </div>
-        <div class="flex flex-col w-full">
-          <div class="form-control w-full">
-            <label for="clientSurname" class="label">
-              <span class="label-text font-bold">Apellido</span>
-            </label>
-          </div>
-          <input type="text" name="clientSurname" placeholder="Ingresá el apellido" 
-            class="input input-bordered w-full" value="${client.lastName}"/>
-        </div>
-      </div>
-      <!-- DNI y Email -->
-      <div class="flex gap-4">
-        <div class="flex flex-col w-full">
-          <div class="form-control w-full">
-            <label for="clientDNI" class="label">
-              <span class="label-text font-bold">DNI</span> 
-            </label>
-          </div>
-          <input type="text" name="clientDNI" placeholder="DNI del cliente (sin espacios ni puntos)" class="input input-bordered w-full"
-           value="${client.dni}" />
-        </div>
-        <div class="flex flex-col w-full">
-          <div class="form-control w-full">
-            <label for="clientEmail" class="label">
-              <span class="label-text font-bold">Email</span>
-            </label>
-          </div>
-          <input type="text" name="clientEmail" placeholder="Email del cliente" class="input input-bordered w-full" value="${client.email}" />
-        </div>
-      </div>
-      <!-- Teléfono y dirección -->
-      <div class="flex gap-4">
-        <div class="flex flex-col w-full">
-          <div class="form-control w-full">
-            <label for="clientTelephone" class="label">
-              <span class="label-text font-bold">Teléfono</span> 
-            </label>
-          </div>
-          <input type="text" name="clientTelephone" placeholder="Telefono del cliente" class="input input-bordered w-full" value="${client.phone}" />
-        </div>
-        <div class="flex flex-col w-full">
-          <div class="form-control w-full">
-            <label for="clientAdress" class="label">
-              <span class="label-text font-bold">Dirección</span>
-            </label>
-          </div>
-          <input type="text" name="clientAddress" placeholder="Dirección del cliente" class="input input-bordered w-full" value="${client.address.streetName} ${client.address.streetNumber}"/>
-        </div>
-      </div>
-         <!-- Provincia y localidad -->
-      <div class="flex flex-col w-full gap-2">
+
+        <!-- Nombre y Apellido -->
         <div class="flex gap-4">
           <div class="flex flex-col w-full">
             <div class="form-control w-full">
-              <label for="clientProvince" class="label">
-                <span class="label-text font-bold">Provincia</span> 
+              <label for="clientName" class="label"> <span
+                class="label-text font-bold">Nombre</span>
               </label>
             </div>
-           <select class ="bg-white select select-bordered w-full">
-  			<option disabled selected></option>
- 			 <option>Buenos Aires</option>
- 			 <option>Capital Federal</option>
-			</select>
+            <input type="text" name="clientName" placeholder="Ingresá el nombre"
+              class="input input-bordered w-full" value="${client.firstName}" />
           </div>
-             <!-- Localidad -->
           <div class="flex flex-col w-full">
             <div class="form-control w-full">
-              <label for="clientPass2" class="label">
-                <span class="label-text font-bold">Localidad</span>
+              <label for="clientSurname" class="label"> <span
+                class="label-text font-bold">Apellido</span>
               </label>
             </div>
-            <select class="bg-white select select-bordered w-full">
-  			<option disabled selected></option>
- 			 <option>Tigre</option>
- 			 <option>San Fernando</option>
-			</select>
+            <input type="text" name="clientSurname"
+              placeholder="Ingresá el apellido"
+              class="input input-bordered w-full" value="${client.lastName}" />
           </div>
-         </div>
+        </div>
+        <!-- DNI y CUIL -->
+        <div class="flex gap-4">
+          <div class="flex flex-col w-full">
+            <div class="form-control w-full">
+              <label for="clientDNI" class="label"> <span
+                class="label-text font-bold">DNI</span>
+              </label>
+            </div>
+            <input type="text" name="clientDNI"
+              placeholder="DNI del cliente (sin espacios ni puntos)"
+              class="input input-bordered w-full" value="${client.dni}" />
+          </div>
+          <div class="flex flex-col w-full">
+            <div class="form-control w-full">
+              <label for="clientCuil" class="label"> <span
+                class="label-text font-bold">CUIL</span>
+              </label>
+            </div>
+            <input type="text" name="clientCuil"
+              placeholder="Cuil del cliente (sin espacios ni puntos)"
+              class="input input-bordered w-full" value="${client.cuil}" />
+          </div>
+        </div>
+        <!-- Genero y Nacionalidad -->
+        <div class="flex gap-4">
+          <div class="flex flex-col w-full">
+            <div class="form-control w-full">
+              <label for="clientSex" class="label"> <span
+                class="label-text font-bold">Género</span>
+              </label>
+            </div>
+            <input type="text" name="clientSex" placeholder="Genero del cliente"
+              class="input input-bordered w-full" value="${client.sex}" />
+          </div>
+          <div class="flex flex-col w-full">
+            <div class="form-control w-full">
+              <label for="clientNationality" class="label"> <span
+                class="label-text font-bold">Nacionalidad</span>
+              </label>
+            </div>
+            <input type="text" name="clientNationality"
+              placeholder="Nacionalidad del cliente"
+              class="input input-bordered w-full"
+              value="${client.nationality.name}" />
+          </div>
+          <div class="flex flex-col w-full">
+            <div class="form-control w-full">
+              <label for="clientBirthDate class="label"> <span
+                class="label-text font-bold">Fecha de Nacimiento</span>
+              </label>
+            </div>
+            <input type="text" name="clientBirthDate"
+              placeholder="Fecha de nacimiento"
+              class="input input-bordered w-full" value="${client.birthDate}" />
+          </div>
         </div>
 
-      <!-- Divisor -->
-      <div class="divider m-0"></div>
-      <div class="flex justify-end w-full">
-      	<a href="Clients?clientId=${client.clientId}&action=view" class="btn mr-4 btn-neutral">Cancelar</a>
-        <button class="btn btn-primary" type="submit" name="action" value="saveClient">Guardar cambios</button>
-      </div>
-    </form>
-  </div>
+        <!-- Email y Teléfono -->
+        <div class="flex gap-4">
+          <div class="flex flex-col w-full">
+            <div class="form-control w-full">
+              <label for="clientEmail" class="label"> <span
+                class="label-text font-bold">Email</span>
+              </label>
+            </div>
+            <input type="text" name="clientEmail"
+              placeholder="Email del cliente"
+              class="input input-bordered w-full" value="${client.email}" />
+          </div>
+          <div class="flex flex-col w-full">
+            <div class="form-control w-full">
+              <label for="clientTelephone" class="label"> <span
+                class="label-text font-bold">Teléfono</span>
+              </label>
+            </div>
+            <input type="text" name="clientTelephone"
+              placeholder="Telefono del cliente"
+              class="input input-bordered w-full" value="${client.phone}" />
+          </div>
+        </div>
+
+        <!-- Dirección -->
+        <div class="flex gap-4">
+
+          <div class="flex flex-col w-full">
+            <div class="form-control w-full">
+              <label for="clientAdress" class="label"> <span
+                class="label-text font-bold">Domicilio</span>
+              </label>
+            </div>
+            <input type="text" name="clientStreet"
+              placeholder="Dirección del cliente (Calle)"
+              class="input input-bordered w-full"
+              value="${client.address.streetName}" />
+          </div>
+          <div class="flex gap-4">
+            <div class="flex flex-col w-full">
+              <div class="form-control w-full">
+                <label for="clientAdressNumber" class="label"> <span
+                  class="label-text font-bold">Nro</span>
+                </label>
+              </div>
+              <input type="text" name="clientAdressNumber"
+                placeholder="Numeración Domicilio"
+                class="input input-bordered w-full"
+                value="${client.address.streetNumber}" />
+            </div>
+            <div class="flex flex-col w-full">
+              <div class="form-control w-full">
+                <label for="clientAdressFlat" class="label"> <span
+                  class="label-text font-bold">Piso/Depto</span>
+                </label>
+              </div>
+              <input type="text" name="clientAdressFlat"
+                placeholder="Piso/Departamento"
+                class="input input-bordered w-full"
+                value="${client.address.flat}" />
+            </div>
+          </div>
+        </div>
+        <!-- Detalles, Localidad y Provincia   -->
+        <div class="flex flex-col w-full gap-2">
+          <div class="flex gap-4">
+
+            <!-- Detalles -->
+            <div class="flex flex-col w-full">
+              <div class="form-control w-full">
+                <label for="clientDetails" class="label"> <span
+                  class="label-text font-bold">Obervaciones</span>
+                </label>
+              </div>
+              <input type="text" name="clientDetails"
+                placeholder="Detalles del domicilio del cliente"
+                class="input input-bordered w-full"
+                value="${client.address.details}" />
+            </div>
+
+            <!-- Localidad -->
+            <div class="flex flex-col w-full">
+              <div class="form-control w-full">
+                <label for="clientLocality" class="label"> <span
+                  class="label-text font-bold">Localidad</span>
+                </label>
+              </div>
+              <select class="bg-white select select-bordered w-full">
+                <option disabled selected></option>
+                <option>Tigre</option>
+                <option>San Fernando</option>
+              </select>
+            </div>
+
+            <!-- Provincia -->
+            <div class="flex flex-col w-full">
+              <div class="form-control w-full">
+                <label for="clientProvince" class="label"> <span
+                  class="label-text font-bold">Provincia</span>
+                </label>
+              </div>
+              <select class="bg-white select select-bordered w-full">
+                <option disabled selected></option>
+                <option>client.address.province.name</option>
+                <option>Capital Federal</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Divisor -->
+        <div class="divider m-0"></div>
+        <div class="flex justify-end w-full">
+          <a href="Clients?clientId=${client.clientId}&action=view"
+            class="btn mr-4 btn-neutral">Cancelar</a>
+          <button class="btn btn-primary" type="submit" name="action"
+            value="saveClient">Guardar cambios</button>
+        </div>
+      </form>
+    </div>
   </t:adminwrapper>
 </t:masterpage>
