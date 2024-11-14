@@ -24,8 +24,7 @@ import utils.Helper;
 import utils.Page;
 
 @WebServlet(urlPatterns = {"/Admin/Clients","/Admin/Clients/"})
-public class AdminClientsServlet extends HttpServlet
-{
+public class AdminClientsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private ClientsBusiness clientsBusiness;
 	private AccountsBusiness accountsBusiness;
@@ -65,6 +64,8 @@ public class AdminClientsServlet extends HttpServlet
 			case "edit":
 				editClient(request,response);
 				break;
+			case "manageAccounts":
+				manageAccounts(request, response);
 			default:
 				try
 				{
@@ -231,5 +232,33 @@ public class AdminClientsServlet extends HttpServlet
 		{
 			e.printStackTrace();
 		}
+	}
+	
+	private void manageAccounts(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		//int clientId = Optional.ofNullable(request.getParameter("clientId")).map(Integer::parseInt).orElse(0);
+		
+		int clientId = Integer.parseInt(request.getParameter("clientId"));
+		System.out.println("Lo que llega al servler..." + clientId);
+		try {
+			Client client = clientsBusiness.read(clientId);
+			System.out.println("\nAl leer e cliente de BD..." + client.getClientId());
+			ArrayList<Account> accountsList = new ArrayList<Account>();
+			accountsList = accountsBusiness.listByIdClient(clientId);
+
+			client.setAccounts(accountsList);
+
+			// TODO: Aca habria que cargarle los LOANS al cliente...
+			//TODO: HACER FUNCION CARGAR CLIENTE!!!
+
+			request.setAttribute("client", client);
+			
+			System.out.println("\nantes de redirect..." + client.getClientId());
+			
+			Helper.redirect("/AdminClientAccounts.jsp", request, response);
+		} catch (BusinessException e) {
+			e.printStackTrace();
+		}
+
 	}
 }

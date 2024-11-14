@@ -13,7 +13,7 @@
           <a href="Clients" title="Volver">
             <i data-lucide="circle-chevron-left"></i>
           </a>
-          <h1 class="font-bold text-xl">Gestión de Clientes</h1>
+          <h1 class="font-bold text-xl">Gestiï¿½n de Clientes</h1>
         </div>
         <div class="flex gap-2.5">
           <button name="action" value="edit"
@@ -22,7 +22,7 @@
           </button>
           <c:choose>
             <c:when test="${client.activeStatus}">
-              <a href="${pageContext.request.contextPath}/AdminClientAccounts.jsp?id=${client.clientId}" 
+              <a href="Clients?clientId=${client.clientId}&action=manageAccounts" 
                 class="btn btn-primary"> 
                 Gestionar Cuentas
               </a>
@@ -73,7 +73,7 @@
             </div>
                  <div class="flex flex-row justify-between gap-6">
               <div class="flex w-1/2">
-                <span class="font-bold">Género:</span>
+                <span class="font-bold">Gï¿½nero:</span>
               </div>
               <div class="flex w-1/2">
                 <span>${client.sex}</span>
