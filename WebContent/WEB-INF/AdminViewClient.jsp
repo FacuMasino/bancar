@@ -1,5 +1,5 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags/"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <c:set var="client" value="${requestScope.client}" />
 
@@ -10,9 +10,10 @@
       <div class="flex justify-between">
         <h1 class="font-bold text-xl">Gestión de Clientes</h1>
         <div class="flex gap-2.5">
-          <button name="action" value="edit" class="btn btn-tertiary bg-base-200 border-gray-200">
-            Editar Cliente </button> <a href="${pageContext.request.contextPath}/AdminClientAccounts.jsp?id=${client.clientId}"
-            class="btn btn-primary"> Gestionar Cuentas </a>
+          <button name="action" value="edit"
+            class="btn btn-tertiary bg-base-200 border-gray-200">
+            Editar Cliente</button>
+          <a href="${pageContext.request.contextPath}/AdminClientAccounts.jsp?id=${client.clientId}" class="btn btn-primary"> Gestionar Cuentas </a>
         </div>
       </div>
       <div class="flex flex-col p-6 bg-white rounded-lg drop-shadow-sm">
@@ -21,64 +22,121 @@
           <i class="text-sm" data-lucide="user"></i>
           <h2 class="font-bold text-xl mb-6">Informacion Personal</h2>
         </div>
-        <div class="flex flex-col w-1/2 gap-5">
-          <div class="flex flex-row justify-between gap-6">
-            <div class="flex w-1/2">
-              <span class="font-bold">ID:</span>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div>
+            <div class="flex flex-row justify-between gap-6">
+              <div class="flex w-1/2">
+                <span class="font-bold"  >ID:</span>
+              </div>
+              <div class="flex w-1/2">
+                <input type="hidden" name="clientId" value="${client.clientId} " />
+                <span class="${client.activeStatus == false ? 'text-red-500' : 'text-green-500'} font-semibold" >${client.clientId}</span>
+              </div>
             </div>
-            <div class="flex w-1/2">
-              <input type="hidden" name="clientId" value="${client.clientId}" />
-              <span>${client.clientId}</span>
+            <div class="flex flex-row justify-between gap-6">
+              <div class="flex w-1/2">
+                <span class="font-bold">DNI:</span>
+              </div>
+              <div class="flex w-1/2">
+                <span>${client.dni}</span>
+              </div>
+            </div>
+            <div class="flex flex-row justify-between gap-6">
+              <div class="flex w-1/2">
+                <span class="font-bold">CUIL:</span>
+              </div>
+              <div class="flex w-1/2">
+                <span>${client.cuil}</span>
+              </div>
+            </div>
+            <div class="flex flex-row justify-between gap-6">
+              <div class="flex w-1/2">
+                <span class="font-bold">Fecha de nacimiento:</span>
+              </div>
+              <div class="flex w-1/2">
+                <span>${client.birthDate}</span>
+              </div>
+            </div>
+                 <div class="flex flex-row justify-between gap-6">
+              <div class="flex w-1/2">
+                <span class="font-bold">Género:</span>
+              </div>
+              <div class="flex w-1/2">
+                <span>${client.sex}</span>
+              </div>
+            </div>
+            <div class="flex flex-row justify-between gap-6">
+              <div class="flex w-1/2">
+                <span class="font-bold">Nacionalidad:</span>
+              </div>
+              <div class="flex w-1/2">
+                <span>${client.nationality.name}</span>
+              </div>
             </div>
           </div>
-          <div class="flex flex-row justify-between gap-6">
-            <div class="flex w-1/2">
-              <span class="font-bold">DNI:</span>
+          <div>
+            <div class="flex flex-row justify-between gap-6">
+              <!-- Falta PAIS de Address. Se agrega?-->
+              <div class="flex w-1/2">
+                <span class="font-bold">Domicilio:</span>
+              </div>
+              <div class="flex w-1/2">
+                <span>${client.address.streetName}
+                  ${client.address.streetNumber} ${client.address.flat}</span>
+              </div>
             </div>
-            <div class="flex w-1/2">
-              <span>${client.dni}</span>
-            </div>
-          </div>
-          <div class="flex flex-row justify-between gap-6">
-            <div class="flex w-1/2">
-              <span class="font-bold">Nombres:</span>
-            </div>
-            <div class="flex w-1/2">
-              <span>${client.firstName} ${client.lastName}</span>
-            </div>
-          </div>
-          <div class="flex flex-row justify-between gap-6">
-            <div class="flex w-1/2">
-              <span class="font-bold">Email:</span>
-            </div>
-            <div class="flex w-1/2">
-              <span>${client.email}</span>
-            </div>
-          </div>
-          <div class="flex flex-row justify-between gap-6">
-            <div class="flex w-1/2">
-              <span class="font-bold">Telefono:</span>
-            </div>
-            <div class="flex w-1/2">
-              <span>${client.phone}</span>
-            </div>
-          </div>
-          <div class="flex flex-row justify-between gap-6">
-            <div class="flex w-1/2">
-              <span class="font-bold">Direccion:</span>
-            </div>
-            <div class="flex w-1/2">
-              <span>${client.address.streetName} ${client.address.streetNumber} ${client.address.flat}</span>
-            </div>
-          </div>
-          <div class="flex flex-row justify-between gap-6">
-            <div class="flex w-1/2">
-              <span class="font-bold">Estado:</span>
-            </div>
-            <div class="flex w-1/2">
-              <!-- Falta darle vida al ACTIVO-INACTIVO -->
-              <span class="flex flex-col items-center w-fit px-2.5 rounded-full border border-green-600 text-green-600 font-semibold">${client.activeStatus ? 'Activo' : 'Inactivo'}</span>
+            <c:if test="${not empty client.address.details}">
+              <div class="flex flex-row justify-between gap-6">
+              <div class="flex w-1/2">
+                <span class="font-bold">Observaciones:</span>
+              </div>
+              <div class="flex w-1/2">
+                <span>${client.address.details}</span>
             
+              </div>
+            </div>
+                </c:if>
+             <div class="flex flex-row justify-between gap-6">
+              <div class="flex w-1/2">
+                <span class="font-bold">Ciudad y CP:</span>
+              </div>
+              <div class="flex w-1/2">
+                <span>${client.address.city.name} (${client.address.city.zipCode})</span>
+              </div>
+            </div>           
+            <div class="flex flex-row justify-between gap-6">
+              <div class="flex w-1/2">
+                <span class="font-bold">Provincia:</span>
+              </div>
+              <div class="flex w-1/2">
+                <span>${client.address.province.name}</span>
+              </div>
+            </div>
+            <div class="flex flex-row justify-between gap-6">
+              <div class="flex w-1/2">
+                <span class="font-bold">Email:</span>
+              </div>
+              <div class="flex w-1/2">
+                <span>${client.email}</span>
+              </div>
+            </div>
+            <div class="flex flex-row justify-between gap-6">
+              <div class="flex w-1/2">
+                <span class="font-bold">Telefono:</span>
+              </div>
+              <div class="flex w-1/2">
+                <span>${client.phone}</span>
+              </div>
+            </div>
+            <div class="flex flex-row justify-between gap-6">
+              <div class="flex w-1/2">
+                <span class="font-bold">Estado:</span>
+              </div>
+              <div class="flex w-1/2">
+                <span
+                  class="flex flex-col items-center w-fit px-2.5 rounded-full ${client.activeStatus ? 'border-green-600 text-green-600' : 'border-red-600 text-red-600'} font-semibold    border-2">
+                  ${client.activeStatus ? 'Activo' : 'Baja'} </span>
+              </div>
             </div>
           </div>
         </div>
@@ -102,13 +160,14 @@
               </tr>
             </thead>
             <tbody>
-            <c:forEach var="account" items="${client.accounts}" varStatus="status">
-             <tr class="hover">
-              <td>${account.id}</td>
-              <td>${account.accountType.name}</td>
-              <td class="text-green-600 font-semibold">${account.balance}</td>
-             </tr>
-            </c:forEach>
+              <c:forEach var="account" items="${client.accounts}"
+                varStatus="status">
+                <tr class="hover">
+                  <td>${account.id}</td>
+                  <td>${account.accountType.name}</td>
+                  <td class="text-green-600 font-semibold">${account.balance}</td>
+                </tr>
+              </c:forEach>
             </tbody>
           </table>
         </div>
@@ -139,33 +198,27 @@
                 <td>Prestamo Personal</td>
                 <td class="text-black-600 font-semibold">$15,000.00</td>
                 <td class="text-black-600 font-semibold">24</td>
-                <td>
-               	  <span class="flex flex-col items-center w-fit px-2.5 rounded-full border border-yellow-500 text-yellow-500 font-semibold">
-                    En Revision
-               	  </span>
-                </td>
+                <td><span
+                  class="flex flex-col items-center w-fit px-2.5 rounded-full border border-yellow-500 text-yellow-500 font-semibold">
+                    En Revision </span></td>
               </tr>
               <tr class="hover">
                 <td>9078</td>
                 <td>Prestamo Hipotecario</td>
                 <td class="text-black-600 font-semibold">$850,000.00</td>
                 <td class="text-black-600 font-semibold">60</td>
-                <td>
-                  <span class="flex flex-col items-center w-fit px-2.5 rounded-full border border-green-600 text-green-600 font-semibold">
-                    Aprobado
-               	  </span>
-                </td>
+                <td><span
+                  class="flex flex-col items-center w-fit px-2.5 rounded-full border border-green-600 text-green-600 font-semibold">
+                    Aprobado </span></td>
               </tr>
               <tr class="hover">
                 <td>9101</td>
                 <td>Prestamo Personal</td>
                 <td class="text-black-600 font-semibold">$80,000.00</td>
                 <td class="text-black-600 font-semibold">48</td>
-                <td>
-                  <span class="flex flex-col items-center w-fit px-2.5 rounded-full border border-red-600 text-red-600 font-semibold">
-                    Rechazado
-               	  </span>
-                </td>
+                <td><span
+                  class="flex flex-col items-center w-fit px-2.5 rounded-full border border-red-600 text-red-600 font-semibold">
+                    Rechazado </span></td>
               </tr>
             </tbody>
           </table>
