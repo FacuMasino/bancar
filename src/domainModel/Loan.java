@@ -4,7 +4,8 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
 
-public class Loan {
+public class Loan 
+{
 	private int LoanId;
 	private int clientId;
 	private Date creationDate;
@@ -15,7 +16,8 @@ public class Loan {
 	private LoanType loanType;
 	private LoanStatus loanStatus;
 
-	public Loan() {
+	public Loan() 
+	{
 
 	}
 

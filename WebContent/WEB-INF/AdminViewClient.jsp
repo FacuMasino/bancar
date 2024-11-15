@@ -208,6 +208,16 @@
               </tr>
             </thead>
             <tbody>
+            <%-- If en JSTL --%>
+            <c:choose>
+              <c:when test="${empty loansList}">
+                <!-- Mostrar mensaje si no hay prestamos -->
+                <tr>
+                  <td colspan="6" class="text-center">No hay préstamos para mostrar.</td>
+                </tr>
+              </c:when>
+              <c:otherwise>
+              <%-- AGREGAR FOR EACH --%>
               <tr class="hover">
                 <td>9001</td>
                 <td>Prestamo Personal</td>
@@ -235,7 +245,9 @@
                   class="flex flex-col items-center w-fit px-2.5 rounded-full border border-red-600 text-red-600 font-semibold">
                     Rechazado </span></td>
               </tr>
-            </tbody>
+             </c:otherwise>
+            </c:choose>
+           </tbody>
           </table>
         </div>
       </div>
