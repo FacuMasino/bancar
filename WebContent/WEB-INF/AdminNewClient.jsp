@@ -1,4 +1,12 @@
+<%@page import="domainModel.Client"%>
+<%@page import="java.util.List"%>
+<%@page import="java.util.ArrayList"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags/"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<c:set var="provinces" value="${requestScope.provinces != null 
+                              ? requestScope.provinces : emptyList}" />
+
 <t:masterpage title="Admin - Alta Cliente" customNavbar="true">
   <t:adminwrapper activeMenuItem="adminClientsMenu">
     <div class="container md:max-w-[800px] mx-auto my-6 px-2">
@@ -23,15 +31,15 @@
             <div class="flex flex-col w-full">
               <div class="form-control w-full">
                 <label for="clientPassword" class="label"> <span
-                  class="label-text font-bold">ContraseÃ±a</span>
+                  class="label-text font-bold">Contraseña</span>
                 </label>
               </div>
               <input type="password" name="clientPassword"
-                placeholder="ContraseÃ±a" class="input input-bordered w-full" />
+                placeholder="Contraseña" class="input input-bordered w-full" />
             </div>
           </div>
-          <p>* La contraseÃ±a debe contener al menos una mayÃºscula, una
-            minÃºscula y un nÃºmero.</p>
+          <p>* La contraseña debe contener al menos una mayúscula, una
+            minúscula y un número.</p>
         </div>
 
         <!-- Nombre y apellido -->
@@ -89,8 +97,8 @@
                 class="label-text font-bold">Fecha de nacimiento</span>
               </label>
             </div>
-            <input type="text" name="clientBirth" placeholder="yyyy-mm-dd"
-              class="input input-bordered w-full" />
+            <input type="date" name="clientBirth" placeholder="yyyy-mm-dd"
+              class="input input-bordered w-full" required/>
           </div>
 
           <!-- Sexo -->
@@ -101,13 +109,15 @@
                 class="label-text font-bold">Genero</span>
               </label>
             </div>
-            <select name="clientSex"
-              class="bg-white select select-bordered w-full max-w-xs">
-              <option disabled selected>Seleccione un género</option>
-              <option value="Masculino">Masculino</option>
-              <option value="Femenino">Femenino</option>
-              <option value="Femenino">No binario</option>
-              <option value="No informado">No informado</option>
+            <select name="clientSex" class="bg-white select select-bordered w-full">
+              <option value="Masulino"
+                ${client.sex == 'Masculino' ? 'selected':''}>
+                Masculino
+              </option>
+              <option value="Femenino"
+                ${client.sex == 'Femenino' ? 'selected':''}>
+                Femenino
+              </option>
             </select>
           </div>
           <div class="flex flex-col w-full">
@@ -126,11 +136,11 @@
         <div class="flex flex-col w-full">
           <div class="form-control w-full">
             <label for="clientPhone" class="label"> <span
-              class="label-text font-bold">TelÃ©fono</span>
+              class="label-text font-bold">Teléfono (Sin 0 ni 15)</span>
             </label>
           </div>
-          <input type="tel" name="clientPhone"
-            placeholder="TelÃ©fono de contacto" required pattern="[0-9]{10}"
+          <input type="text" name="clientPhone"
+            placeholder="Teléfono de contacto" required
             class="input input-bordered w-full" />
         </div>
 
@@ -146,7 +156,7 @@
             class="input input-bordered w-full" />
         </div> </div>
 
-        <!-- Calle y nÃºmero -->
+        <!-- Calle y número -->
         <div class="flex w-full gap-4 ">
           <div class="flex flex-col w-3/4">
 
@@ -161,10 +171,10 @@
           <div class="flex flex-col w-1/4">
             <div class="form-control w-full">
               <label for="clientStreetNumber" class="label"> <span
-                class="label-text font-bold">NÃºmero</span>
+                class="label-text font-bold">Número</span>
               </label>
             </div>
-            <input type="text" name="clientStreetNumber" placeholder="NÃºmero"
+            <input type="text" name="clientStreetNumber" placeholder="Número"
               class="input input-bordered w-full" />
           </div>
         </div>
@@ -198,21 +208,25 @@
           <div class="flex gap-4">
             <div class="flex flex-col w-full">
               <div class="form-control w-full">
-                <label for="clientProvince" class="label"> <span
+                <label for="clientProvinceId" class="label"> <span
                   class="label-text font-bold">Provincia</span>
                 </label>
               </div>
-              <select name="clientProvince"
+              <select name="clientProvinceId"
                 class="bg-white select select-bordered w-full max-w-xs">
-                <option disabled selected>Seleccione una provincia</option>
-                <c:if test="${not empty provinces}">
-                  <c:forEach var="province" items="${provinces}">
-                    <option value="${province.name}">${province.name}</option>
-                  </c:forEach>
-                </c:if>
-                <c:if test="${empty provinces}">
-                  <option disabled>No se encontraron provincias</option>
-                </c:if>
+                <c:choose>
+                  <c:when test="${empty provinces}">
+                    <!-- Mostrar mensaje si provinces está vacía -->
+                    <option disabled selected>Error: No hay provincias para mostrar</option>
+                  </c:when>
+                  <c:otherwise>
+                    <c:forEach var="province" items="${provinces}">
+                      <option value="${province.id}">
+                        ${province.name}
+                      </option>
+                    </c:forEach>
+                  </c:otherwise>
+                </c:choose>
               </select>
 
             </div>
@@ -225,11 +239,10 @@
                   class="label-text font-bold">Localidad</span>
                 </label>
               </div>
-              <select class="bg-white select select-bordered w-full max-w-xs">
-                <option disabled selected>Seleccione una Localidad</option>
-                <option>Tigre</option>
-                <option>Pacheco</option>
-              </select>
+              <input type="text" name="clientCity"
+                placeholder="Ingrese Ciudad"
+                class="input input-bordered w-full"
+                value="" />
             </div>
           </div>
         </div>

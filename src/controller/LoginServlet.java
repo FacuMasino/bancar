@@ -10,23 +10,28 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import businessLogicImpl.ClientsBusiness;
 import businessLogicImpl.UsersBusiness;
+import domainModel.Client;
 import domainModel.Message;
 import domainModel.Message.MessageType;
 import domainModel.User;
 import exceptions.BusinessException;
+import utils.Helper;
 
 @WebServlet("/Login")
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     private UsersBusiness usersBusiness;
-	
+	private ClientsBusiness clientsBusiness;
+    
     /**
      * @see HttpServlet#HttpServlet()
      */
     public LoginServlet() {
         super();
         usersBusiness = new UsersBusiness();
+        clientsBusiness = new ClientsBusiness();
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -55,9 +60,9 @@ public class LoginServlet extends HttpServlet {
 			throws ServletException, IOException
 	{
 		request.getSession().removeAttribute("user");
-		setMessage(request,"Cerraste sesión con éxito!", MessageType.SUCCESS);
-		RequestDispatcher rd = request.getRequestDispatcher("Login.jsp");
-		rd.forward(request, response);
+		request.getSession().removeAttribute("client");
+		Helper.setReqMessage(request,"Cerraste sesión con éxito!", MessageType.SUCCESS);
+		Helper.redirect("Login.jsp", request, response);
 	}
 	
 	private void login(HttpServletRequest request, HttpServletResponse response)
@@ -70,28 +75,38 @@ public class LoginServlet extends HttpServlet {
 		
 		try {
 			User auxUser = usersBusiness.validateCredentials(username, password);
-			if(auxUser != null)
+			if(auxUser == null)
 			{
-				request.getSession().setAttribute("user", auxUser);
-				if(auxUser.getRole().getName().equals("Cliente")) {					
-					response.sendRedirect(request.getContextPath() + "/Client?login=true");
-				} else {
-					response.sendRedirect(request.getContextPath() + "/Admin?login=true");
-				}
+				Helper.setReqMessage(request,"El usuario ingresado no existe", MessageType.ERROR);
+				Helper.redirect("Login.jsp", request, response);
 				return;
 			}
-			setMessage(request,"El usuario ingresado no existe", MessageType.ERROR);
+			
+			// Si es un Cliente
+			if(auxUser.getRole().getName().equals("Cliente"))
+			{
+				Client auxClient = clientsBusiness.findClientByUserId(auxUser.getUserId());
+				if(auxClient != null && auxClient.getActiveStatus())
+				{
+					request.getSession().setAttribute("user", auxUser);
+					request.getSession().setAttribute("client", auxClient);
+					response.sendRedirect(request.getContextPath() + "/Client?login=true");
+					return;
+				}
+				// Cliente dado de baja
+				Helper.setReqMessage(request, "El usuario ingresado está dado de baja", MessageType.ERROR);
+			}
+			
+			// Si es Administrador
+			if(auxUser.getRole().getName().equals("Administrador"))
+			{
+				request.getSession().setAttribute("user", auxUser);
+				response.sendRedirect(request.getContextPath() + "/Admin?login=true");
+				return;
+			}
 		} catch (BusinessException e) {
-			setMessage(request, e.getMessage(), MessageType.ERROR);
+			Helper.setReqMessage(request, e.getMessage(), MessageType.ERROR);
 		}
-		RequestDispatcher rd = request.getRequestDispatcher("Login.jsp");
-		rd.forward(request, response);
+		Helper.redirect("Login.jsp", request, response);
 	}
-
-	private void setMessage(HttpServletRequest request, String message, MessageType type)
-	{
-		request.setAttribute("message", 
-				new Message(message,type));
-	}
-	
 }

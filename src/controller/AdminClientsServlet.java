@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import businessLogicImpl.AccountsBusiness;
 import businessLogicImpl.ClientsBusiness;
 import businessLogicImpl.LoansBusiness;
+import businessLogicImpl.ProvincesBusiness;
 import domainModel.Account;
 import domainModel.Address;
 import domainModel.City;
@@ -31,6 +32,7 @@ public class AdminClientsServlet extends HttpServlet {
 	private ClientsBusiness clientsBusiness;
 	private AccountsBusiness accountsBusiness;
 	private LoansBusiness loansBusiness;
+	private ProvincesBusiness provincesBusiness;
 	
 	public AdminClientsServlet()
 	{
@@ -38,6 +40,7 @@ public class AdminClientsServlet extends HttpServlet {
 		clientsBusiness = new ClientsBusiness();
 		accountsBusiness = new AccountsBusiness();
 		loansBusiness = new LoansBusiness();
+		provincesBusiness = new ProvincesBusiness();
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -60,7 +63,7 @@ public class AdminClientsServlet extends HttpServlet {
 		switch (action) 
 		{
 			case "new":
-				Helper.redirect("/WEB-INF/AdminNewClient.jsp", request, response);
+				newClient(request,response);
 				break;
 			case "view":
 				viewClient(request, response);
@@ -92,7 +95,7 @@ public class AdminClientsServlet extends HttpServlet {
 			case "newClient":
 				//TODO algunas validaciones de negocio, por ejemplo: verificar nombre de usuario disponible
 				//TODO implementar BusinessException
-				newClient(request, response);
+				saveNewClient(request, response);
 				break;
 			case "saveClient":
 				saveClient(request, response);
@@ -109,7 +112,7 @@ public class AdminClientsServlet extends HttpServlet {
 		}
 	}
 
-	private void newClient(HttpServletRequest request, HttpServletResponse response)
+	private void saveNewClient(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException
 	{
 		Client client = new Client();
@@ -140,7 +143,7 @@ public class AdminClientsServlet extends HttpServlet {
 		address.setCity(city);
 
 		Province province = new Province();
-		province.setName(request.getParameter("clientProvince"));
+		province.setName(request.getParameter("clientProvinceId"));
 		address.setProvince(province);
 
 		Country country = new Country();
@@ -164,6 +167,20 @@ public class AdminClientsServlet extends HttpServlet {
 		}
 	}
 
+	private void newClient(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException
+	{
+		try
+		{
+			request.setAttribute("provinces", provincesBusiness.list());
+			Helper.redirect("/WEB-INF/AdminNewClient.jsp", request, response);
+		}
+		catch (BusinessException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
 	private void editClient(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException
 	{
@@ -175,6 +192,7 @@ public class AdminClientsServlet extends HttpServlet {
 		{
 			Client client = clientsBusiness.read(id);
 			request.setAttribute("client", client);
+			request.setAttribute("provinces", provincesBusiness.list());
 			Helper.redirect("/WEB-INF/AdminEditClient.jsp", request, response);
 		}
 		catch (BusinessException e)

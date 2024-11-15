@@ -22,7 +22,7 @@ public class UsersBusiness implements IUsersBusiness
 		try 
 		{
 			User auxUser = usersDao.read(username);
-			if(!auxUser.getPassword().equals(password))
+			if(auxUser != null && !auxUser.getPassword().equals(password))
 			{
 				throw new BusinessException("La contraseña ingresada es incorrecta");
 			}

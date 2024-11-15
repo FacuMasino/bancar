@@ -1,7 +1,12 @@
+<%@page import="domainModel.Client"%>
+<%@page import="java.util.List"%>
+<%@page import="java.util.ArrayList"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags/"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <c:set var="client" value="${requestScope.client}" />
+<c:set var="provinces" value="${requestScope.provinces != null 
+                              ? requestScope.provinces : emptyList}" />
 <c:set var="setIsDisabled" value="${!client.activeStatus ? 'disabled':''}" />
 
 <t:masterpage title="Admin - Editar Cliente" customNavbar="true">
@@ -84,9 +89,16 @@
                 <span class="label-text font-bold">Género</span>
               </label>
             </div>
-            <input type="text" name="clientSex" placeholder="Genero del cliente"
-              class="input input-bordered w-full" value="${client.sex}"
-              ${setIsDisabled} />
+            <select name="clientSex" class="bg-white select select-bordered w-full" ${setIsDisabled}>
+              <option value="Masulino"
+                ${client.sex == 'Masculino' ? 'selected':''}>
+                Masculino
+              </option>
+              <option value="Femenino"
+                ${client.sex == 'Femenino' ? 'selected':''}>
+                Femenino
+              </option>
+            </select>
           </div>
           <div class="flex flex-col w-full">
             <div class="form-control w-full">
@@ -108,10 +120,10 @@
                 </span>
               </label>
             </div>
-            <input type="text" name="clientBirthDate"
+            <input type="date" name="clientBirthDate"
               placeholder="Fecha de nacimiento"
               class="input input-bordered w-full" value="${client.birthDate}"
-              ${setIsDisabled} />
+              ${setIsDisabled} required/>
           </div>
         </div>
 
@@ -131,7 +143,7 @@
           <div class="flex flex-col w-full">
             <div class="form-control w-full">
               <label for="clientTelephone" class="label">
-                <span class="label-text font-bold">Teléfono</span>
+                <span class="label-text font-bold">Teléfono (Sin 0 ni 15)</span>
               </label>
             </div>
             <input type="text" name="clientTelephone"
@@ -204,28 +216,40 @@
             <!-- Localidad -->
             <div class="flex flex-col w-full">
               <div class="form-control w-full">
-                <label for="clientLocality" class="label">
+                <label for="clientCity" class="label">
                   <span class="label-text font-bold">Localidad</span>
                 </label>
               </div>
-              <select class="bg-white select select-bordered w-full" ${setIsDisabled}>
-                <option disabled selected></option>
-                <option>Tigre</option>
-                <option>San Fernando</option>
-              </select>
+              <input type="text" name="clientCity"
+                placeholder="Ciudad"
+                class="input input-bordered w-full"
+                value="${client.address.city.name}"
+                ${setIsDisabled} />
             </div>
 
             <!-- Provincia -->
             <div class="flex flex-col w-full">
               <div class="form-control w-full">
-                <label for="clientProvince" class="label"> <span
+                <label for="clientProvinceId" class="label"> <span
                   class="label-text font-bold">Provincia</span>
                 </label>
               </div>
-              <select class="bg-white select select-bordered w-full" ${setIsDisabled}>
-                <option disabled selected></option>
-                <option>client.address.province.name</option>
-                <option>Capital Federal</option>
+              <select name="clientProvinceId" class="bg-white select select-bordered w-full" ${setIsDisabled}>
+                <c:choose>
+                  <c:when test="${empty provinces}">
+                    <!-- Mostrar mensaje si provinces está vacía -->
+                    <option disabled selected>Error: No hay provincias para mostrar</option>
+                  </c:when>
+                  <c:otherwise>
+                    <c:set var="clientProvinceId" value="${client.address.province.id}" />
+                    <c:forEach var="province" items="${provinces}">
+                      <option value="${province.id}"
+                        ${clientProvinceId == province.id ? 'selected':''}>
+                        ${province.name}
+                      </option>
+                    </c:forEach>
+                  </c:otherwise>
+                </c:choose>
               </select>
             </div>
           </div>

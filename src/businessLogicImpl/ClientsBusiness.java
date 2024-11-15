@@ -118,8 +118,30 @@ public class ClientsBusiness implements IClientsBusiness
 	}
 
 	@Override
-	public boolean findClientByUser(String userName) throws BusinessException {
-		// TODO Auto-generated method stub
-		return false;
+	public Client findClientByUserId(int userId) throws BusinessException {
+		try 
+		{
+			Client client = clientsDao.readByUserId(userId);
+			if(client == null)
+			{
+				throw new BusinessException
+					("No se encontró un cliente asociado a este usuario");
+			}
+			return client;
+		}
+		catch (SQLException ex)
+		{
+			throw new SQLOperationException();
+		}
+		catch (BusinessException ex)
+		{
+			throw ex;
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+			throw new BusinessException
+				("Ocurrió un error desconocido al leer el cliente.");
+		}
 	}
 }

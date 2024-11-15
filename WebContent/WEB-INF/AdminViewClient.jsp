@@ -13,7 +13,7 @@
           <a href="Clients" title="Volver"> <i
             data-lucide="circle-chevron-left"></i>
           </a>
-          <h1 class="font-bold text-xl">Gestiï¿½n de Clientes</h1>
+          <h1 class="font-bold text-xl">Gestión de Clientes</h1>
         </div>
         <div class="flex gap-2.5">
           <button name="action" value="edit"
