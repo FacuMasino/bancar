@@ -102,14 +102,6 @@ public class ClientsDao implements IClientsDao
 
 	public boolean toggleActiveStatus(int clientId, boolean currentActiveStatus) throws SQLException
 	{
-		int userId = usersDao.getUserId(clientId);
-		boolean rtn = usersDao.toggleActiveStatus(userId, currentActiveStatus);
-		
-		if (rtn == false)
-		{
-			return rtn;
-		}
-		
 		int rows = 0;
 		
 		try

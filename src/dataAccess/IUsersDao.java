@@ -9,5 +9,4 @@ public interface IUsersDao
 	public User read(int userId) throws SQLException;
 	public User read(String username) throws SQLException;
 	public boolean update(User user) throws SQLException;
-	public boolean toggleActiveStatus(int userId, boolean currentActiveStatus) throws SQLException;
 }

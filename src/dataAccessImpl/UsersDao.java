@@ -73,27 +73,6 @@ public class UsersDao implements IUsersDao
 	{
 		return false;
 	}
-
-	@Override
-	public boolean toggleActiveStatus(int userId, boolean currentActiveStatus) throws SQLException
-	{
-		int rows = 0;
-		
-		try
-		{
-			db.setPreparedStatement("UPDATE Users SET ActiveStatus = ? WHERE UserId = ?;");
-			db.getPreparedStatement().setBoolean(1, !currentActiveStatus);
-			db.getPreparedStatement().setInt(2, userId);
-			rows = db.getPreparedStatement().executeUpdate();
-		}
-		catch (SQLException ex)
-		{
-			ex.printStackTrace();
-			throw ex;
-		}
-		
-		return (rows > 0);
-	}
 	
 	public int getUserId(User user) throws SQLException
 	{
