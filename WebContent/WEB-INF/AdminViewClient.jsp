@@ -10,22 +10,20 @@
       class="container flex flex-col gap-4 mx-auto p-4 max-w-7xl mb-8">
       <div class="flex justify-between">
         <div class="flex gap-1 items-center">
-          <a href="Clients" title="Volver">
-            <i data-lucide="circle-chevron-left"></i>
+          <a href="Clients" title="Volver"> <i
+            data-lucide="circle-chevron-left"></i>
           </a>
           <h1 class="font-bold text-xl">Gestiï¿½n de Clientes</h1>
         </div>
         <div class="flex gap-2.5">
           <button name="action" value="edit"
-            class="btn btn-tertiary bg-base-200 border-gray-200" ${setIsDisabled}>
-            Editar Cliente
-          </button>
+            class="btn btn-tertiary bg-base-200 border-gray-200"
+            ${setIsDisabled}>Editar Cliente</button>
           <c:choose>
             <c:when test="${client.activeStatus}">
-              <a href="Clients?clientId=${client.clientId}&action=manageAccounts" 
-                class="btn btn-primary"> 
-                Gestionar Cuentas
-              </a>
+              <a
+                href="Clients?clientId=${client.clientId}&action=manageAccounts"
+                class="btn btn-primary"> Gestionar Cuentas </a>
             </c:when>
           </c:choose>
         </div>
@@ -40,11 +38,12 @@
           <div>
             <div class="flex flex-row justify-between gap-6">
               <div class="flex w-1/2">
-                <span class="font-bold"  >ID:</span>
+                <span class="font-bold">ID:</span>
               </div>
               <div class="flex w-1/2">
                 <input type="hidden" name="clientId" value="${client.clientId}" />
-                <span class="${client.activeStatus == false ? 'text-red-500' : 'text-green-500'} font-semibold" >${client.clientId}</span>
+                <span
+                  class="${client.activeStatus == false ? 'text-red-500' : 'text-green-500'} font-semibold">${client.clientId}</span>
               </div>
             </div>
             <div class="flex flex-row justify-between gap-6">
@@ -71,7 +70,7 @@
                 <span>${client.birthDate}</span>
               </div>
             </div>
-                 <div class="flex flex-row justify-between gap-6">
+            <div class="flex flex-row justify-between gap-6">
               <div class="flex w-1/2">
                 <span class="font-bold">Gï¿½nero:</span>
               </div>
@@ -101,23 +100,24 @@
             </div>
             <c:if test="${not empty client.address.details}">
               <div class="flex flex-row justify-between gap-6">
-              <div class="flex w-1/2">
-                <span class="font-bold">Observaciones:</span>
+                <div class="flex w-1/2">
+                  <span class="font-bold">Observaciones:</span>
+                </div>
+                <div class="flex w-1/2">
+                  <span>${client.address.details}</span>
+
+                </div>
               </div>
-              <div class="flex w-1/2">
-                <span>${client.address.details}</span>
-            
-              </div>
-            </div>
-                </c:if>
-             <div class="flex flex-row justify-between gap-6">
+            </c:if>
+            <div class="flex flex-row justify-between gap-6">
               <div class="flex w-1/2">
                 <span class="font-bold">Ciudad y CP:</span>
               </div>
               <div class="flex w-1/2">
-                <span>${client.address.city.name} (${client.address.city.zipCode})</span>
+                <span>${client.address.city.name}
+                  (${client.address.city.zipCode})</span>
               </div>
-            </div>           
+            </div>
             <div class="flex flex-row justify-between gap-6">
               <div class="flex w-1/2">
                 <span class="font-bold">Provincia:</span>
@@ -197,10 +197,10 @@
           <table class="table bg-white w-full">
             <thead>
               <tr>
-                 <%--<th class="text-gray-700">ID Prestamo</th>--%>
+                <%--<th class="text-gray-700">ID Prestamo</th>--%>
                 <th class="text-gray-700">Tipo</th>
                 <th class="text-gray-700">Monto</th>
-                <th class="text-gray-700">Cuotas</th>
+                <%-- <th class="text-gray-700">Cuotas</th>--%>
                 <th class="text-gray-700">Estado</th>
                 <!--  
                   <th class="text-gray-700">Campo extra</th>
@@ -208,34 +208,32 @@
               </tr>
             </thead>
             <tbody>
-            <%-- If en JSTL --%>
-            <c:choose>
-              <c:when test="${empty loansList}">
-                <!-- Mostrar mensaje si no hay prestamos -->
-                <tr>
-                  <td colspan="6" class="text-center">No hay préstamos para mostrar.</td>
-                </tr>
-              </c:when>
-              <c:otherwise>
-              <c:forEach var="loan" items="${client.loans}"
-                varStatus="status">
-                <tr class="hover">
-                 <%-- <td>${loan.Loanid}</td>--%>
-                  <td>${loan.loanType.loanTypeName}</td>
-                   <td class="text-black-600 font-semibold" >${loan.requestedAmount}</td>
-                  <td class="flex flex-col items-center w-fit px-2.5 rounded-full border border-yellow-500 text-yellow-500 font-semibold">${loan.loanStatus.loanStatusName}</td>
-                </tr>
-              </c:forEach>
-             </c:otherwise>
-            </c:choose>
-           </tbody>
+              <%-- If en JSTL --%>
+              <c:choose>
+                <c:when test="${empty loansList}">
+                  <!-- Mostrar mensaje si no hay prestamos -->
+                  <tr>
+                    <td colspan="6" class="text-center">No hay préstamos
+                      para mostrar.</td>
+                  </tr>
+                </c:when>
+                <c:otherwise>
+                  <c:forEach var="loan" items="${client.loans}"
+                    varStatus="status">
+                    <tr class="hover">
+                      <%-- <td>${loan.Loanid}</td>--%>
+                      <td>${loan.loanType.loanTypeName}</td>
+                      <td class="text-black-600 font-semibold">${loan.requestedAmount}</td>
+                      <td
+                        class="flex flex-col items-center w-fit px-2.5 rounded-full border border-yellow-500 text-yellow-500 font-semibold">${loan.loanStatus.loanStatusName}</td>
+                    </tr>
+                  </c:forEach>
+                </c:otherwise>
+              </c:choose>
+            </tbody>
           </table>
         </div>
       </div>
     </form>
   </t:adminwrapper>
 </t:masterpage>
-
-
-
-
