@@ -12,7 +12,7 @@
 <t:masterpage title="Admin - Editar Cliente" customNavbar="true">
   <t:adminwrapper activeMenuItem="adminClientsMenu">
     <div class="container md:max-w-[1400px] mx-auto my-6 px-2">
-      <p class="font-bold text-xl mb-6">Editar informaci�n del cliente</p>
+      <p class="font-bold text-xl mb-6">Editar informaci&oacute;n del cliente</p>
       <form method="post" action="Clients"
         class="bg-white rounded rounded-lg flex flex-col gap-4 p-8 w-full">
         <div class="flex justify-between">
@@ -41,7 +41,7 @@
                 <span class="label-text font-bold">Nombre</span>
               </label>
             </div>
-            <input type="text" name="clientName" placeholder="Ingres� el nombre"
+            <input type="text" name="clientName" placeholder="Ingres&aacute; el nombre"
               class="input input-bordered w-full" value="${client.firstName}" 
               ${setIsDisabled} />
           </div>
@@ -52,7 +52,7 @@
               </label>
             </div>
             <input type="text" name="clientSurname"
-              placeholder="Ingres� el apellido"
+              placeholder="Ingres&aacute; el apellido"
               class="input input-bordered w-full" value="${client.lastName}" 
               ${setIsDisabled} />
           </div>
@@ -87,7 +87,7 @@
           <div class="flex flex-col w-full">
             <div class="form-control w-full">
               <label for="clientSex" class="label">
-                <span class="label-text font-bold">G�nero</span>
+                <span class="label-text font-bold">G&eacute;nero</span>
               </label>
             </div>
             <select name="clientSex" class="bg-white select select-bordered w-full" ${setIsDisabled}>
@@ -128,7 +128,7 @@
           </div>
         </div>
 
-        <!-- Email y Tel�fono -->
+        <!-- Email y Telefono -->
         <div class="flex gap-4">
           <div class="flex flex-col w-full">
             <div class="form-control w-full">
@@ -144,17 +144,17 @@
           <div class="flex flex-col w-full">
             <div class="form-control w-full">
               <label for="clientTelephone" class="label">
-                <span class="label-text font-bold">Tel�fono (Sin 0 ni 15)</span>
+                <span class="label-text font-bold">Tel&eacute;fono (Sin 0 ni 15)</span>
               </label>
             </div>
             <input type="text" name="clientTelephone"
-              placeholder="Telefono del cliente"
+              placeholder="Tel&eacute;fono del cliente"
               class="input input-bordered w-full" value="${client.phone}"
               ${setIsDisabled} />
           </div>
         </div>
 
-        <!-- Direcci�n -->
+        <!-- Direccion -->
         <div class="flex gap-4">
 
           <div class="flex flex-col w-full">
@@ -164,7 +164,7 @@
               </label>
             </div>
             <input type="text" name="clientStreet"
-              placeholder="Direcci�n del cliente (Calle)"
+              placeholder="Direcci&oacute;n del cliente (Calle)"
               class="input input-bordered w-full"
               value="${client.address.streetName}"
               ${setIsDisabled} />
@@ -177,7 +177,7 @@
                 </label>
               </div>
               <input type="text" name="clientAdressNumber"
-                placeholder="Numeraci�n Domicilio"
+                placeholder="Numeraci&oacute;n Domicilio"
                 class="input input-bordered w-full"
                 value="${client.address.streetNumber}"
                 ${setIsDisabled} />
@@ -204,7 +204,7 @@
             <div class="flex flex-col w-full">
               <div class="form-control w-full">
                 <label for="clientDetails" class="label">
-                  <span class="label-text font-bold">Obervaciones</span>
+                  <span class="label-text font-bold">Observaciones</span>
                 </label>
               </div>
               <input type="text" name="clientDetails"
@@ -238,7 +238,7 @@
               <select name="clientProvinceId" class="bg-white select select-bordered w-full" ${setIsDisabled}>
                 <c:choose>
                   <c:when test="${empty provinces}">
-                    <!-- Mostrar mensaje si provinces est� vac�a -->
+                    <!-- Mostrar mensaje si provinces esta vacia -->
                     <option disabled selected>Error: No hay provincias para mostrar</option>
                   </c:when>
                   <c:otherwise>

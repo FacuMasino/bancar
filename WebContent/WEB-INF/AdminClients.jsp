@@ -76,7 +76,8 @@
                         ${statusText}
                       </span>
                     </td>
-                    <td>${client.accounts.size()}</td>
+                    <c:set var="accounts" value="${client.accounts.size() ? client.accounts.size() : 'No posee' }" />
+                    <td>${accounts}</td>
                     <td class="flex items-center">
                       <div class="dropdown dropdown-end">
                         <div tabindex="0" role="button" class="p-0.5">

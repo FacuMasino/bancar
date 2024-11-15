@@ -10,10 +10,6 @@
         los beneficios.</p>
       <a href="#" class="btn bg-white text-red-600 w-fit mb-4">Solicitá tu
         cuenta hoy ></a>
-      <form action="AccountsServlet" method="get">
-        <input type="submit" value="Creación cuenta" name="pruebaBtn" class="btn btn-btn btn-accent">
-      </form>
-      
     </div>
   </div>
 </t:masterpage>

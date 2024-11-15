@@ -21,6 +21,7 @@ import domainModel.Country;
 import domainModel.Loan;
 import domainModel.Province;
 import domainModel.Role;
+import domainModel.Message.MessageType;
 import exceptions.BusinessException;
 import utils.Helper;
 import utils.Page;
@@ -50,14 +51,7 @@ public class AdminClientsServlet extends HttpServlet
 		String action = request.getParameter("action");
 		if(action == null || action.isEmpty())
 		{
-			try
-			{
-				listClients(request, response);
-			}
-			catch (ServletException | IOException | BusinessException e)
-			{
-				e.printStackTrace();
-			}
+			listClients(request, response);
 			return;
 		}
 
@@ -75,14 +69,7 @@ public class AdminClientsServlet extends HttpServlet
 			case "manageAccounts":
 				manageAccounts(request, response);
 			default:
-				try
-				{
-					listClients(request, response);
-				}
-				catch (ServletException | IOException | BusinessException e)
-				{
-					e.printStackTrace();
-				}
+				listClients(request, response);
 		}
 	}
 
@@ -99,27 +86,13 @@ public class AdminClientsServlet extends HttpServlet
 				saveNewClient(request, response);
 				break;
 			case "saveClient":
-				saveClient(request, response);
+				saveEditClient(request, response);
 				break;
 			case "toggleActiveStatus":
-				try
-				{
-					toggleActiveStatus(request, response);
-				}
-				catch (BusinessException e)
-				{
-					e.printStackTrace();
-				}
+				toggleActiveStatus(request, response);
 				break;
 			default:
-				try
-				{
-					listClients(request, response);
-				}
-				catch (ServletException | IOException | BusinessException e)
-				{
-					e.printStackTrace();
-				}
+				listClients(request, response);
 		}
 	}
 
@@ -168,13 +141,15 @@ public class AdminClientsServlet extends HttpServlet
 		try
 		{
 			clientsBusiness.create(client);
-			// TODO: reemplazar println() por modal "Cliente creado exitosamente."
+			Helper.setReqMessage(request, "Cliente creado exitosamente.", MessageType.SUCCESS);
 			System.out.println("Cliente creado exitosamente.");
-			Helper.redirect("/WEB-INF/AdminPanel.jsp", request, response);
+			listClients(request, response);
 		}
-		catch (BusinessException e)
+		catch (BusinessException ex)
 		{
-			e.printStackTrace();
+			Helper.setReqMessage(request, ex.getMessage(), MessageType.ERROR);
+			listClients(request, response);
+			ex.printStackTrace();
 		}
 	}
 
@@ -186,9 +161,11 @@ public class AdminClientsServlet extends HttpServlet
 			request.setAttribute("provinces", provincesBusiness.list());
 			Helper.redirect("/WEB-INF/AdminNewClient.jsp", request, response);
 		}
-		catch (BusinessException e)
+		catch (BusinessException ex)
 		{
-			e.printStackTrace();
+			Helper.setReqMessage(request, ex.getMessage(), MessageType.ERROR);
+			Helper.redirect("/WEB-INF/AdminNewClient.jsp", request, response);
+			ex.printStackTrace();
 		}
 	}
 	
@@ -206,13 +183,15 @@ public class AdminClientsServlet extends HttpServlet
 			request.setAttribute("provinces", provincesBusiness.list());
 			Helper.redirect("/WEB-INF/AdminEditClient.jsp", request, response);
 		}
-		catch (BusinessException e)
+		catch (BusinessException ex)
 		{
-			e.printStackTrace();
+			Helper.setReqMessage(request, ex.getMessage(), MessageType.ERROR);
+			listClients(request, response);
+			ex.printStackTrace();
 		}
 	}
 	
-	private void saveClient(HttpServletRequest request, HttpServletResponse response)
+	private void saveEditClient(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException
 	{
 		Client client = new Client();
@@ -221,7 +200,7 @@ public class AdminClientsServlet extends HttpServlet
 	}
 	
 	private void listClients(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException, BusinessException 
+			throws ServletException, IOException 
 	{
 		int page = Optional.ofNullable(request.getParameter("page"))
 				.map(Integer::parseInt)
@@ -230,12 +209,18 @@ public class AdminClientsServlet extends HttpServlet
 		int pageSize = Optional.ofNullable(request.getParameter("pageSize"))
 				.map(Integer::parseInt)
 				.orElse(10);
-		
-		ArrayList<Client> clientsList = clientsBusiness.list();
-		Page<Client> clientsPage = new Page<Client>(page,pageSize, clientsList);
-
-		request.setAttribute("page", clientsPage);
-		Helper.redirect("/WEB-INF/AdminClients.jsp", request, response);
+		try
+		{
+			ArrayList<Client> clientsList = clientsBusiness.list();
+			Page<Client> clientsPage = new Page<Client>(page,pageSize, clientsList);
+			request.setAttribute("page", clientsPage);			
+			Helper.redirect("/WEB-INF/AdminClients.jsp", request, response);
+		}
+		catch(BusinessException ex)
+		{
+			Helper.setReqMessage(request, ex.getMessage(), MessageType.ERROR);
+			Helper.redirect("/WEB-INF/AdminClients.jsp", request, response);
+		}
 	}
 	
 	private void viewClient(HttpServletRequest request, HttpServletResponse response)
@@ -266,12 +251,13 @@ public class AdminClientsServlet extends HttpServlet
 			client.setAccounts(accountsList);
 		
 			request.setAttribute("client", client);
-			
 			Helper.redirect("/WEB-INF/AdminViewClient.jsp", request, response);
 		}
-		catch (BusinessException e)
+		catch (BusinessException ex)
 		{
-			e.printStackTrace();
+			Helper.setReqMessage(request, ex.getMessage(), MessageType.ERROR);
+			listClients(request, response);
+			ex.printStackTrace();
 		}
 	}
 	
@@ -301,7 +287,8 @@ public class AdminClientsServlet extends HttpServlet
 		}
 	}
 	
-	private void toggleActiveStatus(HttpServletRequest request, HttpServletResponse response) throws BusinessException, ServletException, IOException
+	private void toggleActiveStatus(HttpServletRequest request, HttpServletResponse response) 
+			throws ServletException, IOException
 	{
 		int clientId = Optional.ofNullable(request.getParameter("clientId"))
 				.map(Integer::parseInt)
@@ -311,11 +298,16 @@ public class AdminClientsServlet extends HttpServlet
 		{
 			client = clientsBusiness.read(clientId);
 			clientsBusiness.toggleActiveStatus(clientId, client.getActiveStatus());
-			response.sendRedirect("Clients");
+			String msg = client.getActiveStatus() ? "dió de baja" : "reactivó";
+			Helper.setReqMessage(request, "El cliente se " + msg + " con éxito", 
+					MessageType.SUCCESS);
+			listClients(request, response);
 		}
-		catch (BusinessException e)
+		catch (BusinessException ex)
 		{
-			e.printStackTrace();
+			// Setear el mensaje de error para mostrar
+			Helper.setReqMessage(request, ex.getMessage(), MessageType.ERROR);
+			listClients(request, response); // Ir a la lista de clientes
 		}
 	}
 }
