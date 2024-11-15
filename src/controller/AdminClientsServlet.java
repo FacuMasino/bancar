@@ -233,19 +233,24 @@ public class AdminClientsServlet extends HttpServlet {
 		int clientId = Optional.ofNullable(request.getParameter("clientId"))
 				.map(Integer::parseInt)
 				.orElse(0);
-
 		try
 		{
 			Client client = clientsBusiness.read(clientId);
-			
-			
 			ArrayList<Account> accountsList = new ArrayList<Account>();
 			accountsList = accountsBusiness.listByIdClient(clientId);
-		
+			
+			ArrayList <Loan> loansList = new ArrayList <Loan>();
+			  
+			for (Account account : accountsList)
+			  {
+			      int accountId = account.getId(); 
+			      ArrayList<Loan> accountLoans = loansBusiness.listByIdAccount(accountId);
+			      loansList.addAll(accountLoans); 
+			  }
+
+			client.setLoans(loansList); 
 			client.setAccounts(accountsList);
-			
-			//TODO: Aca habria que cargarle los LOANS al cliente...
-			
+		
 			request.setAttribute("client", client);
 			
 			Helper.redirect("/WEB-INF/AdminViewClient.jsp", request, response);
@@ -257,7 +262,8 @@ public class AdminClientsServlet extends HttpServlet {
 	}
 	
 	private void manageAccounts(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+			throws ServletException, IOException 
+	{
 		//int clientId = Optional.ofNullable(request.getParameter("clientId")).map(Integer::parseInt).orElse(0);
 		
 		int clientId = Integer.parseInt(request.getParameter("clientId"));
@@ -267,29 +273,16 @@ public class AdminClientsServlet extends HttpServlet {
 			System.out.println("\nAl leer e cliente de BD..." + client.getClientId());
 			ArrayList<Account> accountsList = new ArrayList<Account>();
 			accountsList = accountsBusiness.listByIdClient(clientId);
-
 			client.setAccounts(accountsList);
 
-			// TODO: Aca habria que cargarle los LOANS al cliente...
 			//TODO: HACER FUNCION CARGAR CLIENTE!!!
-			ArrayList <Loan> loansList = new ArrayList <Loan>();
-			  
-			for (Account account : accountsList)
-			  {
-			      int accountId = account.getId(); 
-			      ArrayList<Loan> accountLoans = loansBusiness.listByIdAccount(accountId);
-			      loansList.addAll(accountLoans); 
-			  }
-
-			client.setLoans(loansList); 
 			request.setAttribute("client", client);
+			
 			System.out.println("\nantes de redirect..." + client.getClientId());
 			
 			Helper.redirect("/AdminClientAccounts.jsp", request, response);
-			
-		} 
-		catch (BusinessException e)
-		{
+		}
+		catch (BusinessException e) {
 			e.printStackTrace();
 		}
 	}
