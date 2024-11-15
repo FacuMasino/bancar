@@ -9,7 +9,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import businessLogicImpl.AccountsBusiness;
 import businessLogicImpl.ClientsBusiness;
 import businessLogicImpl.LoansBusiness;
@@ -34,6 +33,7 @@ public class AdminClientsServlet extends HttpServlet
 	private AccountsBusiness accountsBusiness;
 	private LoansBusiness loansBusiness;
 	private ProvincesBusiness provincesBusiness;
+	private Client client;
 	
 	public AdminClientsServlet()
 	{
@@ -244,9 +244,12 @@ public class AdminClientsServlet extends HttpServlet
 		int clientId = Optional.ofNullable(request.getParameter("clientId"))
 				.map(Integer::parseInt)
 				.orElse(0);
+
 		try
 		{
 			Client client = clientsBusiness.read(clientId);
+			
+			
 			ArrayList<Account> accountsList = new ArrayList<Account>();
 			accountsList = accountsBusiness.listByIdClient(clientId);
 			
@@ -294,6 +297,24 @@ public class AdminClientsServlet extends HttpServlet
 			Helper.redirect("/AdminClientAccounts.jsp", request, response);
 		}
 		catch (BusinessException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void toggleActiveStatus(HttpServletRequest request, HttpServletResponse response) throws BusinessException, ServletException, IOException
+	{
+		int clientId = Optional.ofNullable(request.getParameter("clientId"))
+				.map(Integer::parseInt)
+				.orElse(0);
+
+		try
+		{
+			client = clientsBusiness.read(clientId);
+			clientsBusiness.toggleActiveStatus(clientId, client.getActiveStatus());
+			response.sendRedirect("Clients");
+		}
+		catch (BusinessException e)
+		{
 			e.printStackTrace();
 		}
 	}
