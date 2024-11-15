@@ -12,11 +12,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import businessLogicImpl.AccountsBusiness;
 import businessLogicImpl.ClientsBusiness;
+import businessLogicImpl.LoansBusiness;
 import domainModel.Account;
 import domainModel.Address;
 import domainModel.City;
 import domainModel.Client;
 import domainModel.Country;
+import domainModel.Loan;
 import domainModel.Province;
 import domainModel.Role;
 import exceptions.BusinessException;
@@ -28,12 +30,14 @@ public class AdminClientsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private ClientsBusiness clientsBusiness;
 	private AccountsBusiness accountsBusiness;
+	private LoansBusiness loansBusiness;
 	
 	public AdminClientsServlet()
 	{
 		super();
 		clientsBusiness = new ClientsBusiness();
 		accountsBusiness = new AccountsBusiness();
+		loansBusiness = new LoansBusiness();
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -250,15 +254,25 @@ public class AdminClientsServlet extends HttpServlet {
 
 			// TODO: Aca habria que cargarle los LOANS al cliente...
 			//TODO: HACER FUNCION CARGAR CLIENTE!!!
+			ArrayList <Loan> loansList = new ArrayList <Loan>();
+			  
+			for (Account account : accountsList)
+			  {
+			      int accountId = account.getId(); 
+			      ArrayList<Loan> accountLoans = loansBusiness.listByIdAccount(accountId);
+			      loansList.addAll(accountLoans); 
+			  }
 
+			client.setLoans(loansList); 
 			request.setAttribute("client", client);
-			
 			System.out.println("\nantes de redirect..." + client.getClientId());
 			
 			Helper.redirect("/AdminClientAccounts.jsp", request, response);
-		} catch (BusinessException e) {
+			
+		} 
+		catch (BusinessException e)
+		{
 			e.printStackTrace();
 		}
-
 	}
 }

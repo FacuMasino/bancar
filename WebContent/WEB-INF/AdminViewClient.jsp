@@ -197,7 +197,7 @@
           <table class="table bg-white w-full">
             <thead>
               <tr>
-                <th class="text-gray-700">ID Prestamo</th>
+                 <%--<th class="text-gray-700">ID Prestamo</th>--%>
                 <th class="text-gray-700">Tipo</th>
                 <th class="text-gray-700">Monto</th>
                 <th class="text-gray-700">Cuotas</th>
@@ -217,34 +217,15 @@
                 </tr>
               </c:when>
               <c:otherwise>
-              <%-- AGREGAR FOR EACH --%>
-              <tr class="hover">
-                <td>9001</td>
-                <td>Prestamo Personal</td>
-                <td class="text-black-600 font-semibold">$15,000.00</td>
-                <td class="text-black-600 font-semibold">24</td>
-                <td><span
-                  class="flex flex-col items-center w-fit px-2.5 rounded-full border border-yellow-500 text-yellow-500 font-semibold">
-                    En Revision </span></td>
-              </tr>
-              <tr class="hover">
-                <td>9078</td>
-                <td>Prestamo Hipotecario</td>
-                <td class="text-black-600 font-semibold">$850,000.00</td>
-                <td class="text-black-600 font-semibold">60</td>
-                <td><span
-                  class="flex flex-col items-center w-fit px-2.5 rounded-full border border-green-600 text-green-600 font-semibold">
-                    Aprobado </span></td>
-              </tr>
-              <tr class="hover">
-                <td>9101</td>
-                <td>Prestamo Personal</td>
-                <td class="text-black-600 font-semibold">$80,000.00</td>
-                <td class="text-black-600 font-semibold">48</td>
-                <td><span
-                  class="flex flex-col items-center w-fit px-2.5 rounded-full border border-red-600 text-red-600 font-semibold">
-                    Rechazado </span></td>
-              </tr>
+              <c:forEach var="loan" items="${client.loans}"
+                varStatus="status">
+                <tr class="hover">
+                 <%-- <td>${loan.Loanid}</td>--%>
+                  <td>${loan.loanType.loanTypeName}</td>
+                   <td class="text-black-600 font-semibold" >${loan.requestedAmount}</td>
+                  <td class="flex flex-col items-center w-fit px-2.5 rounded-full border border-yellow-500 text-yellow-500 font-semibold">${loan.loanStatus.loanStatusName}</td>
+                </tr>
+              </c:forEach>
              </c:otherwise>
             </c:choose>
            </tbody>
