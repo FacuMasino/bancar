@@ -27,7 +27,8 @@ import utils.Helper;
 import utils.Page;
 
 @WebServlet(urlPatterns = {"/Admin/Clients","/Admin/Clients/"})
-public class AdminClientsServlet extends HttpServlet {
+public class AdminClientsServlet extends HttpServlet
+{
 	private static final long serialVersionUID = 1L;
 	private ClientsBusiness clientsBusiness;
 	private AccountsBusiness accountsBusiness;
@@ -99,6 +100,16 @@ public class AdminClientsServlet extends HttpServlet {
 				break;
 			case "saveClient":
 				saveClient(request, response);
+				break;
+			case "toggleActiveStatus":
+				try
+				{
+					toggleActiveStatus(request, response);
+				}
+				catch (BusinessException e)
+				{
+					e.printStackTrace();
+				}
 				break;
 			default:
 				try
