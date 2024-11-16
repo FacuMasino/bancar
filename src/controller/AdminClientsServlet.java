@@ -125,6 +125,7 @@ public class AdminClientsServlet extends HttpServlet
 
 		City city = new City();
 		city.setName(request.getParameter("clientCity"));
+		city.setZipCode(request.getParameter("clientZipCode"));
 		address.setCity(city);
 
 		Province province = new Province();
@@ -132,8 +133,7 @@ public class AdminClientsServlet extends HttpServlet
 		address.setProvince(province);
 
 		Country country = new Country();
-		country.setId(1);
-		country.setName("Argentina");
+		country.setName(request.getParameter("clientNationality"));
 		address.setCountry(country);
 
 		client.setAddress(address);

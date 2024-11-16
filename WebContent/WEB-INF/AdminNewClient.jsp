@@ -81,9 +81,10 @@
                 class="label-text font-bold">DNI</span>
               </label>
             </div>
-            <input type="number" name="clientDni" placeholder="DNI"
+            <input type="number" name="clientDni"
               class="input input-bordered w-full"
-              value="${draftClient.dni}"/>
+              placeholder="DNI del cliente (sin espacios ni puntos)"
+              value="${draftClient.dni}" min="1000000" max="99999999"/>
           </div>
           <div class="flex flex-col w-full">
             <div class="form-control w-full">
@@ -252,7 +253,6 @@
             </div>
 
             <!-- Localidad -->
-
             <div class="flex flex-col w-full">
               <div class="form-control w-full">
                 <label for="clientCity" class="label"> <span
@@ -264,6 +264,20 @@
                 class="input input-bordered w-full"
                 value="" value="${draftClient.address.city.name}"/>
             </div>
+            
+            <!-- Código postal -->
+            <div class="flex flex-col w-full">
+              <div class="form-control w-full">
+                <label for="clientZipCode" class="label">
+                  <span class="label-text font-bold">CP</span>
+                </label>
+              </div>
+              <input type="text" name="clientZipCode"
+                placeholder="CP"
+                class="input input-bordered w-full"
+                value="${draftClient.address.city.zipCode}"/>
+            </div>
+            
           </div>
         </div>
 
