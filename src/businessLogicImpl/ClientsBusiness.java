@@ -26,6 +26,8 @@ public class ClientsBusiness implements IClientsBusiness
 	{
 		try
 		{
+			// TODO: Validar si el DNI ya existe
+			// TODO: Validar si el usuario ya existe
 			// Validar los datos del cliente
 			List<String> invalidFields = Validator.validateClientFields(client);
 			if(!invalidFields.isEmpty())
@@ -80,6 +82,15 @@ public class ClientsBusiness implements IClientsBusiness
 	{
 		try
 		{
+			// TODO: Validar si el DNI ya existe
+			// TODO: Validar si el usuario ya existe
+			// Validar los datos del cliente
+			List<String> invalidFields = Validator.validateClientFields(client);
+			if(!invalidFields.isEmpty())
+			{
+				throw new InvalidFieldsException(invalidFields);
+			}
+			
 			return clientsDao.update(client);
 		}
 		catch (SQLException ex)
