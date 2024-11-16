@@ -56,15 +56,15 @@ if /i "%confirm%" NEQ "Y" (
     goto menu
 )
 
-mysql -h %database_host% -u %database_user% -p%database_pass% < delete_database.sql
-mysql -h %database_host% -u %database_user% -p%database_pass% < create_database.sql
-mysql -h %database_host% -u %database_user% -p%database_pass% < collate_UTF8.sql
-mysql -h %database_host% -u %database_user% -p%database_pass% < create_tables.sql
-mysql -h %database_host% -u %database_user% -p%database_pass% < create_functions.sql
-mysql -h %database_host% -u %database_user% -p%database_pass% < create_stored_procedures.sql
-mysql -h %database_host% -u %database_user% -p%database_pass% < create_views.sql
-mysql -h %database_host% -u %database_user% -p%database_pass% < insert_initial_data.sql
-mysql -h %database_host% -u %database_user% -p%database_pass% < insert_dummy_data.sql
+mysql -h %database_host% -u %database_user% -p%database_pass% --default-character-set=utf8mb4 < delete_database.sql
+mysql -h %database_host% -u %database_user% -p%database_pass% --default-character-set=utf8mb4 < create_database.sql
+mysql -h %database_host% -u %database_user% -p%database_pass% --default-character-set=utf8mb4 < collate_UTF8.sql
+mysql -h %database_host% -u %database_user% -p%database_pass% --default-character-set=utf8mb4 < create_tables.sql
+mysql -h %database_host% -u %database_user% -p%database_pass% --default-character-set=utf8mb4 < create_functions.sql
+mysql -h %database_host% -u %database_user% -p%database_pass% --default-character-set=utf8mb4 < create_stored_procedures.sql
+mysql -h %database_host% -u %database_user% -p%database_pass% --default-character-set=utf8mb4 < create_views.sql
+mysql -h %database_host% -u %database_user% -p%database_pass% --default-character-set=utf8mb4 < insert_initial_data.sql
+mysql -h %database_host% -u %database_user% -p%database_pass% --default-character-set=utf8mb4 < insert_dummy_data.sql
 
 echo.
 echo "Database reset complete."
