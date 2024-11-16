@@ -61,7 +61,7 @@
           </a>
         </li>
         <li>
-          <a href="AdminLoans.jsp" id="adminLoansMenu"> 
+          <a href="${pageContext.request.contextPath}/Admin/Loans" id="adminLoansMenu"> 
             <i data-lucide="wallet-minimal"></i>
              Préstamos
           </a>
