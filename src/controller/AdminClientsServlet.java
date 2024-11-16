@@ -23,6 +23,7 @@ import domainModel.Province;
 import domainModel.Role;
 import domainModel.Message.MessageType;
 import exceptions.BusinessException;
+import exceptions.InvalidFieldsException;
 import utils.Helper;
 import utils.Page;
 
@@ -144,6 +145,12 @@ public class AdminClientsServlet extends HttpServlet
 			Helper.setReqMessage(request, "Cliente creado exitosamente.", MessageType.SUCCESS);
 			System.out.println("Cliente creado exitosamente.");
 			listClients(request, response);
+		}
+		catch (InvalidFieldsException ex)
+		{
+			request.setAttribute("draftClient", client);
+			Helper.setReqErrorList(request, ex.getInvalidFields());
+			newClient(request, response);
 		}
 		catch (BusinessException ex)
 		{

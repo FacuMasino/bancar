@@ -7,6 +7,9 @@
 <c:set var="provinces" value="${requestScope.provinces != null 
                               ? requestScope.provinces : emptyList}" />
 
+<c:set var="draftClient" value="${requestScope.draftClient != null 
+                              ? requestScope.draftClient : null}" />
+
 <t:masterpage title="Admin - Alta Cliente" customNavbar="true">
   <t:adminwrapper activeMenuItem="adminClientsMenu">
     <div class="container md:max-w-[800px] mx-auto my-6 px-2">
@@ -26,7 +29,7 @@
               </div>
               <input type="text" name="clientUsername"
                 placeholder="Nombre de usuario"
-                class="input input-bordered w-full" />
+                class="input input-bordered w-full" value="${draftClient.username}" />
             </div>
             <div class="flex flex-col w-full">
               <div class="form-control w-full">
@@ -35,7 +38,8 @@
                 </label>
               </div>
               <input type="password" name="clientPassword"
-                placeholder="Contraseña" class="input input-bordered w-full" />
+                placeholder="Contraseña" class="input input-bordered w-full" 
+                value="${draftClient.password}"/>
             </div>
           </div>
           <p>* La contraseña debe contener al menos una mayúscula, una
@@ -52,7 +56,8 @@
               </label>
             </div>
             <input type="text" name="clientFirstName" placeholder="Nombre"
-              class="input input-bordered w-full" />
+              class="input input-bordered w-full"
+              value="${draftClient.firstName}"/>
           </div>
           <div class="flex flex-col w-full">
             <div class="form-control w-full">
@@ -61,7 +66,8 @@
               </label>
             </div>
             <input type="text" name="clientLastName" placeholder="Apellido"
-              class="input input-bordered w-full" />
+              class="input input-bordered w-full" 
+              value="${draftClient.lastName}"/>
           </div>
         </div>
         
@@ -76,7 +82,8 @@
               </label>
             </div>
             <input type="number" name="clientDni" placeholder="DNI"
-              class="input input-bordered w-full" />
+              class="input input-bordered w-full"
+              value="${draftClient.dni}"/>
           </div>
           <div class="flex flex-col w-full">
             <div class="form-control w-full">
@@ -85,7 +92,8 @@
               </label>
             </div>
             <input type="number" name="clientCuil" placeholder="CUIL"
-              class="input input-bordered w-full" />
+              class="input input-bordered w-full" 
+              value="${draftClient.cuil}"/>
           </div>
         </div>
 
@@ -98,7 +106,8 @@
               </label>
             </div>
             <input type="date" name="clientBirth" placeholder="yyyy-mm-dd"
-              class="input input-bordered w-full" required/>
+              class="input input-bordered w-full" required
+              value="${draftClient.birthDate}"/>
           </div>
 
           <!-- Sexo -->
@@ -111,11 +120,13 @@
             </div>
             <select name="clientSex" class="bg-white select select-bordered w-full">
               <option value="Masulino"
-                ${client.sex == 'Masculino' ? 'selected':''}>
+                ${client.sex == 'Masculino' ? 'selected':''}
+                ${draftClient.sex == 'Femenino' ? 'selected':''}>
                 Masculino
               </option>
               <option value="Femenino"
-                ${client.sex == 'Femenino' ? 'selected':''}>
+                ${client.sex == 'Femenino' ? 'selected':''}
+                ${draftClient.sex == 'Femenino' ? 'selected':''}>
                 Femenino
               </option>
             </select>
@@ -127,7 +138,8 @@
               </label>
             </div>
             <input type="text" name="clientNationality"
-              placeholder="Nacionalidad" class="input input-bordered w-full" />
+              placeholder="Nacionalidad" class="input input-bordered w-full"
+              value="${draftClient.nationality.name}"/>
           </div>
         </div>
 
@@ -141,7 +153,8 @@
           </div>
           <input type="text" name="clientPhone"
             placeholder="Teléfono de contacto" required
-            class="input input-bordered w-full" />
+            class="input input-bordered w-full"
+            value="${draftClient.phone}" />
         </div>
 
         <!-- Email -->
@@ -153,7 +166,8 @@
             </label>
           </div>
           <input type="email" name="clientEmail" placeholder="Email"
-            class="input input-bordered w-full" />
+            class="input input-bordered w-full"
+            value="${draftClient.email}"/>
         </div> </div>
 
         <!-- Calle y número -->
@@ -166,7 +180,8 @@
               </label>
             </div>
             <input type="text" name="clientStreetName" placeholder="Calle"
-              class="input input-bordered w-full" />
+              class="input input-bordered w-full"
+              value="${draftClient.address.streetName}"/>
           </div>
           <div class="flex flex-col w-1/4">
             <div class="form-control w-full">
@@ -175,7 +190,8 @@
               </label>
             </div>
             <input type="text" name="clientStreetNumber" placeholder="Número"
-              class="input input-bordered w-full" />
+              class="input input-bordered w-full"
+              value="${draftClient.address.streetNumber}"/>
           </div>
         </div>
 
@@ -188,7 +204,8 @@
               </label>
             </div>
             <input type="text" name="clientAddressFlat" placeholder="Piso-Depto"
-              class="input input-bordered w-full" />
+              class="input input-bordered w-full"
+              value="${draftClient.address.flat}"/>
           </div>
           <div class="flex flex-col w-full">
             <div class="form-control w-full">
@@ -198,7 +215,8 @@
             </div>
             <input type="text" name="clientAddressDetails"
               placeholder="Observaciones del domicilio"
-              class="input input-bordered w-full" />
+              class="input input-bordered w-full"
+              value="${draftClient.address.details}"/>
           </div>
         </div>
 
@@ -220,8 +238,10 @@
                     <option disabled selected>Error: No hay provincias para mostrar</option>
                   </c:when>
                   <c:otherwise>
+                    <c:set var="draftProvinceId" value="${draftClient.address.province.id}" />
                     <c:forEach var="province" items="${provinces}">
-                      <option value="${province.id}">
+                      <option value="${province.id}"
+                        ${draftProvinceId == province.id ? 'selected':''}>
                         ${province.name}
                       </option>
                     </c:forEach>
@@ -242,7 +262,7 @@
               <input type="text" name="clientCity"
                 placeholder="Ingrese Ciudad"
                 class="input input-bordered w-full"
-                value="" />
+                value="" value="${draftClient.address.city.name}"/>
             </div>
           </div>
         </div>

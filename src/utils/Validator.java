@@ -1,6 +1,11 @@
 package utils;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -39,6 +44,9 @@ public class Validator
 		} else if (!hasOnlyNumbers(client.getPhone()))
 		{
 			invalidFields.add("El Teléfono solo puede contener números");
+		} else if (client.getPhone().length() != 10)
+		{
+			invalidFields.add("El Teléfono es inválido, debe contener 10 dígitos");
 		}
 		
 		// Nombre
@@ -70,13 +78,24 @@ public class Validator
 			invalidFields.add("El formato del Email no es válido");
 		}
 
+		// Fecha de nacimiento
+		if (client.getBirthDate() == null)
+		{
+			invalidFields.add("La Fecha de Nacimiento es requerida");
+		} else if (!isAdult(client.getBirthDate()))
+		{
+			invalidFields.add("El cliente debe ser mayor de edad");
+		}
+		
+		// Se suman los posibles campos invalidos de dirección
+		invalidFields.addAll(validateAddressFields(client.getAddress()));
+		
 		return invalidFields;
 	}
 
 	public static List<String> validateAddressFields(Address address)
 	{
 		List<String> invalidFields = new ArrayList<String>();
-		
 		
 		// TODO: validaciones de direcciones
 		
@@ -105,6 +124,16 @@ public class Validator
 			}
 		}
 		return true;
+	}
+	
+	private static boolean isAdult(Date birthDate)
+	{
+		
+		LocalDate today = LocalDate.now();
+		String birthStr = new SimpleDateFormat("yyyy-MM-dd").format(birthDate);
+		LocalDate birthLocalDate = LocalDate.parse(birthStr);
+		Period age = Period.between(birthLocalDate, today);
+		return age.getYears() >= 18;
 	}
 	
 	// Regexp tomada de https://stackoverflow.com/a/8204716

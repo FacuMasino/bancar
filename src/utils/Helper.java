@@ -1,6 +1,8 @@
 package utils;
 
 import java.io.IOException;
+import java.util.List;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -25,5 +27,10 @@ public class Helper
 	{
 		request.setAttribute("message", 
 				new Message(message,type));
+	}
+	
+	public static void setReqErrorList(HttpServletRequest request, List<String> errors)
+	{
+		request.setAttribute("errorList", errors);
 	}
 }

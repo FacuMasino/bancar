@@ -2,11 +2,15 @@ package businessLogicImpl;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
+
 import businessLogic.IClientsBusiness;
 import dataAccessImpl.ClientsDao;
 import domainModel.Client;
 import exceptions.BusinessException;
+import exceptions.InvalidFieldsException;
 import exceptions.SQLOperationException;
+import utils.Validator;
 
 public class ClientsBusiness implements IClientsBusiness
 {
@@ -22,6 +26,13 @@ public class ClientsBusiness implements IClientsBusiness
 	{
 		try
 		{
+			// Validar los datos del cliente
+			List<String> invalidFields = Validator.validateClientFields(client);
+			if(!invalidFields.isEmpty())
+			{
+				throw new InvalidFieldsException(invalidFields);
+			}
+			
 			if (0 < clientsDao.create(client))
 			{
 				return true;
@@ -30,6 +41,10 @@ public class ClientsBusiness implements IClientsBusiness
 		catch (SQLException ex)
 		{
 			throw new SQLOperationException();
+		}
+		catch (BusinessException ex)
+		{
+			throw ex;
 		}
 		catch (Exception ex)
 		{

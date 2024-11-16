@@ -9,6 +9,7 @@
 <%@attribute name="customNavbar" required="false" type="java.lang.Boolean" %>
 
 <c:set var="msg" value="${requestScope.message != null ? requestScope.message : null}" />
+<c:set var="msgErrorList" value="${requestScope.errorList != null ? requestScope.errorList : emptyList}" />
 
 <!DOCTYPE html>
 <html data-theme="light">
@@ -46,6 +47,22 @@
 
 				startWindToast("Mensaje", "${msg.message}", "${alertType}", 5, "bottom-end");
 			</script>
+          </c:when>
+        </c:choose>
+        <!-- Notificación Toast (Lista de errores)-->
+        <c:choose>
+          <%-- Si hay atributo "errorList" se muestra la lista de errores --%>
+          <c:when test="${not empty msgErrorList}">
+              <div id="hiddenErrorList" class="hidden">
+                <c:forEach var="errorItem" items="${msgErrorList}">
+                    ${errorItem}<br>
+                </c:forEach>
+              </div>
+              <script type="module">
+              	import { startWindToast } from "${pageContext.request.contextPath}/js/wind-notify/index.js"
+				const errorList = document.getElementById("hiddenErrorList").innerHTML;
+        		startWindToast("Mensaje", errorList, "error", 15, "bottom-end");
+			  </script>
           </c:when>
         </c:choose>
 		<%--@include page="/Components/Footer.jsp" --%>
