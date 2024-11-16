@@ -7,7 +7,7 @@
       </h1>
 
       <!-- Préstamos en revisión -->
-      <form id="pendingLoansForm" method="post" action="AdminLoansServlet" class="bg-white rounded-lg shadow-sm mb-6">
+      <form id="pendingLoansForm" method="post" action="Loans" class="bg-white rounded-lg shadow-sm mb-6">
         <div class="p-4">
           <h2 class="text-base font-medium mb-4">Préstamos en revisión</h2>
           <div class="overflow-x-auto">
@@ -34,10 +34,14 @@
                   <td class="py-3">6</td>
                   <td class="py-3">
                     <div class="flex gap-2">
+                      <%-- IMPORTANTE: Reemplazar el nro '1' por "${loan.id}"
+                           para que funcione el envío del formulario correctamente --%>
                       <button type="submit" class="p-1.5 bg-green-500 text-white rounded-md"
                         onclick="setSelectedLoan('1')" name="action" value="approve">
                         <i data-lucide="check"></i>
                       </button>
+                      <%-- IMPORTANTE: Reemplazar el nro '1' por "${loan.id}"
+                           para que funcione el envío del formulario correctamente --%>
                       <button type="submit" class="p-1.5 bg-red-500 text-white rounded-md"
                         onclick="setSelectedLoan('1')" name="action" value="reject">
                         <i data-lucide="x"></i>
