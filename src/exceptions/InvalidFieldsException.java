@@ -1,23 +1,23 @@
 package exceptions;
 
-import domainModel.InvalidFields;
+import java.util.List;
 
 /**
  * Excepción personalizada que indica errores de validación en uno o varios campos de entrada.
  */
 public class InvalidFieldsException extends BusinessException {
 	
-    // Clase que contiene los nombres de los campos inválidos y sus mensajes de error.
-	private InvalidFields fields;
+    // Clase que contiene los campos inválidos y sus mensajes de error.
+	private List<String> fields;
 	
 	private static final long serialVersionUID = 1L;
 	
-	public InvalidFieldsException(InvalidFields fields) {
+	public InvalidFieldsException(List<String> fields) {
 		super("Verifique los campos ingresados");
 		this.fields = fields;
 	}
 
-	public InvalidFields getInvalidFields() {
+	public List<String> getInvalidFields() {
 		return fields;
 	}
 }
