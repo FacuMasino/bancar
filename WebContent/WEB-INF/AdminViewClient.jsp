@@ -22,7 +22,7 @@
           <c:choose>
             <c:when test="${client.activeStatus}">
               <a
-                href="Clients?clientId=${client.clientId}&action=manageAccounts"
+                href="Accounts?clientId=${client.clientId}"
                 class="btn btn-primary"> Gestionar Cuentas </a>
             </c:when>
           </c:choose>
