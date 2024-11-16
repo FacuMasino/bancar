@@ -67,8 +67,6 @@ public class AdminClientsServlet extends HttpServlet
 			case "edit":
 				editClient(request,response);
 				break;
-			case "manageAccounts":
-				manageAccounts(request, response);
 			default:
 				listClients(request, response);
 		}
@@ -82,8 +80,6 @@ public class AdminClientsServlet extends HttpServlet
 		switch (action) 
 		{
 			case "newClient":
-				//TODO algunas validaciones de negocio, por ejemplo: verificar nombre de usuario disponible
-				//TODO implementar BusinessException
 				saveNewClient(request, response);
 				break;
 			case "saveClient":
@@ -219,6 +215,7 @@ public class AdminClientsServlet extends HttpServlet
 		try
 		{
 			ArrayList<Client> clientsList = clientsBusiness.list();
+			loadClientsAccounts(clientsList);
 			Page<Client> clientsPage = new Page<Client>(page,pageSize, clientsList);
 			request.setAttribute("page", clientsPage);			
 			Helper.redirect("/WEB-INF/AdminClients.jsp", request, response);
@@ -227,6 +224,24 @@ public class AdminClientsServlet extends HttpServlet
 		{
 			Helper.setReqMessage(request, ex.getMessage(), MessageType.ERROR);
 			Helper.redirect("/WEB-INF/AdminClients.jsp", request, response);
+		}
+	}
+	
+	private void loadClientsAccounts(ArrayList<Client> clients) 
+			throws BusinessException
+	{
+		for(Client client : clients)
+		{
+			ArrayList<Account> accounts;
+			try
+			{
+				accounts = accountsBusiness.listByIdClient(client.getClientId());
+				client.setAccounts(accounts);
+			} 
+			catch (BusinessException ex)
+			{
+				throw new BusinessException( "Error al obtener las cuentas de clientes.");
+			}
 		}
 	}
 	
@@ -248,11 +263,12 @@ public class AdminClientsServlet extends HttpServlet
 			ArrayList <Loan> loansList = new ArrayList <Loan>();
 			  
 			for (Account account : accountsList)
-			  {
-			      int accountId = account.getId(); 
-			      ArrayList<Loan> accountLoans = loansBusiness.listByIdAccount(accountId);
-			      loansList.addAll(accountLoans); 
-			  }
+			{
+				int accountId = account.getId();
+				ArrayList<Loan> accountLoans = loansBusiness
+						.listByIdAccount(accountId);
+				loansList.addAll(accountLoans);
+			}
 
 			client.setLoans(loansList); 
 			client.setAccounts(accountsList);
@@ -265,32 +281,6 @@ public class AdminClientsServlet extends HttpServlet
 			Helper.setReqMessage(request, ex.getMessage(), MessageType.ERROR);
 			listClients(request, response);
 			ex.printStackTrace();
-		}
-	}
-	
-	private void manageAccounts(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException 
-	{
-		//int clientId = Optional.ofNullable(request.getParameter("clientId")).map(Integer::parseInt).orElse(0);
-		
-		int clientId = Integer.parseInt(request.getParameter("clientId"));
-		System.out.println("Lo que llega al servler..." + clientId);
-		try {
-			Client client = clientsBusiness.read(clientId);
-			System.out.println("\nAl leer e cliente de BD..." + client.getClientId());
-			ArrayList<Account> accountsList = new ArrayList<Account>();
-			accountsList = accountsBusiness.listByIdClient(clientId);
-			client.setAccounts(accountsList);
-
-			//TODO: HACER FUNCION CARGAR CLIENTE!!!
-			request.setAttribute("client", client);
-			
-			System.out.println("\nantes de redirect..." + client.getClientId());
-			
-			Helper.redirect("/AdminClientAccounts.jsp", request, response);
-		}
-		catch (BusinessException e) {
-			e.printStackTrace();
 		}
 	}
 	

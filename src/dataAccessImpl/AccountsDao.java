@@ -91,7 +91,7 @@ public class AccountsDao implements IAccountsDao {
 		int rows = 0;
 
 		try {
-			db.setPreparedStatement("UPDATE Accounts SET IsActive = 0 WHERE AccountId = ?");
+			db.setPreparedStatement("UPDATE Accounts SET ActiveStatus = 0 WHERE AccountId = ?");
 			db.getPreparedStatement().setInt(1, accountId);
 			rows = db.getPreparedStatement().executeUpdate();
 		} catch (SQLException ex) {
@@ -108,7 +108,7 @@ public class AccountsDao implements IAccountsDao {
 		ArrayList<Account> accounts = new ArrayList<Account>();
 
 		try {
-			db.setPreparedStatement("SELECT * FROM Accounts WHERE isActive = 1");
+			db.setPreparedStatement("SELECT * FROM Accounts WHERE ActiveStatus = 1");
 			rsAccounts = db.getPreparedStatement().executeQuery();
 
 			while (rsAccounts.next()) {
@@ -158,10 +158,10 @@ public class AccountsDao implements IAccountsDao {
 	}
 
 	private void setUpdateParameters(Account account) throws SQLException {
-		db.getPreparedStatement().setString(1, account.getCbu());
-		db.getPreparedStatement().setBigDecimal(2, account.getBalance());
-		db.getPreparedStatement().setInt(3, account.getAccountType().getId());
-		db.getPreparedStatement().setInt(4, account.getId());
+		db.getPreparedStatement().setInt(1, account.getId());
+		db.getPreparedStatement().setString(2, account.getCbu());
+		db.getPreparedStatement().setBigDecimal(3, account.getBalance());
+		db.getPreparedStatement().setInt(4, account.getAccountType().getId());
 	}
 
 	private Account getAccount(ResultSet rs) throws SQLException {
@@ -197,7 +197,7 @@ public class AccountsDao implements IAccountsDao {
 		ArrayList<Account> auxAccountsList = new ArrayList<Account>();
 
 		try {
-			db.setPreparedStatement("SELECT * FROM Accounts WHERE ClientId = ?;");
+			db.setPreparedStatement("SELECT * FROM Accounts WHERE ClientId = ? And ActiveStatus = 1;");
 			db.getPreparedStatement().setInt(1, clientId);
 			rsAccounts = db.getPreparedStatement().executeQuery();
 
