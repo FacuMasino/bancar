@@ -191,7 +191,7 @@ public class Validator
 	{
 		for (int i = 0; i < str.length(); i++)
 		{
-			if (!Character.isLetter(str.charAt(i)))
+			if (!(Character.isLetter(str.charAt(i)) || str.charAt(i) == ' '))
 			{
 				return false;
 			}

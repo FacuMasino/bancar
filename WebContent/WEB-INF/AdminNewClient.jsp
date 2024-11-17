@@ -120,7 +120,7 @@
               </label>
             </div>
             <select name="clientSex" class="bg-white select select-bordered w-full">
-              <option value="Masulino"
+              <option value="Masculino"
                 ${client.sex == 'Masculino' ? 'selected':''}
                 ${draftClient.sex == 'Femenino' ? 'selected':''}>
                 Masculino

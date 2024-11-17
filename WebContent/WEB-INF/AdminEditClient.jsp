@@ -41,7 +41,7 @@
                 <span class="label-text font-bold">Nombre</span>
               </label>
             </div>
-            <input type="text" name="clientName" placeholder="Ingres&aacute; el nombre"
+            <input type="text" name="clientFirstName" placeholder="Ingres&aacute; el nombre"
               class="input input-bordered w-full" value="${client.firstName}" 
               ${setIsDisabled} />
           </div>
@@ -51,7 +51,7 @@
                 <span class="label-text font-bold">Apellido</span>
               </label>
             </div>
-            <input type="text" name="clientSurname"
+            <input type="text" name="clientLastName"
               placeholder="Ingres&aacute; el apellido"
               class="input input-bordered w-full" value="${client.lastName}" 
               ${setIsDisabled} />
@@ -61,11 +61,11 @@
         <div class="flex gap-4">
           <div class="flex flex-col w-full">
             <div class="form-control w-full">
-              <label for="clientDNI" class="label">
+              <label for="clientDni" class="label">
                 <span class="label-text font-bold">DNI</span>
               </label>
             </div>
-            <input type="number" name="clientDNI"
+            <input type="number" name="clientDni"
               placeholder="DNI del cliente (sin espacios ni puntos)"
               class="input input-bordered w-full" value="${client.dni}" 
               ${setIsDisabled} min="1000000" max="99999999"/>
@@ -143,11 +143,11 @@
           </div>
           <div class="flex flex-col w-full">
             <div class="form-control w-full">
-              <label for="clientTelephone" class="label">
+              <label for="clientPhone" class="label">
                 <span class="label-text font-bold">Tel&eacute;fono (Sin 0 ni 15)</span>
               </label>
             </div>
-            <input type="text" name="clientTelephone"
+            <input type="text" name="clientPhone"
               placeholder="Tel&eacute;fono del cliente"
               class="input input-bordered w-full" value="${client.phone}"
               ${setIsDisabled} />
@@ -159,11 +159,11 @@
 
           <div class="flex flex-col w-full">
             <div class="form-control w-full">
-              <label for="clientAdress" class="label">
+              <label for="clientAddress" class="label">
                 <span class="label-text font-bold">Domicilio</span>
               </label>
             </div>
-            <input type="text" name="clientStreet"
+            <input type="text" name="clientStreetName"
               placeholder="Direcci&oacute;n del cliente (Calle)"
               class="input input-bordered w-full"
               value="${client.address.streetName}"
@@ -172,11 +172,11 @@
           <div class="flex gap-4">
             <div class="flex flex-col w-full">
               <div class="form-control w-full">
-                <label for="clientAdressNumber" class="label">
+                <label for="clientStreetNumber" class="label">
                   <span class="label-text font-bold">Nro</span>
                 </label>
               </div>
-              <input type="text" name="clientAdressNumber"
+              <input type="text" name="clientStreetNumber"
                 placeholder="Numeraci&oacute;n Domicilio"
                 class="input input-bordered w-full"
                 value="${client.address.streetNumber}"
@@ -184,11 +184,11 @@
             </div>
             <div class="flex flex-col w-full">
               <div class="form-control w-full">
-                <label for="clientAdressFlat" class="label">
+                <label for="clientFlat" class="label">
                   <span class="label-text font-bold">Piso/Depto</span>
                 </label>
               </div>
-              <input type="text" name="clientAdressFlat"
+              <input type="text" name="clientFlat"
                 placeholder="Piso/Departamento"
                 class="input input-bordered w-full"
                 value="${client.address.flat}"

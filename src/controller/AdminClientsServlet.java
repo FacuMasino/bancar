@@ -27,7 +27,7 @@ import exceptions.InvalidFieldsException;
 import utils.Helper;
 import utils.Page;
 
-@WebServlet(urlPatterns = {"/Admin/Clients","/Admin/Clients/"})
+@WebServlet(urlPatterns = { "/Admin/Clients", "/Admin/Clients/" })
 public class AdminClientsServlet extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
@@ -36,7 +36,7 @@ public class AdminClientsServlet extends HttpServlet
 	private LoansBusiness loansBusiness;
 	private ProvincesBusiness provincesBusiness;
 	private Client client;
-	
+
 	public AdminClientsServlet()
 	{
 		super();
@@ -46,66 +46,66 @@ public class AdminClientsServlet extends HttpServlet
 		provincesBusiness = new ProvincesBusiness();
 	}
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException
-	{	
+	protected void doGet(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException
+	{
 		String action = request.getParameter("action");
-		if(action == null || action.isEmpty())
+		if (action == null || action.isEmpty())
 		{
 			listClients(request, response);
 			return;
 		}
 
-		switch (action) 
+		switch (action)
 		{
-			case "new":
-				newClient(request,response);
-				break;
-			case "view":
-				viewClient(request, response);
-				break;
-			case "edit":
-				editClient(request,response);
-				break;
-			default:
-				listClients(request, response);
+		case "new":
+			newClient(request, response);
+			break;
+		case "view":
+			viewClient(request, response);
+			break;
+		case "edit":
+			editClient(request, response);
+			break;
+		default:
+			listClients(request, response);
 		}
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException
+	protected void doPost(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException
 	{
 		String action = request.getParameter("action");
 
-		switch (action) 
+		switch (action)
 		{
-			case "newClient":
-				saveNewClient(request, response);
-				break;
-			case "saveClient":
-				saveEditClient(request, response);
-				break;
-			case "toggleActiveStatus":
-				toggleActiveStatus(request, response);
-				break;
-			default:
-				listClients(request, response);
+		case "newClient":
+			saveNewClient(request, response);
+			break;
+		case "saveClient":
+			saveEditClient(request, response);
+			break;
+		case "toggleActiveStatus":
+			toggleActiveStatus(request, response);
+			break;
+		default:
+			listClients(request, response);
 		}
 	}
 
-	private void saveNewClient(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException
+	private void saveNewClient(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException
 	{
 		Client client = new Client();
 
 		client.setUsername(request.getParameter("clientUsername"));
 		client.setPassword(request.getParameter("clientPassword"));
-		
+
 		Role role = new Role();
 		role.setId(2);
 		role.setName("Cliente");
 		client.setRole(role);
-		
+
 		client.setDni(request.getParameter("clientDni"));
 		client.setCuil(request.getParameter("clientCuil"));
 		client.setFirstName(request.getParameter("clientFirstName"));
@@ -138,17 +138,16 @@ public class AdminClientsServlet extends HttpServlet
 		try
 		{
 			clientsBusiness.create(client);
-			Helper.setReqMessage(request, "Cliente creado exitosamente.", MessageType.SUCCESS);
+			Helper.setReqMessage(request, "Cliente creado exitosamente.",
+					MessageType.SUCCESS);
 			System.out.println("Cliente creado exitosamente.");
 			listClients(request, response);
-		}
-		catch (InvalidFieldsException ex)
+		} catch (InvalidFieldsException ex)
 		{
 			request.setAttribute("draftClient", client);
 			Helper.setReqErrorList(request, ex.getInvalidFields());
 			newClient(request, response);
-		}
-		catch (BusinessException ex)
+		} catch (BusinessException ex)
 		{
 			Helper.setReqMessage(request, ex.getMessage(), MessageType.ERROR);
 			listClients(request, response);
@@ -156,112 +155,158 @@ public class AdminClientsServlet extends HttpServlet
 		}
 	}
 
-	private void newClient(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException
+	private void newClient(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException
 	{
 		try
 		{
 			request.setAttribute("provinces", provincesBusiness.list());
 			Helper.redirect("/WEB-INF/AdminNewClient.jsp", request, response);
-		}
-		catch (BusinessException ex)
+		} catch (BusinessException ex)
 		{
 			Helper.setReqMessage(request, ex.getMessage(), MessageType.ERROR);
 			Helper.redirect("/WEB-INF/AdminNewClient.jsp", request, response);
 			ex.printStackTrace();
 		}
 	}
-	
-	private void editClient(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException
+
+	private void editClient(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException
 	{
 		int id = Optional.ofNullable(request.getParameter("clientId"))
-				.map(Integer::parseInt)
-				.orElse(0);
-		
+				.map(Integer::parseInt).orElse(0);
+
 		try
 		{
 			Client client = clientsBusiness.read(id);
 			request.setAttribute("client", client);
 			request.setAttribute("provinces", provincesBusiness.list());
 			Helper.redirect("/WEB-INF/AdminEditClient.jsp", request, response);
-		}
-		catch (BusinessException ex)
+		} catch (BusinessException ex)
 		{
 			Helper.setReqMessage(request, ex.getMessage(), MessageType.ERROR);
 			listClients(request, response);
 			ex.printStackTrace();
 		}
 	}
-	
-	private void saveEditClient(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException
+
+	private void saveEditClient(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException
 	{
-		Client client = new Client();
+
+		// TODO: Mapear parametros, actualizar el cliente, devolver mensaje de
+		// estado
+		int clientId = Optional.ofNullable(request.getParameter("clientId"))
+				.map(Integer::parseInt).orElse(0);
+		try
+		{
+			client = clientsBusiness.read(clientId);
+			System.out.println("LEO EL CLIENTE");
+			System.out.println(client.toString());
+			
+			client.setFirstName(request.getParameter("clientFirstName"));
+			client.setLastName(request.getParameter("clientLastName"));
+			client.setDni(request.getParameter("clientDni"));
+			client.setCuil(request.getParameter("clientCuil"));
+			client.setSex(request.getParameter("clientSex"));
+			
+			client.setBirthDate(Date.valueOf("1990-11-11"));
+			System.out.println(client.getBirthDate().toString());
+			
+			client.setEmail(request.getParameter("clientEmail"));
+			client.setPhone(request.getParameter("clientPhone"));
+			
+			client.getAddress().setStreetName(request.getParameter("clientStreetName"));
+			client.getAddress().setStreetNumber(request.getParameter("clientStreetNumber"));
+			client.getAddress().setFlat(request.getParameter("clientFlat"));
+			client.getAddress().setDetails(request.getParameter("clientDetails"));
+			
+			client.getAddress().getCity().setName(request.getParameter("clientCity"));
+			client.getAddress().getCity().setZipCode(request.getParameter("clientZipCode"));
+			
+			client.getAddress().getProvince().setName(request.getParameter("clientProvinceId"));
+			
+			client.getNationality().setName(request.getParameter("clientNationality"));
+			
+			System.out.println(client.toString());
+			
+			clientsBusiness.update(client);
+			Helper.setReqMessage(request, "Cliente modificac@ OK", MessageType.SUCCESS);
+			Helper.redirect("/WEB-INF/AdminEditClient.jsp", request, response);
+			
+		} 
+		catch (InvalidFieldsException ex)
+		{
+			request.setAttribute("draftClient", client);
+			Helper.setReqErrorList(request, ex.getInvalidFields());
+			editClient(request, response);
+		} 
+		catch (BusinessException ex)
+		{
+			Helper.setReqMessage(request, ex.getMessage(), MessageType.ERROR);
+			editClient(request, response);
+			ex.printStackTrace();
+		}
 		
-		// TODO: Mapear parametros, actualizar el cliente, devolver mensaje de estado
 	}
-	
-	private void listClients(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException 
+
+	private void listClients(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException
 	{
 		int page = Optional.ofNullable(request.getParameter("page"))
-				.map(Integer::parseInt)
-				.orElse(1);
+				.map(Integer::parseInt).orElse(1);
 
 		int pageSize = Optional.ofNullable(request.getParameter("pageSize"))
-				.map(Integer::parseInt)
-				.orElse(10);
+				.map(Integer::parseInt).orElse(10);
 		try
 		{
 			ArrayList<Client> clientsList = clientsBusiness.list();
 			loadClientsAccounts(clientsList);
-			Page<Client> clientsPage = new Page<Client>(page,pageSize, clientsList);
-			request.setAttribute("page", clientsPage);			
+			Page<Client> clientsPage = new Page<Client>(page, pageSize,
+					clientsList);
+			request.setAttribute("page", clientsPage);
 			Helper.redirect("/WEB-INF/AdminClients.jsp", request, response);
-		}
-		catch(BusinessException ex)
+		} catch (BusinessException ex)
 		{
 			Helper.setReqMessage(request, ex.getMessage(), MessageType.ERROR);
 			Helper.redirect("/WEB-INF/AdminClients.jsp", request, response);
 		}
 	}
-	
-	private void loadClientsAccounts(ArrayList<Client> clients) 
+
+	private void loadClientsAccounts(ArrayList<Client> clients)
 			throws BusinessException
 	{
-		for(Client client : clients)
+		for (Client client : clients)
 		{
 			ArrayList<Account> accounts;
 			try
 			{
-				accounts = accountsBusiness.listByIdClient(client.getClientId());
+				accounts = accountsBusiness
+						.listByIdClient(client.getClientId());
 				client.setAccounts(accounts);
-			} 
-			catch (BusinessException ex)
+			} catch (BusinessException ex)
 			{
-				throw new BusinessException( "Error al obtener las cuentas de clientes.");
+				throw new BusinessException(
+						"Error al obtener las cuentas de clientes.");
 			}
 		}
 	}
-	
-	private void viewClient(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException
+
+	private void viewClient(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException
 	{
 		int clientId = Optional.ofNullable(request.getParameter("clientId"))
-				.map(Integer::parseInt)
-				.orElse(0);
+				.map(Integer::parseInt).orElse(0);
 
 		try
 		{
 			Client client = clientsBusiness.read(clientId);
-			
-			
+
 			ArrayList<Account> accountsList = new ArrayList<Account>();
 			accountsList = accountsBusiness.listByIdClient(clientId);
-			
-			ArrayList <Loan> loansList = new ArrayList <Loan>();
-			  
+
+			ArrayList<Loan> loansList = new ArrayList<Loan>();
+
 			for (Account account : accountsList)
 			{
 				int accountId = account.getId();
@@ -270,37 +315,35 @@ public class AdminClientsServlet extends HttpServlet
 				loansList.addAll(accountLoans);
 			}
 
-			client.setLoans(loansList); 
+			client.setLoans(loansList);
 			client.setAccounts(accountsList);
-		
+
 			request.setAttribute("client", client);
 			Helper.redirect("/WEB-INF/AdminViewClient.jsp", request, response);
-		}
-		catch (BusinessException ex)
+		} catch (BusinessException ex)
 		{
 			Helper.setReqMessage(request, ex.getMessage(), MessageType.ERROR);
 			listClients(request, response);
 			ex.printStackTrace();
 		}
 	}
-	
-	private void toggleActiveStatus(HttpServletRequest request, HttpServletResponse response) 
-			throws ServletException, IOException
+
+	private void toggleActiveStatus(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException
 	{
 		int clientId = Optional.ofNullable(request.getParameter("clientId"))
-				.map(Integer::parseInt)
-				.orElse(0);
+				.map(Integer::parseInt).orElse(0);
 
 		try
 		{
 			client = clientsBusiness.read(clientId);
-			clientsBusiness.toggleActiveStatus(clientId, client.getActiveStatus());
+			clientsBusiness.toggleActiveStatus(clientId,
+					client.getActiveStatus());
 			String msg = client.getActiveStatus() ? "dió de baja" : "reactivó";
-			Helper.setReqMessage(request, "El cliente se " + msg + " con éxito", 
+			Helper.setReqMessage(request, "El cliente se " + msg + " con éxito",
 					MessageType.SUCCESS);
 			listClients(request, response);
-		}
-		catch (BusinessException ex)
+		} catch (BusinessException ex)
 		{
 			// Setear el mensaje de error para mostrar
 			Helper.setReqMessage(request, ex.getMessage(), MessageType.ERROR);
