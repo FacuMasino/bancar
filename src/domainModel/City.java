@@ -46,6 +46,6 @@ public class City implements Identifiable
 	@Override
 	public String toString()
 	{
-		return "id: " + getId() + " name: " + getName();
+		return "id: " + getId() + " name: " + getName() + " zipCode: " + getZipCode();
 	}
 }

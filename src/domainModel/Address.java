@@ -67,7 +67,7 @@ public class Address implements Identifiable
     {
     	if (this.details == null)
     	{
-    		return "NULL";
+    		return "null";
     	}
     	
     	if (this.details.length() <= characters)
