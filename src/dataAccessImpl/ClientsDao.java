@@ -86,9 +86,9 @@ public class ClientsDao extends Dao<Client> implements IClientsDao
 		
 		try
 		{
-			db.setPreparedStatement("{CALL update_client(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}");
+			db.setCallableStatement("{CALL update_client(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}");
 			setParameters(client, true);
-			rows = db.getPreparedStatement().executeUpdate();
+			rows = db.getCallableStatement().executeUpdate();
 		}
 		catch (SQLException ex)
 		{

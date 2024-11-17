@@ -79,9 +79,9 @@ public class AddressesDao extends Dao<Address> implements IAddressesDao
 		
 		try
 		{
-			db.setPreparedStatement("{CALL update_address(?, ?, ?, ?, ?, ?)}");
+			db.setCallableStatement("{CALL update_address(?, ?, ?, ?, ?, ?)}");
 			setParameters(address, true);
-			rows = db.getPreparedStatement().executeUpdate();
+			rows = db.getCallableStatement().executeUpdate();
 		}
 		catch (SQLException ex)
 		{

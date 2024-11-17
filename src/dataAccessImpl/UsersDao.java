@@ -73,9 +73,9 @@ public class UsersDao extends Dao<User> implements IUsersDao
 		
 		try
 		{
-			db.setPreparedStatement("{CALL update_user(?, ?, ?)}");
+			db.setCallableStatement("{CALL update_user(?, ?, ?)}");
 			setParameters(user, true);
-			rows = db.getPreparedStatement().executeUpdate();
+			rows = db.getCallableStatement().executeUpdate();
 		}
 		catch (SQLException ex)
 		{

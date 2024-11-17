@@ -90,9 +90,9 @@ public class ProvincesDao extends Dao<Province> implements IProvincesDao
 		
 		try
 		{
-			db.setPreparedStatement("{CALL update_province(?, ?, ?)}");
+			db.setCallableStatement("{CALL update_province(?, ?, ?)}");
 			setParameters(province, countryId, true);
-			rows = db.getPreparedStatement().executeUpdate();
+			rows = db.getCallableStatement().executeUpdate();
 		}
 		catch (SQLException ex)
 		{

@@ -65,9 +65,9 @@ public class CountriesDao extends Dao<Country> implements ICountriesDao
 		
 		try
 		{
-			db.setPreparedStatement("{CALL update_country(?, ?)}");
+			db.setCallableStatement("{CALL update_country(?, ?)}");
 			setParameters(country, true);
-			rows = db.getPreparedStatement().executeUpdate();
+			rows = db.getCallableStatement().executeUpdate();
 		}
 		catch (SQLException ex)
 		{

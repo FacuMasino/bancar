@@ -90,9 +90,9 @@ public class CitiesDao extends Dao<City> implements ICitiesDao
 		
 		try
 		{
-			db.setPreparedStatement("{CALL update_city(?, ?, ?, ?)}");
+			db.setCallableStatement("{CALL update_city(?, ?, ?, ?)}");
 			setParameters(city, provinceId, true);
-			rows = db.getPreparedStatement().executeUpdate();
+			rows = db.getCallableStatement().executeUpdate();
 		}
 		catch (SQLException ex)
 		{
