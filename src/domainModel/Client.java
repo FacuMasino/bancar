@@ -3,7 +3,7 @@ package domainModel;
 import java.sql.Date;
 import java.util.ArrayList;
 
-public class Client extends User
+public class Client extends User implements Identifiable
 {
 	private int clientId;
 	private boolean activeStatus;
@@ -23,6 +23,18 @@ public class Client extends User
 	public Client()
 	{
 		
+	}
+	
+	@Override
+	public int getId()
+	{
+		return getClientId();
+	}
+
+	@Override
+	public void setId(int id)
+	{
+		setClientId(id);
 	}
 
 	public int getClientId()

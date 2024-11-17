@@ -1,6 +1,6 @@
 package domainModel;
 
-public class Province
+public class Province implements Identifiable
 {
 	private int id;
 	private String name;
@@ -10,11 +10,13 @@ public class Province
 		
 	}
 
+	@Override
 	public int getId()
 	{
 		return id;
 	}
 
+	@Override
 	public void setId(int id)
 	{
 		this.id = id;

@@ -1,6 +1,6 @@
 package domainModel;
 
-public class City
+public class City implements Identifiable
 {
 	private int id;
 	private String name;
@@ -11,11 +11,13 @@ public class City
 		
 	}
 
+	@Override
 	public int getId()
 	{
 		return id;
 	}
 
+	@Override
 	public void setId(int id)
 	{
 		this.id = id;

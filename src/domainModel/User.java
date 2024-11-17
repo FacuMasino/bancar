@@ -1,6 +1,6 @@
 package domainModel;
 
-public class User
+public class User implements Identifiable
 {
 	private int userId;
 	private String username;
@@ -10,6 +10,18 @@ public class User
 	public User()
 	{
 		
+	}
+	
+	@Override
+	public int getId()
+	{
+		return getUserId();
+	}
+
+	@Override
+	public void setId(int id)
+	{
+		setUserId(id);
 	}
 
 	public int getUserId()

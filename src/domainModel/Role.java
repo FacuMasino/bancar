@@ -1,6 +1,6 @@
 package domainModel;
 
-public class Role
+public class Role implements Identifiable
 {
 	private int id;
 	private String name;
@@ -10,11 +10,13 @@ public class Role
 		
 	}
 
+	@Override
 	public int getId()
 	{
 		return id;
 	}
 
+	@Override
 	public void setId(int id)
 	{
 		this.id = id;
