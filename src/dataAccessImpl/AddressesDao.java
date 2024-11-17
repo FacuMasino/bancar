@@ -5,22 +5,20 @@ import java.sql.SQLException;
 import dataAccess.IAddressesDao;
 import domainModel.Address;
 
-public class AddressesDao implements IAddressesDao
+public class AddressesDao extends Dao<Address> implements IAddressesDao
 {
-	private Database db;
 	private CitiesDao citiesDao;
 	private ProvincesDao provincesDao;
 	private CountriesDao countriesDao;
 	
 	public AddressesDao()
 	{
-		db = new Database();
 		citiesDao = new CitiesDao();
 		provincesDao = new ProvincesDao();
 		countriesDao = new CountriesDao();
 	}
 
-	@Override	
+	@Override
 	public int create(Address address) throws SQLException
 	{
 		countriesDao.handleId(address.getCountry());
@@ -76,15 +74,16 @@ public class AddressesDao implements IAddressesDao
 		return false;
 	}
 	
-	public int getId(Address address) throws SQLException
+	@Override
+	public int findId(Address address) throws SQLException
 	{
-		return getId(
+		return findId(
 				address.getStreetName(),
 				address.getStreetNumber(),
 				address.getCity().getId());
 	}
 	
-	public int getId(String streetName, String streetNumber, int cityId) throws SQLException
+	public int findId(String streetName, String streetNumber, int cityId) throws SQLException
 	{
 		ResultSet rs;
 		
@@ -109,36 +108,7 @@ public class AddressesDao implements IAddressesDao
 			throw ex;
 		}
 	}
-	
-	public void handleId(Address address) throws SQLException
-	{
-		try
-		{
-			if (address != null)
-		    {
-		        int foundId = getId(address);
 
-		        if (foundId == 0)
-		        {
-		        	address.setId(create(address));
-		        }
-		        else if (foundId == address.getId())
-		        {
-		            update(address);
-		        }
-		        else
-		        {
-		        	address.setId(foundId);
-		        }
-		    }
-		}
-		catch (SQLException ex)
-		{
-			ex.printStackTrace();
-			throw ex;
-		}
-	}
-	
 	private void setParameters(Address address, boolean isUpdate) throws SQLException
 	{
 		if (isUpdate)
@@ -170,10 +140,10 @@ public class AddressesDao implements IAddressesDao
 			int cityId = rs.getInt("CityId");
 			address.setCity(citiesDao.read(cityId));
 
-			int provinceId = provincesDao.getId(cityId);
+			int provinceId = provincesDao.findId(cityId);
 			address.setProvince(provincesDao.read(provinceId));
 
-			int countryId = countriesDao.getId(provinceId);
+			int countryId = countriesDao.findId(provinceId);
 			address.setCountry(countriesDao.read(countryId));
 		}
 		catch (SQLException ex)

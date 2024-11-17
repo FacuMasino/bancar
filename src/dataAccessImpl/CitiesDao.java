@@ -5,15 +5,32 @@ import java.sql.SQLException;
 import dataAccess.ICitiesDao;
 import domainModel.City;
 
-public class CitiesDao implements ICitiesDao
-{
-	private Database db;
-	
+public class CitiesDao extends Dao<City> implements ICitiesDao
+{	
+	private int provinceId;
+
 	public CitiesDao()
 	{
-		db = new Database();
+		
+	}
+	
+	public int getProvinceId()
+	{
+		return provinceId;
 	}
 
+
+	public void setProvinceId(int provinceId)
+	{
+		this.provinceId = provinceId;
+	}
+
+	@Override
+	protected int create(City city) throws SQLException
+	{
+		return create(city, getProvinceId());
+	}
+	
 	@Override
 	public int create(City city, int provinceId) throws SQLException
 	{
@@ -61,17 +78,29 @@ public class CitiesDao implements ICitiesDao
 	}
 
 	@Override
-	public boolean update(City city) throws SQLException
+	protected boolean update(City city) throws SQLException
+	{
+		return update(city, getProvinceId());
+	}
+	
+	@Override
+	public boolean update(City city, int provinceId) throws SQLException
 	{
 		return false;
 	}
 	
-	public int getId(City city, int provinceId) throws SQLException
+	@Override
+	protected int findId(City city) throws SQLException
 	{
-		return getId(city.getName(), provinceId);
+		return findId(city, getProvinceId());
 	}
 	
-	public int getId(String cityName, int provinceId) throws SQLException
+	public int findId(City city, int provinceId) throws SQLException
+	{
+		return findId(city.getName(), provinceId);
+	}
+	
+	public int findId(String cityName, int provinceId) throws SQLException
 	{
 		ResultSet rs;
 		
@@ -98,31 +127,8 @@ public class CitiesDao implements ICitiesDao
 	
 	public void handleId(City city, int provinceId) throws SQLException
 	{
-		try
-		{
-			if (city != null)
-		    {
-		        int foundId = getId(city, provinceId);
-
-		        if (foundId == 0)
-		        {
-		        	city.setId(create(city, provinceId));
-		        }
-		        else if (foundId == city.getId())
-		        {
-		            update(city);
-		        }
-		        else
-		        {
-		        	city.setId(foundId);
-		        }
-		    }
-		}
-		catch (SQLException ex)
-		{
-			ex.printStackTrace();
-			throw ex;
-		}
+		setProvinceId(provinceId);
+		super.handleId(city);
 	}
 	
 	private void setParameters(City city, int provinceId, boolean isUpdate) throws SQLException

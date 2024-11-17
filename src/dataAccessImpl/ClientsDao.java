@@ -5,17 +5,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import dataAccess.IClientsDao;
 import domainModel.Client;
+import domainModel.User;
 
-public class ClientsDao implements IClientsDao
+public class ClientsDao extends Dao<Client> implements IClientsDao
 {	
-	private Database db;
 	private CountriesDao countriesDao;
 	private AddressesDao addressesDao;
 	private UsersDao usersDao;
 
 	public ClientsDao()
 	{
-		db = new Database();
 		countriesDao = new CountriesDao();
 		addressesDao = new AddressesDao();
 		usersDao = new UsersDao();
@@ -23,10 +22,10 @@ public class ClientsDao implements IClientsDao
 	
 	public int create(Client client) throws SQLException
 	{
+		handleUserId(client);
 		countriesDao.handleId(client.getNationality());
 		addressesDao.handleId(client.getAddress());
-		usersDao.handleId(client);
-
+		
 		try
 		{
 			db.setCallableStatement("{CALL insert_client(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}");
@@ -73,7 +72,7 @@ public class ClientsDao implements IClientsDao
 	@Override
 	public Client readByUserId(int userId) throws SQLException
 	{
-		return read(getClientId(userId));
+		return read(findClientId(userId));
 	}
 
 	@Override
@@ -146,7 +145,13 @@ public class ClientsDao implements IClientsDao
 		return clients;
 	}
 	
-	public int getClientId(int userId) throws SQLException
+	@Override
+	protected int findId(Client client) throws SQLException
+	{
+		return 0;
+	}
+	
+	public int findClientId(int userId) throws SQLException
 	{
 		ResultSet rs;
 		
@@ -168,6 +173,17 @@ public class ClientsDao implements IClientsDao
 			ex.printStackTrace();
 			throw ex;
 		}
+	}
+	
+	public void handleUserId(Client client) throws SQLException
+	{
+		User user = new User();
+		user.setUserId(client.getUserId());
+		user.setUsername(client.getUsername());
+		user.setPassword(client.getPassword());
+		user.setRole(client.getRole());
+		usersDao.handleId(user);
+		client.setUserId(user.getUserId());
 	}
 	
 	private void setParameters(Client client, boolean isUpdate) throws SQLException

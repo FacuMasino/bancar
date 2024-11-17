@@ -5,14 +5,12 @@ import java.sql.SQLException;
 import dataAccess.IUsersDao;
 import domainModel.User;
 
-public class UsersDao implements IUsersDao
+public class UsersDao extends Dao<User> implements IUsersDao
 {
-	private Database db;
 	private RolesDao rolesDao;
 
 	public UsersDao()
 	{
-		db = new Database();
 		rolesDao = new RolesDao();
 	}
 
@@ -65,7 +63,7 @@ public class UsersDao implements IUsersDao
 	@Override
 	public User read(String username) throws SQLException
 	{
-		return read(getUserId(username));
+		return read(findUserId(username));
 	}
 	
 	@Override
@@ -74,12 +72,18 @@ public class UsersDao implements IUsersDao
 		return false;
 	}
 	
-	public int getUserId(User user) throws SQLException
+	@Override
+	protected int findId(User user) throws SQLException
 	{
-		return getUserId(user.getUsername());
+		return findUserId(user);
 	}
 	
-	public int getUserId(String username) throws SQLException
+	public int findUserId(User user) throws SQLException
+	{
+		return findUserId(user.getUsername());
+	}
+	
+	public int findUserId(String username) throws SQLException
 	{
 		ResultSet rs;
 		
@@ -103,7 +107,7 @@ public class UsersDao implements IUsersDao
 		}
 	}
 	
-	public int getUserId(int clientId) throws SQLException
+	public int findUserId(int clientId) throws SQLException
 	{
 		ResultSet rs;
 		
@@ -121,35 +125,6 @@ public class UsersDao implements IUsersDao
 			return rs.getInt("UserId");
 		}
 		catch (Exception ex)
-		{
-			ex.printStackTrace();
-			throw ex;
-		}
-	}
-	
-	public void handleId(User user) throws SQLException
-	{
-		try
-		{
-			if (user != null)
-		    {
-		        int foundId = getUserId(user);
-
-		        if (foundId == 0)
-		        {
-		        	user.setUserId(create(user));
-		        }
-		        else if (foundId == user.getUserId())
-		        {
-		            update(user);
-		        }
-		        else
-		        {
-		        	user.setUserId(foundId);
-		        }
-		    }
-		}
-		catch (SQLException ex)
 		{
 			ex.printStackTrace();
 			throw ex;

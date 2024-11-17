@@ -5,13 +5,11 @@ import java.sql.SQLException;
 import dataAccess.ICountriesDao;
 import domainModel.Country;
 
-public class CountriesDao implements ICountriesDao
+public class CountriesDao extends Dao<Country> implements ICountriesDao
 {
-	private Database db;
-	
 	public CountriesDao()
 	{
-		db = new Database();
+		
 	}
 
 	@Override
@@ -66,12 +64,13 @@ public class CountriesDao implements ICountriesDao
 		return false;
 	}
 	
-	public int getId(Country country) throws SQLException
+	@Override
+	public int findId(Country country) throws SQLException
 	{
-		return getId(country.getName());
+		return findId(country.getName());
 	}
 	
-	public int getId(String countryName) throws SQLException
+	public int findId(String countryName) throws SQLException
 	{
 		ResultSet rs;
 		
@@ -95,7 +94,7 @@ public class CountriesDao implements ICountriesDao
 		}
 	}
 	
-	public int getId(int provinceId) throws SQLException
+	public int findId(int provinceId) throws SQLException
 	{
 		ResultSet rs;
 		
@@ -113,35 +112,6 @@ public class CountriesDao implements ICountriesDao
 			return rs.getInt("CountryId");
 		}
 		catch (Exception ex)
-		{
-			ex.printStackTrace();
-			throw ex;
-		}
-	}
-	
-	public void handleId(Country country) throws SQLException
-	{
-		try
-		{
-			if (country != null)
-		    {
-		        int foundId = getId(country);
-
-		        if (foundId == 0)
-		        {
-		            country.setId(create(country));
-		        }
-		        else if (foundId == country.getId())
-		        {
-		            update(country);
-		        }
-		        else
-		        {
-		        	country.setId(foundId);
-		        }
-		    }
-		}
-		catch (SQLException ex)
 		{
 			ex.printStackTrace();
 			throw ex;

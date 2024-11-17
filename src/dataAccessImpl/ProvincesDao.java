@@ -6,15 +6,31 @@ import java.util.ArrayList;
 import dataAccess.IProvincesDao;
 import domainModel.Province;
 
-public class ProvincesDao implements IProvincesDao
+public class ProvincesDao extends Dao<Province> implements IProvincesDao
 {
-	private Database db;
-	
+	private int countryId;
+
 	public ProvincesDao()
 	{
-		db = new Database();
+		
+	}
+	
+	public int getCountryId()
+	{
+		return countryId;
 	}
 
+	public void setCountryId(int countryId)
+	{
+		this.countryId = countryId;
+	}
+	
+	@Override
+	protected int create(Province province) throws SQLException
+	{
+		return create(province, getCountryId());
+	}
+	
 	@Override
 	public int create(Province province, int countryId) throws SQLException
 	{
@@ -60,9 +76,15 @@ public class ProvincesDao implements IProvincesDao
 		
 		return province;
 	}
-
+	
 	@Override
-	public boolean update(Province province) throws SQLException
+	protected boolean update(Province province) throws SQLException
+	{
+		return update(province, getCountryId());
+	}
+	
+	@Override
+	public boolean update(Province province, int countryId) throws SQLException
 	{
 		return false;
 	}
@@ -93,12 +115,18 @@ public class ProvincesDao implements IProvincesDao
 		return provinces;
 	}
 	
-	public int getId(Province province, int countryId) throws SQLException
+	@Override
+	protected int findId(Province province) throws SQLException
 	{
-		return getId(province.getName(), countryId);
+		return findId(province, getCountryId());
 	}
 	
-	public int getId(String provinceName, int countryId) throws SQLException
+	public int findId(Province province, int countryId) throws SQLException
+	{
+		return findId(province.getName(), countryId);
+	}
+	
+	public int findId(String provinceName, int countryId) throws SQLException
 	{
 		ResultSet rs;
 		
@@ -123,7 +151,7 @@ public class ProvincesDao implements IProvincesDao
 		}
 	}
 	
-	public int getId(int cityId) throws SQLException
+	public int findId(int cityId) throws SQLException
 	{
 		ResultSet rs;
 		
@@ -149,31 +177,8 @@ public class ProvincesDao implements IProvincesDao
 	
 	public void handleId(Province province, int countryId) throws SQLException
 	{
-		try
-		{
-			if (province != null)
-		    {
-		        int foundId = getId(province, countryId);
-
-		        if (foundId == 0)
-		        {
-		        	province.setId(create(province, countryId));
-		        }
-		        else if (foundId == province.getId())
-		        {
-		            update(province);
-		        }
-		        else
-		        {
-		        	province.setId(foundId);
-		        }
-		    }
-		}
-		catch (SQLException ex)
-		{
-			ex.printStackTrace();
-			throw ex;
-		}
+		setCountryId(countryId);
+		super.handleId(province);
 	}
 	
 	private void setParameters(Province province, int countryId, boolean isUpdate) throws SQLException
