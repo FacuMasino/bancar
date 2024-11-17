@@ -71,7 +71,25 @@ public class AddressesDao extends Dao<Address> implements IAddressesDao
 	@Override
 	public boolean update(Address address) throws SQLException
 	{
-		return false;
+		countriesDao.handleId(address.getCountry());
+		provincesDao.handleId(address.getProvince(), address.getCountry().getId());
+		citiesDao.handleId(address.getCity(), address.getProvince().getId());
+		
+		int rows = 0;
+		
+		try
+		{
+			db.setPreparedStatement("{CALL update_address(?, ?, ?, ?, ?, ?)}");
+			setParameters(address, true);
+			rows = db.getPreparedStatement().executeUpdate();
+		}
+		catch (SQLException ex)
+		{
+			ex.printStackTrace();
+			throw ex;
+		}
+		
+		return (rows > 0);
 	}
 	
 	@Override

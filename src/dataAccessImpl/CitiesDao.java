@@ -86,7 +86,21 @@ public class CitiesDao extends Dao<City> implements ICitiesDao
 	@Override
 	public boolean update(City city, int provinceId) throws SQLException
 	{
-		return false;
+		int rows = 0;
+		
+		try
+		{
+			db.setPreparedStatement("{CALL update_city(?, ?, ?, ?)}");
+			setParameters(city, provinceId, true);
+			rows = db.getPreparedStatement().executeUpdate();
+		}
+		catch (SQLException ex)
+		{
+			ex.printStackTrace();
+			throw ex;
+		}
+		
+		return (rows > 0);
 	}
 	
 	@Override

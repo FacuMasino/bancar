@@ -61,7 +61,21 @@ public class CountriesDao extends Dao<Country> implements ICountriesDao
 	@Override
 	public boolean update(Country country) throws SQLException
 	{
-		return false;
+		int rows = 0;
+		
+		try
+		{
+			db.setPreparedStatement("{CALL update_country(?, ?)}");
+			setParameters(country, true);
+			rows = db.getPreparedStatement().executeUpdate();
+		}
+		catch (SQLException ex)
+		{
+			ex.printStackTrace();
+			throw ex;
+		}
+		
+		return (rows > 0);
 	}
 	
 	@Override

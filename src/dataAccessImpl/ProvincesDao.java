@@ -86,7 +86,21 @@ public class ProvincesDao extends Dao<Province> implements IProvincesDao
 	@Override
 	public boolean update(Province province, int countryId) throws SQLException
 	{
-		return false;
+		int rows = 0;
+		
+		try
+		{
+			db.setPreparedStatement("{CALL update_province(?, ?, ?)}");
+			setParameters(province, countryId, true);
+			rows = db.getPreparedStatement().executeUpdate();
+		}
+		catch (SQLException ex)
+		{
+			ex.printStackTrace();
+			throw ex;
+		}
+		
+		return (rows > 0);
 	}
 
 	@Override

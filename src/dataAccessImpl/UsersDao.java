@@ -69,7 +69,21 @@ public class UsersDao extends Dao<User> implements IUsersDao
 	@Override
 	public boolean update(User user) throws SQLException
 	{
-		return false;
+		int rows = 0;
+		
+		try
+		{
+			db.setPreparedStatement("{CALL update_user(?, ?, ?)}");
+			setParameters(user, true);
+			rows = db.getPreparedStatement().executeUpdate();
+		}
+		catch (SQLException ex)
+		{
+			ex.printStackTrace();
+			throw ex;
+		}
+		
+		return (rows > 0);
 	}
 	
 	@Override
