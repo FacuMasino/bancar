@@ -3,7 +3,6 @@ package businessLogicImpl;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import businessLogic.IClientsBusiness;
 import dataAccessImpl.ClientsDao;
 import domainModel.Client;
@@ -28,8 +27,9 @@ public class ClientsBusiness implements IClientsBusiness
 		{
 			// TODO: Validar si el DNI ya existe
 			// TODO: Validar si el usuario ya existe
-			// Validar los datos del cliente
+
 			List<String> invalidFields = Validator.validateClientFields(client);
+
 			if(!invalidFields.isEmpty())
 			{
 				throw new InvalidFieldsException(invalidFields);
@@ -84,8 +84,9 @@ public class ClientsBusiness implements IClientsBusiness
 		{
 			// TODO: Validar si el DNI ya existe
 			// TODO: Validar si el usuario ya existe
-			// Validar los datos del cliente
+
 			List<String> invalidFields = Validator.validateClientFields(client);
+
 			if(!invalidFields.isEmpty())
 			{
 				throw new InvalidFieldsException(invalidFields);

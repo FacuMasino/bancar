@@ -16,6 +16,25 @@ public class ProvincesBusiness implements IProvincesBusiness
 	{
 		provincesDao = new ProvincesDao();
 	}
+	
+	@Override
+	public Province read(int provinceId) throws BusinessException 
+	{
+		try 
+		{
+			return provincesDao.read(provinceId);
+		}
+		catch (SQLException ex)
+		{
+			throw new SQLOperationException();
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+			throw new BusinessException
+				("Ocurrió un error desconocido al leer el cliente.");
+		}
+	}
 
 	@Override
 	public ArrayList<Province> list() throws BusinessException

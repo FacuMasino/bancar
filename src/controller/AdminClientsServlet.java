@@ -11,8 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import businessLogicImpl.AccountsBusiness;
 import businessLogicImpl.ClientsBusiness;
-import businessLogicImpl.LoansBusiness;
 import businessLogicImpl.ProvincesBusiness;
+import businessLogicImpl.CountriesBusiness;
+import businessLogicImpl.LoansBusiness;
 import domainModel.Account;
 import domainModel.Address;
 import domainModel.City;
@@ -35,6 +36,7 @@ public class AdminClientsServlet extends HttpServlet
 	private AccountsBusiness accountsBusiness;
 	private LoansBusiness loansBusiness;
 	private ProvincesBusiness provincesBusiness;
+	private CountriesBusiness countriesBusiness;
 	private Client client;
 
 	public AdminClientsServlet()
@@ -44,6 +46,7 @@ public class AdminClientsServlet extends HttpServlet
 		accountsBusiness = new AccountsBusiness();
 		loansBusiness = new LoansBusiness();
 		provincesBusiness = new ProvincesBusiness();
+		countriesBusiness = new CountriesBusiness();
 		client = new Client();
 	}
 
@@ -211,7 +214,9 @@ public class AdminClientsServlet extends HttpServlet
 
 		client.setUsername(request.getParameter("clientUsername"));
 		client.setPassword(request.getParameter("clientPassword"));
+		// client.setRole(rolesBusiness.read(2));
 
+		// TODO: reemplazar las 4 siguientes líneas por client.setRole(rolesBusiness.read(2));
 		Role role = new Role();
 		role.setId(2);
 		role.setName("Cliente");
@@ -224,11 +229,18 @@ public class AdminClientsServlet extends HttpServlet
 		client.setSex(request.getParameter("clientSex"));
 		client.setEmail(request.getParameter("clientEmail"));
 		client.setPhone(request.getParameter("clientPhone"));
-		client.setBirthDate(Date.valueOf(request.getParameter("clientBirth")));
+		String clientBirth = request.getParameter("clientBirth");
+		client.setBirthDate(Date.valueOf(clientBirth));
+		
+		Country nationality = new Country();
+		nationality.setName(request.getParameter("clientNationality"));
+		client.setNationality(nationality);
 
 		Address address = new Address();
 		address.setStreetName(request.getParameter("clientStreetName"));
 		address.setStreetNumber(request.getParameter("clientStreetNumber"));
+		address.setFlat(request.getParameter("clientFlat"));
+		address.setDetails(request.getParameter("clientDetails"));
 
 		City city = new City();
 		city.setName(request.getParameter("clientCity"));
@@ -248,12 +260,16 @@ public class AdminClientsServlet extends HttpServlet
 			e.printStackTrace();
 		}
 
-		Country country = new Country();
-		country.setName(request.getParameter("clientNationality"));
-		address.setCountry(country);
+		try
+		{
+			address.setCountry(countriesBusiness.read(1));
+		}
+		catch (BusinessException e)
+		{
+			e.printStackTrace();
+		}
 
 		client.setAddress(address);
-		client.setNationality(country);
 
 		try
 		{
@@ -292,10 +308,10 @@ public class AdminClientsServlet extends HttpServlet
 		{
 			client = clientsBusiness.read(clientId);
 			
-			client.setFirstName(request.getParameter("clientFirstName"));
-			client.setLastName(request.getParameter("clientLastName"));
 			client.setDni(request.getParameter("clientDni"));
 			client.setCuil(request.getParameter("clientCuil"));
+			client.setFirstName(request.getParameter("clientFirstName"));
+			client.setLastName(request.getParameter("clientLastName"));
 			client.setSex(request.getParameter("clientSex"));
 			client.setEmail(request.getParameter("clientEmail"));
 			client.setPhone(request.getParameter("clientPhone"));
