@@ -148,9 +148,33 @@ public class ClientsDao extends Dao<Client> implements IClientsDao
 	@Override
 	protected int findId(Client client) throws SQLException
 	{
-		return 0;
+		return findClientId(client.getDni());
 	}
 	
+	public int findClientId(String dni) throws SQLException
+	{
+		ResultSet rs;
+		
+		try
+		{
+			db.setPreparedStatement("SELECT ClientId FROM Clients WHERE Dni = ?;");
+			db.getPreparedStatement().setString(1, dni);
+			rs = db.getPreparedStatement().executeQuery();
+			
+			if(!rs.next())
+			{
+				return 0;
+			}
+			
+			return rs.getInt("ClientId");
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+			throw ex;
+		}
+	}
+
 	public int findClientId(int userId) throws SQLException
 	{
 		ResultSet rs;
