@@ -68,7 +68,7 @@
             <input type="number" name="clientDni"
               placeholder="DNI del cliente (sin espacios ni puntos)"
               class="input input-bordered w-full" value="${client.dni}" 
-              ${setIsDisabled} min="1000000" max="99999999"/>
+              ${setIsDisabled} min="1000" max="99999999"/>
           </div>
           <div class="flex flex-col w-full">
             <div class="form-control w-full">
@@ -76,10 +76,10 @@
                 <span class="label-text font-bold">CUIL</span>
               </label>
             </div>
-            <input type="text" name="clientCuil"
+            <input type="number" name="clientCuil"
               placeholder="Cuil del cliente (sin espacios ni puntos)"
               class="input input-bordered w-full" value="${client.cuil}"
-              ${setIsDisabled} />
+              ${setIsDisabled} min="1000" max="99999999"/>
           </div>
         </div>
         <!-- Genero y Nacionalidad -->
@@ -91,7 +91,7 @@
               </label>
             </div>
             <select name="clientSex" class="bg-white select select-bordered w-full" ${setIsDisabled}>
-              <option value="Masulino"
+              <option value="Masculino"
                 ${client.sex == 'Masculino' ? 'selected':''}>
                 Masculino
               </option>
@@ -147,7 +147,7 @@
                 <span class="label-text font-bold">Tel&eacute;fono (Sin 0 ni 15)</span>
               </label>
             </div>
-            <input type="text" name="clientPhone"
+            <input type="number" name="clientPhone"
               placeholder="Tel&eacute;fono del cliente"
               class="input input-bordered w-full" value="${client.phone}"
               ${setIsDisabled} />
@@ -156,7 +156,6 @@
 
         <!-- Direccion -->
         <div class="flex gap-4">
-
           <div class="flex flex-col w-full">
             <div class="form-control w-full">
               <label for="clientAddress" class="label">
@@ -176,11 +175,11 @@
                   <span class="label-text font-bold">Nro</span>
                 </label>
               </div>
-              <input type="text" name="clientStreetNumber"
+              <input type="number" name="clientStreetNumber"
                 placeholder="Numeraci&oacute;n Domicilio"
                 class="input input-bordered w-full"
                 value="${client.address.streetNumber}"
-                ${setIsDisabled} />
+                ${setIsDisabled} min="1" max="999999" />
             </div>
             <div class="flex flex-col w-full">
               <div class="form-control w-full">

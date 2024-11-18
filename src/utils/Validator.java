@@ -43,11 +43,11 @@ public class Validator
 		} else if (!hasOnlyNumbers(client.getPhone()))
 		{
 			invalidFields.add("El Teléfono solo puede contener números");
-		} else if (client.getPhone().length() != 10)
-		{
-			invalidFields
-					.add("El Teléfono es inválido, debe contener 10 dígitos");
-		}
+		} /*
+			 * //NO VALIDAMOZ EL LARGO...DEJAD LIBRE LA CANTIDAD... else if
+			 * (client.getPhone().length() != 10) { invalidFields
+			 * .add("El Teléfono es inválido, debe contener 10 dígitos"); }
+			 */
 
 		// Nombre
 		if (client.getFirstName() == null
@@ -104,8 +104,8 @@ public class Validator
 			invalidFields.add("El Nombre de la Calle es requerido");
 		} else if (!hasOnlyLettersAndNumbers(address.getStreetName()))
 		{
-			invalidFields
-					.add("El Nombre de la Calle solo puede contener letras y números");
+			invalidFields.add(
+					"El Nombre de la Calle solo puede contener letras y números");
 		}
 
 		// Número de calle
@@ -120,8 +120,8 @@ public class Validator
 		}
 
 		// Piso
-		if (address.getFlat() != null && !address.getFlat().trim().isEmpty()
-				&& !hasOnlyLettersAndNumbers(address.getFlat()))
+		if (address.getFlat() != null && (!address.getFlat().trim().isEmpty()
+				&& !hasOnlyLettersAndNumbers(address.getFlat())))
 		{
 			invalidFields.add("El Piso solo puede contener letras y números");
 		}
@@ -131,7 +131,7 @@ public class Validator
 				|| address.getCity().getName().trim().isEmpty())
 		{
 			invalidFields.add("El Nombre de la Ciudad es requerido");
-		} else if (!hasOnlyLetters(address.getCity().getName()))
+		} else if (!hasOnlyLettersAndNumbers(address.getCity().getName()))
 		{
 			invalidFields
 					.add("El Nombre de la Ciudad solo puede contener letras");
@@ -149,16 +149,23 @@ public class Validator
 		}
 
 		// País
-		if (address.getCountry() == null
-				|| address.getCountry().getName() == null
-				|| address.getCountry().getName().trim().isEmpty())
+		if (address.getCountry() == null	|| address.getCountry().getName() == null	|| address.getCountry().getName().trim().isEmpty())
 		{
 			invalidFields.add("La Nacionalidad es requerida");
 		} else if (!hasOnlyLetters(address.getCountry().getName()))
 		{
 			invalidFields.add("La Nacionalidad solo puede contener letras");
 		}
-		
+
+		if (address.getProvince().getName() == null
+				|| address.getProvince().getName().trim().isEmpty())
+		{
+			invalidFields.add("La provincia es un campo requerido");
+		} else if (!hasOnlyLetters(address.getProvince().getName()))
+		{
+			invalidFields.add("La provincia solo puede contener letras");
+		}
+
 		return invalidFields;
 	}
 
@@ -167,14 +174,14 @@ public class Validator
 		for (int i = 0; i < str.length(); i++)
 		{
 			char c = str.charAt(i);
-			if (!Character.isLetterOrDigit(c))
+			if (!(Character.isLetterOrDigit(c) || str.charAt(i) == ' '))
 			{
 				return false;
 			}
 		}
 		return true;
 	}
-	
+
 	private static boolean hasOnlyNumbers(String str)
 	{
 		for (int i = 0; i < str.length(); i++)

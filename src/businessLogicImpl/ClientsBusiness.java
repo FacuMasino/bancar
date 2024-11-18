@@ -100,6 +100,7 @@ public class ClientsBusiness implements IClientsBusiness
 		}
 		catch (Exception ex)
 		{
+			//TODO: revisar el tipo de Exception y el texto lanzado...
 			ex.printStackTrace();
 			throw new BusinessException
 				("Ocurrió un error desconocido al actualizar los datos del cliente.");
