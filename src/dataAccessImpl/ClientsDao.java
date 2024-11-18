@@ -78,9 +78,9 @@ public class ClientsDao extends Dao<Client> implements IClientsDao
 	@Override
 	public boolean update(Client client) throws SQLException
 	{
+		handleUserId(client);
 		countriesDao.handleId(client.getNationality());
 		addressesDao.handleId(client.getAddress());
-		usersDao.handleId(client);
 		
 		int rows = 0;
 		
