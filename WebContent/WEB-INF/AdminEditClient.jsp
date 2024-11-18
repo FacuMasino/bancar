@@ -68,7 +68,7 @@
             <input type="number" name="clientDni"
               placeholder="DNI del cliente (sin espacios ni puntos)"
               class="input input-bordered w-full" value="${client.dni}" 
-              ${setIsDisabled} min="1000" max="99999999"/>
+              ${setIsDisabled} min="1000000" max="99999999"/>
           </div>
           <div class="flex flex-col w-full">
             <div class="form-control w-full">
@@ -79,7 +79,7 @@
             <input type="number" name="clientCuil"
               placeholder="Cuil del cliente (sin espacios ni puntos)"
               class="input input-bordered w-full" value="${client.cuil}"
-              ${setIsDisabled} min="1000" max="99999999"/>
+              ${setIsDisabled} min="20000000000" max="28999999999"/>
           </div>
         </div>
         <!-- Genero y Nacionalidad -->
@@ -98,6 +98,10 @@
               <option value="Femenino"
                 ${client.sex == 'Femenino' ? 'selected':''}>
                 Femenino
+              </option>
+              <option value="No informa"
+                ${client.sex == null ? 'selected':''}>
+                No informado
               </option>
             </select>
           </div>

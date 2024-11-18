@@ -25,6 +25,10 @@ public class ClientsBusiness implements IClientsBusiness
 	{
 		try
 		{
+			if ("No informa".equals(client.getSex()))
+			{
+			    client.setSex(null);
+			}
 			// TODO: Validar si el DNI ya existe
 			// TODO: Validar si el usuario ya existe
 
@@ -82,6 +86,10 @@ public class ClientsBusiness implements IClientsBusiness
 	{
 		try
 		{
+			if ("No informa".equals(client.getSex()))
+			{
+			    client.setSex(null);
+			}
 			// TODO: Validar si el DNI ya existe
 			// TODO: Validar si el usuario ya existe
 

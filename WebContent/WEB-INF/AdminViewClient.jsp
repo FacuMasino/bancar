@@ -83,7 +83,7 @@
                 <span class="font-bold">Género:</span>
               </div>
               <div class="flex w-1/2">
-                <span>${client.sex}</span>
+                <span>${client.sex != null ? client.sex : 'No especificado'}</span>
               </div>
             </div>
             <div class="flex flex-row justify-between gap-6">

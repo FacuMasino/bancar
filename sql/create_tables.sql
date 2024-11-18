@@ -60,7 +60,7 @@ CREATE TABLE
         Cuil VARCHAR(50) UNIQUE NOT NULL,
         FirstName VARCHAR(50) NOT NULL,
         LastName VARCHAR(50) NOT NULL,
-        Sex VARCHAR(50) NOT NULL,
+        Sex VARCHAR(50) NULL,
         Email VARCHAR(50) NOT NULL,
         Phone VARCHAR(50) NOT NULL,
         BirthDate DATE NOT NULL,

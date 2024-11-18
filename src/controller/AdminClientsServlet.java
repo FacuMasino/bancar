@@ -296,7 +296,7 @@ public class AdminClientsServlet extends HttpServlet
 			ex.printStackTrace();
 		}
 	}
-
+		    
 	private void saveEditClient(
 			HttpServletRequest request, HttpServletResponse response)
 					throws ServletException, IOException

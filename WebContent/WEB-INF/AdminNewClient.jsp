@@ -78,7 +78,7 @@
               </label>
             </div>
             <input type="number" name="clientCuil" placeholder="CUIL" class="input input-bordered w-full"
-              value="${draftClient.cuil}" />
+              value="${draftClient.cuil}"  min="20000000000" max="28999999999" />
           </div>
         </div>
 
@@ -99,10 +99,14 @@
 
           <div class="flex flex-col w-full">
             <div class="form-control w-full">
-              <label for="clientSex" class="label"> <span class="label-text font-bold">Genero</span>
+              <label for="clientSex" class="label"> <span class="label-text font-bold">Género</span>
               </label>
             </div>
+            
             <select name="clientSex" class="bg-white select select-bordered w-full">
+              <option value="" selected disabled>
+              Seleccione una opción
+               </option>
               <option value="Masculino" ${client.sex=='Masculino' ? 'selected' :''}
                 ${draftClient.sex=='Femenino' ? 'selected' :''}>
                 Masculino
@@ -110,6 +114,10 @@
               <option value="Femenino" ${client.sex=='Femenino' ? 'selected' :''}
                 ${draftClient.sex=='Femenino' ? 'selected' :''}>
                 Femenino
+              </option>
+               <option value="No informa" ${client.sex=='' ? 'selected' :''}
+                ${draftClient.sex=='' ? 'selected' :''}>
+                No informado
               </option>
             </select>
           </div>
