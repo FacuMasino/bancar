@@ -4,16 +4,50 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import dataAccess.IMovementsDao;
+import domainModel.Account;
+import domainModel.AccountType;
 import domainModel.Movement;
+import domainModel.MovementType;
 
 public class MovementsDao implements IMovementsDao
 {
+	private Database db;
+	private MovementTypesDao movementTypeDao;
+
+	// TODO: revisar SP, es necesario el OUT?
+
+	public MovementsDao()
+	{
+		db = new Database();
+		movementTypeDao = new MovementTypesDao();
+	}
 
 	@Override
 	public boolean create(Movement movement) throws SQLException
 	{
-		// TODO Auto-generated method stub
-		return false;
+		int rows = 0;
+
+		try
+		{
+			MovementType auxMovementType = new MovementType(); // creo un objeto
+																// auxMovementType
+																// auxiliar.
+			auxMovementType = movementTypeDao
+					.readByName(movement.getMovementType().getName());
+
+			movement.setMovementType(auxMovementType); // seteo el movementType
+														// completo
+
+			db.setPreparedStatement("{CALL insert_movement(?, ?, ?, ?)}");
+			setParameters(movement);
+			rows = db.getPreparedStatement().executeUpdate();
+		} catch (SQLException ex)
+		{
+			ex.printStackTrace();
+			throw ex;
+		}
+
+		return (rows > 0);
 	}
 
 	@Override
@@ -23,6 +57,8 @@ public class MovementsDao implements IMovementsDao
 		return null;
 	}
 
+	// TODO: un movimiento tendrá update? o es algo inalterable una vez
+	// realizado? en ese caso, herada DAO<Movement>?
 	@Override
 	public boolean update(Movement movemen) throws SQLException
 	{
@@ -56,5 +92,13 @@ public class MovementsDao implements IMovementsDao
 	{
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	private void setParameters(Movement movement) throws SQLException
+	{
+		db.getPreparedStatement().setString(1, movement.getDetails());
+		db.getPreparedStatement().setBigDecimal(2, movement.getAmount());
+		db.getPreparedStatement().setInt(3, movement.getMovementType().getId());
+		db.getPreparedStatement().setInt(4, movement.getAccountId());
 	}
 }

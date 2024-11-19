@@ -1,7 +1,9 @@
 package controller;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Optional;
 import javax.servlet.ServletException;
@@ -13,6 +15,7 @@ import businessLogicImpl.AccountsBusiness;
 import businessLogicImpl.ClientsBusiness;
 import businessLogicImpl.ProvincesBusiness;
 import businessLogicImpl.RolesBusiness;
+import dataAccessImpl.MovementsDao;
 import businessLogicImpl.CountriesBusiness;
 import businessLogicImpl.LoansBusiness;
 import domainModel.Account;
@@ -23,6 +26,8 @@ import domainModel.Country;
 import domainModel.Loan;
 import domainModel.Province;
 import domainModel.Message.MessageType;
+import domainModel.Movement;
+import domainModel.MovementType;
 import exceptions.BusinessException;
 import exceptions.InvalidFieldsException;
 import utils.Helper;
@@ -172,7 +177,7 @@ public class AdminClientsServlet extends HttpServlet
 					throws ServletException, IOException
 	{
 		try
-		{
+		{	
 			request.setAttribute("provinces", provincesBusiness.list());
 			Helper.redirect("/WEB-INF/AdminNewClient.jsp", request, response);
 		}
