@@ -211,4 +211,15 @@ BEGIN
     WHERE AccountId = _AccountId;
 END $$
 
+CREATE PROCEDURE insert_movement(
+    IN _Details VARCHAR(500),
+    IN _Amount DECIMAL(15, 2),
+    IN _MovementTypeId INT,
+    IN _AccountId INT
+)
+BEGIN
+    INSERT INTO Movements (Details, Amount, MovementTypeId, AccountId)
+    VALUES (_Details, _Amount, _MovementTypeId, _AccountId);
+END$$
+
 DELIMITER ;
