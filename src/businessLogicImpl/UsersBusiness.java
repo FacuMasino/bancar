@@ -25,7 +25,8 @@ public class UsersBusiness implements IUsersBusiness
 
 			if(auxUser != null && !auxUser.getPassword().equals(password))
 			{
-				throw new BusinessException("La contraseña ingresada es incorrecta");
+				throw new BusinessException(
+						"La contraseña ingresada es incorrecta.");
 			}
 
 			return auxUser;
@@ -41,8 +42,34 @@ public class UsersBusiness implements IUsersBusiness
 		catch (Exception ex)
 		{
 			ex.printStackTrace();
-			throw new BusinessException
-				("Ocurrió un error desconocido al leer el usuario.");
+			throw new BusinessException(
+					"Ocurrió un error desconocido al leer el usuario.");
+		}
+	}
+
+	public void validateUsername(User user) throws BusinessException
+	{
+		try
+		{
+			if (user.getUserId() != usersDao.findUserId(user.getUsername()))
+			{
+				throw new BusinessException(
+						"El nombre de usuario ingresado pertenece a otro usuario.");
+			}
+		}
+		catch (BusinessException ex)
+		{
+			throw ex;
+		}
+		catch (SQLException ex)
+		{
+			throw new SQLOperationException();
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+			throw new BusinessException(
+					"Ocurrió un error desconocido al validar el nombre de usuario.");
 		}
 	}
 }

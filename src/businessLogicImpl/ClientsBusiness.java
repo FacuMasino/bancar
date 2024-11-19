@@ -14,23 +14,26 @@ import utils.Validator;
 public class ClientsBusiness implements IClientsBusiness
 {
 	private ClientsDao clientsDao;
+	private UsersBusiness usersBusiness;
 	
 	public ClientsBusiness()
 	{
 		clientsDao = new ClientsDao();
+		usersBusiness = new UsersBusiness();
 	}
 
 	@Override
 	public boolean create(Client client) throws BusinessException
 	{
+		validateDni(client);
+		usersBusiness.validateUsername(client);
+		
 		try
 		{
 			if ("No informa".equals(client.getSex()))
 			{
 			    client.setSex(null);
 			}
-			// TODO: Validar si el DNI ya existe
-			// TODO: Validar si el usuario ya existe
 
 			List<String> invalidFields = Validator.validateClientFields(client);
 
@@ -55,8 +58,8 @@ public class ClientsBusiness implements IClientsBusiness
 		catch (Exception ex)
 		{
 			ex.printStackTrace();
-			throw new BusinessException
-				("Ocurrió un error desconocido al crear el cliente.");
+			throw new BusinessException(
+					"Ocurrió un error desconocido al crear el cliente.");
 		}
 		
 		return false;
@@ -76,22 +79,23 @@ public class ClientsBusiness implements IClientsBusiness
 		catch (Exception ex)
 		{
 			ex.printStackTrace();
-			throw new BusinessException
-				("Ocurrió un error desconocido al leer el cliente.");
+			throw new BusinessException(
+					"Ocurrió un error desconocido al leer el cliente.");
 		}
 	}
 
 	@Override
 	public boolean update(Client client) throws BusinessException 
 	{
+		validateDni(client);
+		usersBusiness.validateUsername(client);
+
 		try
 		{
 			if ("No informa".equals(client.getSex()))
 			{
 			    client.setSex(null);
 			}
-			// TODO: Validar si el DNI ya existe
-			// TODO: Validar si el usuario ya existe
 
 			List<String> invalidFields = Validator.validateClientFields(client);
 
@@ -108,10 +112,9 @@ public class ClientsBusiness implements IClientsBusiness
 		}
 		catch (Exception ex)
 		{
-			//TODO: revisar el tipo de Exception y el texto lanzado...
 			ex.printStackTrace();
-			throw new BusinessException
-				("Ocurrió un error desconocido al actualizar los datos del cliente.");
+			throw new BusinessException(
+					"Ocurrió un error desconocido al actualizar los datos del cliente.");
 		}
 	}
 
@@ -129,8 +132,8 @@ public class ClientsBusiness implements IClientsBusiness
 		catch (Exception ex)
 		{
 			ex.printStackTrace();
-			throw new BusinessException
-				("Ocurrió un error desconocido al eliminar el cliente.");
+			throw new BusinessException(
+					"Ocurrió un error desconocido al eliminar el cliente.");
 		}
 	}
 
@@ -148,20 +151,21 @@ public class ClientsBusiness implements IClientsBusiness
 		catch (Exception ex)
 		{
 			ex.printStackTrace();
-			throw new BusinessException
-				("Ocurrió un error desconocido al obtener los clientes.");
+			throw new BusinessException(
+					"Ocurrió un error desconocido al obtener los clientes.");
 		}
 	}
 
 	@Override
-	public Client findClientByUserId(int userId) throws BusinessException {
+	public Client findClientByUserId(int userId) throws BusinessException
+	{
 		try 
 		{
 			Client client = clientsDao.readByUserId(userId);
 			if(client == null)
 			{
-				throw new BusinessException
-					("No se encontró un cliente asociado a este usuario");
+				throw new BusinessException(
+						"No se encontró un cliente asociado a este usuario.");
 			}
 			return client;
 		}
@@ -176,8 +180,34 @@ public class ClientsBusiness implements IClientsBusiness
 		catch (Exception ex)
 		{
 			ex.printStackTrace();
-			throw new BusinessException
-				("Ocurrió un error desconocido al leer el cliente.");
+			throw new BusinessException(
+					"Ocurrió un error desconocido al leer el cliente.");
+		}
+	}
+	
+	public void validateDni(Client client) throws BusinessException
+	{
+		try
+		{
+			if (client.getClientId() != clientsDao.findClientId(client.getDni()))
+			{
+				throw new BusinessException(
+						"El DNI ingresado pertenece a otro cliente.");
+			}
+		}
+		catch (BusinessException ex)
+		{
+			throw ex;
+		}
+		catch (SQLException ex)
+		{
+			throw new SQLOperationException();
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+			throw new BusinessException(
+					"Ocurrió un error desconocido al validar el DNI.");
 		}
 	}
 }
