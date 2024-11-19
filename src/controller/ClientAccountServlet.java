@@ -13,11 +13,11 @@ import domainModel.Message.MessageType;
 import utils.Helper;
 
 @WebServlet(urlPatterns = {"/Client/", "/Client"})
-public class ClientsServlet extends HttpServlet {
+public class ClientAccountServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
 
-    public ClientsServlet() {
+    public ClientAccountServlet() {
         super();
 
     }
