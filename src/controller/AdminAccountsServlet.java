@@ -172,7 +172,6 @@ public class AdminAccountsServlet extends HttpServlet
 			}
 			
 			request.setAttribute("client", client);
-			Helper.setReqMessage(request, "Cuenta eliminada con éxito!", MessageType.SUCCESS);
 			Helper.redirect("/WEB-INF/AdminClientAccounts.jsp", request, response);
 		}
 		catch (BusinessException ex)

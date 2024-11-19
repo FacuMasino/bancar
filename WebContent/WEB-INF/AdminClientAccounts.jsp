@@ -123,8 +123,8 @@ JSTL --%>
       <%-- Este es el modal que se abre al hacer click en eliminar --%>
       <dialog id="modal_delete_account" class="modal">
       <form method="post" action="Accounts" class="modal-box bg-white">
-        <input type="hidden" name="clientId" value="${client.clientId}" /> <input
-          id="accountNumberDelete" type="hidden" name="accountId" />
+        <input type="hidden" name="clientId" value="${client.clientId}" />
+        <input id="accountNumberDelete" type="hidden" name="accountId" />
         <h3 class="text-lg font-bold">Eliminar cuenta</h3>
         <p class="pt-4 pb-1">Est&aacute; seguro que desea eliminar la
           cuenta?</p>
@@ -141,6 +141,7 @@ JSTL --%>
       <%-- Este es el modal que se abre al hacer click en modificar --%>
       <dialog id="modal_edit_account" class="modal">
       <form method="post" action="Accounts" class="modal-box bg-white">
+        <input type="hidden" name="clientId" value="${client.clientId}" />
         <h3 class="text-lg font-bold">Modificar Saldo</h3>
         <div class="py-4 flex items-center justify-end gap-2.5">
           <span>Saldo:</span> <input id="accountNumberEdit" type="hidden"
