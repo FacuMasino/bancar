@@ -79,5 +79,4 @@ public class Movement {
 	public void setMovementType(MovementType movementType) {
 		this.movementType = movementType;
 	}
-
 }
