@@ -46,7 +46,7 @@ CREATE TABLE
 CREATE TABLE
     Users (
         UserId INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-        Username VARCHAR(50) NULL,
+        Username VARCHAR(50) UNIQUE NULL,
         UserPassword VARCHAR(50) NOT NULL,
         RoleId INT DEFAULT 2 NOT NULL,
         CONSTRAINT FK_Role FOREIGN KEY (RoleId) REFERENCES Roles (RoleId)

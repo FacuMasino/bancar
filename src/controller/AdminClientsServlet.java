@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import businessLogicImpl.AccountsBusiness;
 import businessLogicImpl.ClientsBusiness;
 import businessLogicImpl.ProvincesBusiness;
+import businessLogicImpl.RolesBusiness;
 import businessLogicImpl.CountriesBusiness;
 import businessLogicImpl.LoansBusiness;
 import domainModel.Account;
@@ -21,7 +22,6 @@ import domainModel.Client;
 import domainModel.Country;
 import domainModel.Loan;
 import domainModel.Province;
-import domainModel.Role;
 import domainModel.Message.MessageType;
 import exceptions.BusinessException;
 import exceptions.InvalidFieldsException;
@@ -37,6 +37,7 @@ public class AdminClientsServlet extends HttpServlet
 	private LoansBusiness loansBusiness;
 	private ProvincesBusiness provincesBusiness;
 	private CountriesBusiness countriesBusiness;
+	private RolesBusiness rolesBusiness;
 	private Client client;
 
 	public AdminClientsServlet()
@@ -47,6 +48,7 @@ public class AdminClientsServlet extends HttpServlet
 		loansBusiness = new LoansBusiness();
 		provincesBusiness = new ProvincesBusiness();
 		countriesBusiness = new CountriesBusiness();
+		rolesBusiness = new RolesBusiness();
 		client = new Client();
 	}
 
@@ -214,13 +216,15 @@ public class AdminClientsServlet extends HttpServlet
 
 		client.setUsername(request.getParameter("clientUsername"));
 		client.setPassword(request.getParameter("clientPassword"));
-		// client.setRole(rolesBusiness.read(2));
 
-		// TODO: reemplazar las 4 siguientes líneas por client.setRole(rolesBusiness.read(2));
-		Role role = new Role();
-		role.setId(2);
-		role.setName("Cliente");
-		client.setRole(role);
+		try
+		{
+			client.setRole(rolesBusiness.read(2));
+		}
+		catch (BusinessException e)
+		{
+			e.printStackTrace();
+		}
 
 		client.setDni(request.getParameter("clientDni"));
 		client.setCuil(request.getParameter("clientCuil"));

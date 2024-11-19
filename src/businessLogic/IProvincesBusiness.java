@@ -6,6 +6,6 @@ import exceptions.BusinessException;
 
 public interface IProvincesBusiness
 {
-	Province read(int provinceId) throws BusinessException;
+	public Province read(int provinceId) throws BusinessException;
 	public ArrayList<Province> list() throws BusinessException;
 }

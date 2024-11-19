@@ -32,7 +32,7 @@ public class ProvincesBusiness implements IProvincesBusiness
 		{
 			ex.printStackTrace();
 			throw new BusinessException
-				("Ocurrió un error desconocido al leer el cliente.");
+				("Ocurrió un error desconocido al leer la provincia.");
 		}
 	}
 
