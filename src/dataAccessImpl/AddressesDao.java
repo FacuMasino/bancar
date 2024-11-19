@@ -98,19 +98,21 @@ public class AddressesDao extends Dao<Address> implements IAddressesDao
 		return findId(
 				address.getStreetName(),
 				address.getStreetNumber(),
+				address.getFlat(),
 				address.getCity().getId());
 	}
 	
-	public int findId(String streetName, String streetNumber, int cityId) throws SQLException
+	public int findId(String streetName, String streetNumber, String flat, int cityId) throws SQLException
 	{
 		ResultSet rs;
 		
 		try
 		{
-			db.setPreparedStatement("SELECT AddressId FROM Addresses WHERE StreetName = ? AND StreetNumber = ? AND CityId = ?;");
+			db.setPreparedStatement("CALL find_address_id(?, ?, ?, ?)");
 			db.getPreparedStatement().setString(1, streetName);
 			db.getPreparedStatement().setString(2, streetNumber);
-			db.getPreparedStatement().setInt(3, cityId);
+			db.getPreparedStatement().setString(3, flat);
+			db.getPreparedStatement().setInt(4, cityId);
 			rs = db.getPreparedStatement().executeQuery();
 			
 			if(!rs.next())

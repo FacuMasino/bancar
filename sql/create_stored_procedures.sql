@@ -104,6 +104,20 @@ BEGIN
     WHERE AddressId = _AddressId;
 END $$
 
+CREATE PROCEDURE find_address_id (
+    IN _StreetName VARCHAR(50),
+    IN _StreetNumber VARCHAR(50),
+    IN _Flat VARCHAR(50),
+    IN _CityId INT
+)
+BEGIN
+    SELECT AddressId FROM Addresses
+    WHERE StreetName = _StreetName
+    AND StreetNumber = _StreetNumber
+    AND Flat = _Flat
+    AND CityId = _CityId;
+END $$
+
 -- User
 
 CREATE PROCEDURE insert_user (

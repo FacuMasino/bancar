@@ -34,7 +34,7 @@ CREATE TABLE
         Details VARCHAR(500) NULL,
         CityId INT NOT NULL,
         CONSTRAINT FK_City FOREIGN KEY (CityId) REFERENCES Cities (CityId),
-        CONSTRAINT UC_Address UNIQUE (StreetName, StreetNumber, CityId)
+        CONSTRAINT UC_Address UNIQUE (StreetName, StreetNumber, Flat, CityId)
     );
 
 CREATE TABLE
