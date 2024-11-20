@@ -124,7 +124,8 @@ CREATE TABLE
         InstallmentId INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
         InstallmentNumber INT NOT NULL,
         Amount DECIMAL(15, 2) NOT NULL,
-        PaymentDate DATE NOT NULL,
+        PaymentDate DATE NULL,
+        PaymentDueDate DATE NOT NULL,
         LoanId INT NOT NULL,
         CONSTRAINT FK_Loan FOREIGN KEY (LoanId) REFERENCES Loans (LoanId)
     );

@@ -24,7 +24,7 @@ public class InstallmentsDao implements IInstallmentsDao
 
 		try
 		{
-			db.setPreparedStatement("{CALL insert_installment(?, ?, ?, ?)}");
+			db.setPreparedStatement("{CALL insert_installment(?, ?, ?, ?, ?)}");
 			setParameters(installment);
 			rows = db.getPreparedStatement().executeUpdate();
 		} 
@@ -43,7 +43,8 @@ public class InstallmentsDao implements IInstallmentsDao
 		db.getPreparedStatement().setInt(1, installment.getNumber());
 		db.getPreparedStatement().setBigDecimal(2, installment.getAmount());
 		db.getPreparedStatement().setDate(3, installment.getPaymentDate());
-		db.getPreparedStatement().setInt(4, installment.getLoanId());
+		db.getPreparedStatement().setDate(4, installment.getPaymentDueDate());
+		db.getPreparedStatement().setInt(5, installment.getLoanId());
 	}
 
 	@Override
@@ -80,6 +81,7 @@ public class InstallmentsDao implements IInstallmentsDao
 		auxInstallment.setNumber(rs.getInt("InstallmentNumber"));
 		auxInstallment.setAmount(rs.getBigDecimal("Amount"));
 		auxInstallment.setPaymentDate(rs.getDate("PaymentDate"));
+		auxInstallment.setPaymentDueDate(rs.getDate("PaymentDueDate"));
 		auxInstallment.setLoanId(rs.getInt("LoanId"));
 		return auxInstallment;
 	}
