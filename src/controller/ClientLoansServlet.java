@@ -77,7 +77,7 @@ public class ClientLoansServlet extends HttpServlet {
 		// Clasificar prestamos
 		for(Loan loan: clientLoans)
 		{
-			int statusId = loan.getLoanStatus().getLoanStatusId();
+			int statusId = loan.getLoanStatus().getId();
 			
 			switch(statusId)
 			{

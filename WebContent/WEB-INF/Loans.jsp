@@ -23,7 +23,7 @@
       </div>
       <div class="divide-y divide-gray-300 rounded-lg shadow p-6 bg-white">
 
-        <!-- Préstamo otorgado 1 (reemplazar por for) -->
+        <!-- Préstamos otorgados -->
         <c:choose>
           <c:when test="${not empty approvedLoans}">
             <c:forEach var="loan" items="${approvedLoans}">
@@ -51,39 +51,33 @@
 
       </div>
 
-      <!-- Préstamos pendientes de aprobación -->
+      <!-- Préstamos pendientes de aprobación -->      
       <h2 class="text-xl font-semibold text-gray-700">
         Pendientes de aprobación
       </h2>
       <div class="divide-y divide-gray-300 rounded-lg shadow p-6 bg-white">
 
-        <!-- Préstamo pendiente 1 (reemplazar por for) -->
-        <div class="flex justify-between items-center bg-white p-4">
-          <div>
-            <h3 class="text-lg font-medium text-gray-800">Préstamo automotriz</h3>
-            <p class="text-gray-600">Monto solicitado: $6,000,000.00</p>
-            <p class="text-gray-600">Fecha de solicitud: 01/10/24</p>
-          </div>
-          <div class="text-right flex items-center">
-            <span class="px-4 py-2 bg-yellow-200 text-yellow-700 font-medium rounded-lg">
-              En revisión
-            </span>
-          </div>
-        </div>
-
-        <!-- Préstamo pendiente 2 (reemplazar por for) -->
-        <div class="flex justify-between items-center bg-white p-4">
-          <div>
-            <h3 class="text-lg font-medium text-gray-800">Préstamo educativo</h3>
-            <p class="text-gray-600">Monto solicitado: $500,000.00</p>
-            <p class="text-gray-600">Fecha de solicitud: 10/09/24</p>
-          </div>
-          <div class="text-right flex items-center">
-            <span class="px-4 py-2 bg-yellow-200 text-yellow-700 font-medium rounded-lg">
-              En revisión
-            </span>
-          </div>
-        </div>
+        <c:choose>
+          <c:when test="${not empty pendingLoans}">
+            <c:forEach var="loan" items="${pendingLoans}">
+              <div class="flex justify-between items-center bg-white p-4">
+                <div>
+                  <h3 class="text-lg font-medium text-gray-800">${loan.loanType.name}</h3>
+                  <p class="text-gray-600">Monto solicitado: ${loan.requestedAmount}</p>
+                  <p class="text-gray-600">Fecha de solicitud: NO IMPLEMENTADO</p>
+                </div>
+                <div class="text-right flex items-center">
+                  <span class="px-4 py-2 bg-yellow-200 text-yellow-700 font-medium rounded-lg">
+                    En revisión
+                  </span>
+                </div>
+              </div>
+            </c:forEach>
+          </c:when>
+          <c:otherwise>
+            <span>No tenés préstamos pendientes de aprobación.</span>
+          </c:otherwise>
+        </c:choose>
       </div>
       
       <!-- Historial de prestamos (todos) -->

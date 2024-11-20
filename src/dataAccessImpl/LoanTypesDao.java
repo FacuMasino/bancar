@@ -69,9 +69,9 @@ public class LoanTypesDao implements ILoanTypesDao
 		try
 		{
 			LoanType auxLoanType = new LoanType();
-			auxLoanType.setLoanTypeId(rs.getInt("LoanTypeId"));
-			auxLoanType.setLoanTypeName(rs.getString("LoanTypeName"));
-			auxLoanType.setLoanTypeDescription(rs.getString("LoanTypeDescription"));
+			auxLoanType.setId(rs.getInt("LoanTypeId"));
+			auxLoanType.setName(rs.getString("LoanTypeName"));
+			auxLoanType.setDescription(rs.getString("LoanTypeDescription"));
 			
 			return auxLoanType;
 		}

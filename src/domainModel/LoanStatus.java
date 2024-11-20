@@ -2,39 +2,39 @@ package domainModel;
 
 public class LoanStatus 
 {
-	private int loanStatusId;
-	private String loanStatusName;
+	private int id;
+	private String name;
 	
 	public LoanStatus() 
 	{
 		
 	}
 	
-	public int getLoanStatusId() 
+	public int getId() 
 	{
-		return loanStatusId;
+		return id;
 	}
 	
-	public void setLoanStatusId(int loanStatusId)
+	public void setId(int loanStatusId)
 	{
-		this.loanStatusId = loanStatusId;
+		this.id = loanStatusId;
 	}
 	
-	public String getLoanStatusName()
+	public String getName()
 	{
-		return loanStatusName;
+		return name;
 	}
 	
-	public void setLoanStatusName(String loanStatusName) 
+	public void setName(String loanStatusName) 
 	{
-		this.loanStatusName = loanStatusName;
+		this.name = loanStatusName;
 	}
 
 	@Override
 	public String toString()
 	{
-		return "LoanStatus [loanStatusId=" + loanStatusId + ", loanStatusName="
-				+ loanStatusName + "]";
+		return "LoanStatus [loanStatusId=" + id + ", loanStatusName="
+				+ name + "]";
 	}
 	
 }

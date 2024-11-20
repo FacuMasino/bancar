@@ -123,14 +123,14 @@ public class LoansDao implements ILoansDao
 		db.getPreparedStatement().setBigDecimal(2, loan.getRequestedAmount());
 		db.getPreparedStatement().setBigDecimal(3, loan.getInterestRate());
 		db.getPreparedStatement().setInt(4, loan.getLoanType().getLoanTypeId());
-		db.getPreparedStatement().setInt(5, loan.getLoanStatus().getLoanStatusId());
+		db.getPreparedStatement().setInt(5, loan.getLoanStatus().getId());
 		db.getPreparedStatement().setInt(6, loan.getAccountId());
 	}
 
 	private void setUpdateParameters(Loan loan) throws SQLException
 	{
 		db.getPreparedStatement().setInt(1, loan.getLoanId());
-		db.getPreparedStatement().setInt(2, loan.getLoanStatus().getLoanStatusId());
+		db.getPreparedStatement().setInt(2, loan.getLoanStatus().getId());
 	}
 
 	private Loan getLoan(ResultSet rs) throws SQLException
