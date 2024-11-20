@@ -1,4 +1,14 @@
+<%@page import="domainModel.Client"%>
+<%@page import="java.util.List"%>
+<%@page import="java.util.ArrayList"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags/"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<c:set var="approvedLoans" value="${requestScope.approvedLoans != null ? 
+                                requestScope.approvedLoans : emptyList }"/>
+<c:set var="pendingLoans" value="${requestScope.pendingLoans != null ? 
+                                requestScope.pendingLoans : emptyList}" />
+
 <t:masterpage title="Mis Préstamos" customNavbar="true">
   <t:clientwrapper activeMenuItem="loansMenu">
     <div class="container flex flex-col gap-4 mx-auto p-4 max-w-7xl">
@@ -7,13 +17,38 @@
         <h2 class="text-xl font-semibold text-gray-700">
           Mis préstamos
         </h2>
-        <a href="ApplyForLoan.jsp" class="btn btn-primary">
+        <a href="?action=apply" class="btn btn-primary">
           Solicitar préstamo
         </a>
       </div>
       <div class="divide-y divide-gray-300 rounded-lg shadow p-6 bg-white">
 
         <!-- Préstamo otorgado 1 (reemplazar por for) -->
+        <c:choose>
+          <c:when test="${not empty approvedLoans}">
+            <c:forEach var="loan" items="${approvedLoans}">
+              <div class="flex justify-between items-center bg-white p-4">
+                <div>
+                  <h3 class="text-lg font-medium text-gray-800">${loan.loanType.name}</h3>
+                  <p class="text-gray-600">Saldo otorgado: $150,000</p>
+                  <p class="text-gray-600">Cuotas pendientes: 23 de 48</p>
+                </div>
+                <div class="flex flex-col items-end">
+                  <p class="text-gray-600 font-medium">$5000 / mes</p>
+                  <p class="text-gray-600">Vencimiento: 23/11/24</p>
+                  <a href="PayLoan.jsp?id=AcaElIdDePrestamo" class="mt-2 text-blue-600 hover:underline flex items-center">
+                    Pagar
+                    <span class="ml-1">&#8594;</span> <!-- Flecha derecha -->
+                  </a>
+                </div>
+              </div>
+            </c:forEach>
+          </c:when>
+          <c:otherwise>
+            <span>No tenés préstamos vigentes.</span>
+          </c:otherwise>
+        </c:choose>
+        
         <div class="flex justify-between items-center bg-white p-4">
           <div>
             <h3 class="text-lg font-medium text-gray-800">Préstamo personal</h3>
