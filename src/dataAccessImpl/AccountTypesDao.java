@@ -66,8 +66,8 @@ public class AccountTypesDao implements IAccountTypesDao {
 			rsAccountType = db.getPreparedStatement().executeQuery();
 
 			while (rsAccountType.next()) {
-				if (!rsAccountType.next())
-					return auxAccountTypeList; // devuelve null si esta vacia
+				/*if (!rsAccountType.next())
+					return auxAccountTypeList; // devuelve null si esta vacia*/
 
 				AccountType auxAccType = new AccountType();
 				auxAccType = getAccountType(rsAccountType);

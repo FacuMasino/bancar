@@ -27,13 +27,15 @@ public class AccountsBusiness implements IAccountsBusiness
 			// Asignar CBU
 			int nextId = accountsDao.getLastId() + 1;
 			account.setCbu(generateCBU(nextId));
-			
+		
 			return accountsDao.create(account);
 		}
-		catch (SQLException ex)
+		
+		catch (SQLException ex) 
 		{
 			throw new SQLOperationException();
 		}
+		
 		catch (Exception ex)
 		{
 			ex.printStackTrace();

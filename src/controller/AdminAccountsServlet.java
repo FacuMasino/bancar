@@ -46,7 +46,7 @@ public class AdminAccountsServlet extends HttpServlet
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException
 	{
-		
+
 		int clientId = Optional.ofNullable(request.getParameter("clientId"))
 				.map(Integer::parseInt)
 				.orElse(0);
@@ -57,7 +57,7 @@ public class AdminAccountsServlet extends HttpServlet
 		}
 
 		viewClientAccounts(request, response, clientId);
-	
+
 	}
 	
 
@@ -84,25 +84,7 @@ public class AdminAccountsServlet extends HttpServlet
 				break;
 		}
 	}
-	
-	/*private void newAccount(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException
-	{
-			try
-			{
-				request.setAttribute("accounTypes", accountTypesBusiness.list());
-				Helper.redirect("/WEB-INF/AdminClientAccounts.jsp", request, response);
-			}
-			catch (BusinessException ex)
-			{
-				Helper.setReqMessage(
-						request, ex.getMessage(), MessageType.ERROR);
-				
-				Helper.redirect("/WEB-INF/AdminClientAccounts.jsp", request, response);
-				ex.printStackTrace();
-			}
-	}*/
-	
+		
 	private void saveNewAccount ( HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{	
 		int clientId = Optional.ofNullable(request.getParameter("clientId"))
@@ -275,11 +257,5 @@ public class AdminAccountsServlet extends HttpServlet
 		{
 			throw ex;
 		}
-	}
-	
-	
-}
-	
-
-
-	
+	}	
+}	
