@@ -234,7 +234,7 @@ CREATE PROCEDURE insert_loan(
 )
 BEGIN
     INSERT INTO Loans (InstallmentsQuantity, RequestedAmount, InserestRate, LoanTypeId, LoanStatusId, AccountId)
-    VALUES (_InstallmentsQty, _RequestedAmount, _InterestRate, _LoanTypeId, _LoanStatusId, _AccountId)
+    VALUES (_InstallmentsQty, _RequestedAmount, _InterestRate, _LoanTypeId, _LoanStatusId, _AccountId);
 END$$
 
 -- Installment
