@@ -122,7 +122,7 @@ public class LoansDao implements ILoansDao
 		db.getPreparedStatement().setInt(1, loan.getInstallmentsQuantity());
 		db.getPreparedStatement().setBigDecimal(2, loan.getRequestedAmount());
 		db.getPreparedStatement().setBigDecimal(3, loan.getInterestRate());
-		db.getPreparedStatement().setInt(4, loan.getLoanType().getLoanTypeId());
+		db.getPreparedStatement().setInt(4, loan.getLoanType().getId());
 		db.getPreparedStatement().setInt(5, loan.getLoanStatus().getId());
 		db.getPreparedStatement().setInt(6, loan.getAccountId());
 	}
@@ -144,6 +144,7 @@ public class LoansDao implements ILoansDao
 			auxLoan.setRequestedAmount(rs.getBigDecimal("RequestedAmount"));
 			auxLoan.setInterestRate(rs.getBigDecimal("InterestRate"));
 			auxLoan.setAccountId(rs.getInt("AccountId"));
+			auxLoan.setInstallmentsQuantity(rs.getInt("InstallmentsQuantity"));
 			
 			int loanTypeId = rs.getInt("LoanTypeId");
 			auxLoan.setLoanType(loanTypesDao.read(loanTypeId));

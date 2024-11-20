@@ -30,7 +30,7 @@
               <div class="flex justify-between items-center bg-white p-4">
                 <div>
                   <h3 class="text-lg font-medium text-gray-800">${loan.loanType.name}</h3>
-                  <p class="text-gray-600">Saldo otorgado: ${loan.requestedAmount}</p>
+                  <p class="text-gray-600">Saldo otorgado: $ ${loan.requestedAmount}</p>
                   <p class="text-gray-600">Cuotas pendientes: NO IMPLEMENTADO</p>
                 </div>
                 <div class="flex flex-col items-end">
@@ -63,7 +63,7 @@
               <div class="flex justify-between items-center bg-white p-4">
                 <div>
                   <h3 class="text-lg font-medium text-gray-800">${loan.loanType.name}</h3>
-                  <p class="text-gray-600">Monto solicitado: ${loan.requestedAmount}</p>
+                  <p class="text-gray-600">Monto solicitado: $ ${loan.requestedAmount}</p>
                   <p class="text-gray-600">Fecha de solicitud: NO IMPLEMENTADO</p>
                 </div>
                 <div class="text-right flex items-center">
@@ -119,58 +119,46 @@
             </tr>
           </thead>
           <tbody>
-            <!-- row 1 -->
-            <tr class="hover">
-              <th>1</th>
-              <td>1002</td>
-              <td>Personal</td>
-              <td>
-                <span class="flex flex-col items-center w-fit px-2.5 rounded-full border border-green-600 text-green-600 font-semibold">
-                  Finalizado
-                </span>
-              </td>
-              <td>$ 100.000</td>
-              <td>12</td>
-            </tr>
-            <!-- row 2 -->
-            <tr class="hover">
-              <th>2</th>
-              <td>1002</td>
-              <td>Hipotecario</td>
-              <td>
-                <span class="flex flex-col items-center w-fit px-2.5 rounded-full border border-blue-600 text-blue-600 font-semibold">
-                  Vigente
-                </span>
-              </td>
-              <td>$ 500.000</td>
-              <td>48</td>
-            </tr>
-            <!-- row 3 -->
-            <tr class="hover">
-              <th>3</th>
-              <td>1003</td>
-              <td>Automotriz</td>
-              <td>
-                <span class="flex flex-col items-center w-fit px-2.5 rounded-full border border-yellow-500 text-yellow-500 font-semibold">
-                  En Revisión
-                </span>
-              </td>
-              <td>$ 1.000.000</td>
-              <td>48</td>
-            </tr>
-            <!-- row 3 -->
-            <tr class="hover">
-              <th>4</th>
-              <td>1003</td>
-              <td>Automotriz</td>
-              <td>
-                <span class="flex flex-col items-center w-fit px-2.5 rounded-full border border-red-600 text-red-600 font-semibold">
-                  Rechazado
-                </span>
-              </td>
-              <td>$ 1.000.000</td>
-              <td>48</td>
-            </tr>
+            <c:choose>
+              <c:when test="${not empty client.loans}">
+                <c:forEach var="loan" items="${client.loans}">
+                  <tr class="hover">
+                    <th>${loan.loanId}</th>
+                    <td>${loan.accountId}</td>
+                    <td>${loan.loanType.name}</td>
+                    <td>
+                      <c:choose>
+                        <c:when test="${loan.loanStatus.id eq 1}">
+                          <span class="flex flex-col items-center w-fit px-2.5 rounded-full border border-yellow-600 text-yellow-700 font-semibold">
+                            En Revisión
+                          </span>
+                        </c:when>
+                        <c:when test="${loan.loanStatus.id eq 2}">
+                          <span class="flex flex-col items-center w-fit px-2.5 rounded-full border border-blue-600 text-blue-600 font-semibold">
+                            Vigente
+                          </span>                          
+                        </c:when>
+                        <c:when test="${loan.loanStatus.id eq 2}">
+                          <span class="flex flex-col items-center w-fit px-2.5 rounded-full border border-green-600 text-green-600 font-semibold">
+                            Finalizado
+                          </span>                        
+                        </c:when>
+                        <c:otherwise>
+                          <span class="flex flex-col items-center w-fit px-2.5 rounded-full border border-red-600 text-red-600 font-semibold">
+                            Rechazado
+                          </span>
+                        </c:otherwise>
+                      </c:choose>
+                    </td>
+                    <td>$ ${loan.requestedAmount}</td>
+                    <td>${loan.installmentsQuantity}</td>
+                  </tr>
+                </c:forEach>
+              </c:when>
+              <c:otherwise>
+                <span>No tenés préstamos para mostrar.</span>
+              </c:otherwise>
+            </c:choose>
           </tbody>
         </table>
       </div>  
