@@ -92,10 +92,11 @@ JSTL --%>
 
       <%--Este div se debe mostrar condicionalmente, Solo si el cliente tiene
       menos de 3 cuentas --%>
-      <c:if test="${client.accounts.size() < 3}">
+      <c:if test="${client.accounts.size() < 3 && client.activeStatus == true}">
         <form method="post" action="Accounts"
           class="flex flex-col p-6 bg-white rounded-lg w-full items-end gap-6 drop-shadow-sm">
           <h2 class="font-bold text-xl w-full">Crear Cuenta</h2>
+<input type="hidden" name="clientId" value="${client.clientId}" />
           <div class="flex items-center justify-end w-full gap-2.5">
             <span>Tipo de cuenta:</span> <select name="accountType"
               class="select select-bordered bg-white w-1/2 drop-shadow">
@@ -105,18 +106,16 @@ JSTL --%>
                   <option disabled selected>Error: No hay tipos de cuenta para mostrar</option>
                 </c:when>
                 <c:otherwise>
+                  <option selected>Seleccione una cuenta</option>
                   <c:forEach var="accountType" items="${accountTypes}">
-                    <option selected>Seleccione una cuenta</option>
-                    <option value="${accountType.id}"
-                      ${accountType.id ? 'selected' :''}>
+                    <option value="${accountType.id}">
                       ${accountType.name}</option>
                   </c:forEach>
                 </c:otherwise>
               </c:choose>
             </select>
           </div>
-          <button type="submit" name="action" value="newAccount"
-            class="btn btn-primary w-fit">Crear cuenta</button>
+          <button type="submit" name="action" value="saveNewAccount" class="btn btn-primary w-fit">Crear cuenta</button>
         </form>
       </c:if>
 

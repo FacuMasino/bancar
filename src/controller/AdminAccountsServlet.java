@@ -47,7 +47,6 @@ public class AdminAccountsServlet extends HttpServlet
 			HttpServletResponse response) throws ServletException, IOException
 	{
 		
-		
 		int clientId = Optional.ofNullable(request.getParameter("clientId"))
 				.map(Integer::parseInt)
 				.orElse(0);
@@ -58,13 +57,7 @@ public class AdminAccountsServlet extends HttpServlet
 		}
 
 		viewClientAccounts(request, response, clientId);
-		try
-		{
-		request.setAttribute("accountTypes", accountTypesBusiness.list());
-		} catch (BusinessException e) {
 	
-			e.printStackTrace();
-		}
 	}
 	
 
@@ -80,8 +73,8 @@ public class AdminAccountsServlet extends HttpServlet
 
 		switch (action) 
 		{
-			case "newAccount":
-				saveNewAccount(request, response,clientId);
+			case "saveNewAccount":
+				saveNewAccount(request, response);
 				break;
 			case "editAccount":
 				editAccount(request, response);
@@ -92,7 +85,7 @@ public class AdminAccountsServlet extends HttpServlet
 		}
 	}
 	
-	private void newAccount(HttpServletRequest request, HttpServletResponse response)
+	/*private void newAccount(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException
 	{
 			try
@@ -108,6 +101,59 @@ public class AdminAccountsServlet extends HttpServlet
 				Helper.redirect("/WEB-INF/AdminClientAccounts.jsp", request, response);
 				ex.printStackTrace();
 			}
+	}*/
+	
+	private void saveNewAccount ( HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	{	
+		int clientId = Optional.ofNullable(request.getParameter("clientId"))
+				.map(Integer::parseInt)
+				.orElse(0);
+		
+		Account account = new Account ();
+		
+		try
+		{
+			String accountTypeId = request.getParameter("accountType");
+			int typeId = Integer.parseInt(accountTypeId);
+			AccountType accountType;
+			accountType= accountTypesBusiness.read(typeId);
+			account.setAccountType(accountType);	
+		}
+		catch (BusinessException e)
+		{
+			e.printStackTrace();
+		}
+	
+			account.setBalance(new BigDecimal("10000.00"));
+            account.setClientId(clientId);
+            account.setCbu(account.getCbu());
+
+     	try
+		{  
+     		Boolean success = accountsBusiness.create(account);
+     		Client client = getFullClient(clientId);
+     		
+     		if(success)
+			{
+				Helper.setReqMessage(request, "Cuenta creada exitosamente.", MessageType.SUCCESS);
+			}
+     		else
+			{
+				Helper.setReqMessage(request, "No se pudo crear la cuenta.", MessageType.ERROR);
+			}
+     		
+     		System.out.println("Cuenta creada exitosamente.");
+     		request.setAttribute("client", client);
+     		request.setAttribute("accountTypes", accountTypesBusiness.list());
+			Helper.redirect("/WEB-INF/AdminClientAccounts.jsp", request, response);
+		}
+		
+		catch (BusinessException ex)
+		{
+			Helper.setReqMessage(request, ex.getMessage(), MessageType.ERROR);
+			Helper.redirect("/WEB-INF/AdminClientAccounts.jsp", request, response);
+			ex.printStackTrace();
+		}
 	}
 
 	private void editAccount(HttpServletRequest request, HttpServletResponse response)
@@ -172,8 +218,8 @@ public class AdminAccountsServlet extends HttpServlet
 			}
 			
 			request.setAttribute("client", client);
-			Helper.setReqMessage(request, "Cuenta eliminada con éxito!", MessageType.SUCCESS);
 			Helper.redirect("/WEB-INF/AdminClientAccounts.jsp", request, response);
+			Helper.setReqMessage(request, "Cuenta eliminada con éxito!", MessageType.SUCCESS);
 		}
 		catch (BusinessException ex)
 		{
@@ -190,6 +236,8 @@ public class AdminAccountsServlet extends HttpServlet
 		{
 			Client client = getFullClient(clientId);
 			request.setAttribute("client", client);
+		 	request.setAttribute("accountTypes", accountTypesBusiness.list());
+			
 			
 			Helper.redirect("/WEB-INF/AdminClientAccounts.jsp", request, response);
 		}
@@ -228,54 +276,8 @@ public class AdminAccountsServlet extends HttpServlet
 			throw ex;
 		}
 	}
-	private void saveNewAccount ( HttpServletRequest request, HttpServletResponse response, int clientId) throws ServletException, IOException
-	{	
-			Account account = new Account ();
-			///Client client;
-		
-		try
-		{
-			String accountTypeId = request.getParameter("accounTypeId");
-			int typeId = Integer.parseInt(accountTypeId);
-			AccountType accountType;
-			accountType= accountTypesBusiness.read(typeId);
-			account.setAccountType(accountType);
-		
-		}
-		catch (BusinessException e)
-		{
-			e.printStackTrace();
-		}
 	
-		/*try
-		{
-			client = clientsBusiness.read(clientId);
-		} 
 	
-		catch (BusinessException e1)
-		{
-			e1.printStackTrace();
-		}*/
-			account.setBalance(new BigDecimal("10000.00"));
-			account.setActiveStatus(true);  
-            account.setClientId(clientId);
-           /// account.setClient(client);
-       
-		try
-		{
-			accountsBusiness.create(account);
-	
-			Helper.setReqMessage( request, "Cuenta creada exitosamente.", MessageType.SUCCESS);
-			System.out.println("Cuenta creada exitosamente.");
-	
-		}
-		
-		catch (BusinessException ex)
-		{
-			Helper.setReqMessage(request, ex.getMessage(), MessageType.ERROR);
-			ex.printStackTrace();
-		}
-	}
 }
 	
 
