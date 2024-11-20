@@ -1,4 +1,4 @@
-package domainModel;
+	package domainModel;
 
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -79,4 +79,14 @@ public class Movement {
 	public void setMovementType(MovementType movementType) {
 		this.movementType = movementType;
 	}
+
+	@Override
+	public String toString()
+	{
+		return "Movement [movementId=" + movementId + ", movementDate="
+				+ movementDate + ", details=" + details + ", amount=" + amount
+				+ ", movementType=" + movementType + ", accountId=" + accountId
+				+ "]";
+	}
+	
 }

@@ -12,5 +12,5 @@ public interface IMovementsDao
 	public boolean delete(int movementId) throws SQLException;
 	public ArrayList<Movement> list() throws SQLException;
 	public int getId(Movement movement) throws SQLException;
-	public ArrayList<Movement> listByIdAccount(int clientId) throws SQLException;
+	public ArrayList<Movement> listByIdAccount(int accountId) throws SQLException;
 }
