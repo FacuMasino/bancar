@@ -2,42 +2,50 @@ package domainModel;
 
 public class LoanType 
 {
-	private int loanTypeId;
-	private String loanTypeName;
-	private String loanTypeDescription;
+	private int id;
+	private String name;
+	private String description;
 	
 	public LoanType() 
 	{
 		
 	}
 	
-	public String getLoanTypeDescription() 
+	public String getDescription() 
 	{
-		return loanTypeDescription;
+		return description;
 	}
 	
-	public void setLoanTypeDescription(String loanTypeDescription)
+	public void setDescription(String loanTypeDescription)
 	{
-		this.loanTypeDescription = loanTypeDescription;
+		this.description = loanTypeDescription;
 	}
 	
-	public String getLoanTypeName()
+	public String getName()
 	{
-		return loanTypeName;
+		return name;
 	}
 	
-	public void setLoanTypeName(String loanTypeName)
+	public void setName(String loanTypeName)
 	{
-		this.loanTypeName = loanTypeName;
+		this.name = loanTypeName;
 	}
 	
-	public int getLoanTypeId()
+	public int getId()
 	{
-		return loanTypeId;
+		return id;
 	}
 	
-	public void setLoanTypeId(int loanTypeId) 
+	public void setId(int loanTypeId) 
 	{
-		this.loanTypeId = loanTypeId;
+		this.id = loanTypeId;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "LoanType [loanTypeId=" + id + ", loanTypeName="
+				+ name + ", loanTypeDescription=" + description
+				+ "]";
 	}
 }

@@ -211,7 +211,7 @@ BEGIN
     WHERE AccountId = _AccountId;
 END $$
 
-CREATE PROCEDURE insert_movement(
+CREATE PROCEDURE insert_movement (
     IN _Details VARCHAR(500),
     IN _Amount DECIMAL(15, 2),
     IN _MovementTypeId INT,
@@ -220,6 +220,35 @@ CREATE PROCEDURE insert_movement(
 BEGIN
     INSERT INTO Movements (Details, Amount, MovementTypeId, AccountId)
     VALUES (_Details, _Amount, _MovementTypeId, _AccountId);
-END$$
+END $$
+
+-- Loan
+
+CREATE PROCEDURE insert_loan (
+    IN _InstallmentsQty INT,
+    IN _RequesteAmount DECIMAL(15,2),
+    IN _InterestRate DECIMAL(3,2),
+    IN _LoanTypeId INT,
+    IN _LoanStatusId INT,
+    IN _AccountId INT
+)
+BEGIN
+    INSERT INTO Loans (InstallmentsQuantity, RequestedAmount, InserestRate, LoanTypeId, LoanStatusId, AccountId)
+    VALUES (_InstallmentsQty, _RequestedAmount, _InterestRate, _LoanTypeId, _LoanStatusId, _AccountId);
+END $$
+
+-- Installments
+
+CREATE PROCEDURE insert_installment (
+    IN _InstallmentNumber INT,
+    IN _Amount DECIMAL(15, 2),
+    IN _PaymentDate DATE,
+    IN _PaymentDueDate DATE,
+    IN _LoanId INT
+)
+BEGIN
+    INSERT INTO Installments (InstallmentNumber, Amount, PaymentDate, PaymentDueDate, LoanId)
+    VALUES (_InstallmentNumber, _Amount, _PaymentDate, _PaymentDueDate, _LoanId);
+END $$
 
 DELIMITER ;

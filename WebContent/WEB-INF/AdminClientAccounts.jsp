@@ -116,41 +116,44 @@
           </form>
         </c:if>
 
-        <%-- Este es el modal que se abre al hacer click en eliminar --%>
-          <dialog id="modal_delete_account" class="modal">
-            <form method="post" action="Accounts" class="modal-box bg-white">
-              <input type="hidden" name="clientId" value="${client.clientId}" /> <input
-                id="accountNumberDelete" type="hidden" name="accountId" />
-              <h3 class="text-lg font-bold">Eliminar cuenta</h3>
-              <p class="pt-4 pb-1">Est&aacute; seguro que desea eliminar la
-                cuenta?</p>
-              <p class="py-1 text-red-600">Esta acci&oacute;n no se puede
-                deshacer!</p>
-              <div class="modal-action">
-                <button type="button" onclick="modal_delete_account.close()" class="btn">Cancelar</button>
-                <button type="submit" name="action" value="deleteAccount"
-                  class="btn btn-primary">Eliminar</button>
-              </div>
-            </form>
-          </dialog>
-          <%-- Este es el modal que se abre al hacer click en modificar --%>
-            <dialog id="modal_edit_account" class="modal">
-              <form method="post" action="Accounts" class="modal-box bg-white">
-                <h3 class="text-lg font-bold">Modificar Saldo</h3>
-                <div class="py-4 flex items-center justify-end gap-2.5">
-                  <span>Saldo:</span> <input id="accountNumberEdit" type="hidden" name="accountId" /> <input
-                    id="balanceInput" type="number" name="accountBalance"
-                    class="input input-bordered w-full max-w-xs" min="0" required />
-                </div>
-                <div class="modal-action">
-                  <!-- if there is a button in form, it will close the modal -->
-                  <button type="button" onclick="modal_edit_account.close()" class="btn">
-                    Cancelar</button>
-                  <button type="submit" name="action" value="editAccount"
-                    class="btn btn-primary">Modificar</button>
-                </div>
-              </form>
-            </dialog>
+      <%-- Este es el modal que se abre al hacer click en eliminar --%>
+      <dialog id="modal_delete_account" class="modal">
+      <form method="post" action="Accounts" class="modal-box bg-white">
+        <input type="hidden" name="clientId" value="${client.clientId}" />
+        <input id="accountNumberDelete" type="hidden" name="accountId" />
+        <h3 class="text-lg font-bold">Eliminar cuenta</h3>
+        <p class="pt-4 pb-1">Est&aacute; seguro que desea eliminar la
+          cuenta?</p>
+        <p class="py-1 text-red-600">Esta acci&oacute;n no se puede
+          deshacer!</p>
+        <div class="modal-action">
+          <button type="button" onclick="modal_delete_account.close()"
+            class="btn">Cancelar</button>
+          <button type="submit" name="action" value="deleteAccount"
+            class="btn btn-primary">Eliminar</button>
+        </div>
+      </form>
+      </dialog>
+      <%-- Este es el modal que se abre al hacer click en modificar --%>
+      <dialog id="modal_edit_account" class="modal">
+      <form method="post" action="Accounts" class="modal-box bg-white">
+        <input type="hidden" name="clientId" value="${client.clientId}" />
+        <h3 class="text-lg font-bold">Modificar Saldo</h3>
+        <div class="py-4 flex items-center justify-end gap-2.5">
+          <span>Saldo:</span> <input id="accountNumberEdit" type="hidden"
+            name="accountId" /> <input id="balanceInput" type="number"
+            name="accountBalance" class="input input-bordered w-full max-w-xs"
+            min="0" required />
+        </div>
+        <div class="modal-action">
+          <!-- if there is a button in form, it will close the modal -->
+          <button type="button" onclick="modal_edit_account.close()" class="btn">
+            Cancelar</button>
+          <button type="submit" name="action" value="editAccount"
+            class="btn btn-primary">Modificar</button>
+        </div>
+      </form>
+      </dialog>
     </div>
     <script>
       const openEditModal = (accountNumber, actualBalance) => {

@@ -9,6 +9,7 @@ public class Installment
 	private int number;
 	private BigDecimal amount;
 	private Date paymentDate;
+	private Date paymentDueDate;
 	private int loanId;
 
 	public Installment()
@@ -55,6 +56,24 @@ public class Installment
 	public void setLoanId(int loanId) {
 		this.loanId = loanId;
 	}
+	
+	public Date getPaymentDueDate()
+	{
+		return paymentDueDate;
+	}
 
+	public void setPaymentDueDate(Date paymentDueDate)
+	{
+		this.paymentDueDate = paymentDueDate;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "Installment [installmentId=" + installmentId + ", number="
+				+ number + ", amount=" + amount + ", paymentDate=" + paymentDate
+				+ ", paymentDueDate=" + paymentDueDate + ", loanId=" + loanId
+				+ "]";
+	}
 	
 }

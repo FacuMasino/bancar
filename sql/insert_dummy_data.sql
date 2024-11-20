@@ -145,3 +145,43 @@ VALUES
     ('2024-10-02', 24, 14000.00, 6.4, 1, 3, 7),
     ('2024-11-14', 48, 21000.00, 7.8, 2, 1, 8),
     ('2024-12-05', 36, 25000.00, 7.1, 3, 2, 9);
+    
+    
+INSERT INTO Movements (Details, Amount, MovementTypeId, AccountId)
+VALUES 
+    ('Apertura de cuenta - cuenta 1', 1000.00, 1, 1),
+    ('Alta de préstamo - cuenta 1', 5000.00, 2, 1),
+    ('Pago parcial préstamo - cuenta 1', -1000.00, 3, 1),
+    ('Transferencia entrante - cuenta 2', 2000.00, 4, 2),
+    ('Transferencia saliente - cuenta 2', -500.00, 4, 2),
+    ('Pago de préstamo - cuenta 3', -1500.00, 3, 3),
+    ('Alta de cuenta - cuenta 3', 2000.00, 1, 3),
+    ('Apertura de cuenta - cuenta 4', 3000.00, 1, 4),
+    ('Alta de préstamo - cuenta 4', 4000.00, 2, 4),
+    ('Pago de préstamo - cuenta 4', -500.00, 3, 4),
+    ('Transferencia entrante - cuenta 5', 1200.00, 4, 5),
+    ('Pago parcial préstamo - cuenta 5', -700.00, 3, 5),
+    ('Apertura de cuenta - cuenta 6', 1500.00, 1, 6),
+    ('Alta de préstamo - cuenta 6', 2500.00, 2, 6),
+    ('Pago total préstamo - cuenta 6', -2500.00, 3, 6),
+    ('Transferencia entrante - cuenta 7', 3500.00, 4, 7),
+    ('Transferencia saliente - cuenta 7', -1200.00, 4, 7),
+    ('Apertura de cuenta - cuenta 8', 2000.00, 1, 8),
+    ('Alta de préstamo - cuenta 8', 3000.00, 2, 8),
+    ('Pago parcial préstamo - cuenta 8', -1000.00, 3, 8),
+    ('Transferencia entrante - cuenta 9', 2200.00, 4, 9),
+    ('Transferencia saliente - cuenta 9', -800.00, 4, 9),
+    ('Alta de cuenta - cuenta 10', 3000.00, 1, 10),
+    ('Alta de préstamo - cuenta 10', 4500.00, 2, 10),
+    ('Pago de préstamo - cuenta 10', -1200.00, 3, 10),
+    ('Apertura de cuenta - cuenta 11', 1800.00, 1, 11),
+    ('Pago parcial préstamo - cuenta 11', -600.00, 3, 11),
+    ('Transferencia entrante - cuenta 12', 2500.00, 4, 12),
+    ('Transferencia saliente - cuenta 12', -1000.00, 4, 12),
+    ('Pago de préstamo - cuenta 13', -700.00, 3, 13),
+    ('Alta de cuenta - cuenta 13', 3500.00, 1, 13),
+    ('Apertura de cuenta - cuenta 14', 1500.00, 1, 14),
+    ('Alta de préstamo - cuenta 15', 2800.00, 2, 15),
+    ('Pago parcial préstamo - cuenta 15', -900.00, 3, 15),
+    ('Transferencia saliente - cuenta 16', -500.00, 4, 16);
+

@@ -6,15 +6,16 @@ import java.util.ArrayList;
 
 public class Loan 
 {
-	private int LoanId;
+	private int loanId;
 	private int clientId;
 	private Date creationDate;
 	private BigDecimal requestedAmount;
 	private BigDecimal interestRate;
-	private int monthsLimit;
 	private ArrayList<Installment> installments;
+	private int installmentsQuantity;
 	private LoanType loanType;
 	private LoanStatus loanStatus;
+	private int accountId;
 
 	public Loan() 
 	{
@@ -22,11 +23,11 @@ public class Loan
 	}
 
 	public int getLoanId() {
-		return LoanId;
+		return loanId;
 	}
 
 	public void setLoanId(int loanId) {
-		LoanId = loanId;
+		this.loanId = loanId;
 	}
 
 	public int getClientId() {
@@ -61,14 +62,6 @@ public class Loan
 		this.interestRate = interestRate;
 	}
 
-	public int getMonthsLimit() {
-		return monthsLimit;
-	}
-
-	public void setMonthsLimit(int monthsLimit) {
-		this.monthsLimit = monthsLimit;
-	}
-
 	public ArrayList<Installment> getInstallments() {
 		return installments;
 	}
@@ -92,5 +85,38 @@ public class Loan
 	public void setLoanStatus(LoanStatus loanStatus) {
 		this.loanStatus = loanStatus;
 	}
+
+	public int getAccountId()
+	{
+		return accountId;
+	}
+
+	public void setAccountId(int accountId)
+	{
+		this.accountId = accountId;
+	}
+
+	public int getInstallmentsQuantity()
+	{
+		return installmentsQuantity;
+	}
+
+	public void setInstallmentsQuantity(int installmentsQuantity)
+	{
+		this.installmentsQuantity = installmentsQuantity;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "Loan [loanId=" + loanId + ", clientId=" + clientId
+				+ ", creationDate=" + creationDate + ", requestedAmount="
+				+ requestedAmount + ", interestRate=" + interestRate
+				+ ", installments=" + installments + ", installmentsQuantity="
+				+ installmentsQuantity + ", loanType=" + loanType
+				+ ", loanStatus=" + loanStatus + ", accountId=" + accountId
+				+ "]";
+	}
+
 
 }

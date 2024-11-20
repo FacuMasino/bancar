@@ -77,25 +77,6 @@ public class LoansBusiness implements ILoansBusiness
 	}
 
 	@Override
-	public boolean delete(int loanId) throws BusinessException
-	{
-		try
-		{
-			return loansDao.delete(loanId);			
-		}
-		catch (SQLException ex)
-		{
-			throw new SQLOperationException();
-		}
-		catch (Exception ex)
-		{
-			ex.printStackTrace();
-			throw new BusinessException
-				("Ocurrió un error desconocido al eliminar el préstamo.");
-		}
-	}
-
-	@Override
 	public ArrayList<Loan> list() throws BusinessException
 	{
 		try
@@ -111,25 +92,6 @@ public class LoansBusiness implements ILoansBusiness
 			ex.printStackTrace();
 			throw new BusinessException
 				("Ocurrió un error desconocido al obtener los préstamos.");
-		}
-	}
-
-	@Override
-	public int getId(Loan loan) throws BusinessException
-	{
-		try
-		{
-			return loansDao.getId(loan);
-		}
-		catch (SQLException ex)
-		{
-			throw new SQLOperationException();
-		}
-		catch (Exception ex)
-		{
-			ex.printStackTrace();
-			throw new BusinessException
-				("Ocurrió un error desconocido al obtener ID del préstamo.");
 		}
 	}
 	

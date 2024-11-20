@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import dataAccess.ILoansDao;
+import domainModel.Installment;
 import domainModel.Loan;
 import domainModel.LoanStatus;
 import domainModel.LoanType;
@@ -11,16 +12,16 @@ import domainModel.LoanType;
 public class LoansDao implements ILoansDao 
 {
 	private Database db;
-	private LoanStatus loanStatus; 
-	private LoanType loanType;
-	
-	
-//TODO VER QUE FALTA AGREGAR ACÁ
+	private LoanTypesDao loanTypesDao;
+	private LoanStatusesDao loanStatusesDao;
+	private InstallmentsDao installmentsDao;
 	
 	public LoansDao() 
 	{
 		db = new Database();
-		
+		loanTypesDao = new LoanTypesDao();
+		loanStatusesDao = new LoanStatusesDao();
+		installmentsDao = new InstallmentsDao();
 	}
 	
 	@Override
@@ -30,13 +31,7 @@ public class LoansDao implements ILoansDao
 
 		try
 		{
-		    loanStatus = new LoanStatus();
-			loanType = new LoanType();
-		
-			////auxAccountType = accountTypeDao.readByName(account.getAccountType().getName());
-			////////account.setAccountType(auxAccountType); // seteo el accountType completo
-
-			db.setPreparedStatement("{CALL insert_loan(?, ?, ?, ?)}");
+			db.setPreparedStatement("{CALL insert_loan(?, ?, ?, ?, ?, ?)}");
 			setParameters(loan);
 			rows = db.getPreparedStatement().executeUpdate();
 		} 
@@ -85,7 +80,7 @@ public class LoansDao implements ILoansDao
 		int rows = 0;
 
 		try {
-			db.setPreparedStatement("{CALL update_loan(?, ?, ?, ?)}");
+			db.setPreparedStatement("UPDATE Loans SET LoanStatusId = ? WHERE LoanId = ?");
 			setUpdateParameters(loan);
 			rows = db.getPreparedStatement().executeUpdate();
 		} catch (SQLException ex) {
@@ -97,13 +92,6 @@ public class LoansDao implements ILoansDao
 	}
 
 	@Override
-	public boolean delete(int loanId) throws SQLException 
-	{
-		return false;
-		
-	}
-
-	@Override
 	public ArrayList<Loan> list() throws SQLException 
 	{
 		ResultSet rsLoans;
@@ -111,19 +99,14 @@ public class LoansDao implements ILoansDao
 
 		try
 		{
-			db.setPreparedStatement("SELECT * FROM Loans ");
+			db.setPreparedStatement("SELECT * FROM Loans");
 			rsLoans = db.getPreparedStatement().executeQuery();
 
 			while (rsLoans.next())
-				{
-				// TODO: IMPORTANTE leer cliente con su ID usando ClientsBusiness, ahora está
-				// vacío
-				// Client auxClient = new Client();
-				// TODO: IMPORTANTE leer tipo de cuenta con su ID usando AccountTypeBusiness,
-				// ahora está vacía
+			{
 				loans.add(getLoan(rsLoans));
-				}
 			}
+		}
 		
 		catch (SQLException ex) 
 		{
@@ -133,53 +116,21 @@ public class LoansDao implements ILoansDao
 
 		return loans;
 	}
-
-	@Override
-	public int getId(Loan loan) throws SQLException 
-	{
-		return 0;
-	}
-
-	@Override
-	public int getLastId() throws SQLException 
-	{
-		int lastId = 0;
-
-		try 
-		{
-			db.setPreparedStatement("SELECT MAX(LoanId) from Loans");
-			ResultSet rs = db.getPreparedStatement().executeQuery();
-			if (rs.next()) {
-				lastId = rs.getInt(1);
-			}
-		} 
-		catch (SQLException ex)
-		{
-			ex.printStackTrace();
-			throw ex;
-		}
-
-		return lastId;
-	}
 	
 	private void setParameters(Loan loan) throws SQLException
 	{
-		///TODO: Installmentquantity, AccountID ? 
-		db.getPreparedStatement().setBigDecimal(1, loan.getRequestedAmount());
-		db.getPreparedStatement().setBigDecimal(2, loan.getInterestRate());
-		db.getPreparedStatement().setInt(3, loan.getLoanType().getLoanTypeId());
-		db.getPreparedStatement().setInt(4, loan.getLoanStatus().getLoanStatusId());
-		///db.getPreparedStatement().setInt(5, loan.getClientId());
+		db.getPreparedStatement().setInt(1, loan.getInstallmentsQuantity());
+		db.getPreparedStatement().setBigDecimal(2, loan.getRequestedAmount());
+		db.getPreparedStatement().setBigDecimal(3, loan.getInterestRate());
+		db.getPreparedStatement().setInt(4, loan.getLoanType().getId());
+		db.getPreparedStatement().setInt(5, loan.getLoanStatus().getId());
+		db.getPreparedStatement().setInt(6, loan.getAccountId());
 	}
 
 	private void setUpdateParameters(Loan loan) throws SQLException
 	{
-		///TODO: Installmentquantity, AccountID ? 
-		db.getPreparedStatement().setBigDecimal(1, loan.getRequestedAmount());
-		db.getPreparedStatement().setBigDecimal(2, loan.getInterestRate());
-		db.getPreparedStatement().setInt(3, loan.getLoanType().getLoanTypeId());
-		db.getPreparedStatement().setInt(4, loan.getLoanStatus().getLoanStatusId());
-		db.getPreparedStatement().setInt(5, loan.getLoanId());
+		db.getPreparedStatement().setInt(1, loan.getLoanId());
+		db.getPreparedStatement().setInt(2, loan.getLoanStatus().getId());
 	}
 
 	private Loan getLoan(ResultSet rs) throws SQLException
@@ -189,16 +140,19 @@ public class LoansDao implements ILoansDao
 		try
 		{
 			auxLoan.setLoanId(rs.getInt("LoanId"));
-           /// auxLoan.setClientId(rs.getInt("clientId"));
 			auxLoan.setCreationDate(rs.getDate("CreationDate"));
 			auxLoan.setRequestedAmount(rs.getBigDecimal("RequestedAmount"));
 			auxLoan.setInterestRate(rs.getBigDecimal("InterestRate"));
-
-			///TODO: FALTA EN BD ?   auxLoan.setMonthsLimit(rs.getInt("monthsLimit"));
-			//TODO: Hay que elaborar read en Loantype y loanStatus
-
-			LoanType auxLoanType = new LoanType();
-			LoanStatus auxLoanStatus = new LoanStatus();		
+			auxLoan.setAccountId(rs.getInt("AccountId"));
+			auxLoan.setInstallmentsQuantity(rs.getInt("InstallmentsQuantity"));
+			
+			int loanTypeId = rs.getInt("LoanTypeId");
+			auxLoan.setLoanType(loanTypesDao.read(loanTypeId));
+			
+			int loanStatusId = rs.getInt("LoanStatusId");
+			auxLoan.setLoanStatus(loanStatusesDao.read(loanStatusId));
+			
+			auxLoan.setInstallments(installmentsDao.listByLoanId(auxLoan.getLoanId()));
 		}
 		catch (SQLException ex) 
 		{

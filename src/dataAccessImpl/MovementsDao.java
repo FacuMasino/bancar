@@ -1,5 +1,6 @@
 package dataAccessImpl;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -76,8 +77,23 @@ public class MovementsDao implements IMovementsDao
 	@Override
 	public ArrayList<Movement> list() throws SQLException
 	{
-		// TODO Auto-generated method stub
-		return null;
+		ResultSet rsMovements;
+		ArrayList<Movement> movements = new ArrayList<Movement>();
+
+		try {
+			db.setPreparedStatement("SELECT * FROM Movements");
+			rsMovements = db.getPreparedStatement().executeQuery();
+
+			while (rsMovements.next()) {
+				
+				movements.add(getMovement(rsMovements));
+			}
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+			throw ex;
+		}
+
+		return movements;
 	}
 
 	@Override
@@ -88,10 +104,27 @@ public class MovementsDao implements IMovementsDao
 	}
 
 	@Override
-	public ArrayList<Movement> listByIdAccount(int clientId) throws SQLException
+	public ArrayList<Movement> listByIdAccount(int accountId) throws SQLException
 	{
-		// TODO Auto-generated method stub
-		return null;
+		ResultSet rsMovement;
+		// El negocio debe verificar que lo devuelto != null
+		ArrayList<Movement> auxMovementList = new ArrayList<Movement>();
+
+		try {
+			db.setPreparedStatement("SELECT * FROM Movements WHERE AccountId = ?;");
+			db.getPreparedStatement().setInt(1, accountId);
+			rsMovement = db.getPreparedStatement().executeQuery();
+
+			while (rsMovement.next()) {
+				auxMovementList.add(getMovement(rsMovement));
+			}
+
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+			throw ex;
+		}
+
+		return auxMovementList;
 	}
 
 	private void setParameters(Movement movement) throws SQLException
@@ -100,5 +133,29 @@ public class MovementsDao implements IMovementsDao
 		db.getPreparedStatement().setBigDecimal(2, movement.getAmount());
 		db.getPreparedStatement().setInt(3, movement.getMovementType().getId());
 		db.getPreparedStatement().setInt(4, movement.getAccountId());
+	}
+	
+	private Movement getMovement(ResultSet rs) throws SQLException {
+		Movement auxMovement= new Movement();
+
+		try {
+			auxMovement.setMovementId(rs.getInt("MovementId"));
+			auxMovement.setMovementDate(rs.getDate("MovementDate"));
+			auxMovement.setDetails(rs.getString("Details"));
+			auxMovement.setAmount(rs.getBigDecimal("Amount"));
+			auxMovement.setAccountId(rs.getInt("AccountId"));
+			
+			MovementType auxMovementType = new MovementType();
+			auxMovementType = movementTypeDao.read(rs.getInt("MovementTypeId"));
+
+			auxMovement.setMovementType(auxMovementType);
+
+
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+			throw ex;
+		}
+
+		return auxMovement;
 	}
 }
