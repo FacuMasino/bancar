@@ -3,6 +3,7 @@
 <%@page import="java.util.ArrayList"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags/"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
 
 <c:set var="approvedLoans" value="${requestScope.approvedLoans != null ? 
                                 requestScope.approvedLoans : emptyList }"/>
@@ -35,7 +36,10 @@
                 </div>
                 <div class="flex flex-col items-end">
                   <p class="text-gray-600 font-medium">$ NO IMPLEMENTADO / mes</p>
-                  <p class="text-gray-600">Vencimiento: NO IMPLEMENTADO</p>
+                  <p class="text-gray-600">
+                    Vencimiento:
+                    <fmt:formatDate type = "both" dateStyle = "short" timeStyle = "short" value = "${now}" />
+                  </p>
                   <a href="PayLoan.jsp?id=AcaElIdDePrestamo" class="mt-2 text-blue-600 hover:underline flex items-center">
                     Pagar
                     <span class="ml-1">&#8594;</span> <!-- Flecha derecha -->

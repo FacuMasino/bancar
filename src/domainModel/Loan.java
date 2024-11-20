@@ -11,7 +11,6 @@ public class Loan
 	private Date creationDate;
 	private BigDecimal requestedAmount;
 	private BigDecimal interestRate;
-	private int monthsLimit;
 	private ArrayList<Installment> installments;
 	private int installmentsQuantity;
 	private LoanType loanType;
@@ -61,14 +60,6 @@ public class Loan
 
 	public void setInterestRate(BigDecimal interestRate) {
 		this.interestRate = interestRate;
-	}
-
-	public int getMonthsLimit() {
-		return monthsLimit;
-	}
-
-	public void setMonthsLimit(int monthsLimit) {
-		this.monthsLimit = monthsLimit;
 	}
 
 	public ArrayList<Installment> getInstallments() {
