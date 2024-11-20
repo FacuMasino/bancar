@@ -43,8 +43,8 @@ public class LoanStatusesDao implements ILoanStatusesDao
 		try
 		{
 			LoanStatus auxLoanStatus = new LoanStatus();
-			auxLoanStatus.setLoanStatusId(rs.getInt("LoanTypeId"));
-			auxLoanStatus.setLoanStatusName(rs.getString("LoanTypeName"));
+			auxLoanStatus.setLoanStatusId(rs.getInt("LoanStatusId"));
+			auxLoanStatus.setLoanStatusName(rs.getString("LoanStatusName"));
 			
 			return auxLoanStatus;
 		}

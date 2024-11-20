@@ -115,4 +115,17 @@ public class Loan
 		this.installmentsQuantity = installmentsQuantity;
 	}
 
+	@Override
+	public String toString()
+	{
+		return "Loan [loanId=" + loanId + ", clientId=" + clientId
+				+ ", creationDate=" + creationDate + ", requestedAmount="
+				+ requestedAmount + ", interestRate=" + interestRate
+				+ ", monthsLimit=" + monthsLimit + ", installments="
+				+ installments + ", installmentsQuantity="
+				+ installmentsQuantity + ", loanType=" + loanType
+				+ ", loanStatus=" + loanStatus + ", accountId=" + accountId
+				+ "]";
+	}
+
 }

@@ -222,6 +222,8 @@ BEGIN
     VALUES (_Details, _Amount, _MovementTypeId, _AccountId);
 END$$
 
+-- Loan
+
 CREATE PROCEDURE insert_loan(
     IN _InstallmentsQty INT,
     IN _RequesteAmount DECIMAL(15,2),
@@ -233,6 +235,19 @@ CREATE PROCEDURE insert_loan(
 BEGIN
     INSERT INTO Loans (InstallmentsQuantity, RequestedAmount, InserestRate, LoanTypeId, LoanStatusId, AccountId)
     VALUES (_InstallmentsQty, _RequestedAmount, _InterestRate, _LoanTypeId, _LoanStatusId, _AccountId)
+END$$
+
+-- Installment
+
+CREATE PROCEDURE insert_installment(
+    IN _InstallmentNumber INT,
+    IN _Amount DECIMAL(15, 2),
+    IN _PaymentDate DATE,
+    IN _LoanId INT
+)
+BEGIN
+    INSERT INTO Installments (InstallmentNumber, Amount, PaymentDate, LoanId)
+    VALUES (_InstallmentNumber, _Amount, _PaymentDate, _LoanId);
 END$$
 
 DELIMITER ;

@@ -29,4 +29,13 @@ public class LoanStatus
 	{
 		this.loanStatusName = loanStatusName;
 	}
+
+	@Override
+	public String toString()
+	{
+		return "LoanStatus [loanStatusId=" + loanStatusId + ", loanStatusName="
+				+ loanStatusName + "]";
+	}
+	
 }
+

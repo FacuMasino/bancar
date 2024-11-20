@@ -56,5 +56,12 @@ public class Installment
 		this.loanId = loanId;
 	}
 
+	@Override
+	public String toString()
+	{
+		return "Installment [installmentId=" + installmentId + ", number="
+				+ number + ", amount=" + amount + ", paymentDate=" + paymentDate
+				+ ", loanId=" + loanId + "]";
+	}
 	
 }

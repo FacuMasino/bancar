@@ -40,4 +40,12 @@ public class LoanType
 	{
 		this.loanTypeId = loanTypeId;
 	}
+
+	@Override
+	public String toString()
+	{
+		return "LoanType [loanTypeId=" + loanTypeId + ", loanTypeName="
+				+ loanTypeName + ", loanTypeDescription=" + loanTypeDescription
+				+ "]";
+	}
 }

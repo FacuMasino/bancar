@@ -71,7 +71,9 @@ public class ClientLoansServlet extends HttpServlet {
 		List<Loan> clientLoans = new ArrayList<Loan>();
 		
 		clientLoans = client.getLoans();
-		System.out.println(client.getLoans());
+		
+		System.out.println(clientLoans);
+		
 		// Clasificar prestamos
 		for(Loan loan: clientLoans)
 		{

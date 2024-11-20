@@ -30,12 +30,12 @@
               <div class="flex justify-between items-center bg-white p-4">
                 <div>
                   <h3 class="text-lg font-medium text-gray-800">${loan.loanType.name}</h3>
-                  <p class="text-gray-600">Saldo otorgado: $150,000</p>
-                  <p class="text-gray-600">Cuotas pendientes: 23 de 48</p>
+                  <p class="text-gray-600">Saldo otorgado: ${loan.requestedAmount}</p>
+                  <p class="text-gray-600">Cuotas pendientes: NO IMPLEMENTADO</p>
                 </div>
                 <div class="flex flex-col items-end">
-                  <p class="text-gray-600 font-medium">$5000 / mes</p>
-                  <p class="text-gray-600">Vencimiento: 23/11/24</p>
+                  <p class="text-gray-600 font-medium">$ NO IMPLEMENTADO / mes</p>
+                  <p class="text-gray-600">Vencimiento: NO IMPLEMENTADO</p>
                   <a href="PayLoan.jsp?id=AcaElIdDePrestamo" class="mt-2 text-blue-600 hover:underline flex items-center">
                     Pagar
                     <span class="ml-1">&#8594;</span> <!-- Flecha derecha -->
@@ -48,39 +48,6 @@
             <span>No tenés préstamos vigentes.</span>
           </c:otherwise>
         </c:choose>
-        
-        <div class="flex justify-between items-center bg-white p-4">
-          <div>
-            <h3 class="text-lg font-medium text-gray-800">Préstamo personal</h3>
-            <p class="text-gray-600">Saldo otorgado: $150,000</p>
-            <p class="text-gray-600">Cuotas pendientes: 23 de 48</p>
-          </div>
-          <div class="flex flex-col items-end">
-            <p class="text-gray-600 font-medium">$5000 / mes</p>
-            <p class="text-gray-600">Vencimiento: 23/11/24</p>
-            <a href="PayLoan.jsp?id=AcaElIdDePrestamo" class="mt-2 text-blue-600 hover:underline flex items-center">
-              Pagar
-              <span class="ml-1">&#8594;</span> <!-- Flecha derecha -->
-            </a>
-          </div>
-        </div>
-
-        <!-- Préstamo otorgado 2 (reemplazar por for) -->
-        <div class="flex justify-between items-center bg-white p-4">
-          <div>
-            <h3 class="text-lg font-medium text-gray-800">Préstamo hipotecario</h3>
-            <p class="text-gray-600">Saldo otorgado: $1,000,000</p>
-            <p class="text-gray-600">Cuotas pendientes: 15 de 30</p>
-          </div>
-          <div class="flex flex-col items-end">
-            <p class="text-gray-600 font-medium">$20000 / mes</p>
-            <p class="text-gray-600">Vencimiento: 15/12/24</p>
-            <a href="PayLoan.jsp?id=AcaElIdDePrestamo" class="mt-2 text-blue-600 hover:underline flex items-center">
-              Pagar
-              <span class="ml-1">&#8594;</span> <!-- Flecha derecha -->
-            </a>
-          </div>
-        </div>
 
       </div>
 

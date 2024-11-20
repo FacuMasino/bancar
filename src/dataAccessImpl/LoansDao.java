@@ -14,12 +14,14 @@ public class LoansDao implements ILoansDao
 	private Database db;
 	private LoanTypesDao loanTypesDao;
 	private LoanStatusesDao loanStatusesDao;
+	private InstallmentsDao installmentsDao;
 	
 	public LoansDao() 
 	{
 		db = new Database();
 		loanTypesDao = new LoanTypesDao();
 		loanStatusesDao = new LoanStatusesDao();
+		installmentsDao = new InstallmentsDao();
 	}
 	
 	@Override
@@ -149,7 +151,6 @@ public class LoansDao implements ILoansDao
 			int loanStatusId = rs.getInt("LoanStatusId");
 			auxLoan.setLoanStatus(loanStatusesDao.read(loanStatusId));
 			
-			ArrayList<Installment> installments = new ArrayList<Installment>();
 			auxLoan.setInstallments(installmentsDao.listByLoanId(auxLoan.getLoanId()));
 		}
 		catch (SQLException ex) 
