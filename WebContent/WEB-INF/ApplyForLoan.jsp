@@ -19,7 +19,7 @@
         <div class="flex flex-col gap-2.5 w-full">
           <div class="flex justify-between">
             <span>$ 100.000</span>
-            <span>$ 200.000.000</span>
+            <span>$ 2.000.000</span>
           </div>
           <!-- el min y max habría que establecerlo en la db -->
           <!-- podría venir como un atributo desde el sevlet -->
@@ -77,7 +77,7 @@
       <select class="select select-bordered w-full bg-white drop-shadow" name="loanType">
         <c:choose>
             <c:when test="${not empty loanTypes}">
-              <option selected>Selecciona un motivo</option>
+              <option value="0" selected>Selecciona un motivo</option>
               <c:forEach var="type" items="${loanTypes}">
                 <option value="${type.id}">${type.name}</option>
               </c:forEach>
@@ -91,7 +91,7 @@
       <select class="select select-bordered w-full bg-white drop-shadow" name="destinationAccountId">
         <c:choose>
           <c:when test="${not empty client.accounts}">
-            <option selected>Selecciona una cuenta</option>
+            <option value="0" selected>Selecciona una cuenta</option>
             <c:forEach var="account" items="${client.accounts}">
               <option value="${account.id}">Cta. ${account.id} - $ ${account.balance}</option>
             </c:forEach>
@@ -102,7 +102,7 @@
         </c:choose>
       </select>
       <button type="submit" class="btn btn-primary"
-        name="action" value="requestLoan">
+        name="action" value="request">
         Solicitar préstamo
       </button>
     </form>

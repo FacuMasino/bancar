@@ -20,6 +20,7 @@ import businessLogicImpl.LoansBusiness;
 import domainModel.Account;
 import domainModel.Client;
 import domainModel.Loan;
+import domainModel.LoanStatus;
 import domainModel.LoanType;
 import domainModel.Message;
 import domainModel.Message.MessageType;
@@ -138,33 +139,57 @@ public class ClientLoansServlet extends HttpServlet {
 	{
 		
 		int accountId = Integer.parseInt(req.getParameter("destinationAccountId"));
-		int loanType = Integer.parseInt(req.getParameter("loanType"));
+		int loanTypeId = Integer.parseInt(req.getParameter("loanType"));
 		int installmentsQty = Integer.parseInt(req.getParameter("installmentsQty"));
 		BigDecimal requestedAmount = new BigDecimal(req.getParameter("requestedAmount"));
 		BigDecimal interestRate = new BigDecimal(req.getParameter("interestRate"));
 		
-		if(accountId == 0 || loanType == 0)
+		if(accountId == 0 || loanTypeId == 0)
 		{
 			Helper.setReqMessage(req, 
 					"Debe seleccionar el Motivo y Cuenta Destino", MessageType.ERROR);
-			Helper.redirect("/WEB-INF/Loans.jsp", req, res);
+			viewApplyForLoan(req,res);
 			return;
 		}
 		
 		try
 		{
-			Loan auxLoan = new Loan();
+			LoanType loanType = new LoanType();
+			loanType.setId(loanTypeId);
 			
-			boolean success = loansBusiness.create(auxLoan);
+			LoanStatus loanStatus = new LoanStatus();
+			loanStatus.setId(1); // ESTADO: EN REVISIÓN - ID 1 
+			
+			Loan loan = new Loan();
+			loan.setClientId(client.getClientId());
+			loan.setRequestedAmount(requestedAmount);
+			loan.setInterestRate(interestRate);
+			loan.setInstallmentsQuantity(installmentsQty);
+			loan.setLoanType(loanType);
+			loan.setLoanStatus(loanStatus);
+			loan.setAccountId(accountId);
+			
+			boolean success = loansBusiness.create(loan);
+			if(success)
+			{
+				Helper.setReqMessage(req, 
+						"Solicitud de aprobación enviada con éxito!", MessageType.SUCCESS);
+			} else
+			{
+				Helper.setReqMessage(req, 
+						"Ocurrió un error al solicitar el préstamo.", MessageType.ERROR);
+			}
 			
 		} catch (BusinessException ex)
 		{
 			Helper.setReqMessage(req, ex.getMessage(), MessageType.ERROR);
-			Helper.redirect("/WEB-INF/Loans.jsp", req, res);
+			viewClientLoans(req,res);
+			return;
 		}
 		
-		Helper.redirect("/WEB-INF/Loans.jsp", req, res);
-	}	
+		getSessionClient(req); // Actualiza los datos completos del cliente
+		viewClientLoans(req,res);
+	}
 
 	private void viewApplyForLoan(HttpServletRequest req, HttpServletResponse res)
 		throws ServletException, IOException
@@ -178,6 +203,7 @@ public class ClientLoansServlet extends HttpServlet {
 		{
 			Helper.setReqMessage(req, ex.getMessage(), MessageType.ERROR);
 			Helper.redirect("/WEB-INF/ApplyForLoan.jsp", req, res);
+			return;
 		}
 		
 		req.setAttribute("loanTypes", loanTypes);

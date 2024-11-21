@@ -226,7 +226,7 @@ END $$
 
 CREATE PROCEDURE insert_loan (
     IN _InstallmentsQty INT,
-    IN _RequesteAmount DECIMAL(15,2),
+    IN _RequestedAmount DECIMAL(15,2),
     IN _InterestRate DECIMAL(3,2),
     IN _LoanTypeId INT,
     IN _LoanStatusId INT,

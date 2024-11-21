@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.eclipse.jdt.internal.compiler.ast.NumberLiteral;
+
 import businessLogicImpl.ClientsBusiness;
 import businessLogicImpl.UsersBusiness;
 import domainModel.Client;
@@ -63,7 +65,12 @@ public class LoginServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		String action = request.getParameter("action");
-
+		if(action == null)
+		{
+			doGet(request,response);
+			return;
+		}
+		
 		switch (action) 
 		{
 			case "login":
@@ -73,7 +80,7 @@ public class LoginServlet extends HttpServlet {
 				logout(request, response);
 				break;
 			default:
-				login(request, response);
+				doGet(request,response);
 		}
 	}
 	
