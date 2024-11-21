@@ -3,9 +3,7 @@ package dataAccessImpl;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
 import dataAccess.IAccountTypesDao;
-import domainModel.Account;
 import domainModel.AccountType;
 
 
@@ -14,22 +12,6 @@ public class AccountTypesDao implements IAccountTypesDao {
 
 	public AccountTypesDao() {
 		db = new Database();
-	}
-
-	@Override
-	public boolean create(AccountType accountType) throws SQLException {
-		int rows = 0;
-
-		try {
-			db.setPreparedStatement("INSERT INTO accounttypes(accountTypeName) VALUES(?)");
-			db.getPreparedStatement().setString(1, accountType.getName());
-			rows = db.getPreparedStatement().executeUpdate();
-
-		} catch (Exception exception) {
-			exception.printStackTrace();
-		}
-
-		return (rows > 0);
 	}
 
 	@Override

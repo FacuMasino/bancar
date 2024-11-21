@@ -2,7 +2,6 @@ package businessLogicImpl;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-
 import businessLogic.IAccountTypesBusiness;
 import dataAccessImpl.AccountTypesDao;
 import domainModel.AccountType;
@@ -15,21 +14,6 @@ public class AccountTypesBusiness implements IAccountTypesBusiness {
 
 	public AccountTypesBusiness() {
 		accountTypesDao = new AccountTypesDao();
-	}
-
-	@Override
-	public boolean create(AccountType accountType) throws BusinessException {
-
-		try {
-			if (accountTypesDao.getId(accountType) != 0) // Si quiere crear un AccountType que ya existe..
-			{
-				return false;
-			}
-			return accountTypesDao.create(accountType);
-
-		} catch (SQLException ex) {
-			throw new SQLOperationException();
-		}
 	}
 
 	@Override
