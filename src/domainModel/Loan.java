@@ -12,6 +12,7 @@ public class Loan
 	private BigDecimal requestedAmount;
 	private BigDecimal interestRate;
 	private ArrayList<Installment> installments;
+	private ArrayList<Installment> pendingInstallments;
 	private int installmentsQuantity;
 	private LoanType loanType;
 	private LoanStatus loanStatus;
@@ -104,6 +105,18 @@ public class Loan
 	public void setInstallmentsQuantity(int installmentsQuantity)
 	{
 		this.installmentsQuantity = installmentsQuantity;
+	}
+
+	
+	
+	public ArrayList<Installment> getPendingInstallments()
+	{
+		return pendingInstallments;
+	}
+
+	public void setPendingInstallments(ArrayList<Installment> pendingInstallments)
+	{
+		this.pendingInstallments = pendingInstallments;
 	}
 
 	@Override

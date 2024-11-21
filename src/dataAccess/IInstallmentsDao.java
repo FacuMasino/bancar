@@ -7,7 +7,8 @@ import domainModel.Installment;
 
 public interface IInstallmentsDao
 {
-	public boolean create(Installment installment) throws SQLException;
+	public boolean generate(int loanId) throws SQLException;
 	public Installment read(int installmentId) throws SQLException;
 	public ArrayList<Installment> listByLoanId(int loanId) throws SQLException;
+	public ArrayList<Installment> listPendingsByLoanId(int loanId) throws SQLException;
 }

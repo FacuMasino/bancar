@@ -233,7 +233,7 @@ CREATE PROCEDURE insert_loan (
     IN _AccountId INT
 )
 BEGIN
-    INSERT INTO Loans (InstallmentsQuantity, RequestedAmount, InserestRate, LoanTypeId, LoanStatusId, AccountId)
+    INSERT INTO Loans (InstallmentsQuantity, RequestedAmount, InterestRate, LoanTypeId, LoanStatusId, AccountId)
     VALUES (_InstallmentsQty, _RequestedAmount, _InterestRate, _LoanTypeId, _LoanStatusId, _AccountId);
 END $$
 
@@ -249,6 +249,49 @@ CREATE PROCEDURE insert_installment (
 BEGIN
     INSERT INTO Installments (InstallmentNumber, Amount, PaymentDate, PaymentDueDate, LoanId)
     VALUES (_InstallmentNumber, _Amount, _PaymentDate, _PaymentDueDate, _LoanId);
+END $$
+
+CREATE PROCEDURE generate_installments (
+    OUT _GeneratedInstallments INT,
+    IN _LoanId INT
+)
+BEGIN
+    DECLARE _InterestRate DECIMAL(3, 2);
+    DECLARE _RequestedAmount DECIMAL(15, 2);
+    DECLARE _InstallmentsQty INT;
+    DECLARE _CreationDate DATE;
+    DECLARE _InterestToPay DECIMAL(15, 2);
+    DECLARE _FinalAmount DECIMAL(15, 2);
+    DECLARE _InstallmentAmount DECIMAL(15, 2);
+    DECLARE _DueDate DATE;
+    DECLARE counter INT DEFAULT 0;
+
+    -- CATCH del error
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error al crear cuotas';
+    END;
+
+    START TRANSACTION;
+        SELECT InterestRate INTO _InterestRate FROM Loans WHERE LoanId = _LoanId;
+        SELECT RequestedAmount INTO _RequestedAmount FROM Loans WHERE LoanId = _LoanId;
+        SELECT InstallmentsQuantity INTO _InstallmentsQty FROM Loans WHERE LoanId = _LoanId;
+        SELECT CreationDate INTO _CreationDate FROM Loans WHERE LoanId = _LoanId;
+
+        -- ACLARACIÓN
+        -- El cálculo del interés no tiene en cuenta la cantidad de días que pudiera tener cada mes.
+        SET _InterestToPay = ((_InterestRate / 12.00) * _InstallmentsQty / 100.00) * _RequestedAmount;
+        SET _FinalAmount = _RequestedAmount + _InterestToPay;
+        SET _InstallmentAmount = _FinalAmount / _InstallmentsQty;
+        WHILE counter < _InstallmentsQty DO
+            SET counter = counter + 1;
+            -- Incremento la fecha de vencimiento sumando meses según counter
+            SET _DueDate = DATE_ADD(_CreationDate, Interval counter MONTH);
+            CALL insert_installment(counter, _InstallmentAmount, NULL, _DueDate, _LoanId);
+        END WHILE;
+        SET _GeneratedInstallments = counter;
+    COMMIT;
 END $$
 
 DELIMITER ;

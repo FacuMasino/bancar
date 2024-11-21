@@ -153,6 +153,7 @@ public class LoansDao implements ILoansDao
 			auxLoan.setLoanStatus(loanStatusesDao.read(loanStatusId));
 			
 			auxLoan.setInstallments(installmentsDao.listByLoanId(auxLoan.getLoanId()));
+			auxLoan.setPendingInstallments(installmentsDao.listPendingsByLoanId(auxLoan.getLoanId()));
 		}
 		catch (SQLException ex) 
 		{

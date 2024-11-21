@@ -3,6 +3,7 @@ package businessLogicImpl;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import businessLogic.ILoansBusiness;
+import dataAccessImpl.InstallmentsDao;
 import dataAccessImpl.LoansDao;
 import domainModel.Loan;
 import exceptions.BusinessException;
@@ -11,10 +12,12 @@ import exceptions.SQLOperationException;
 public class LoansBusiness implements ILoansBusiness 
 {
 	private LoansDao loansDao;
+	private InstallmentsDao installmentsDao;
 	
 	public LoansBusiness()
 	{
 		loansDao = new LoansDao();
+		installmentsDao = new InstallmentsDao();
 	}
 
 	// TODO: PENDIENTE Ningún método valida las reglas de negocio
@@ -58,10 +61,17 @@ public class LoansBusiness implements ILoansBusiness
 	}
 
 	@Override
-	public boolean update(Loan loan) throws BusinessException
+	public boolean update(Loan loan, boolean isApproving) throws BusinessException
 	{
 		try
 		{
+			if(isApproving)
+			{
+				if(!installmentsDao.generate(loan.getLoanId()))
+				{
+					throw new BusinessException("Ocurrió un error al generar las cuotas.");
+				}
+			}
 			return loansDao.update(loan);
 		}
 		catch (SQLException ex)

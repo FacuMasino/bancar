@@ -32,13 +32,13 @@
                 <div>
                   <h3 class="text-lg font-medium text-gray-800">${loan.loanType.name}</h3>
                   <p class="text-gray-600">Saldo otorgado: $ ${loan.requestedAmount}</p>
-                  <p class="text-gray-600">Cuotas pendientes: NO IMPLEMENTADO</p>
+                  <p class="text-gray-600">Cuotas pendientes: ${loan.pendingInstallments.size()}</p>
                 </div>
                 <div class="flex flex-col items-end">
-                  <p class="text-gray-600 font-medium">$ NO IMPLEMENTADO / mes</p>
+                  <p class="text-gray-600 font-medium">$ ${loan.requestedAmount * 1.00 / loan.installmentsQuantity} / mes</p>
                   <p class="text-gray-600">
                     Vencimiento:
-                    <fmt:formatDate type = "both" dateStyle = "short" timeStyle = "short" value = "${now}" />
+                    <fmt:formatDate type="date" dateStyle="short" timeStyle="short" value="${now}" />
                   </p>
                   <a href="PayLoan.jsp?id=AcaElIdDePrestamo" class="mt-2 text-blue-600 hover:underline flex items-center">
                     Pagar
@@ -88,43 +88,43 @@
       <h2 class="text-xl font-semibold text-gray-700">
         Historial de préstamos
       </h2>
-      <div class="flex flex-col bg-white p-2.5 rounded-xl drop-shadow-sm">
-        <div class="flex justify-between p-2.5 mb-2">
-          <label class="input input-sm input-bordered flex items-center gap-2">
-            <input type="text" class="grow" placeholder="Buscar cuenta, monto" name="searchInput">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="search" class="lucide lucide-search"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
-          </label>
-          <div class="flex gap-2.5">
-            <select class="select select-bordered select-sm w-fit bg-white">
-              <option selected>Seleccione estado</option>
-              <option>Finalizado</option>
-              <option>Vigente</option>
-              <option>En revisión</option>
-              <option>Rechazado</option>
-            </select>
-            <select class="select select-bordered select-sm w-fit bg-white">
-            <option selected>Seleccione tipo</option>
-            <option>Personal</option>
-            <option>Hipotecario</option>
-            <option>Etc..</option>
-          </select>
-          </div>
-        </div>
-        <table class="table">
-          <!-- head -->
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Cuenta</th>
-              <th>Tipo</th>
-              <th>Estado</th>
-              <th>Monto</th>
-              <th>Cuotas</th>
-            </tr>
-          </thead>
-          <tbody>
-            <c:choose>
-              <c:when test="${not empty client.loans}">
+      <div class="flex flex-col bg-white p-2.5 rounded-xl drop-shadow-sm">        
+        <c:choose>
+          <c:when test="${not empty client.loans}">
+            <div class="flex justify-between p-2.5 mb-2">
+              <label class="input input-sm input-bordered flex items-center gap-2">
+                <input type="text" class="grow" placeholder="Buscar cuenta, monto" name="searchInput">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="search" class="lucide lucide-search"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+              </label>
+              <div class="flex gap-2.5">
+                <select class="select select-bordered select-sm w-fit bg-white">
+                  <option selected>Seleccione estado</option>
+                  <option>Finalizado</option>
+                  <option>Vigente</option>
+                  <option>En revisión</option>
+                  <option>Rechazado</option>
+                </select>
+                <select class="select select-bordered select-sm w-fit bg-white">
+                <option selected>Seleccione tipo</option>
+                <option>Personal</option>
+                <option>Hipotecario</option>
+                <option>Etc..</option>
+              </select>
+              </div>
+            </div>
+            <table class="table">
+              <!-- head -->
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Cuenta</th>
+                  <th>Tipo</th>
+                  <th>Estado</th>
+                  <th>Monto</th>
+                  <th>Cuotas</th>
+                </tr>
+              </thead>
+              <tbody>
                 <c:forEach var="loan" items="${client.loans}">
                   <tr class="hover">
                     <th>${loan.loanId}</th>
@@ -158,13 +158,13 @@
                     <td>${loan.installmentsQuantity}</td>
                   </tr>
                 </c:forEach>
-              </c:when>
-              <c:otherwise>
-                <span>No tenés préstamos para mostrar.</span>
-              </c:otherwise>
-            </c:choose>
-          </tbody>
-        </table>
+               </tbody>
+            </table>
+          </c:when>
+          <c:otherwise>
+            <span class="p-4">No tenés préstamos para mostrar.</span>
+          </c:otherwise>
+        </c:choose>
       </div>  
     </div>
   </t:clientwrapper>
