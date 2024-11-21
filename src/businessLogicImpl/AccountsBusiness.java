@@ -20,7 +20,7 @@ public class AccountsBusiness implements IAccountsBusiness
 	// TODO: PENDIENTE Ningún método valida las reglas de negocio
 	
 	@Override
-	public boolean create(Account account) throws BusinessException 
+	public boolean create(Account account) throws BusinessException
 	{
 		try
 		{
@@ -30,12 +30,10 @@ public class AccountsBusiness implements IAccountsBusiness
 		
 			return accountsDao.create(account);
 		}
-		
-		catch (SQLException ex) 
+		catch (SQLException ex)
 		{
 			throw new SQLOperationException();
 		}
-		
 		catch (Exception ex)
 		{
 			ex.printStackTrace();
@@ -155,14 +153,20 @@ public class AccountsBusiness implements IAccountsBusiness
 	}
 
 	@Override
-	public ArrayList<Account> listByIdClient(int clientId) throws BusinessException {
-		try {
+	public ArrayList<Account> listByIdClient(int clientId) throws BusinessException
+	{
+		try
+		{
 			return accountsDao.listByIdClient(clientId);
-		} catch (SQLException ex) {
+		}
+		catch (SQLException ex)
+		{
 			throw new SQLOperationException();
-		} catch (Exception ex) {
+		}
+		catch (Exception ex)
+		{
 			ex.printStackTrace();
-			throw new BusinessException("Ocurrió un error desconocido al leer LAS cuentas...");
+			throw new BusinessException("Ocurrió un error desconocido al leer las cuentas.");
 		}
 	}
 }
