@@ -122,7 +122,7 @@ VALUES
 INSERT INTO Loans (CreationDate, InstallmentsQuantity, RequestedAmount, InterestRate, LoanTypeId, LoanStatusId, AccountId)
 VALUES
     ('2023-01-10', 10, 5000.00, 5.5, 1, 1, 1),
-    ('2023-01-11', 12, 5000.00, 5.5, 1, 2, 1),
+    ('2024-10-10', 12, 50000.00, 5.5, 1, 2, 1),
     ('2023-01-11', 10, 100000.00, 5.5, 1, 3, 1),
     ('2023-02-20', 24, 15000.00, 6.8, 2, 2, 2),
     ('2023-03-15', 36, 20000.00, 7.2, 1, 3, 3),
@@ -187,3 +187,17 @@ VALUES
     ('Pago parcial préstamo - cuenta 15', -900.00, 3, 15),
     ('Transferencia saliente - cuenta 16', -500.00, 4, 16);
 
+INSERT INTO Installments (InstallmentNumber, Amount, PaymentDate, PaymentDueDate, LoanId)
+VALUES
+    ('1', 439.58, NULL, '2024-11-10', 2),
+    ('2', 439.58, NULL, '2024-12-10', 2),
+    ('3', 439.58, NULL, '2025-01-10', 2),
+    ('4', 439.58, NULL, '2025-02-10', 2),
+    ('5', 439.58, NULL, '2025-03-10', 2),
+    ('6', 439.58, NULL, '2025-04-10', 2),
+    ('7', 439.58, NULL, '2025-05-10', 2),
+    ('8', 439.58, NULL, '2025-06-10', 2),
+    ('9', 439.58, NULL, '2025-07-10', 2),
+    ('10', 439.58, NULL, '2025-08-10', 2),
+    ('11', 439.58, NULL, '2025-09-10', 2),
+    ('12', 439.58, NULL, '2025-10-10', 2);

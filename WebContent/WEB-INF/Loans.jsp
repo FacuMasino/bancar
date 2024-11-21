@@ -36,9 +36,9 @@
                   <p class="text-gray-600">Cuotas pendientes: ${loan.pendingInstallments.size()}</p>
                 </div>
                 <div class="flex flex-col items-end">
-                  <p class="text-gray-600 font-medium">$ ${loan.requestedAmount * 1.00 / loan.installmentsQuantity} / mes</p>
+                  <p class="text-gray-600 font-medium">$ ${loan.pendingInstallments[0].amount} / mes</p>
                   <%-- Obtengo el primer elemento de la lista para la fecha, ya que es la primer cuota que debe --%>
-                  <c:set var="dueDate" value="${loan.pendingInstallments[1].paymentDueDate}"/>
+                  <c:set var="dueDate" value="${loan.pendingInstallments[0].paymentDueDate}"/>
                   <c:set var="dueDateClass" value="${dueDate < now ? 'text-red-600' : 'text-gray-600'}"/>
                   <p class="${dueDateClass}">
                     Vencimiento: 
