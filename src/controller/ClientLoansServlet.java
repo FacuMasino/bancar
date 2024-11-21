@@ -1,8 +1,10 @@
 package controller;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,10 +15,13 @@ import javax.servlet.http.HttpServletResponse;
 import businessLogicImpl.AccountTypesBusiness;
 import businessLogicImpl.AccountsBusiness;
 import businessLogicImpl.ClientsBusiness;
+import businessLogicImpl.LoanTypesBusiness;
 import businessLogicImpl.LoansBusiness;
 import domainModel.Account;
 import domainModel.Client;
 import domainModel.Loan;
+import domainModel.LoanType;
+import domainModel.Message;
 import domainModel.Message.MessageType;
 import exceptions.BusinessException;
 import utils.Helper;
@@ -26,12 +31,14 @@ public class ClientLoansServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private AccountsBusiness accountsBusiness;
 	private LoansBusiness loansBusiness;
+	private LoanTypesBusiness loanTypesBusiness;
 	private Client client;
 
     public ClientLoansServlet() {
         super();
 		accountsBusiness = new AccountsBusiness();
 		loansBusiness = new LoansBusiness();
+		loanTypesBusiness = new LoanTypesBusiness();
     }
 
 	protected void doGet(HttpServletRequest req, HttpServletResponse res)
@@ -56,6 +63,7 @@ public class ClientLoansServlet extends HttpServlet {
 				viewApplyForLoan(req, res);
 				break;
 			default:
+				viewClientLoans(req, res);
 				break;
 		}
 	}
@@ -63,8 +71,24 @@ public class ClientLoansServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse res)
 			throws ServletException, IOException
 	{
+		String action = req.getParameter("action");
 		getSessionClient(req); // Obtener cliente y sus datos
-		doGet(req, res);
+		
+		if(action == null || action.isEmpty())
+		{
+			viewClientLoans(req, res);
+			return;
+		}
+		
+		switch (action)
+		{
+			case "request":
+				requestLoan(req, res);
+				break;
+			default:
+				viewClientLoans(req, res);
+				break;
+		}
 	}
 
 	private void viewClientLoans(HttpServletRequest req, HttpServletResponse res)
@@ -108,12 +132,55 @@ public class ClientLoansServlet extends HttpServlet {
 	{
 		Helper.redirect("/WEB-INF/PayLoan.jsp", req, res);
 	}	
+	
+	private void requestLoan(HttpServletRequest req, HttpServletResponse res)
+			throws ServletException, IOException
+	{
+		
+		int accountId = Integer.parseInt(req.getParameter("destinationAccountId"));
+		int loanType = Integer.parseInt(req.getParameter("loanType"));
+		int installmentsQty = Integer.parseInt(req.getParameter("installmentsQty"));
+		BigDecimal requestedAmount = new BigDecimal(req.getParameter("requestedAmount"));
+		BigDecimal interestRate = new BigDecimal(req.getParameter("interestRate"));
+		
+		if(accountId == 0 || loanType == 0)
+		{
+			Helper.setReqMessage(req, 
+					"Debe seleccionar el Motivo y Cuenta Destino", MessageType.ERROR);
+			Helper.redirect("/WEB-INF/Loans.jsp", req, res);
+			return;
+		}
+		
+		try
+		{
+			Loan auxLoan = new Loan();
+			
+			boolean success = loansBusiness.create(auxLoan);
+			
+		} catch (BusinessException ex)
+		{
+			Helper.setReqMessage(req, ex.getMessage(), MessageType.ERROR);
+			Helper.redirect("/WEB-INF/Loans.jsp", req, res);
+		}
+		
+		Helper.redirect("/WEB-INF/Loans.jsp", req, res);
+	}	
 
 	private void viewApplyForLoan(HttpServletRequest req, HttpServletResponse res)
 		throws ServletException, IOException
 	{
+		ArrayList<LoanType> loanTypes = new ArrayList<LoanType>();
 		
+		try
+		{
+			loanTypes = loanTypesBusiness.list();
+		} catch (BusinessException ex)
+		{
+			Helper.setReqMessage(req, ex.getMessage(), MessageType.ERROR);
+			Helper.redirect("/WEB-INF/ApplyForLoan.jsp", req, res);
+		}
 		
+		req.setAttribute("loanTypes", loanTypes);
 		Helper.redirect("/WEB-INF/ApplyForLoan.jsp", req, res);
 	}
 	

@@ -1,4 +1,9 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags/"%>
+<%@page import="java.util.List"%>
+<%@page import="java.util.ArrayList"%>
+<%@taglib prefix="t" tagdir="/WEB-INF/tags/"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <t:masterpage title="Pedir Préstamo" customNavbar="true">
   <t:clientwrapper activeMenuItem="loansMenu">
     <form method="post" action="Loans" class="container flex flex-col gap-4 mx-auto p-4 max-w-7xl mb-8">
@@ -70,15 +75,31 @@
       </div>
       <h1 class="font-bold text-lg">Motivo del préstamo</h1>
       <select class="select select-bordered w-full bg-white drop-shadow" name="loanType">
-        <option selected>Selecciona un motivo</option>
-        <option>Electrodomésticos del hogar</option>
-        <option>Hipotecario</option>
+        <c:choose>
+            <c:when test="${not empty loanTypes}">
+              <option selected>Selecciona un motivo</option>
+              <c:forEach var="type" items="${loanTypes}">
+                <option value="${type.id}">${type.name}</option>
+              </c:forEach>
+            </c:when>
+            <c:otherwise>
+              <option disabled>No se pudieron obtener los datos</option>
+            </c:otherwise>
+        </c:choose>
       </select>
       <h1 class="font-bold text-lg">Dónde vas a recibir el dinero?</h1>
       <select class="select select-bordered w-full bg-white drop-shadow" name="destinationAccountId">
-        <option selected>Selecciona una cuenta</option>
-        <option>Cta. 1001 - $ 55.000</option>
-        <option>Cta. 1002 - $ 200.000</option>
+        <c:choose>
+          <c:when test="${not empty client.accounts}">
+            <option selected>Selecciona una cuenta</option>
+            <c:forEach var="account" items="${client.accounts}">
+              <option value="${account.id}">Cta. ${account.id} - $ ${account.balance}</option>
+            </c:forEach>
+          </c:when>
+          <c:otherwise>
+            <option disabled>No se pudieron obtener las cuentas</option>
+          </c:otherwise>
+        </c:choose>
       </select>
       <button type="submit" class="btn btn-primary"
         name="action" value="requestLoan">
