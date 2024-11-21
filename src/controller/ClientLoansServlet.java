@@ -51,8 +51,12 @@ public class ClientLoansServlet extends HttpServlet {
 		{
 			case "payLoan":
 				viewPayLoan(req, res);
+				break;
 			case "apply":
 				viewApplyForLoan(req, res);
+				break;
+			default:
+				break;
 		}
 	}
 	

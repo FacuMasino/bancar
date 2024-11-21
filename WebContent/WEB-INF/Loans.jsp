@@ -1,6 +1,7 @@
 <%@page import="domainModel.Client"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
+<jsp:useBean id="now" class="java.util.Date"/>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags/"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
@@ -36,11 +37,17 @@
                 </div>
                 <div class="flex flex-col items-end">
                   <p class="text-gray-600 font-medium">$ ${loan.requestedAmount * 1.00 / loan.installmentsQuantity} / mes</p>
-                  <p class="text-gray-600">
-                    Vencimiento:
-                    <fmt:formatDate type="date" dateStyle="short" timeStyle="short" value="${now}" />
+                  <%-- Obtengo el primer elemento de la lista para la fecha, ya que es la primer cuota que debe --%>
+                  <c:set var="dueDate" value="${loan.pendingInstallments[1].paymentDueDate}"/>
+                  <c:set var="dueDateClass" value="${dueDate < now ? 'text-red-600' : 'text-gray-600'}"/>
+                  <p class="${dueDateClass}">
+                    Vencimiento: 
+                    <fmt:formatDate type="date" dateStyle="short" timeStyle="short" value="${dueDate}" />
+                    <c:if test="${dueDate < now}">
+                      <p class="text-red-600 font-bold text-xs">[VENCIDO]</p>
+                    </c:if>
                   </p>
-                  <a href="PayLoan.jsp?id=AcaElIdDePrestamo" class="mt-2 text-blue-600 hover:underline flex items-center">
+                  <a href="?action=payLoan&id=${loan.loanId}" class="mt-2 text-blue-600 hover:underline flex items-center">
                     Pagar
                     <span class="ml-1">&#8594;</span> <!-- Flecha derecha -->
                   </a>
@@ -68,7 +75,10 @@
                 <div>
                   <h3 class="text-lg font-medium text-gray-800">${loan.loanType.name}</h3>
                   <p class="text-gray-600">Monto solicitado: $ ${loan.requestedAmount}</p>
-                  <p class="text-gray-600">Fecha de solicitud: NO IMPLEMENTADO</p>
+                  <p class="text-gray-600">
+                    Fecha de solicitud:
+                    <fmt:formatDate type="date" dateStyle="short" timeStyle="short" value="${loan.creationDate}" />
+                  </p>
                 </div>
                 <div class="text-right flex items-center">
                   <span class="px-4 py-2 bg-yellow-200 text-yellow-700 font-medium rounded-lg">
