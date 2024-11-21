@@ -83,7 +83,7 @@
               </c:forEach>
             </c:when>
             <c:otherwise>
-              <option disabled>No se pudieron obtener los datos</option>
+              <option value="0" disabled>No se pudieron obtener los datos</option>
             </c:otherwise>
         </c:choose>
       </select>
@@ -97,7 +97,7 @@
             </c:forEach>
           </c:when>
           <c:otherwise>
-            <option disabled>No se pudieron obtener las cuentas</option>
+            <option value="0" disabled>No se pudieron obtener las cuentas</option>
           </c:otherwise>
         </c:choose>
       </select>

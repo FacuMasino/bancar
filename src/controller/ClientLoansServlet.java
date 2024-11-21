@@ -19,6 +19,7 @@ import businessLogicImpl.LoanTypesBusiness;
 import businessLogicImpl.LoansBusiness;
 import domainModel.Account;
 import domainModel.Client;
+import domainModel.Installment;
 import domainModel.Loan;
 import domainModel.LoanStatus;
 import domainModel.LoanType;
@@ -131,29 +132,51 @@ public class ClientLoansServlet extends HttpServlet {
 	private void viewPayLoan(HttpServletRequest req, HttpServletResponse res)
 		throws ServletException, IOException
 	{
+		try
+		{
+			int loanId = Optional.ofNullable(req.getParameter("id"))
+					.map(Integer::parseInt)
+					.orElse(0);
+			
+			// Busca entre la lista de préstamos el que coincida con el id
+			Loan auxLoan = client.getLoans().stream()
+					.filter(loan -> loan.getLoanId() == loanId)
+					.findFirst()
+					.orElse(null);
+			
+			BigDecimal outstandingBalance = loansBusiness.calcOutstandingBalance(auxLoan);
+			
+			req.setAttribute("outstandingBalance", outstandingBalance);
+			req.setAttribute("loan", auxLoan);
+		} catch (Exception ex)
+		{
+			Helper.setReqMessage(req, "Ocurrió un error desconocido.", MessageType.ERROR);
+			viewClientLoans(req,res);
+			return;
+		}
+		
 		Helper.redirect("/WEB-INF/PayLoan.jsp", req, res);
 	}	
 	
 	private void requestLoan(HttpServletRequest req, HttpServletResponse res)
 			throws ServletException, IOException
 	{
-		
-		int accountId = Integer.parseInt(req.getParameter("destinationAccountId"));
-		int loanTypeId = Integer.parseInt(req.getParameter("loanType"));
-		int installmentsQty = Integer.parseInt(req.getParameter("installmentsQty"));
-		BigDecimal requestedAmount = new BigDecimal(req.getParameter("requestedAmount"));
-		BigDecimal interestRate = new BigDecimal(req.getParameter("interestRate"));
-		
-		if(accountId == 0 || loanTypeId == 0)
-		{
-			Helper.setReqMessage(req, 
-					"Debe seleccionar el Motivo y Cuenta Destino", MessageType.ERROR);
-			viewApplyForLoan(req,res);
-			return;
-		}
-		
 		try
 		{
+			int accountId = Integer.parseInt(req.getParameter("destinationAccountId"));
+			int loanTypeId = Integer.parseInt(req.getParameter("loanType"));
+			int installmentsQty = Integer.parseInt(req.getParameter("installmentsQty"));
+			BigDecimal requestedAmount = new BigDecimal(req.getParameter("requestedAmount"));
+			BigDecimal interestRate = new BigDecimal(req.getParameter("interestRate"));
+			
+			if(accountId == 0 || loanTypeId == 0)
+			{
+				Helper.setReqMessage(req, 
+						"Debe seleccionar el Motivo y Cuenta Destino", MessageType.ERROR);
+				viewApplyForLoan(req,res);
+				return;
+			}
+			
 			LoanType loanType = new LoanType();
 			loanType.setId(loanTypeId);
 			
@@ -185,6 +208,9 @@ public class ClientLoansServlet extends HttpServlet {
 			Helper.setReqMessage(req, ex.getMessage(), MessageType.ERROR);
 			viewClientLoans(req,res);
 			return;
+		} catch (Exception ex)
+		{
+			Helper.setReqMessage(req, "Ocurrió un error desconocido.", MessageType.ERROR);
 		}
 		
 		getSessionClient(req); // Actualiza los datos completos del cliente

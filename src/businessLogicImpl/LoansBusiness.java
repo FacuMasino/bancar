@@ -1,10 +1,12 @@
 package businessLogicImpl;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import businessLogic.ILoansBusiness;
 import dataAccessImpl.InstallmentsDao;
 import dataAccessImpl.LoansDao;
+import domainModel.Installment;
 import domainModel.Loan;
 import exceptions.BusinessException;
 import exceptions.SQLOperationException;
@@ -119,5 +121,18 @@ public class LoansBusiness implements ILoansBusiness
 			ex.printStackTrace();
 			throw new BusinessException("Ocurrió un error desconocido al leer los prestamos...");
 		}
+	}
+	
+	public BigDecimal calcOutstandingBalance(Loan auxLoan)
+	{
+		
+		BigDecimal outstandingBalance = new BigDecimal(0);
+		
+		for(Installment installment : auxLoan.getPendingInstallments())
+		{
+			outstandingBalance = outstandingBalance.add(installment.getAmount());
+		}
+		
+		return outstandingBalance;
 	}
 }
