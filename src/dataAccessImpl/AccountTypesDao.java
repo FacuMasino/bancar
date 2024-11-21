@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import dataAccess.IAccountTypesDao;
 import domainModel.AccountType;
 
-
 public class AccountTypesDao implements IAccountTypesDao
 {
 	private Database db;
@@ -74,35 +73,6 @@ public class AccountTypesDao implements IAccountTypesDao
 		}
 
 		return auxAccountTypeList;
-	}
-
-	@Override
-	public int getId(AccountType accountType) throws SQLException
-	{
-		// Negocio deberia de verificar que NO sea 0
-		ResultSet rsAccountType;
-		int auxId = 0;
-
-		try
-		{
-			db.setPreparedStatement("SELECT AccountTypeId FROM AccountTypes WHERE AccountTypeName = ?");
-			db.getPreparedStatement().setString(1, accountType.getName());
-			rsAccountType = db.getPreparedStatement().executeQuery();
-			
-			if (!rsAccountType.next())
-			{
-				return auxId;
-			}
-			
-			auxId = rsAccountType.getInt(1);
-		}
-		catch (Exception ex)
-		{
-			ex.printStackTrace();
-			throw ex;
-		}
-
-		return auxId;
 	}
 
 	private AccountType getAccountType(ResultSet rsAccountType) throws SQLException

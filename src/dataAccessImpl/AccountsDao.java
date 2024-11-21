@@ -7,7 +7,6 @@ import dataAccess.IAccountsDao;
 import domainModel.Account;
 import domainModel.AccountType;
 
-
 public class AccountsDao implements IAccountsDao
 {
 	private Database db;
@@ -150,12 +149,6 @@ public class AccountsDao implements IAccountsDao
 		}
 
 		return accounts;
-	}
-
-	@Override
-	public int getId(Account account) throws SQLException
-	{
-		return 0;
 	}
 
 	@Override

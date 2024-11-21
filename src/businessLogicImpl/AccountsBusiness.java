@@ -118,25 +118,6 @@ public class AccountsBusiness implements IAccountsBusiness
 		}
 	}
 
-	@Override
-	public int getId(Account account) throws BusinessException
-	{
-		try
-		{
-			return accountsDao.getId(account);
-		}
-		catch (SQLException ex)
-		{
-			throw new SQLOperationException();
-		}
-		catch (Exception ex)
-		{
-			ex.printStackTrace();
-			throw new BusinessException
-				("Ocurrió un error desconocido al obtener ID de cuenta.");
-		}
-	}
-	
 	/*
 	 * Genera un CBU ficticio basado en el nro de cuenta (ID)
 	 */

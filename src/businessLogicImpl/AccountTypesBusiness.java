@@ -59,22 +59,4 @@ public class AccountTypesBusiness implements IAccountTypesBusiness
 			throw new BusinessException("Ocurrió un error desconocido al obtener los tipos de cuenta.");
 		}
 	}
-
-	@Override
-	public int getId(AccountType accountType) throws BusinessException
-	{
-		try
-		{	
-			return accountTypesDao.getId(accountType);
-		}
-		catch (SQLException ex)
-		{
-			throw new SQLOperationException();
-		}
-		catch (Exception ex)
-		{
-			ex.printStackTrace();
-			throw new BusinessException("Ocurrió un error desconocido al obtener ID de cuenta.");
-		}
-	}
 }
