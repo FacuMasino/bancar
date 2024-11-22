@@ -135,4 +135,16 @@ public class LoansBusiness implements ILoansBusiness
 		
 		return outstandingBalance;
 	}
+
+	@Override
+	public boolean payLoan(Loan loan, int installmentId)
+			throws BusinessException
+	{
+		// TODO Auto-generated method stub
+		// Negocio de movimientos, tiene saldo?
+		// Generar movimiento
+		// Negocio de cuotas, pagar cuota
+		// Es última cuota? cambiar estado del préstamo
+		return false;
+	}
 }

@@ -87,9 +87,51 @@ public class ClientLoansServlet extends HttpServlet {
 			case "request":
 				requestLoan(req, res);
 				break;
+			case "payInstallment":
+				payInstallment(req,res);
 			default:
 				viewClientLoans(req, res);
 				break;
+		}
+	}
+
+	private void payInstallment(HttpServletRequest req, HttpServletResponse res)
+	{
+		try
+		{
+			int loanId = Optional.ofNullable(req.getParameter("id"))
+					.map(Integer::parseInt)
+					.orElse(0);
+			
+			int installmentId = Optional.ofNullable(req.getParameter("installmentId"))
+					.map(Integer::parseInt)
+					.orElse(0);
+			
+			// Busca entre la lista de préstamos el que coincida con el id
+			Loan auxLoan = client.getLoans().stream()
+					.filter(loan -> loan.getLoanId() == loanId)
+					.findFirst()
+					.orElse(null);
+			
+			if(auxLoan == null)
+			{
+				Helper.setReqMessage(req,
+						"Ocurrió un error al cargar los datos del préstamo.", MessageType.ERROR);
+				Helper.redirect("/WEB-INF/PayLoan.jsp", req, res);
+				return; // Cortamos el flujo para evitar una excepción por volver a redireccionar
+			}
+			
+			boolean success = loansBusiness.payLoan(auxLoan, installmentId);
+			if(success)
+			{
+				//... [en proceso]
+			}
+			// manejar bssexceptions posibles [en proceso]
+		} catch (Exception ex)
+		{
+			Helper.setReqMessage(req,
+					"Error desconocido: " + ex.getMessage(), MessageType.ERROR);
+			ex.printStackTrace();
 		}
 	}
 
@@ -134,6 +176,10 @@ public class ClientLoansServlet extends HttpServlet {
 	{
 		try
 		{
+			// Con esta función Nullable evitamos la excepción Null Pointer
+			// En el caso de que no exista el parámetro id.
+			// loanId va a tener 0, y no se va a encontrar ningún
+			// Préstamo con ese id ya que en la DB empiezan desde 1
 			int loanId = Optional.ofNullable(req.getParameter("id"))
 					.map(Integer::parseInt)
 					.orElse(0);
@@ -144,13 +190,21 @@ public class ClientLoansServlet extends HttpServlet {
 					.findFirst()
 					.orElse(null);
 			
+			if(auxLoan == null)
+			{
+				Helper.setReqMessage(req,
+						"Ocurrió un error al cargar los datos del préstamo.", MessageType.ERROR);
+				Helper.redirect("/WEB-INF/PayLoan.jsp", req, res);
+				return; // Cortamos el flujo para evitar una excepción por volver a redireccionar
+			}
+			
 			BigDecimal outstandingBalance = loansBusiness.calcOutstandingBalance(auxLoan);
 			
 			req.setAttribute("outstandingBalance", outstandingBalance);
 			req.setAttribute("loan", auxLoan);
-		} catch (Exception ex)
+		} catch (NumberFormatException ex)
 		{
-			Helper.setReqMessage(req, "Ocurrió un error desconocido.", MessageType.ERROR);
+			Helper.setReqMessage(req, "El ID del préstamo tiene un formato inválido.", MessageType.ERROR);
 			viewClientLoans(req,res);
 			return;
 		}

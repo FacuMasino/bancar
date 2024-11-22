@@ -11,4 +11,5 @@ public interface ILoansBusiness
 	public boolean update(Loan loan, boolean isApproving) throws BusinessException;
 	public ArrayList<Loan> list() throws BusinessException;
 	public ArrayList<Loan> listByIdAccount(int accountId) throws BusinessException;
+	public boolean payLoan(Loan loan, int installmentId) throws BusinessException;
 }
