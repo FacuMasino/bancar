@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Optional;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,15 +13,15 @@ import businessLogicImpl.AccountTypesBusiness;
 import businessLogicImpl.AccountsBusiness;
 import businessLogicImpl.ClientsBusiness;
 import businessLogicImpl.LoansBusiness;
+import businessLogicImpl.MovementsBusiness;
 import domainModel.Account;
 import domainModel.AccountType;
 import domainModel.Client;
 import domainModel.Loan;
+import domainModel.Movement;
 import domainModel.Message.MessageType;
 import exceptions.BusinessException;
-import exceptions.InvalidFieldsException;
 import utils.Helper;
-import utils.Page;
 
 @WebServlet(urlPatterns = { "/Admin/Accounts", "/Admin/Accounts/" })
 public class AdminAccountsServlet extends HttpServlet
@@ -32,6 +31,7 @@ public class AdminAccountsServlet extends HttpServlet
 	private ClientsBusiness clientsBusiness;
 	private LoansBusiness loansBusiness;
 	private AccountTypesBusiness accountTypesBusiness;
+	private MovementsBusiness movementsBusiness;
 
 	public AdminAccountsServlet()
 	{
@@ -40,7 +40,8 @@ public class AdminAccountsServlet extends HttpServlet
 		clientsBusiness = new ClientsBusiness();
 		loansBusiness = new LoansBusiness();
 		accountTypesBusiness = new AccountTypesBusiness();
-		
+		movementsBusiness = new MovementsBusiness();
+
 	}
 
 	protected void doGet(HttpServletRequest request,
@@ -48,9 +49,8 @@ public class AdminAccountsServlet extends HttpServlet
 	{
 
 		int clientId = Optional.ofNullable(request.getParameter("clientId"))
-				.map(Integer::parseInt)
-				.orElse(0);
-		if(clientId == 0)
+				.map(Integer::parseInt).orElse(0);
+		if (clientId == 0)
 		{
 			response.sendRedirect("Clients");
 			return;
@@ -58,204 +58,247 @@ public class AdminAccountsServlet extends HttpServlet
 
 		viewClientAccounts(request, response, clientId);
 
+		//// SI ENTRA ACÁ VIENE POR EL HREF
+
+		if (request.getParameter("id") != null)
+		{
+			listMovements(request, response);
+		}
 	}
-	
 
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException
 	{
-		
+
 		int clientId = Optional.ofNullable(request.getParameter("clientId"))
-				.map(Integer::parseInt)
-				.orElse(0);
-		
+				.map(Integer::parseInt).orElse(0);
+
 		String action = request.getParameter("action");
 
-		switch (action) 
+		switch (action)
 		{
-			case "saveNewAccount":
-				saveNewAccount(request, response);
-				break;
-			case "editAccount":
-				editAccount(request, response);
-				break;
-			case "deleteAccount":
-				deleteAccount(request, response);
-				break;
+		case "saveNewAccount":
+			saveNewAccount(request, response);
+			break;
+		case "editAccount":
+			editAccount(request, response);
+			break;
+		case "deleteAccount":
+			deleteAccount(request, response);
+			break;
 		}
 	}
-		
-	private void saveNewAccount ( HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
-	{	
+
+	private void saveNewAccount(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException
+	{
 		int clientId = Optional.ofNullable(request.getParameter("clientId"))
-				.map(Integer::parseInt)
-				.orElse(0);
-		
-		Account account = new Account ();
-		
+				.map(Integer::parseInt).orElse(0);
+
+		Account account = new Account();
+
 		try
 		{
 			String accountTypeId = request.getParameter("accountType");
 			int typeId = Integer.parseInt(accountTypeId);
 			AccountType accountType;
-			accountType= accountTypesBusiness.read(typeId);
-			account.setAccountType(accountType);	
-		}
-		catch (BusinessException e)
+			accountType = accountTypesBusiness.read(typeId);
+			account.setAccountType(accountType);
+		} catch (BusinessException e)
 		{
 			e.printStackTrace();
 		}
-	
-			account.setBalance(new BigDecimal("10000.00"));
-            account.setClientId(clientId);
-            account.setCbu(account.getCbu());
 
-     	try
-		{  
-     		Boolean success = accountsBusiness.create(account);
-     		Client client = getFullClient(clientId);
-     		
-     		if(success)
+		account.setBalance(new BigDecimal("10000.00"));
+		account.setClientId(clientId);
+		account.setCbu(account.getCbu());
+
+		try
+		{
+			Boolean success = accountsBusiness.create(account);
+			Client client = getFullClient(clientId);
+
+			if (success)
 			{
-				Helper.setReqMessage(request, "Cuenta creada exitosamente.", MessageType.SUCCESS);
-			}
-     		else
+				Helper.setReqMessage(request, "Cuenta creada exitosamente.",
+						MessageType.SUCCESS);
+			} else
 			{
-				Helper.setReqMessage(request, "No se pudo crear la cuenta.", MessageType.ERROR);
+				Helper.setReqMessage(request, "No se pudo crear la cuenta.",
+						MessageType.ERROR);
 			}
-     		
-     		System.out.println("Cuenta creada exitosamente.");
-     		request.setAttribute("client", client);
-     		request.setAttribute("accountTypes", accountTypesBusiness.list());
-			Helper.redirect("/WEB-INF/AdminClientAccounts.jsp", request, response);
+
+			System.out.println("Cuenta creada exitosamente.");
+			request.setAttribute("client", client);
+			request.setAttribute("accountTypes", accountTypesBusiness.list());
+			Helper.redirect("/WEB-INF/AdminClientAccounts.jsp", request,
+					response);
 		}
-		
+
 		catch (BusinessException ex)
 		{
 			Helper.setReqMessage(request, ex.getMessage(), MessageType.ERROR);
-			Helper.redirect("/WEB-INF/AdminClientAccounts.jsp", request, response);
+			Helper.redirect("/WEB-INF/AdminClientAccounts.jsp", request,
+					response);
 			ex.printStackTrace();
 		}
 	}
 
-	private void editAccount(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException
+	private void editAccount(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException
 	{
 		int clientId = Optional.ofNullable(request.getParameter("clientId"))
-				.map(Integer::parseInt)
-				.orElse(0);
+				.map(Integer::parseInt).orElse(0);
 		int accountId = Optional.ofNullable(request.getParameter("accountId"))
-				.map(Integer::parseInt)
-				.orElse(0);
-		
-		BigDecimal accountBalance = Optional.ofNullable(request.getParameter("accountBalance"))
-				.map(BigDecimal::new)
-				.orElse(BigDecimal.ZERO);
-		
-		try 
+				.map(Integer::parseInt).orElse(0);
+
+		BigDecimal accountBalance = Optional
+				.ofNullable(request.getParameter("accountBalance"))
+				.map(BigDecimal::new).orElse(BigDecimal.ZERO);
+
+		try
 		{
 			Account auxAccount = accountsBusiness.read(accountId);
 			System.out.println(accountBalance);
 			auxAccount.setBalance(accountBalance);
 			Boolean success = accountsBusiness.update(auxAccount);
 			Client client = getFullClient(clientId);
-			if(success)
+			if (success)
 			{
-				Helper.setReqMessage(request, "Cuenta actualizada con éxito!", MessageType.SUCCESS);
+				Helper.setReqMessage(request, "Cuenta actualizada con éxito!",
+						MessageType.SUCCESS);
 			} else
 			{
-				Helper.setReqMessage(request, "No se pudo modificar la cuenta", MessageType.ERROR);
+				Helper.setReqMessage(request, "No se pudo modificar la cuenta",
+						MessageType.ERROR);
 			}
 			request.setAttribute("client", client);
-			Helper.redirect("/WEB-INF/AdminClientAccounts.jsp", request, response);
-		}
-		catch (BusinessException ex)
+			Helper.redirect("/WEB-INF/AdminClientAccounts.jsp", request,
+					response);
+		} catch (BusinessException ex)
 		{
 			Helper.setReqMessage(request, ex.getMessage(), MessageType.ERROR);
-			Helper.redirect("/WEB-INF/AdminClientAccounts.jsp", request, response);
+			Helper.redirect("/WEB-INF/AdminClientAccounts.jsp", request,
+					response);
 		}
 	}
-	
-	private void deleteAccount(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException
+
+	private void deleteAccount(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException
 	{
 		int clientId = Optional.ofNullable(request.getParameter("clientId"))
-				.map(Integer::parseInt)
-				.orElse(0);
+				.map(Integer::parseInt).orElse(0);
 		int accountId = Optional.ofNullable(request.getParameter("accountId"))
-				.map(Integer::parseInt)
-				.orElse(0);
-		
-		try 
+				.map(Integer::parseInt).orElse(0);
+
+		try
 		{
 			Boolean success = accountsBusiness.delete(accountId);
 			Client client = getFullClient(clientId);
-			
-			if(success)
+
+			if (success)
 			{
-				Helper.setReqMessage(request, "Cuenta eliminada con éxito!", MessageType.SUCCESS);
+				Helper.setReqMessage(request, "Cuenta eliminada con éxito!",
+						MessageType.SUCCESS);
 			} else
 			{
-				Helper.setReqMessage(request, "No se pudo eliminar la cuenta", MessageType.ERROR);
+				Helper.setReqMessage(request, "No se pudo eliminar la cuenta",
+						MessageType.ERROR);
 			}
-			
+
 			request.setAttribute("client", client);
-			Helper.redirect("/WEB-INF/AdminClientAccounts.jsp", request, response);
-			Helper.setReqMessage(request, "Cuenta eliminada con éxito!", MessageType.SUCCESS);
+			Helper.redirect("/WEB-INF/AdminClientAccounts.jsp", request,
+					response);
+		
 		}
+		
 		catch (BusinessException ex)
 		{
 			Helper.setReqMessage(request, ex.getMessage(), MessageType.ERROR);
-			Helper.redirect("/WEB-INF/AdminClientAccounts.jsp", request, response);
+			Helper.redirect("/WEB-INF/AdminClientAccounts.jsp", request,
+					response);
 		}
 	}
-	
-	private void viewClientAccounts(HttpServletRequest request, HttpServletResponse response,
-			int clientId)
-			throws ServletException, IOException  
+
+	private void viewClientAccounts(HttpServletRequest request,
+			HttpServletResponse response, int clientId)
+			throws ServletException, IOException
 	{
-		try 
+		try
 		{
 			Client client = getFullClient(clientId);
 			request.setAttribute("client", client);
-		 	request.setAttribute("accountTypes", accountTypesBusiness.list());
-			
-			
-			Helper.redirect("/WEB-INF/AdminClientAccounts.jsp", request, response);
-		}
-		catch (BusinessException ex)
+			request.setAttribute("accountTypes", accountTypesBusiness.list());
+
+			Helper.redirect("/WEB-INF/AdminClientAccounts.jsp", request,
+					response);
+		} catch (BusinessException ex)
 		{
 			Helper.setReqMessage(request, ex.getMessage(), MessageType.ERROR);
 			Helper.redirect("/Admin/Clients", request, response);
+
 		}
 	}
-	
+
 	private Client getFullClient(int clientId) throws BusinessException
 	{
 		try
 		{
 			Client client = clientsBusiness.read(clientId);
-			
+
 			ArrayList<Account> accountsList = new ArrayList<Account>();
 			accountsList = accountsBusiness.listByIdClient(clientId);
-			
-			ArrayList <Loan> loansList = new ArrayList<Loan>();
-			  
+
+			ArrayList<Loan> loansList = new ArrayList<Loan>();
+
 			for (Account account : accountsList)
 			{
 				int accountId = account.getId();
-				ArrayList<Loan> accountLoans = loansBusiness.listByIdAccount(accountId);
+				ArrayList<Loan> accountLoans = loansBusiness
+						.listByIdAccount(accountId);
 				loansList.addAll(accountLoans);
 			}
-	
-			client.setLoans(loansList); 
+
+			client.setLoans(loansList);
 			client.setAccounts(accountsList);
-			
+
 			return client;
-		}
-		catch (BusinessException ex) 
+		} catch (BusinessException ex)
 		{
 			throw ex;
 		}
-	}	
-}	
+	}
+
+	//// PARA LISTAR MOVIMIENTOS EN NUEVO JSP
+
+	private void listMovements(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException
+	{
+		try
+		{
+			// TODO: Cargar lista cuando funcione eḷ negocio
+			// Enviar atributo con la lista
+			int accountId = Optional
+					.ofNullable(request.getParameter("accountId"))
+					.map(Integer::parseInt).orElse(0);
+			int clientId = Optional.ofNullable(request.getParameter("clientId"))
+					.map(Integer::parseInt).orElse(0);
+
+			Client client = getFullClient(clientId);
+			Account account = accountsBusiness.read(accountId);
+			ArrayList<Movement> movementsList = new ArrayList<Movement>();
+			movementsList = movementsBusiness.listByIdAccount(accountId);
+
+			request.setAttribute("client", client);
+			request.setAttribute("account", account);
+			request.setAttribute("movementsList", movementsList);
+			Helper.redirect("/WEB-INF/AdminAccountDetails.jsp", request,
+					response);
+		} catch (BusinessException e)
+		{
+			Helper.setReqMessage(request, e.getMessage(), MessageType.ERROR);
+			Helper.redirect("/Admin/Clients", request, response);
+			e.printStackTrace();
+		}
+	}
+}

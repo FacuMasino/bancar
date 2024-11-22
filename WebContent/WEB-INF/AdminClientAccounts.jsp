@@ -6,8 +6,7 @@
 <%-- Variables JSTL --%>
 
 <c:set var="client" value="${requestScope.client}" />
-<c:set var="accountTypes"
-  value="${requestScope.accountTypes != null ? requestScope.accountTypes : emptyList}" />
+<c:set var="accountTypes" value="${requestScope.accountTypes != null ? requestScope.accountTypes : emptyList}" />
 
 <t:masterpage title="Admin - Cuentas del cliente" customNavbar="true">
   <t:adminwrapper activeMenuItem="adminClientsMenu">
@@ -59,23 +58,24 @@
             <c:when test="${not empty client.accounts}">
               <c:forEach var="account" items="${client.accounts}" varStatus="status">
                 <div class="flex flex-col p-6 bg-white rounded-lg w-full drop-shadow-sm">
+                 <div class= "flex justify-between">
                   <h2 class="font-bold text-xl mb-6">
                     Cuenta: <span>${account.getAccountType().getName()}</span>
                   </h2>
+                 <a href="/Admin/Accounts?accountId=${account.id}&clientId=${client.clientId}" class="btn btn-ghost" title="Movimientos">
+                   <i data-lucide="eye"></i>
+                 </a>
+                  </div>
                   <span class="font-bold text-xl text-green-600">${account.balance}</span>
                   <div class="flex flex-col w-fit mb-4">
-                    <div class="flex justify-between gap-2">
-                      <span>Nro. de cuenta:</span> <span>${account.id }</span>
+               <div class="flex justify-between gap-2">
+                      <span> Nro. de cuenta: </span> <span>${account.id}</span>
                     </div>
                   </div>
 
                   <div class="flex justify-between">
-                    <button type="button" onclick="openEditModal(${account.id }, ${account.balance})"
-                      class="btn btn-sm btn-ghost border-gray-200">
-                      Modificar</button>
-                    <button class="btn btn-sm btn-primary" type="button"
-                      onclick="openDeleteModal(${account.id })">
-                      <i class="w-[16px]" data-lucide="trash"></i>
+                    <button type="button" onclick="openEditModal(${account.id }, ${account.balance})"class="btn btn-sm btn-ghost border-gray-200"> Modificar</button>
+                      <button class="btn btn-sm btn-primary" type="button" onclick="openDeleteModal(${account.id })"><i class="w-[16px]" data-lucide="trash"></i>
                     </button>
                   </div>
                 </div>
@@ -94,8 +94,7 @@
             <h2 class="font-bold text-xl w-full">Crear Cuenta</h2>
             <input type="hidden" name="clientId" value="${client.clientId}" />
             <div class="flex items-center justify-end w-full gap-2.5">
-              <span>Tipo de cuenta:</span> <select name="accountType"
-                class="select select-bordered bg-white w-1/2 drop-shadow">
+              <span>Tipo de cuenta:</span> <select name="accountType" class="select select-bordered bg-white w-1/2 drop-shadow">
                 <c:choose>
                   <c:when test="${empty accountTypes}">
                     <!-- Mostrar mensaje si tipo de cuentas está vacía (no va a ocurrir) -->
