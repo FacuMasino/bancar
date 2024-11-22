@@ -8,10 +8,10 @@ public class Installment
 	private int installmentId;
 	private int number;
 	private BigDecimal amount;
-	private Date paymentDate;
 	private Date paymentDueDate;
 	private int loanId;
-
+	private Movement movement;
+	
 	public Installment()
 	{
 		
@@ -41,14 +41,6 @@ public class Installment
 		this.amount = amount;
 	}
 
-	public Date getPaymentDate() {
-		return paymentDate;
-	}
-
-	public void setPaymentDate(Date paymentDate) {
-		this.paymentDate = paymentDate;
-	}
-
 	public int getLoanId() {
 		return loanId;
 	}
@@ -67,13 +59,23 @@ public class Installment
 		this.paymentDueDate = paymentDueDate;
 	}
 
+	public Movement getMovement()
+	{
+		return movement;
+	}
+
+	public void setMovement(Movement movement)
+	{
+		this.movement = movement;
+	}
+
 	@Override
 	public String toString()
 	{
 		return "Installment [installmentId=" + installmentId + ", number="
-				+ number + ", amount=" + amount + ", paymentDate=" + paymentDate
-				+ ", paymentDueDate=" + paymentDueDate + ", loanId=" + loanId
-				+ "]";
+				+ number + ", amount=" + amount + ", paymentDueDate="
+				+ paymentDueDate + ", loanId=" + loanId + ", movement="
+				+ movement + "]";
 	}
 	
 }

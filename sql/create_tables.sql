@@ -120,17 +120,6 @@ CREATE TABLE
     );
 
 CREATE TABLE
-    Installments (
-        InstallmentId INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-        InstallmentNumber INT NOT NULL,
-        Amount DECIMAL(15, 2) NOT NULL,
-        PaymentDate DATE NULL,
-        PaymentDueDate DATE NOT NULL,
-        LoanId INT NOT NULL,
-        CONSTRAINT FK_Loan FOREIGN KEY (LoanId) REFERENCES Loans (LoanId)
-    );
-
-CREATE TABLE
     MovementTypes (
         MovementTypeId INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
         MovementTypeName VARCHAR(50) NOT NULL
@@ -146,4 +135,16 @@ CREATE TABLE
         AccountId INT NOT NULL,
         CONSTRAINT FK_MovementType FOREIGN KEY (MovementTypeId) REFERENCES MovementTypes (MovementTypeId),
         CONSTRAINT FK_Account_Movement FOREIGN KEY (AccountId) REFERENCES Accounts (AccountId)
+    );
+
+CREATE TABLE
+    Installments (
+        InstallmentId INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+        InstallmentNumber INT NOT NULL,
+        Amount DECIMAL(15, 2) NOT NULL,
+        PaymentDueDate DATE NOT NULL,
+        LoanId INT NOT NULL,
+        MovementId INT NULL,
+        CONSTRAINT FK_Loan FOREIGN KEY (LoanId) REFERENCES Loans (LoanId),
+        CONSTRAINT FK_Movement FOREIGN KEY (MovementId) REFERENCES Movements (MovementId)
     );

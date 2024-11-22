@@ -7,14 +7,17 @@ import java.util.ArrayList;
 import dataAccess.IInstallmentsDao;
 import domainModel.Installment;
 import domainModel.Loan;
+import domainModel.Movement;
 
 public class InstallmentsDao implements IInstallmentsDao
 {
 	private Database db;
+	private MovementsDao movementsDao;
 	
 	public InstallmentsDao()
 	{
 		db = new Database();
+		movementsDao = new MovementsDao();
 	}
 
 	@Override
@@ -72,9 +75,16 @@ public class InstallmentsDao implements IInstallmentsDao
 		auxInstallment.setInstallmentId(rs.getInt("InstallmentId"));
 		auxInstallment.setNumber(rs.getInt("InstallmentNumber"));
 		auxInstallment.setAmount(rs.getBigDecimal("Amount"));
-		auxInstallment.setPaymentDate(rs.getDate("PaymentDate"));
 		auxInstallment.setPaymentDueDate(rs.getDate("PaymentDueDate"));
 		auxInstallment.setLoanId(rs.getInt("LoanId"));
+		
+		if(rs.getInt("MovementId") != 0)
+		{
+			Movement auxMovement = new Movement();
+			auxMovement = movementsDao.read(rs.getInt("MovementId"));
+			auxInstallment.setMovement(auxMovement);
+		}
+		
 		return auxInstallment;
 	}
 
@@ -115,7 +125,7 @@ public class InstallmentsDao implements IInstallmentsDao
 		
 		try
 		{
-			db.setPreparedStatement("SELECT * FROM Installments WHERE loanId = ? AND PaymentDate IS NULL");
+			db.setPreparedStatement("SELECT * FROM Installments WHERE loanId = ? AND MovementId IS NULL");
 			db.getPreparedStatement().setInt(1, loanId);
 			rsInstallment = db.getPreparedStatement().executeQuery();
 

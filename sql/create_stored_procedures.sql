@@ -242,13 +242,12 @@ END $$
 CREATE PROCEDURE insert_installment (
     IN _InstallmentNumber INT,
     IN _Amount DECIMAL(15, 2),
-    IN _PaymentDate DATE,
     IN _PaymentDueDate DATE,
     IN _LoanId INT
 )
 BEGIN
-    INSERT INTO Installments (InstallmentNumber, Amount, PaymentDate, PaymentDueDate, LoanId)
-    VALUES (_InstallmentNumber, _Amount, _PaymentDate, _PaymentDueDate, _LoanId);
+    INSERT INTO Installments (InstallmentNumber, Amount, PaymentDueDate, LoanId)
+    VALUES (_InstallmentNumber, _Amount,_PaymentDueDate, _LoanId);
 END $$
 
 CREATE PROCEDURE generate_installments (
@@ -288,7 +287,7 @@ BEGIN
             SET counter = counter + 1;
             -- Incremento la fecha de vencimiento sumando meses según counter
             SET _DueDate = DATE_ADD(_CreationDate, Interval counter MONTH);
-            CALL insert_installment(counter, _InstallmentAmount, NULL, _DueDate, _LoanId);
+            CALL insert_installment(counter, _InstallmentAmount,_DueDate, _LoanId);
         END WHILE;
         SET _GeneratedInstallments = counter;
     COMMIT;
