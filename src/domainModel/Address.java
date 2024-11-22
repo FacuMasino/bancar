@@ -116,14 +116,15 @@ public class Address implements Identifiable
     @Override
 	public String toString()
 	{
-    	return "id: " + getId() +
-    			" streetName: " + getStreetName() +
-    			" streetNumber: " + getStreetNumber() +
-    			" flat: " + getFlat() +
-    			" details: " + getDetails(5) +
-    			" city: [" + getCity().toString() +
-    			"] province: [" + getProvince().toString() +
-    			"] country: [" + getCountry().toString() +
-    			"]";
+    	return "Address: [" +
+				"id=" + getId() +
+    			", streetName=" + getStreetName() +
+    			", streetNumber=" + getStreetNumber() +
+    			", flat=" + getFlat() +
+    			", details=" + getDetails(5) +
+    			", city=" + city +
+    			", province=" + province +
+    			", country=" + country +
+    			"]"; 
 	}
 }

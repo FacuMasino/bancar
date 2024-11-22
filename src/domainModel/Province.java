@@ -35,6 +35,9 @@ public class Province implements Identifiable
 	@Override
 	public String toString()
 	{
-		return "id: " + getId() + " name: " + getName();
+		return "Province: [" +
+				"id=" + getId() +
+				", name=" + getName() +
+				"]";
 	}
 }

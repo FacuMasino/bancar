@@ -33,6 +33,9 @@ public class AccountType
 	@Override
 	public String toString()
 	{
-		return "id: " + getId() + "name: " + getName();
+		return "AccountType: [" +
+				"id=" + getId() +
+				", name=" + getName() +
+				"]";
 	}
 }

@@ -35,6 +35,9 @@ public class Country implements Identifiable
 	@Override
 	public String toString()
 	{
-    	return "id: " + getId() + " name: " + getName();
+    	return "Country: [" +
+				"id=" + getId() +
+				", name=" + getName() +
+				"]";
 	}
 }

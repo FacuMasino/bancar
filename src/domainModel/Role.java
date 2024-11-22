@@ -35,6 +35,9 @@ public class Role implements Identifiable
 	@Override
 	public String toString()
 	{	
-    	return "id: " + getId() + " name: " + getName();
+    	return "Role: [" +
+				"id=" + getId() +
+				", name=" + getName() +
+				"]";
 	}
 }

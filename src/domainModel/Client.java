@@ -166,6 +166,16 @@ public class Client extends User implements Identifiable
 	{
 		this.accounts = accounts;
 	}
+
+	public ArrayList<Loan> getLoans()
+	{
+		return loans;
+	}
+
+	public void setLoans(ArrayList<Loan> loans)
+	{
+		this.loans = loans;
+	}
 	
 	public void setUser(User user)
 	{
@@ -181,19 +191,21 @@ public class Client extends User implements Identifiable
 	@Override
 	public String toString()
 	{
-		return "Client [clientId=" + clientId + ", activeStatus=" + activeStatus
-				+ ", dni=" + dni + ", cuil=" + cuil + ", firstName=" + firstName
-				+ ", lastName=" + lastName + ", sex=" + sex + ", email=" + email
-				+ ", phone=" + phone + ", birthDate=" + birthDate
-				+ ", nationality=" + nationality + ", address=" + address
-				+ ", accounts=" + accounts + ", loans=" + loans + "]";
-	}
-
-	public ArrayList<Loan> getLoans() {
-		return loans;
-	}
-
-	public void setLoans(ArrayList<Loan> loans) {
-		this.loans = loans;
+		return "Client: [" +
+				"clientId=" + clientId +
+				", activeStatus=" + activeStatus +
+				", dni=" + dni +
+				", cuil=" + cuil +
+				", firstName=" + firstName +
+				", lastName=" + lastName +
+				", sex=" + sex +
+				", email=" + email +
+				", phone=" + phone +
+				", birthDate=" + birthDate +
+				", nationality=" + nationality +
+				", address=" + address +
+				", accounts=" + accounts +
+				", loans=" + loans +
+				"]";
 	}
 }

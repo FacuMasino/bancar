@@ -12,7 +12,8 @@ public class Account
 	private BigDecimal balance;
 	private AccountType accountType;
 	private Client client; // TODO: ¿Se usa en algún momento account.getClient()?
-	private int clientId; // TODO: ¿Se usa en algún momento account.getClientId()?
+	private int clientId; // TODO: Debería ser responsabilidad del DAO (y no del dominio) ya que es un atributo necesario
+	//para representar una columna de una tabla SQL (y no para representar un atributo del objeto cuenta).
 
 	public Account()
 	{
@@ -89,11 +90,26 @@ public class Account
 		this.client = client;
 	}
 
-	public int getClientId() {
+	public int getClientId()
+	{
 		return clientId;
 	}
 
-	public void setClientId(int clientId) {
+	public void setClientId(int clientId)
+	{
 		this.clientId = clientId;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return "Account: [" +
+				"id=" + getId() +
+    			", activeStatus=" + getActiveStatus() +
+    			", cbu=" + getCbu() +
+    			", creationDate=" + getCreationDate() +
+    			", balance=" + getBalance() +
+    			", accountType=" + accountType +
+    			"]";
 	}
 }
