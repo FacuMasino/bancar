@@ -75,9 +75,9 @@ public class AccountsDao implements IAccountsDao
 
 		try
 		{
-			db.setPreparedStatement("{CALL update_account(?, ?, ?, ?, ?)}");
+			db.setCallableStatement("{CALL update_account(?, ?, ?, ?)}");
 			setParameters(account, true);
-			rows = db.getPreparedStatement().executeUpdate();
+			rows = db.getCallableStatement().executeUpdate();
 		}
 		catch (SQLException ex)
 		{
@@ -200,7 +200,11 @@ public class AccountsDao implements IAccountsDao
 	    db.getCallableStatement().setString(2, account.getCbu());
 	    db.getCallableStatement().setBigDecimal(3, account.getBalance());
 	    db.getCallableStatement().setInt(4, account.getAccountType().getId());
-	    db.getCallableStatement().setInt(5, account.getClientId());
+	    
+	    if (!isUpdate) // TODO: En realidad, es posible prescindir de este if, pero create() y update() deberían tener clientId como parámetro de entrada.
+	    {
+	    	db.getCallableStatement().setInt(5, account.getClientId());
+	    }
 	}
 
 	private void assignResultSet(Account account, ResultSet rs) throws SQLException
