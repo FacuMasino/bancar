@@ -237,14 +237,17 @@ public class ClientLoansServlet extends HttpServlet {
 			LoanStatus loanStatus = new LoanStatus();
 			loanStatus.setId(1); // ESTADO: EN REVISIÓN - ID 1 
 			
+			Account account = new Account();
+			account = accountsBusiness.read(accountId);
+			
 			Loan loan = new Loan();
-			loan.setClientId(client.getClientId());
+			loan.setClient(client);
 			loan.setRequestedAmount(requestedAmount);
 			loan.setInterestRate(interestRate);
 			loan.setInstallmentsQuantity(installmentsQty);
 			loan.setLoanType(loanType);
 			loan.setLoanStatus(loanStatus);
-			loan.setAccountId(accountId);
+			loan.setAccount(account);
 			
 			boolean success = loansBusiness.create(loan);
 			if(success)
@@ -310,12 +313,7 @@ public class ClientLoansServlet extends HttpServlet {
 			
 			ArrayList <Loan> loansList = new ArrayList<Loan>();
 			  
-			for (Account account : accountsList)
-			{
-				int accountId = account.getId();
-				ArrayList<Loan> accountLoans = loansBusiness.listByIdAccount(accountId);
-				loansList.addAll(accountLoans);
-			}
+			loansList = loansBusiness.listByClient(client);
 	
 			client.setLoans(loansList);
 			client.setAccounts(accountsList);

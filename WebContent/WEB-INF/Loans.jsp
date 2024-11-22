@@ -138,7 +138,7 @@
                 <c:forEach var="loan" items="${client.loans}">
                   <tr class="hover">
                     <th>${loan.loanId}</th>
-                    <td>${loan.accountId}</td>
+                    <td>${loan.account.id}</td>
                     <td>${loan.loanType.name}</td>
                     <td>
                       <c:choose>

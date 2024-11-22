@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import businessLogic.ILoansBusiness;
 import dataAccessImpl.InstallmentsDao;
 import dataAccessImpl.LoansDao;
+import domainModel.Client;
 import domainModel.Installment;
 import domainModel.Loan;
 import exceptions.BusinessException;
@@ -107,10 +108,10 @@ public class LoansBusiness implements ILoansBusiness
 		}
 	}
 	
-	public ArrayList<Loan> listByIdAccount (int accountId) throws BusinessException
+	public ArrayList<Loan> listByClient (Client client) throws BusinessException
 	{
 		try {
-			return loansDao.listByIdAccount(accountId);
+			return loansDao.listByClient(client);
 		} 
 		catch (SQLException ex)
 		{
@@ -119,7 +120,7 @@ public class LoansBusiness implements ILoansBusiness
 		catch (Exception ex)
 		{
 			ex.printStackTrace();
-			throw new BusinessException("Ocurrió un error desconocido al leer los prestamos...");
+			throw new BusinessException("Ocurrió un error desconocido al leer los prestamos.");
 		}
 	}
 	

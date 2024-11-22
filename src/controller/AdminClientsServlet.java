@@ -150,13 +150,7 @@ public class AdminClientsServlet extends HttpServlet
 
 			ArrayList<Loan> loansList = new ArrayList<Loan>();
 
-			for (Account account : accountsList)
-			{
-				int accountId = account.getId();
-				ArrayList<Loan> accountLoans = loansBusiness
-						.listByIdAccount(accountId);
-				loansList.addAll(accountLoans);
-			}
+			loansList = loansBusiness.listByClient(client);
 
 			client.setLoans(loansList);
 			client.setAccounts(accountsList);

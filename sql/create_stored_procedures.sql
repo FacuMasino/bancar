@@ -230,11 +230,12 @@ CREATE PROCEDURE insert_loan (
     IN _InterestRate DECIMAL(3,2),
     IN _LoanTypeId INT,
     IN _LoanStatusId INT,
+    IN _ClientId INT,
     IN _AccountId INT
 )
 BEGIN
-    INSERT INTO Loans (InstallmentsQuantity, RequestedAmount, InterestRate, LoanTypeId, LoanStatusId, AccountId)
-    VALUES (_InstallmentsQty, _RequestedAmount, _InterestRate, _LoanTypeId, _LoanStatusId, _AccountId);
+    INSERT INTO Loans (InstallmentsQuantity, RequestedAmount, InterestRate, LoanTypeId, LoanStatusId, ClientId, AccountId)
+    VALUES (_InstallmentsQty, _RequestedAmount, _InterestRate, _LoanTypeId, _LoanStatusId, _ClientId, _AccountId);
 END $$
 
 -- Installments

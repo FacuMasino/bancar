@@ -113,9 +113,11 @@ CREATE TABLE
         InterestRate DECIMAL(3, 2) DEFAULT 1.65 NOT NULL,
         LoanTypeId INT NOT NULL,
         LoanStatusId INT NOT NULL,
+        ClientId INT NOT NULL,
         AccountId INT NOT NULL,
         CONSTRAINT FK_LoanType FOREIGN KEY (LoanTypeId) REFERENCES LoanTypes (LoanTypeId),
         CONSTRAINT FK_LoanStatus FOREIGN KEY (LoanStatusId) REFERENCES LoanStatuses (LoanStatusId),
+        CONSTRAINT FK_ClientLoan FOREIGN KEY (ClientId) REFERENCES Clients (ClientId),
         CONSTRAINT FK_Account FOREIGN KEY (AccountId) REFERENCES Accounts (AccountId)
     );
 
