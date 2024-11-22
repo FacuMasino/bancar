@@ -35,7 +35,7 @@ VALUES
 INSERT INTO Users (Username, UserPassword, RoleId)
 VALUES
     ('admin', 'admin', 1),
-    ('user1', 'password123', 2),
+    ('client', 'client', 2),
     ('user2', 'password456', 2),
     ('user3', 'password789', 2),
     ('user4', 'passwordABC', 2),
