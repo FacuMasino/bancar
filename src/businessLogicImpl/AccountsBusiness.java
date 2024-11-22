@@ -16,19 +16,19 @@ public class AccountsBusiness implements IAccountsBusiness
 	{
 		accountsDao = new AccountsDao();
 	}
-
-	// TODO: PENDIENTE Ningún método valida las reglas de negocio
 	
 	@Override
 	public boolean create(Account account) throws BusinessException
 	{
 		try
 		{
-			// Asignar CBU
-			int nextId = accountsDao.getLastId() + 1;
-			account.setCbu(generateCBU(nextId));
-		
-			return accountsDao.create(account);
+			int newAccountId = accountsDao.getLastId() + 1;
+			account.setCbu(generateCBU(newAccountId));
+
+			if (0 < accountsDao.create(account))
+			{
+				return true;
+			}
 		}
 		catch (SQLException ex)
 		{
@@ -40,6 +40,8 @@ public class AccountsBusiness implements IAccountsBusiness
 			throw new BusinessException
 				("Ocurrió un error desconocido al crear la cuenta.");
 		}
+		
+		return false;
 	}
 
 	@Override

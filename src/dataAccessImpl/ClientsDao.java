@@ -25,6 +25,8 @@ public class ClientsDao extends Dao<Client> implements IClientsDao
 		handleUserId(client);
 		countriesDao.handleId(client.getNationality());
 		addressesDao.handleId(client.getAddress());
+		// TODO: accountsDao.handleId(client.getAccounts());
+		// TODO: accountsDao.handleId(client.getLoans());
 		
 		try
 		{
@@ -59,6 +61,9 @@ public class ClientsDao extends Dao<Client> implements IClientsDao
 			}
 			
 			assignResultSet(client, rs);
+			
+			// TODO: client.setAccounts(accountsDao.list(client.getId()));
+			// TODO: client.setLoans(loansDao.list(client.getId()));
 		}
 		catch (Exception ex)
 		{
@@ -81,6 +86,8 @@ public class ClientsDao extends Dao<Client> implements IClientsDao
 		handleUserId(client);
 		countriesDao.handleId(client.getNationality());
 		addressesDao.handleId(client.getAddress());
+		// TODO: accountsDao.handleId(client.getAccounts());
+		// TODO: accountsDao.handleId(client.getLoans());
 		
 		int rows = 0;
 		

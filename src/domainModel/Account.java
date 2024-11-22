@@ -11,9 +11,8 @@ public class Account
 	private Date creationDate;
 	private BigDecimal balance;
 	private AccountType accountType;
-	private Client client;
-	
-	private int clientId;
+	private Client client; // TODO: ¿Se usa en algún momento account.getClient()?
+	private int clientId; // TODO: ¿Se usa en algún momento account.getClientId()?
 
 	public Account()
 	{

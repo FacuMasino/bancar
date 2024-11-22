@@ -18,22 +18,21 @@ public class AccountTypesDao implements IAccountTypesDao
 	@Override
 	public AccountType read(int accountTypeId) throws SQLException
 	{
-		ResultSet rsAccountType;
-		// El negocio debe verificar que lo devuelto != null
-		AccountType auxAccountType = null;
+		ResultSet rs;
+		AccountType accountType = new AccountType();
 
 		try
 		{
 			db.setPreparedStatement("SELECT * FROM AccountTypes WHERE AccountTypeId = ?");
 			db.getPreparedStatement().setInt(1, accountTypeId);
-			rsAccountType = db.getPreparedStatement().executeQuery();
+			rs = db.getPreparedStatement().executeQuery();
 
-			if (!rsAccountType.next())
+			if (!rs.next())
 			{				
-				return auxAccountType; // no se encontró, devuelve null
+				return null;
 			}
 
-			auxAccountType = getAccountType(rsAccountType);
+			assignResultSet(accountType, rs);
 		}
 		catch (Exception ex)
 		{
@@ -41,29 +40,53 @@ public class AccountTypesDao implements IAccountTypesDao
 			throw ex;
 		}
 
-		return auxAccountType;
+		return accountType;
+	}
+	
+	@Override
+	public AccountType readByName(String accountTypeName) throws SQLException
+	{
+		AccountType accountType = new AccountType();
+		ResultSet rs;
+
+		try
+		{
+			db.setPreparedStatement("SELECT * FROM AccountTypes WHERE AccountTypeName = ?");
+			db.getPreparedStatement().setString(1, accountTypeName);
+			rs = db.getPreparedStatement().executeQuery();
+
+			if (!rs.next())
+			{				
+				return accountType;
+			}
+
+			assignResultSet(accountType, rs);
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+			throw ex;
+		}
+
+		return accountType;
 	}
 
 	@Override
 	public ArrayList<AccountType> list() throws SQLException
 	{
-		ArrayList<AccountType> auxAccountTypeList = new ArrayList<AccountType>();
-		ResultSet rsAccountType;
+		ArrayList<AccountType> accountTypes = new ArrayList<AccountType>();
+		ResultSet rs;
 
 		try
 		{
 			db.setPreparedStatement("SELECT * FROM AccountTypes");
-			rsAccountType = db.getPreparedStatement().executeQuery();
+			rs = db.getPreparedStatement().executeQuery();
 
-			while (rsAccountType.next())
+			while (rs.next())
 			{
-				/*if (!rsAccountType.next())
-					return auxAccountTypeList; // devuelve null si esta vacia*/
-
-				AccountType auxAccType = new AccountType();
-				auxAccType = getAccountType(rsAccountType);
-
-				auxAccountTypeList.add(auxAccType);
+				AccountType accountType = new AccountType();
+				assignResultSet(accountType, rs);
+				accountTypes.add(accountType);
 			}
 		}
 		catch (Exception ex)
@@ -72,52 +95,20 @@ public class AccountTypesDao implements IAccountTypesDao
 			throw ex;
 		}
 
-		return auxAccountTypeList;
+		return accountTypes;
 	}
 
-	private AccountType getAccountType(ResultSet rsAccountType) throws SQLException
+	private void assignResultSet(AccountType accountType, ResultSet rs) throws SQLException
 	{
-		AccountType auxAccountType = new AccountType();
-
 		try
 		{
-			auxAccountType.setId(rsAccountType.getInt("AccountTypeId"));
-			auxAccountType.setName(rsAccountType.getString("AccountTypeName"));
+			accountType.setId(rs.getInt("AccountTypeId"));
+			accountType.setName(rs.getString("AccountTypeName"));
 		}
 		catch (SQLException ex)
 		{
 			ex.printStackTrace();
 			throw ex;
 		}
-
-		return auxAccountType;
-	}
-
-	@Override
-	public AccountType readByName(String accountTypeName) throws SQLException
-	{
-		ResultSet rsAccountType;
-		AccountType auxAccountType = null;
-
-		try
-		{
-			db.setPreparedStatement("SELECT * FROM AccountTypes WHERE AccountTypeName = ?");
-			db.getPreparedStatement().setString(1, accountTypeName);
-			rsAccountType = db.getPreparedStatement().executeQuery();
-
-			if (!rsAccountType.next())
-			{				
-				return auxAccountType; // no se encontró, devuelve null
-			}
-
-			auxAccountType = getAccountType(rsAccountType);
-		}
-		catch (Exception ex)
-		{
-			ex.printStackTrace();
-			throw ex;
-		}
-
-		return auxAccountType;
 	}
 }
