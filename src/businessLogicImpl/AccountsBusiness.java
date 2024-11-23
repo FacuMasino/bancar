@@ -1,5 +1,6 @@
 package businessLogicImpl;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import businessLogic.IAccountsBusiness;
@@ -84,22 +85,33 @@ public class AccountsBusiness implements IAccountsBusiness
 
 	@Override
 	public boolean delete(int accountId) throws BusinessException
-	{
-		try
-		{
-			return accountsDao.delete(accountId);			
-		}
-		catch (SQLException ex)
-		{
-			throw new SQLOperationException();
-		}
-		catch (Exception ex)
-		{
-			ex.printStackTrace();
-			throw new BusinessException
-				("Ocurrió un error desconocido al eliminar la cuenta.");
-		}
-	}
+    {
+        try 
+        {
+            Account account = accountsDao.read(accountId);
+        
+            if (account.getBalance().compareTo(BigDecimal.ZERO) >= 0)
+            { 
+                return accountsDao.delete(accountId);   
+            }      
+            else
+            {
+                    throw new BusinessException
+                            ( "No se puede eliminar una cuenta con saldo negativo.");
+             }
+        }
+        catch (SQLException ex)
+        {
+            throw new SQLOperationException();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            throw new BusinessException
+                ("Ocurrió un error desconocido al eliminar la cuenta.");
+        }
+    }
+
 
 	@Override
 	public ArrayList<Account> list() throws BusinessException

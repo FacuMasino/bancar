@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import businessLogicImpl.AccountTypesBusiness;
 import businessLogicImpl.AccountsBusiness;
 import businessLogicImpl.ClientsBusiness;
@@ -92,6 +93,7 @@ public class AdminAccountsServlet extends HttpServlet
 	private void saveNewAccount(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException
 	{
+		  		
 		int clientId = Optional.ofNullable(request.getParameter("clientId"))
 				.map(Integer::parseInt).orElse(0);
 
@@ -104,7 +106,8 @@ public class AdminAccountsServlet extends HttpServlet
 			AccountType accountType;
 			accountType = accountTypesBusiness.read(typeId);
 			account.setAccountType(accountType);
-		} catch (BusinessException e)
+		}
+		catch (BusinessException e)
 		{
 			e.printStackTrace();
 		}
@@ -120,9 +123,11 @@ public class AdminAccountsServlet extends HttpServlet
 
 			if (success)
 			{
+		
 				Helper.setReqMessage(request, "Cuenta creada exitosamente.",
 						MessageType.SUCCESS);
-			} else
+			} 
+			else
 			{
 				Helper.setReqMessage(request, "No se pudo crear la cuenta.",
 						MessageType.ERROR);
@@ -131,6 +136,7 @@ public class AdminAccountsServlet extends HttpServlet
 			System.out.println("Cuenta creada exitosamente.");
 			request.setAttribute("client", client);
 			request.setAttribute("accountTypes", accountTypesBusiness.list());
+		
 			Helper.redirect("/WEB-INF/AdminClientAccounts.jsp", request,
 					response);
 		}
@@ -190,11 +196,12 @@ public class AdminAccountsServlet extends HttpServlet
 				.map(Integer::parseInt).orElse(0);
 		int accountId = Optional.ofNullable(request.getParameter("accountId"))
 				.map(Integer::parseInt).orElse(0);
+		Client client = new Client();
 
 		try
 		{
+			client = getFullClient(clientId);
 			Boolean success = accountsBusiness.delete(accountId);
-			Client client = getFullClient(clientId);
 
 			if (success)
 			{
@@ -206,15 +213,12 @@ public class AdminAccountsServlet extends HttpServlet
 						MessageType.ERROR);
 			}
 
-			request.setAttribute("client", client);
-			Helper.redirect("/WEB-INF/AdminClientAccounts.jsp", request,
-					response);
-		
-		}
-		
-		catch (BusinessException ex)
+			viewClientAccounts (request,response, clientId);
+	
+		} catch (BusinessException ex)
 		{
 			Helper.setReqMessage(request, ex.getMessage(), MessageType.ERROR);
+			request.setAttribute("client", client);
 			Helper.redirect("/WEB-INF/AdminClientAccounts.jsp", request,
 					response);
 		}
