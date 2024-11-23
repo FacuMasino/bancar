@@ -27,6 +27,7 @@ import domainModel.Message;
 import domainModel.Message.MessageType;
 import exceptions.BusinessException;
 import utils.Helper;
+import utils.Page;
 
 @WebServlet(urlPatterns = { "/Client/Loans", "/Client/Loans/" })
 public class ClientLoansServlet extends HttpServlet {
@@ -166,9 +167,27 @@ public class ClientLoansServlet extends HttpServlet {
 			}
 		}
 		
+		// Se obtiene la página actual del historial de préstamos para el paginado
+		Page<Loan> historyPage = getLoansHistoryPage(req);
+		
+		req.setAttribute("historyPage", historyPage);
 		req.setAttribute("approvedLoans", approvedLoans);
 		req.setAttribute("pendingLoans", pendingLoans);
 		Helper.redirect("/WEB-INF/Loans.jsp", req, res);
+	}
+	
+	private Page<Loan> getLoansHistoryPage(HttpServletRequest req)
+	{
+		int page = Optional.ofNullable(
+				req.getParameter("page")).map(Integer::parseInt).orElse(1);
+
+		int pageSize = Optional.ofNullable(
+				req.getParameter("pageSize")).map(Integer::parseInt).orElse(10);
+		
+		Page<Loan> loansPage = 
+				new Page<Loan>(page, pageSize, client.getLoans());
+		
+		return loansPage;
 	}
 	
 	private void viewPayLoan(HttpServletRequest req, HttpServletResponse res)

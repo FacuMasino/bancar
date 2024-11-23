@@ -117,5 +117,17 @@ public class Loan
 		this.account = account;
 	}
 
+	@Override
+	public String toString()
+	{
+		return "Loan [loanId=" + loanId + ", creationDate=" + creationDate
+				+ ", requestedAmount=" + requestedAmount + ", interestRate="
+				+ interestRate + ", installments=" + installments
+				+ ", pendingInstallments=" + pendingInstallments
+				+ ", installmentsQuantity=" + installmentsQuantity
+				+ ", loanType=" + loanType + ", loanStatus=" + loanStatus
+				+ ", client=" + client + ", account=" + account + "]";
+	}
+
 
 }

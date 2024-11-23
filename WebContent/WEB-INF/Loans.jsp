@@ -11,6 +11,11 @@
 <c:set var="pendingLoans" value="${requestScope.pendingLoans != null ? 
                                 requestScope.pendingLoans : emptyList}" />
 
+<!-- Variables para el paginado -->
+<c:set var="historyPageList" value="${requestScope.historyPage.content != null ? 
+                              requestScope.historyPage.content : emptyList}" />
+<c:set var="page" value="${requestScope.historyPage}" />
+
 <t:masterpage title="Mis Préstamos" customNavbar="true">
   <t:clientwrapper activeMenuItem="loansMenu">
     <div class="container flex flex-col gap-4 mx-auto p-4 max-w-7xl">
@@ -100,7 +105,7 @@
       </h2>
       <div class="flex flex-col bg-white p-2.5 rounded-xl drop-shadow-sm">        
         <c:choose>
-          <c:when test="${not empty client.loans}">
+          <c:when test="${not empty historyPageList}">
             <div class="flex justify-between p-2.5 mb-2">
               <label class="input input-sm input-bordered flex items-center gap-2">
                 <input type="text" class="grow" placeholder="Buscar cuenta, monto" name="searchInput">
@@ -135,7 +140,7 @@
                 </tr>
               </thead>
               <tbody>
-                <c:forEach var="loan" items="${client.loans}">
+                <c:forEach var="loan" items="${historyPageList}">
                   <tr class="hover">
                     <th>${loan.loanId}</th>
                     <td>${loan.account.id}</td>
@@ -170,6 +175,18 @@
                 </c:forEach>
                </tbody>
             </table>
+            <form method="get" action="Loans" class="flex w-full items-center p-2.5">
+              <span class="w-full">
+                Mostrando 
+                ${page.startElementPos + 1} a ${page.endElementPos}
+                de ${page.totalElements}
+              </span>
+              <div class="join flex justify-end w-full">
+                 <c:forEach var="i" begin="1" end="${page.totalPages}">
+                    <button value="${i}" name="page" class="join-item btn">${i}</button>
+                </c:forEach>
+              </div>
+            </form>
           </c:when>
           <c:otherwise>
             <span class="p-4">No tenés préstamos para mostrar.</span>
