@@ -11,5 +11,5 @@ public interface IAccountsBusiness
 	public boolean update(Account account) throws BusinessException;
 	public boolean delete(int accountId) throws BusinessException;
 	public ArrayList<Account> list() throws BusinessException;
-	public ArrayList<Account> listByIdClient(int clientId) throws BusinessException;
+	public ArrayList<Account> list(int clientId) throws BusinessException;
 }

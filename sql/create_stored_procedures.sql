@@ -238,7 +238,7 @@ BEGIN
     VALUES (_InstallmentsQty, _RequestedAmount, _InterestRate, _LoanTypeId, _LoanStatusId, _ClientId, _AccountId);
 END $$
 
--- Installments
+-- Installment
 
 CREATE PROCEDURE insert_installment (
     IN _InstallmentNumber INT,

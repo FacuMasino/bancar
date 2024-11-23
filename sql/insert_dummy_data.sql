@@ -89,10 +89,8 @@ VALUES
     (1, '16788999', '27167889999', 'Monica', 'Perez', 'Femenino', 'monica.perez@example.com', '5491148901234', '1980-06-10', 1, 10, 25),
     (0, '17899000', '20178990000', 'Ramon', 'Santos', 'Masculino', 'ramon.santos@example.com', '5491159012345', '1997-03-28', 1, 10, 26);
 
-INSERT INTO
-    Accounts (ActiveStatus, Cbu, Balance, AccountTypeId, ClientId)
+INSERT INTO Accounts (ActiveStatus, Cbu, Balance, AccountTypeId, ClientId)
 VALUES
-    
     (1, '1234567890123456789101', 10000.00, 1, 1),
     (1, '1234567890123456789102', 5000.00, 2, 1),
     (1, '1234567890123456789103', 7500.00, 1, 1),
@@ -135,8 +133,6 @@ VALUES
     (0, '1234567890123456789140', 600.00, 2, 16),
     (0, '1234567890123456789141', 450.00, 1, 16);
 
-
-
 INSERT INTO Loans (CreationDate, InstallmentsQuantity, RequestedAmount, InterestRate, LoanTypeId, LoanStatusId, ClientId, AccountId)
 VALUES
     ('2023-01-10', 10, 5000.00, 5.5, 1, 1, 1, 1),
@@ -165,8 +161,7 @@ VALUES
     ('2024-10-02', 24, 14000.00, 6.4, 1, 3, 7, 7),
     ('2024-11-14', 48, 21000.00, 7.8, 2, 1, 8, 8),
     ('2024-12-05', 36, 25000.00, 7.1, 3, 2, 9, 9);
-    
-    
+
 INSERT INTO Movements (Details, Amount, MovementTypeId, AccountId)
 VALUES 
     ('Apertura de cuenta - cuenta 1', 1000.00, 1, 1),

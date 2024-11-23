@@ -92,8 +92,6 @@ VALUES
 
 -- dummy_data.sql: Loans
 
--- dummy_data.sql: Installments
-
 INSERT INTO
     MovementTypes (MovementTypeName)
 VALUES
@@ -103,3 +101,5 @@ VALUES
     ('Transferencia');
 
 -- dummy_data.sql: Movements
+
+-- dummy_data.sql: Installments

@@ -55,10 +55,10 @@
         </div>
         <div class="flex flex-col p-6 w-full gap-4">
           <div class="form-control w-full">
-            <label for="destinatary" class="label pt-0">
+            <label for="destinationAccountCbu" class="label pt-0">
               <span class="label-text font-semibold text-lg ">CBU</span>
             </label>
-            <input type="number" name="destinatary" placeholder="Ingrese DNI o CBU destino"
+            <input type="number" name="destinationAccountCbu" placeholder="Ingrese el CBU de destino"
               class="input input-bordered w-full" required />
           </div>
           <div class="form-control w-full">

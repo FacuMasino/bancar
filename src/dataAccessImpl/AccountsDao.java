@@ -136,7 +136,7 @@ public class AccountsDao implements IAccountsDao
 	}
 	
 	@Override
-	public ArrayList<Account> listByIdClient(int clientId) throws SQLException
+	public ArrayList<Account> list(int clientId) throws SQLException
 	{
 		ArrayList<Account> accounts = new ArrayList<Account>();
 		ResultSet rs;
@@ -163,6 +163,31 @@ public class AccountsDao implements IAccountsDao
 		return accounts;
 	}
 	
+	public int findId(String cbu) throws SQLException
+	{
+		ResultSet rs;
+		
+		try
+		{
+			db.setPreparedStatement("SELECT AccountId FROM Accounts WHERE Cbu = ?");
+			db.getPreparedStatement().setString(1, cbu);
+			rs = db.getPreparedStatement().executeQuery();
+			
+			if(!rs.next())
+			{
+				return 0;
+			}
+			
+			return rs.getInt("AccountId");
+		}
+		catch (SQLException ex)
+		{
+			ex.printStackTrace();
+			throw ex;
+		}
+	}
+	
+	@Override
 	public int getLastId() throws SQLException
 	{
 		int lastId = 0;

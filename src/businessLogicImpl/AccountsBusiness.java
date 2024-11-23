@@ -112,7 +112,6 @@ public class AccountsBusiness implements IAccountsBusiness
         }
     }
 
-
 	@Override
 	public ArrayList<Account> list() throws BusinessException
 	{
@@ -131,6 +130,45 @@ public class AccountsBusiness implements IAccountsBusiness
 				("Ocurrió un error desconocido al obtener las cuentas.");
 		}
 	}
+	
+	@Override
+	public ArrayList<Account> list(int clientId) throws BusinessException
+	{
+		try
+		{
+			return accountsDao.list(clientId);
+		}
+		catch (SQLException ex)
+		{
+			throw new SQLOperationException();
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+			throw new BusinessException("Ocurrió un error desconocido al leer las cuentas.");
+		}
+	}
+	
+	// TODO: Eliminar este método y reemplazar todos sus llamados por list(int clientId) de los servlets
+	// (Doble click en el nombre del método y click en Open Call Hierarchy para ver llamados)
+	public ArrayList<Account> listByIdClient(int clientId) throws BusinessException
+	{
+		return list(clientId);
+	}
+	
+	public int findId(String cbu)
+	{
+		try
+		{
+			return accountsDao.findId(cbu);
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+		
+		return 0;
+	}
 
 	/*
 	 * Genera un CBU ficticio basado en el nro de cuenta (ID)
@@ -145,23 +183,5 @@ public class AccountsBusiness implements IAccountsBusiness
 		String accNumber = String.format("%013d", accountId);
 		
 		return entity + branch + firstDV + accNumber + lastDV;
-	}
-
-	@Override
-	public ArrayList<Account> listByIdClient(int clientId) throws BusinessException
-	{
-		try
-		{
-			return accountsDao.listByIdClient(clientId);
-		}
-		catch (SQLException ex)
-		{
-			throw new SQLOperationException();
-		}
-		catch (Exception ex)
-		{
-			ex.printStackTrace();
-			throw new BusinessException("Ocurrió un error desconocido al leer las cuentas.");
-		}
 	}
 }

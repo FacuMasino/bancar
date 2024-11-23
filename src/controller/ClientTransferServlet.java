@@ -20,8 +20,10 @@ public class ClientTransferServlet extends HttpServlet
 	private static final long serialVersionUID = 1L;
 	private AccountsBusiness accountsBusiness;
 	private Client sessionClient;
-	private String selectedAccountId;
 	private Account originAccount;
+	private Account destinationAccount;
+	private String selectedAccountId;
+	private String destinationAccountCbu;
     
     public ClientTransferServlet()
     {
@@ -77,12 +79,32 @@ public class ClientTransferServlet extends HttpServlet
 			HttpServletRequest request, HttpServletResponse response)
 	{
 		selectedAccountId = request.getParameter("selectedAccountId");
+		destinationAccountCbu = request.getParameter("destinationAccountCbu");
 		
 		if (selectedAccountId != null && !selectedAccountId.isEmpty())
 		{
 			try
 			{
 				originAccount = accountsBusiness.read(Integer.parseInt(selectedAccountId));
+				System.out.println(originAccount.toString()); // test
+			}
+			catch (NumberFormatException e)
+			{
+				e.printStackTrace();
+			}
+			catch (BusinessException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		
+		if (destinationAccountCbu != null && !destinationAccountCbu.isEmpty())
+		{
+			try
+			{
+				int destinationAccountId = accountsBusiness.findId(destinationAccountCbu);
+				destinationAccount = accountsBusiness.read(destinationAccountId);
+				System.out.println(destinationAccount.toString()); // test
 			}
 			catch (NumberFormatException e)
 			{
