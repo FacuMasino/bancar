@@ -1,17 +1,27 @@
 package businessLogicImpl;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import businessLogic.IMovementsBusiness;
+import dataAccessImpl.MovementsDao;
 import domainModel.Movement;
 import exceptions.BusinessException;
+import exceptions.SQLOperationException;
 
 public class MovementsBusiness implements IMovementsBusiness
 {
+	private MovementsDao movementDao;
+	
+	
+	public MovementsBusiness()
+	{
+		movementDao = new MovementsDao();
+	}
 
 	@Override
 	public boolean create(Movement movement) throws BusinessException
 	{
-		// TODO Auto-generated method stub
+		// TODO pendiente la creacion del movimiento es vida
 		return false;
 	}
 
@@ -54,8 +64,14 @@ public class MovementsBusiness implements IMovementsBusiness
 	public ArrayList<Movement> listByIdAccount(int accountId)
 			throws BusinessException
 	{
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			return movementDao.listByIdAccount(accountId);
+		} catch (SQLException ex) {
+			throw new SQLOperationException();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			throw new BusinessException("Ocurrió un error desconocido al leer los movimientos...");
+		}
 	}
 
 }

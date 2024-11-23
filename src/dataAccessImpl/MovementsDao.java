@@ -150,7 +150,6 @@ public class MovementsDao implements IMovementsDao
 
 			auxMovement.setMovementType(auxMovementType);
 
-
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 			throw ex;

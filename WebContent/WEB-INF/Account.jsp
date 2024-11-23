@@ -5,34 +5,52 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <c:set var="client" value="${requestScope.client}" />
+<c:set var="movements" value="${requestScope.movements != null ? requestScope.movements : emptyList}" />
 
 <t:masterpage title="Mi Cuenta" customNavbar="true">
   <t:clientwrapper activeMenuItem="accountMenu">
-    <form method="get" action="Clients"
+    <form method="get" action="Client"
       class="container flex flex-col gap-4 mx-auto p-4 max-w-7xl mb-8">
       <input type="hidden" name="clientId" value="${client.clientId}" />
       <div class="container mx-auto p-4">
         <div class="mb-2">
-          <h1 class="font-bold text-3xl">Bienvenido/a</h1><h1 class="font-bold text-3xl">${client.firstName } ${client.lastName }</h1>
+          <h1 class="font-bold text-3xl">Bienvenido/a</h1>
+          <h1 class="font-bold text-3xl">${client.firstName }
+            ${client.lastName }</h1>
         </div>
         <div class="flex items-center justify-between mb-4">
           <h2 class="font-bold text-lg">Mi Cuenta</h2>
-          <select
-            class="bg-white w-64 font-bold font-sans select text-black select-bordered">
-            <option>Cta.10001</option>
-            <option>Cta.10002</option>
+          <input type="hidden" name="clientId"
+            value="${client.clientId}" /> <select
+            name="idSelectedAccount"
+            class="bg-white w-64 font-bold font-sans select text-black select-bordered"
+            onchange="this.form.submit()">
+            <c:choose>
+              <c:when test="${empty client.accounts}">
+                <!-- Mostrar mensaje si accounts está vacía -->
+                <option disabled selected>No hay cuentas
+                  disponibles</option>
+              </c:when>
+              <c:otherwise>
+                <c:forEach var="account" items="${client.accounts}"
+                  varStatus="status">
+                  <option value="${account.id}"
+                    <c:if test="${account.id == idSelectedAccount}">selected</c:if>>
+                    Cuenta Nro: ${account.id}</option>
+                </c:forEach>
+              </c:otherwise>
+            </c:choose>
           </select>
         </div>
         <div
           class=" flex flex-col p-4 mb-4 border border border-gray-300 rounded-lg  gap-6 w-full bg-white">
           <div class="flex flex-col p-2 gap-4  w-full  ">
             <div class="flex flex-row text-lg">
-              <p>
-                Cuenta Nro.<br> <span class="font-bold">10001</span>
-              </p>
+              <p>Cuenta Nro: ${client.clientId}</p>
             </div>
             <div>
-              <p class="font-bold text-2xl">$10.000,00</p>
+              <p class="font-bold text-2xl">Saldo:
+                $ ${selectedAccountBalance}</p>
             </div>
           </div>
         </div>
@@ -43,8 +61,6 @@
           </div>
           <div>
             <div class="mb-4">
-              <!--  <form method="get" action="AccountServlet" 
-                class="flex justify-between p-2.5 mb-2"> -->
               <label
                 class="input input-sm input-bordered flex items-center gap-2">
                 <input type="text" class="grow"
@@ -68,57 +84,32 @@
                   <option>Crédito</option>
                 </select>
               </div>
-              <!--  </form>-->
               <table class="table bg-white w-full">
                 <thead>
                   <tr>
                     <th>Fecha</th>
                     <th>Descripción</th>
                     <th>Monto</th>
-                    <th>Acciones</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr class="hover">
-                    <td>01/10/2024</td>
-                    <td>Depósito de nómina</td>
-                    <td class="text-green-600 font-semibold">+$1,500.00</td>
-                    <td><a
-                      href="TransactionDetails.jsp?id=123&successAlert=false"
-                      class="btn btn-ghost" title="Ver detalle"> <i
-                        data-lucide="eye"></i>
-                    </a></td>
-                  </tr>
-                  <tr class="hover">
-                    <td>03/10/2024</td>
-                    <td>Pago de servicios</td>
-                    <td class="text-red-600 font-semibold">-$200.00</td>
-                    <td><a
-                      href="TransactionDetails.jsp?id=123&successAlert=false"
-                      class="btn btn-ghost" title="Ver detalle"> <i
-                        data-lucide="eye"></i>
-                    </a></td>
-                  </tr>
-                  <tr class="hover">
-                    <td>05/10/2024</td>
-                    <td>Transferencia recibida</td>
-                    <td class="text-green-600 font-semibold">+$300.00</td>
-                    <td><a
-                      href="TransactionDetails.jsp?id=123&successAlert=false"
-                      class="btn btn-ghost" title="Ver detalle"> <i
-                        data-lucide="eye"></i>
-                    </a></td>
-                  </tr>
-                  <tr class="hover">
-                    <td>07/10/2024</td>
-                    <td>Pago tarjeta de crédito</td>
-                    <td class="text-red-600 font-semibold">-$500.00</td>
-                    <td><a
-                      href="TransactionDetails.jsp?id=123&successAlert=false"
-                      class="btn btn-ghost" title="Ver detalle"> <i
-                        data-lucide="eye"></i>
-                    </a></td>
-                  </tr>
+                  <c:choose>
+                    <c:when test="${empty movements}">
+                      <!-- Mostrar mensaje si no hay movimientos-->
+                      <h3 class="font-bold text-3xl">No hay
+                        movimientos disponibles</h3>
+                    </c:when>
+                    <c:otherwise>
+                      <c:forEach var="movement" items="${movements}"
+                        varStatus="status">
+                        <tr class="hover">
+                          <td>${movement.movementDate}</td>
+                          <td>${movement.details}</td>
+                          <td>${movement.amount}</td>
+                        </tr>
+                      </c:forEach>
+                    </c:otherwise>
+                  </c:choose>
                 </tbody>
               </table>
             </div>
