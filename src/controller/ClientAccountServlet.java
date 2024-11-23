@@ -43,13 +43,25 @@ public class ClientAccountServlet extends HttpServlet
 	{
 		String loginSuccess = Optional.ofNullable(request.getParameter("login"))
 				.orElse("");
+
+		String action = Optional.ofNullable(request.getParameter("action"))
+				.orElse("");
+
 		if (loginSuccess.equals("true"))
 		{
 			Helper.setReqMessage(request, "Iniciaste sesión con éxito!",
 					MessageType.SUCCESS);
 		}
-		//TODO: esta funcion deberia ser una de las opciones de un switch? para separar las tareas de este servlet...
-		showMovements(request,response);
+
+		switch (action)
+		{
+		case "viewProfile":
+			viewProfile(request, response);
+			break;
+		default:
+			showMovements(request, response);
+		}
+
 	}
 
 	protected void doPost(HttpServletRequest request,
@@ -57,9 +69,9 @@ public class ClientAccountServlet extends HttpServlet
 	{
 		doGet(request, response);
 	}
-	
+
 	private void showMovements(HttpServletRequest request,
-			HttpServletResponse response)throws ServletException, IOException
+			HttpServletResponse response) throws ServletException, IOException
 	{
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpSession session = req.getSession(false);
@@ -75,42 +87,68 @@ public class ClientAccountServlet extends HttpServlet
 			client = clientBusiness.findClientByUserId(user.getUserId());
 			accounts = accountBusiness.listByIdClient(client.getClientId());
 			ArrayList<Movement> movementList = new ArrayList<Movement>();
-			
+
 			client.setAccounts(accounts);
-			
+
 			int idSelectedAccount;
 
 			if (accounts.isEmpty())
 			{
 				System.out.println(
 						"\nEl cliente no tiene cuentas disponibles!!!");
-			}
-			else
+			} else
 			{
-				if (request.getParameter("idSelectedAccount") == null)	//fuerzo la seleccion a la primera cuenta que tenga disponible
-				{														//sino, con 1 cuenta disponible, no la puedo seleccionar...
-					idSelectedAccount = accounts.get(0).getId();
-				} 
-				else
+				if (request.getParameter("idSelectedAccount") == null)
 				{
-					idSelectedAccount = Integer.parseInt(request.getParameter("idSelectedAccount"));
+					//fuerzo la seleccion a la primer cuenta disponible, porque si es una sola,no se puede seleccionar
+					idSelectedAccount = accounts.get(0).getId();
+				} else
+				{
+					idSelectedAccount = Integer.parseInt(
+							request.getParameter("idSelectedAccount"));
 				}
-				movementList = movementBusiness.listByIdAccount(idSelectedAccount);
+				movementList = movementBusiness
+						.listByIdAccount(idSelectedAccount);
 				Account auxAccount = accountBusiness.read(idSelectedAccount);
-				
+
 				request.setAttribute("idSelectedAccount", idSelectedAccount);
 				request.setAttribute("movements", movementList);
-				request.setAttribute("selectedAccountBalance",auxAccount.getBalance());
+				request.setAttribute("selectedAccountBalance",
+						auxAccount.getBalance());
 			}
 			request.setAttribute("client", client);
-		}
-		catch (BusinessException e)
+		} catch (BusinessException e)
 		{
 			// TODO: ver que exceptions tendriamos que mandar
 			e.printStackTrace();
 		}
 
 		Helper.redirect("WEB-INF/Account.jsp", request, response);
+	}
+
+	private void viewProfile(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException
+	{
+		System.out.println("Entramos a VIEWPROFILE!!");
+
+		HttpServletRequest req = (HttpServletRequest) request;
+		HttpSession session = req.getSession(false);
+
+		User user = (User) session.getAttribute("user");
+
+
+		try
+		{
+			Client auxClient = clientBusiness.findClientByUserId(user.getUserId());
+			request.getSession().setAttribute("client", auxClient);
+			request.setAttribute("client", auxClient);
+		} catch (BusinessException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Helper.redirect("Profile.jsp", request, response);
+
 	}
 
 }

@@ -1,4 +1,11 @@
+<%@page import="domainModel.Client"%>
+<%@page import="java.util.List"%>
+<%@page import="java.util.ArrayList"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags/"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<c:set var="client" value="${requestScope.client}" />
+
 <t:masterpage title="Mi Perfil" customNavbar="true">
   <t:clientwrapper activeMenuItem="myProfileMenu">
     <div class="container mx-auto p-4">
@@ -14,21 +21,21 @@
               <label
                 class="block text-sm font-medium text-gray-700 mb-2">Nombre
                 Completo</label> <input type="text" name="clientName"
-                value="Juan,Romero" disabled
+                value="${client.firstName } ${client.lastName }" disabled
                 class="input input-bordered w-full" />
             </div>
 
             <div>
               <label
                 class="block text-sm font-medium text-gray-700 mb-2">Usuario</label>
-              <input type="text" name="clientSurname" value="romeroj24"
+              <input type="text" name="clientSurname" value=${client.getUsername() }
                 disabled class="input input-bordered w-full" />
             </div>
 
             <div>
               <label
                 class="block text-sm font-medium text-gray-700 mb-2">DNI</label>
-              <input type="text" name="clientDni" value="3800000"
+              <input type="text" name="clientDni" value=${client.dni }
                 disabled class="input input-bordered w-full" />
             </div>
 
@@ -36,28 +43,28 @@
               <label
                 class="block text-sm font-medium text-gray-700 mb-2">Email</label>
               <input type="text" name="clientEmail"
-                value="juan@email.com" disabled
+                value=${client.email } disabled
                 class="input input-bordered w-full" />
             </div>
 
             <div>
               <label
                 class="block text-sm font-medium text-gray-700 mb-2">Teléfono</label>
-              <input type="text" name="clientPhone" value="123-456"
+              <input type="text" name="clientPhone" value=${client.phone }
                 disabled class="input input-bordered w-full" />
             </div>
 
             <div>
               <label
                 class="block text-sm font-medium text-gray-700 mb-2">Dirección</label>
-              <input type="text" name="clientAddress" value="Av utn 123"
+              <input type="text" name="clientAddress" value="${client.getAddress().streetName } ${client.getAddress().streetNumber }"
                 disabled class="input input-bordered w-full" />
             </div>
 
             <div>
               <label
                 class="block text-sm font-medium text-gray-700 mb-2">Provincia</label>
-              <input type="text" name="clientProvince" value="La Rioja"
+              <input type="text" name="clientProvince" value="${client.getAddress().getProvince().name }"
                 disabled class="input input-bordered w-full" />
             </div>
 
@@ -65,7 +72,7 @@
               <label
                 class="block text-sm font-medium text-gray-700 mb-2">Localidad</label>
               <input type="text" name="clientLocality"
-                value="Torremontalbo" disabled
+                value="${client.getAddress().getCity().name }" disabled
                 class="input input-bordered w-full" />
             </div>
           </div>
