@@ -206,6 +206,7 @@ public class Client extends User implements Identifiable
 				", address=" + address +
 				", accounts=" + accounts +
 				", loans=" + loans +
-				"]";
+				"] " +
+				super.toString();
 	}
 }

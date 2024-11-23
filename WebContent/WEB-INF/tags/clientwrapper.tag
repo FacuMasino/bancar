@@ -65,7 +65,7 @@
           </a>
         </li>
         <li>
-          <a href="Transfer.jsp" id="transferMenu">
+          <a href="${pageContext.request.contextPath}/Client/Transfer" id="transferMenu">
             <i data-lucide="arrow-left-right"></i>
             Transferir
           </a>
