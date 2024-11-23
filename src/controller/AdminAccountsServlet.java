@@ -255,7 +255,7 @@ public class AdminAccountsServlet extends HttpServlet
 
 			ArrayList<Loan> loansList = new ArrayList<Loan>();
 
-			loansList = loansBusiness.listByClient(client);
+			loansList = loansBusiness.list(client);
 
 			client.setLoans(loansList);
 			client.setAccounts(accountsList);

@@ -12,6 +12,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import businessLogic.IAccountsBusiness;
+import businessLogic.ILoanTypesBusiness;
+import businessLogic.ILoansBusiness;
 import businessLogicImpl.AccountTypesBusiness;
 import businessLogicImpl.AccountsBusiness;
 import businessLogicImpl.ClientsBusiness;
@@ -32,9 +35,9 @@ import utils.Page;
 @WebServlet(urlPatterns = { "/Client/Loans", "/Client/Loans/" })
 public class ClientLoansServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private AccountsBusiness accountsBusiness;
-	private LoansBusiness loansBusiness;
-	private LoanTypesBusiness loanTypesBusiness;
+	private IAccountsBusiness accountsBusiness;
+	private ILoansBusiness loansBusiness;
+	private ILoanTypesBusiness loanTypesBusiness;
 	private Client client;
 
     public ClientLoansServlet() {
@@ -145,7 +148,7 @@ public class ClientLoansServlet extends HttpServlet {
 		
 		clientLoans = client.getLoans();
 		
-		System.out.println(clientLoans);
+		// System.out.println(clientLoans); // Descomentar para debuggear
 		
 		// Clasificar prestamos
 		for(Loan loan: clientLoans)
@@ -328,11 +331,11 @@ public class ClientLoansServlet extends HttpServlet {
 			int clientId = client.getClientId();
 			
 			ArrayList<Account> accountsList = new ArrayList<Account>();
-			accountsList = accountsBusiness.listByIdClient(clientId);
+			accountsList = accountsBusiness.list(clientId);
 			
 			ArrayList <Loan> loansList = new ArrayList<Loan>();
 			  
-			loansList = loansBusiness.listByClient(client);
+			loansList = loansBusiness.list(client);
 	
 			client.setLoans(loansList);
 			client.setAccounts(accountsList);

@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import dataAccess.IInstallmentsDao;
+import dataAccess.IMovementsDao;
 import domainModel.Installment;
 import domainModel.Loan;
 import domainModel.Movement;
@@ -12,7 +13,7 @@ import domainModel.Movement;
 public class InstallmentsDao implements IInstallmentsDao
 {
 	private Database db;
-	private MovementsDao movementsDao;
+	private IMovementsDao movementsDao;
 	
 	public InstallmentsDao()
 	{

@@ -3,6 +3,12 @@ package dataAccessImpl;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import dataAccess.IAccountsDao;
+import dataAccess.IClientsDao;
+import dataAccess.IInstallmentsDao;
+import dataAccess.ILoanStatusesDao;
+import dataAccess.ILoanTypesDao;
 import dataAccess.ILoansDao;
 import domainModel.Client;
 import domainModel.Installment;
@@ -13,11 +19,11 @@ import domainModel.LoanType;
 public class LoansDao implements ILoansDao 
 {
 	private Database db;
-	private LoanTypesDao loanTypesDao;
-	private LoanStatusesDao loanStatusesDao;
-	private InstallmentsDao installmentsDao;
-	private ClientsDao clientsDao;
-	private AccountsDao accountsDao;
+	private ILoanTypesDao loanTypesDao;
+	private ILoanStatusesDao loanStatusesDao;
+	private IInstallmentsDao installmentsDao;
+	private IClientsDao clientsDao;
+	private IAccountsDao accountsDao;
 	
 	public LoansDao() 
 	{
@@ -174,15 +180,16 @@ public class LoansDao implements ILoansDao
 
 		return auxLoan;
 	}
-
-	public ArrayList<Loan> listByClient (Client client) throws SQLException
+	
+	@Override
+	public ArrayList<Loan> list (Client client) throws SQLException
 	{
 
 		ResultSet rsLoans;
 		ArrayList<Loan> auxLoansList = new ArrayList<Loan>();
 
-		try {
-			
+		try
+		{
 			db.setPreparedStatement("SELECT * FROM Loans WHERE ClientId = ?");
 			db.getPreparedStatement().setInt(1, client.getClientId());
 			rsLoans = db.getPreparedStatement().executeQuery();

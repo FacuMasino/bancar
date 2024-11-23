@@ -3,19 +3,25 @@ package businessLogicImpl;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
+
 import businessLogic.ILoansBusiness;
+import dataAccess.IInstallmentsDao;
+import dataAccess.ILoansDao;
 import dataAccessImpl.InstallmentsDao;
 import dataAccessImpl.LoansDao;
 import domainModel.Client;
 import domainModel.Installment;
 import domainModel.Loan;
+import domainModel.LoanStatus;
+import domainModel.LoanType;
 import exceptions.BusinessException;
 import exceptions.SQLOperationException;
 
 public class LoansBusiness implements ILoansBusiness 
 {
-	private LoansDao loansDao;
-	private InstallmentsDao installmentsDao;
+	private ILoansDao loansDao;
+	private IInstallmentsDao installmentsDao;
 	
 	public LoansBusiness()
 	{
@@ -63,18 +69,14 @@ public class LoansBusiness implements ILoansBusiness
 		}
 	}
 
+	// Este método debería utilizarse solo por 2 motivos:
+	// - El Admin aprueba el préstamo y deben generarse las cuotas + actualizar estado
+	// - Se cambia el estado a Finalizado porque pagó la última cuota
 	@Override
-	public boolean update(Loan loan, boolean isApproving) throws BusinessException
+	public boolean update(Loan loan) throws BusinessException
 	{
 		try
 		{
-			if(isApproving)
-			{
-				if(!installmentsDao.generate(loan.getLoanId()))
-				{
-					throw new BusinessException("Ocurrió un error al generar las cuotas.");
-				}
-			}
 			return loansDao.update(loan);
 		}
 		catch (SQLException ex)
@@ -86,6 +88,36 @@ public class LoansBusiness implements ILoansBusiness
 			ex.printStackTrace();
 			throw new BusinessException
 				("Ocurrió un error desconocido al actualizar el préstamo.");
+		}
+	}
+	
+	@Override
+	public boolean approve(Loan loan) throws BusinessException
+	{
+		try
+		{
+			if(installmentsDao.generate(loan.getLoanId()))
+			{
+				LoanStatus loanStatus = new LoanStatus();
+				loanStatus.setId(2); // ESTADO APROBADO
+				
+				loan.setLoanStatus(loanStatus);
+				
+				return update(loan);
+			}
+			throw new BusinessException
+			("No se pudo aprobar el préstamo, error al generar las cuotas.");
+		}
+		catch (SQLException ex)
+		{
+			throw new SQLOperationException(
+					"Ocurrió un error en nuestra base de datos, no se pudo aprobar el préstamo.");
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+			throw new BusinessException
+				("Ocurrió un error desconocido al aprobar el préstamo.");
 		}
 	}
 
@@ -108,10 +140,11 @@ public class LoansBusiness implements ILoansBusiness
 		}
 	}
 	
-	public ArrayList<Loan> listByClient (Client client) throws BusinessException
+	@Override
+	public ArrayList<Loan> list(Client client) throws BusinessException
 	{
 		try {
-			return loansDao.listByClient(client);
+			return loansDao.list(client);
 		} 
 		catch (SQLException ex)
 		{
@@ -124,6 +157,7 @@ public class LoansBusiness implements ILoansBusiness
 		}
 	}
 	
+	@Override
 	public BigDecimal calcOutstandingBalance(Loan auxLoan)
 	{
 		
@@ -137,6 +171,24 @@ public class LoansBusiness implements ILoansBusiness
 		return outstandingBalance;
 	}
 
+	@Override
+	public ArrayList<Loan> filter(LoanStatus loanStatus, ArrayList<Loan> list)
+		throws BusinessException
+	{
+		return list.stream().filter(loan -> 
+							loan.getLoanStatus().getId() == loanStatus.getId())
+							.collect(Collectors.toCollection(ArrayList::new));
+	}
+	
+	@Override
+	public ArrayList<Loan> filter(LoanType loanType, ArrayList<Loan> list)
+		throws BusinessException
+	{
+		return list.stream().filter(loan -> 
+							loan.getLoanType().getId() == loanType.getId())
+							.collect(Collectors.toCollection(ArrayList::new));
+	}
+	
 	@Override
 	public boolean payLoan(Loan loan, int installmentId)
 			throws BusinessException

@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import businessLogic.ILoanTypesBusiness;
+import dataAccess.ILoanTypesDao;
 import dataAccessImpl.LoanTypesDao;
 import domainModel.LoanType;
 import exceptions.BusinessException;
@@ -12,7 +13,7 @@ import exceptions.SQLOperationException;
 public class LoanTypesBusiness implements ILoanTypesBusiness
 {
 
-	private LoanTypesDao loanTypesDao;
+	private ILoanTypesDao loanTypesDao;
 	
 	public LoanTypesBusiness()
 	{

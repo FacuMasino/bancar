@@ -12,5 +12,5 @@ public interface ILoansDao
 	public Loan read(int loanId) throws SQLException;
 	public boolean update(Loan loan) throws SQLException;
 	public ArrayList<Loan> list() throws SQLException;
-	public ArrayList<Loan> listByClient(Client client) throws SQLException;
+	public ArrayList<Loan> list(Client client) throws SQLException;
 }
