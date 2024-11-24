@@ -107,8 +107,8 @@
       <h2 class="text-xl font-semibold text-gray-700">
         Historial de préstamos
       </h2>
-      <div class="flex flex-col bg-white p-2.5 rounded-xl drop-shadow-sm">        
-        <form method="get" action="Loans" class="flex justify-between p-2.5 mb-2">
+      <form method="get" action="Loans" class="flex flex-col bg-white p-2.5 rounded-xl drop-shadow-sm">        
+        <div class="flex justify-between p-2.5 mb-2">
           <div class="flex gap-2.5 items-center">
             <span>Tamaño de página</span>
             <select name="pageSize" onchange="this.form.submit()"
@@ -157,7 +157,7 @@
               </c:choose>
             </select>
           </div>
-        </form>
+        </div>
         <c:choose>
           <c:when test="${not empty historyPageList}">
             <table class="table">
@@ -208,7 +208,7 @@
                 </c:forEach>
                </tbody>
             </table>
-            <form method="get" action="Loans" class="flex w-full items-center p-2.5">
+            <div class="flex w-full items-center p-2.5">
               <span class="w-full">
                 Mostrando 
                 ${page.startElementPos + 1} a ${page.endElementPos}
@@ -219,13 +219,13 @@
                     <button value="${i}" name="page" class="join-item btn">${i}</button>
                 </c:forEach>
               </div>
-            </form>
+            </div>
           </c:when>
           <c:otherwise>
             <span class="p-4">No tenés préstamos para mostrar.</span>
           </c:otherwise>
         </c:choose>
-      </div>  
+      </form>  
     </div>
   </t:clientwrapper>
 </t:masterpage>
