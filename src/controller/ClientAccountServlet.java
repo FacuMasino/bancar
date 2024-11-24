@@ -123,7 +123,7 @@ public class ClientAccountServlet extends HttpServlet
 			Helper.setReqMessage(req, ex.getMessage(), MessageType.ERROR);
 		}
 
-		Helper.redirect("WEB-INF/Account.jsp", req, res);
+		Helper.redirect("/WEB-INF/Account.jsp", req, res);
 	}
 
 	private void viewProfile(HttpServletRequest req,
@@ -141,7 +141,7 @@ public class ClientAccountServlet extends HttpServlet
 		Client auxClient = (Client)req.getSession().getAttribute("client");
 		req.setAttribute("client", auxClient);
 		
-		Helper.redirect("Profile.jsp", req, res);
+		Helper.redirect("/WEB-INF/Profile.jsp", req, res);
 	}
 	
 	private Page<Movement> getMovementsPage(HttpServletRequest req, 
