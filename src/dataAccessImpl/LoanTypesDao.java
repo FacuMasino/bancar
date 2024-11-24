@@ -3,6 +3,7 @@ package dataAccessImpl;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import dataAccess.ILoanTypesDao;
 import domainModel.LoanType;
@@ -40,9 +41,9 @@ public class LoanTypesDao implements ILoanTypesDao
 	}
 
 	@Override
-	public ArrayList<LoanType> list() throws SQLException
+	public List<LoanType> list() throws SQLException
 	{
-		ArrayList<LoanType> loanTypesList = new ArrayList<LoanType>();
+		List<LoanType> loanTypesList = new ArrayList<LoanType>();
 		ResultSet rs;
 		
 		try

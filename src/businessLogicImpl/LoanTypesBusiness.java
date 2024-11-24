@@ -2,6 +2,7 @@ package businessLogicImpl;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import businessLogic.ILoanTypesBusiness;
 import dataAccess.ILoanTypesDao;
@@ -21,7 +22,7 @@ public class LoanTypesBusiness implements ILoanTypesBusiness
 	}
 	
 	@Override
-	public ArrayList<LoanType> list() throws BusinessException
+	public List<LoanType> list() throws BusinessException
 	{
 		try
 		{

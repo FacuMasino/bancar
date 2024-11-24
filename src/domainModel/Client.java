@@ -2,6 +2,7 @@ package domainModel;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Client extends User implements Identifiable
 {
@@ -17,8 +18,8 @@ public class Client extends User implements Identifiable
 	private Date birthDate;
 	private Country nationality;
 	private Address address;
-	private ArrayList<Account> accounts;
-	private ArrayList<Loan> loans;
+	private List<Account> accounts;
+	private List<Loan> loans;
 	
 	public Client()
 	{
@@ -157,22 +158,22 @@ public class Client extends User implements Identifiable
 		this.address = address;
 	}
 
-	public ArrayList<Account> getAccounts()
+	public List<Account> getAccounts()
 	{
 		return accounts;
 	}
 
-	public void setAccounts(ArrayList<Account> accounts)
+	public void setAccounts(List<Account> accounts)
 	{
 		this.accounts = accounts;
 	}
 
-	public ArrayList<Loan> getLoans()
+	public List<Loan> getLoans()
 	{
 		return loans;
 	}
 
-	public void setLoans(ArrayList<Loan> loans)
+	public void setLoans(List<Loan> loans)
 	{
 		this.loans = loans;
 	}

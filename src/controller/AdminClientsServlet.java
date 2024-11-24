@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -148,7 +149,7 @@ public class AdminClientsServlet extends HttpServlet
 			ArrayList<Account> accountsList = new ArrayList<Account>();
 			accountsList = accountsBusiness.listByIdClient(clientId);
 
-			ArrayList<Loan> loansList = new ArrayList<Loan>();
+			List<Loan> loansList = new ArrayList<Loan>();
 
 			loansList = loansBusiness.list(client);
 

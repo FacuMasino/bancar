@@ -13,11 +13,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import businessLogic.IAccountsBusiness;
+import businessLogic.ILoanStatusesBusiness;
 import businessLogic.ILoanTypesBusiness;
 import businessLogic.ILoansBusiness;
 import businessLogicImpl.AccountTypesBusiness;
 import businessLogicImpl.AccountsBusiness;
 import businessLogicImpl.ClientsBusiness;
+import businessLogicImpl.LoanStatusesBusiness;
 import businessLogicImpl.LoanTypesBusiness;
 import businessLogicImpl.LoansBusiness;
 import domainModel.Account;
@@ -38,6 +40,7 @@ public class ClientLoansServlet extends HttpServlet {
 	private IAccountsBusiness accountsBusiness;
 	private ILoansBusiness loansBusiness;
 	private ILoanTypesBusiness loanTypesBusiness;
+	private ILoanStatusesBusiness loanStatusesBusiness;
 	private Client client;
 
     public ClientLoansServlet() {
@@ -45,6 +48,7 @@ public class ClientLoansServlet extends HttpServlet {
 		accountsBusiness = new AccountsBusiness();
 		loansBusiness = new LoansBusiness();
 		loanTypesBusiness = new LoanTypesBusiness();
+		loanStatusesBusiness = new LoanStatusesBusiness();
     }
 
 	protected void doGet(HttpServletRequest req, HttpServletResponse res)
@@ -145,37 +149,42 @@ public class ClientLoansServlet extends HttpServlet {
 		List<Loan> approvedLoans = new ArrayList<Loan>();
 		List<Loan> pendingLoans = new ArrayList<Loan>();
 		List<Loan> clientLoans = new ArrayList<Loan>();
+		List<LoanStatus> loanStatuses = new ArrayList<LoanStatus>();
+		List<LoanType> loanTypes = new ArrayList<LoanType>();
 		
-		clientLoans = client.getLoans();
-		
-		// System.out.println(clientLoans); // Descomentar para debuggear
-		
-		// Clasificar prestamos
-		for(Loan loan: clientLoans)
+		try
 		{
-			int statusId = loan.getLoanStatus().getId();
+			// Prestamos del cliente en session
+			clientLoans = client.getLoans();
 			
-			switch(statusId)
-			{
-				// En revisión
-				case 1:
-					pendingLoans.add(loan);
-					break;
-				// Vigente
-				case 2:
-					approvedLoans.add(loan);
-					break;
-				default:
-					break;
-			}
+			// Obtener estados y tipos 
+			loanStatuses = loanStatusesBusiness.list();
+			loanTypes = loanTypesBusiness.list();
+			
+			// System.out.println(clientLoans); // Descomentar para debuggear
+			
+			// Clasificar prestamos
+			LoanStatus pendingStatus = new LoanStatus();
+			pendingStatus.setId(1); // Id harcodeado, estado PENDIENTE		
+			LoanStatus approvedStatus = new LoanStatus();
+			approvedStatus.setId(2); // Id harcodeado, estado VIGENTE/APROBADO
+			
+			pendingLoans = loansBusiness.filter(pendingStatus, clientLoans);
+			approvedLoans = loansBusiness.filter(approvedStatus, clientLoans);
+			
+			// Se obtiene la página actual del historial de préstamos para el paginado
+			Page<Loan> historyPage = getLoansHistoryPage(req);
+			
+			req.setAttribute("loanStatuses", loanStatuses);
+			req.setAttribute("loanTypes", loanTypes);
+			req.setAttribute("historyPage", historyPage);
+			req.setAttribute("approvedLoans", approvedLoans);
+			req.setAttribute("pendingLoans", pendingLoans);
+		} catch (BusinessException ex)
+		{
+			Helper.setReqMessage(req, ex.getMessage(), MessageType.ERROR);
 		}
 		
-		// Se obtiene la página actual del historial de préstamos para el paginado
-		Page<Loan> historyPage = getLoansHistoryPage(req);
-		
-		req.setAttribute("historyPage", historyPage);
-		req.setAttribute("approvedLoans", approvedLoans);
-		req.setAttribute("pendingLoans", pendingLoans);
 		Helper.redirect("/WEB-INF/Loans.jsp", req, res);
 	}
 	
@@ -299,7 +308,7 @@ public class ClientLoansServlet extends HttpServlet {
 	private void viewApplyForLoan(HttpServletRequest req, HttpServletResponse res)
 		throws ServletException, IOException
 	{
-		ArrayList<LoanType> loanTypes = new ArrayList<LoanType>();
+		List<LoanType> loanTypes = new ArrayList<LoanType>();
 		
 		try
 		{
@@ -333,11 +342,11 @@ public class ClientLoansServlet extends HttpServlet {
 			ArrayList<Account> accountsList = new ArrayList<Account>();
 			accountsList = accountsBusiness.list(clientId);
 			
-			ArrayList <Loan> loansList = new ArrayList<Loan>();
+			List<Loan> loansList = new ArrayList<Loan>();
 			  
 			loansList = loansBusiness.list(client);
 	
-			client.setLoans(loansList);
+			client.setLoans(loansList); // TODO: Corregir
 			client.setAccounts(accountsList);
 			
 			// Se setea el atributo para que lo tenga el JSP al que se redireccione

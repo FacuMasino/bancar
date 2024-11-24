@@ -3,6 +3,7 @@ package businessLogicImpl;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import businessLogic.ILoansBusiness;
@@ -122,7 +123,7 @@ public class LoansBusiness implements ILoansBusiness
 	}
 
 	@Override
-	public ArrayList<Loan> list() throws BusinessException
+	public List<Loan> list() throws BusinessException
 	{
 		try
 		{
@@ -141,7 +142,7 @@ public class LoansBusiness implements ILoansBusiness
 	}
 	
 	@Override
-	public ArrayList<Loan> list(Client client) throws BusinessException
+	public List<Loan> list(Client client) throws BusinessException
 	{
 		try {
 			return loansDao.list(client);
@@ -172,7 +173,7 @@ public class LoansBusiness implements ILoansBusiness
 	}
 
 	@Override
-	public ArrayList<Loan> filter(LoanStatus loanStatus, ArrayList<Loan> list)
+	public List<Loan> filter(LoanStatus loanStatus, List<Loan> list)
 		throws BusinessException
 	{
 		return list.stream().filter(loan -> 
@@ -181,7 +182,7 @@ public class LoansBusiness implements ILoansBusiness
 	}
 	
 	@Override
-	public ArrayList<Loan> filter(LoanType loanType, ArrayList<Loan> list)
+	public List<Loan> filter(LoanType loanType, List<Loan> list)
 		throws BusinessException
 	{
 		return list.stream().filter(loan -> 

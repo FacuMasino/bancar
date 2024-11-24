@@ -1,7 +1,7 @@
 package businessLogic;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.util.List;
 
 import domainModel.Client;
 import domainModel.Loan;
@@ -15,10 +15,10 @@ public interface ILoansBusiness
 	public Loan read(int loanId) throws BusinessException;
 	public boolean update(Loan loan) throws BusinessException;
 	public boolean approve(Loan loan) throws BusinessException;
-	public ArrayList<Loan> list() throws BusinessException;
-	public ArrayList<Loan> list(Client client) throws BusinessException;
+	public List<Loan> list() throws BusinessException;
+	public List<Loan> list(Client client) throws BusinessException;
 	public BigDecimal calcOutstandingBalance(Loan auxLoan);
 	public boolean payLoan(Loan loan, int installmentId) throws BusinessException;
-	public ArrayList<Loan> filter(LoanStatus loanStatus, ArrayList<Loan> list) throws BusinessException;
-	public ArrayList<Loan> filter(LoanType loanType, ArrayList<Loan> list) throws BusinessException;
+	public List<Loan> filter(LoanStatus loanStatus, List<Loan> list) throws BusinessException;
+	public List<Loan> filter(LoanType loanType, List<Loan> list) throws BusinessException;
 }

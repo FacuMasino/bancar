@@ -1,10 +1,11 @@
 package businessLogic;
 
-import java.util.ArrayList;
+import java.util.List;
+
 import domainModel.LoanType;
 import exceptions.BusinessException;
 
 public interface ILoanTypesBusiness
 {
-	public ArrayList<LoanType> list() throws BusinessException;
+	public List<LoanType> list() throws BusinessException;
 }

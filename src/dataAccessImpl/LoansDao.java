@@ -3,6 +3,7 @@ package dataAccessImpl;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import dataAccess.IAccountsDao;
 import dataAccess.IClientsDao;
@@ -103,10 +104,10 @@ public class LoansDao implements ILoansDao
 	}
 
 	@Override
-	public ArrayList<Loan> list() throws SQLException 
+	public List<Loan> list() throws SQLException 
 	{
 		ResultSet rsLoans;
-		ArrayList<Loan> loans = new ArrayList<Loan>();
+		List<Loan> loans = new ArrayList<Loan>();
 
 		try
 		{
@@ -182,11 +183,11 @@ public class LoansDao implements ILoansDao
 	}
 	
 	@Override
-	public ArrayList<Loan> list (Client client) throws SQLException
+	public List<Loan> list (Client client) throws SQLException
 	{
 
 		ResultSet rsLoans;
-		ArrayList<Loan> auxLoansList = new ArrayList<Loan>();
+		List<Loan> auxLoansList = new ArrayList<Loan>();
 
 		try
 		{

@@ -2,6 +2,8 @@ package dataAccessImpl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import dataAccess.ILoanStatusesDao;
 import domainModel.LoanStatus;
@@ -53,6 +55,31 @@ public class LoanStatusesDao implements ILoanStatusesDao
 			ex.printStackTrace();
 			throw ex;
 		}
+	}
+
+	@Override
+	public List<LoanStatus> list() throws SQLException
+	{
+		ResultSet rs;
+		List<LoanStatus> loanStatusList = new ArrayList<LoanStatus>();
+		
+		try
+		{
+			db.setPreparedStatement("SELECT * FROM LoanStatuses");
+			rs = db.getPreparedStatement().executeQuery();
+			
+			while(rs.next())
+			{
+				loanStatusList.add(getLoanStatus(rs));
+			}
+			
+		} catch (SQLException ex)
+		{
+			ex.printStackTrace();
+			throw ex;
+		}
+		
+		return loanStatusList;
 	}
 
 }
