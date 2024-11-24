@@ -11,6 +11,7 @@ public class Page<T> {
     private List<T> content;
     private int startElementPos;
     private int endElementPos;
+    private int[] pageSizes = {10,20,30,40,50};
 	
 	public Page(int currentPage, int pageSize, List<T> fullList) {
         this.currentPage = currentPage;
@@ -56,5 +57,10 @@ public class Page<T> {
 	public int getEndElementPos() {
 		return endElementPos;
 	}
-   
+
+	public int[] getPageSizes()
+	{
+		return pageSizes;
+	}
+	
 }

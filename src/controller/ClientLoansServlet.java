@@ -189,17 +189,41 @@ public class ClientLoansServlet extends HttpServlet {
 	}
 	
 	private Page<Loan> getLoansHistoryPage(HttpServletRequest req)
+			throws BusinessException
 	{
-		int page = Optional.ofNullable(
-				req.getParameter("page")).map(Integer::parseInt).orElse(1);
+		try
+		{
+			int page = Optional.ofNullable(
+					req.getParameter("page")).map(Integer::parseInt).orElse(1);
+			int pageSize = Optional.ofNullable(
+					req.getParameter("pageSize")).map(Integer::parseInt).orElse(10);
+			int loanStatusId = Optional.ofNullable(
+					req.getParameter("loanStatusId")).map(Integer::parseInt).orElse(0);
+			int loanTypeId= Optional.ofNullable(
+					req.getParameter("loanTypeId")).map(Integer::parseInt).orElse(0);
+			
+			List<Loan> clientLoans = client.getLoans();
+			LoanStatus loanStatus = new LoanStatus();
+			LoanType loanType = new LoanType();
 
-		int pageSize = Optional.ofNullable(
-				req.getParameter("pageSize")).map(Integer::parseInt).orElse(10);
-		
-		Page<Loan> loansPage = 
-				new Page<Loan>(page, pageSize, client.getLoans());
-		
-		return loansPage;
+			if(loanStatusId != 0)
+			{
+				loanStatus.setId(loanStatusId);
+				clientLoans = loansBusiness.filter(loanStatus, clientLoans);
+			}
+			
+			if(loanTypeId != 0)
+			{
+				loanType.setId(loanTypeId);
+				clientLoans = loansBusiness.filter(loanType, clientLoans);
+			}
+			
+			Page<Loan> loansPage = new Page<Loan>(page, pageSize, clientLoans);
+			return loansPage;
+		} catch (BusinessException ex)
+		{
+			throw ex;
+		}
 	}
 	
 	private void viewPayLoan(HttpServletRequest req, HttpServletResponse res)
@@ -346,7 +370,7 @@ public class ClientLoansServlet extends HttpServlet {
 			  
 			loansList = loansBusiness.list(client);
 	
-			client.setLoans(loansList); // TODO: Corregir
+			client.setLoans(loansList); 
 			client.setAccounts(accountsList);
 			
 			// Se setea el atributo para que lo tenga el JSP al que se redireccione

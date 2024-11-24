@@ -10,6 +10,10 @@
                                 requestScope.approvedLoans : emptyList }"/>
 <c:set var="pendingLoans" value="${requestScope.pendingLoans != null ? 
                                 requestScope.pendingLoans : emptyList}" />
+<c:set var="loanTypes" value="${requestScope.loanTypes != null ? 
+                                requestScope.loanTypes : emptyList}" />
+<c:set var="loanStatuses" value="${requestScope.loanStatuses != null ? 
+                                requestScope.loanStatuses : emptyList}" />
 
 <!-- Variables para el paginado -->
 <c:set var="historyPageList" value="${requestScope.historyPage.content != null ? 
@@ -104,26 +108,58 @@
         Historial de préstamos
       </h2>
       <div class="flex flex-col bg-white p-2.5 rounded-xl drop-shadow-sm">        
+        <form method="get" action="Loans" class="flex justify-between p-2.5 mb-2">
+          <div class="flex gap-2.5 items-center">
+            <span>Tamaño de página</span>
+            <select name="pageSize" onchange="this.form.submit()"
+              class="select select-bordered select-sm w-fit bg-white">
+              <c:forEach var="size" items="${page.pageSizes}">
+                  <option ${param.pageSize == size ? 'selected':''}>
+                    ${size}
+                  </option>
+              </c:forEach>
+            </select>
+          </div>
+          <div class="flex gap-2.5 items-center">
+            <span>Filtrar</span>
+            <select name="loanStatusId" onchange="this.form.submit()"
+              class="select select-bordered select-sm w-fit bg-white">
+              <c:choose>
+                <c:when test="${not empty loanStatuses}">
+                  <option value="0" selected>Cualquier estado</option>
+                  <c:forEach var="status" items="${loanStatuses}">
+                    <option value="${status.id}" 
+                      ${param.loanStatusId == status.id ? 'selected' : ''}>
+                      ${status.name}
+                    </option>
+                  </c:forEach>
+                </c:when>
+                <c:otherwise>
+                  <option value="0" disabled>No se pudieron obtener los datos</option>
+                </c:otherwise>
+              </c:choose>
+            </select>
+            <select name="loanTypeId" onchange="this.form.submit()"
+              class="select select-bordered select-sm w-fit bg-white">
+              <c:choose>
+                <c:when test="${not empty loanTypes}">
+                  <option value="0" selected>Cualquier motivo</option>
+                  <c:forEach var="type" items="${loanTypes}">
+                    <option value="${type.id}"
+                      ${param.loanTypeId == type.id ? 'selected' : ''}>
+                      ${type.name}
+                    </option>
+                  </c:forEach>
+                </c:when>
+                <c:otherwise>
+                  <option value="0" disabled>No se pudieron obtener los datos</option>
+                </c:otherwise>
+              </c:choose>
+            </select>
+          </div>
+        </form>
         <c:choose>
           <c:when test="${not empty historyPageList}">
-            <div class="flex justify-end p-2.5 mb-2">
-              <div class="flex gap-2.5 items-center">
-                <span>Filtrar</span>
-                <select class="select select-bordered select-sm w-fit bg-white">
-                  <option selected>Seleccione estado</option>
-                  <option>Finalizado</option>
-                  <option>Vigente</option>
-                  <option>En revisión</option>
-                  <option>Rechazado</option>
-                </select>
-                <select class="select select-bordered select-sm w-fit bg-white">
-                  <option selected>Seleccione tipo</option>
-                  <option>Personal</option>
-                  <option>Hipotecario</option>
-                  <option>Etc..</option>
-                </select>
-              </div>
-            </div>
             <table class="table">
               <!-- head -->
               <thead>
