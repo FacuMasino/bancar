@@ -2,6 +2,7 @@ package controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.ServletException;
@@ -16,24 +17,25 @@ import businessLogicImpl.ClientsBusiness;
 import businessLogicImpl.MovementsBusiness;
 import domainModel.Account;
 import domainModel.Client;
+import domainModel.LoanStatus;
+import domainModel.LoanType;
 import domainModel.Message.MessageType;
 import domainModel.Movement;
 import domainModel.User;
 import exceptions.BusinessException;
 import utils.Helper;
+import utils.Page;
 
 @WebServlet(urlPatterns = { "/Client/", "/Client" })
 public class ClientAccountServlet extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
-	private ClientsBusiness clientBusiness;
 	private AccountsBusiness accountBusiness;
 	private MovementsBusiness movementBusiness;
 
 	public ClientAccountServlet()
 	{
 		super();
-		clientBusiness = new ClientsBusiness();
 		accountBusiness = new AccountsBusiness();
 		movementBusiness = new MovementsBusiness();
 	}
@@ -70,24 +72,18 @@ public class ClientAccountServlet extends HttpServlet
 		doGet(request, response);
 	}
 
-	private void showMovements(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException
+	private void showMovements(HttpServletRequest req,
+			HttpServletResponse res) throws ServletException, IOException
 	{
-		HttpServletRequest req = (HttpServletRequest) request;
-		HttpSession session = req.getSession(false);
-
-		User user = (User) session.getAttribute("user");
-
 		Client client = new Client();
+		client = (Client)req.getSession().getAttribute("client");
 
 		try
 		{
+
 			ArrayList<Account> accounts = new ArrayList<Account>();
-
-			client = clientBusiness.findClientByUserId(user.getUserId());
 			accounts = accountBusiness.listByIdClient(client.getClientId());
-			ArrayList<Movement> movementList = new ArrayList<Movement>();
-
+			
 			client.setAccounts(accounts);
 
 			int selectedAccountId;
@@ -98,32 +94,36 @@ public class ClientAccountServlet extends HttpServlet
 						"\nEl cliente no tiene cuentas disponibles!!!");
 			} else
 			{
-				if (request.getParameter("selectedAccountId") == null)
+				if (req.getParameter("selectedAccountId") == null)
 				{
 					//fuerzo la seleccion a la primer cuenta disponible, porque si es una sola,no se puede seleccionar
 					selectedAccountId = accounts.get(0).getId();
 				} else
 				{
 					selectedAccountId = Integer.parseInt(
-							request.getParameter("selectedAccountId"));
+							req.getParameter("selectedAccountId"));
 				}
-				movementList = movementBusiness
-						.listByIdAccount(selectedAccountId);
+				
+				ArrayList<Movement> movementsList = new ArrayList<Movement>();
+				movementsList = movementBusiness.listByIdAccount(selectedAccountId);
+				
+				Page<Movement> movementsPage = getMovementsPage(req,movementsList);
+				
 				Account auxAccount = accountBusiness.read(selectedAccountId);
 
-				request.setAttribute("idSelectedAccount", selectedAccountId);
-				request.setAttribute("movements", movementList);
-				request.setAttribute("selectedAccountBalance",
+				req.setAttribute("selectedAcountId", selectedAccountId);
+				req.setAttribute("movementsPage", movementsPage);
+				req.setAttribute("selectedAccountBalance",
 						auxAccount.getBalance());
 			}
-			request.setAttribute("client", client);
+			req.setAttribute("client", client);			
 		} catch (BusinessException ex)
 		{
 			ex.printStackTrace();
 			Helper.setReqMessage(req, ex.getMessage(), MessageType.ERROR);
 		}
 
-		Helper.redirect("WEB-INF/Account.jsp", request, response);
+		Helper.redirect("WEB-INF/Account.jsp", req, res);
 	}
 
 	private void viewProfile(HttpServletRequest req,
@@ -142,6 +142,18 @@ public class ClientAccountServlet extends HttpServlet
 		req.setAttribute("client", auxClient);
 		
 		Helper.redirect("Profile.jsp", req, res);
+	}
+	
+	private Page<Movement> getMovementsPage(HttpServletRequest req, 
+			List<Movement> movements)
+	{
+		int page = Optional.ofNullable(
+				req.getParameter("page")).map(Integer::parseInt).orElse(1);
+		int pageSize = Optional.ofNullable(
+				req.getParameter("pageSize")).map(Integer::parseInt).orElse(10);
+		
+		Page<Movement> movmentsPage = new Page<Movement>(page, pageSize, movements);
+		return movmentsPage;
 	}
 
 }

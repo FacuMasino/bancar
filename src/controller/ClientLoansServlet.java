@@ -116,6 +116,8 @@ public class ClientLoansServlet extends HttpServlet {
 					.orElse(0);
 			
 			// Busca entre la lista de préstamos el que coincida con el id
+			// Para no volver a leerlo desde la DB, ya está cargado en el objeto
+			// Client de la session
 			Loan auxLoan = client.getLoans().stream()
 					.filter(loan -> loan.getLoanId() == loanId)
 					.findFirst()

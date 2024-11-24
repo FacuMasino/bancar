@@ -5,7 +5,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <c:set var="client" value="${requestScope.client}" />
-<c:set var="movements" value="${requestScope.movements != null ? requestScope.movements : emptyList}" />
+<c:set var="movements" value="${requestScope.movementsPage.content != null ? requestScope.movementsPage.content : emptyList}" />
+<c:set var="page" value="${requestScope.movementsPage}" />
 
 <t:masterpage title="Mi Cuenta" customNavbar="true">
   <t:clientwrapper activeMenuItem="accountMenu">
@@ -32,7 +33,7 @@
                 <c:forEach var="account" items="${client.accounts}"
                   varStatus="status">
                   <option value="${account.id}"
-                    <c:if test="${account.id == idSelectedAccount}">selected</c:if>>
+                    <c:if test="${account.id == selectedAcountId}">selected</c:if>>
                     Cuenta Nro: ${account.id}</option>
                 </c:forEach>
               </c:otherwise>
@@ -53,17 +54,28 @@
         </div>
         <div
           class=" flex flex-col p-4 border border border-gray-300 rounded-lg  gap-6 w-full bg-white">
-          <div>
+          <div class="flex justify-between">
             <h2 class="font-bold text-xl">Últimos Movimientos</h2>
+            <label class="input input-sm input-bordered flex items-center gap-2">
+              <input type="text" class="grow"
+              placeholder="Buscar cuenta, monto" name="searchInput">
+              <i data-lucide="search" class="w-[20px] h-[20px]"></i>
+            </label>
           </div>
-          <div>
+          <form method="get" action="Client">
             <div class="flex flex-col mb-4">
               <div class="flex justify-between">
-                <label class="input input-sm input-bordered flex items-center gap-2">
-                  <input type="text" class="grow"
-                  placeholder="Buscar cuenta, monto" name="searchInput">
-                  <i data-lucide="search" class="w-[20px] h-[20px]"></i>
-                </label>
+                <div class="flex gap-2.5 items-center">
+                  <span>Tamaño de página</span>
+                  <select name="pageSize" onchange="this.form.submit()"
+                    class="select select-bordered select-sm w-fit bg-white">
+                    <c:forEach var="size" items="${page.pageSizes}">
+                        <option ${param.pageSize == size ? 'selected':''}>
+                          ${size}
+                        </option>
+                    </c:forEach>
+                  </select>
+                </div>
                 <div class="flex gap-2.5">
                   <input name="transactionDate" type="date"
                     class="border p-1 rounded border-gray-200"> <select
@@ -110,15 +122,19 @@
                 </tbody>
               </table>
             </div>
-            <div class="flex justify-end">
-              <div class="join">
-                <button class="join-item btn">1</button>
-                <button class="join-item btn btn-active">2</button>
-                <button class="join-item btn">3</button>
-                <button class="join-item btn">4</button>
-              </div>
+            <div class="flex w-full items-center p-2.5">
+             <span class="w-full">
+              Mostrando 
+              ${page.startElementPos + 1} a ${page.endElementPos}
+              de ${page.totalElements}
+             </span>
+            <div class="join flex justify-end w-full">
+               <c:forEach var="i" begin="1" end="${page.totalPages}">
+                  <button value="${i}" name="page" class="join-item btn">${i}</button>
+              </c:forEach>
+              </div>  
             </div>
-          </div>
+          </form>
         </div>
       </div>
     </div>
