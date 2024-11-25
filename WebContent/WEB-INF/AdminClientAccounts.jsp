@@ -7,6 +7,7 @@
 
 <c:set var="client" value="${requestScope.client}" />
 <c:set var="accountTypes" value="${requestScope.accountTypes != null ? requestScope.accountTypes : emptyList}" />
+<c:set var="totalLoansDebt" value="${requestScope.totalLoansDebt}" />
 
 <t:masterpage title="Admin - Cuentas del cliente" customNavbar="true">
   <t:adminwrapper activeMenuItem="adminClientsMenu">
@@ -36,8 +37,8 @@
             </c:choose>
           </div>
           <div class="flex justify-between gap-2 text-red-600">
-            <span class="font-bold">Deuda:(no va por enunciado....)</span> <span>$
-              10.000</span>
+            <span class="font-bold">Deuda Pr�stamos:</span> 
+            <span>$ ${totalLoansDebt}</span>
           </div>
           <div class="flex justify-between gap-2 text-blue-600">
             <span class="font-bold">Cantidad de Pr&eacute;stamos:</span>
@@ -53,7 +54,6 @@
         </div>
       </div>
       <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <%-- Ac� ir�a un For iterando sobre las cuentas del cliente --%>
           <c:choose>
             <c:when test="${not empty client.accounts}">
               <c:forEach var="account" items="${client.accounts}" varStatus="status">
@@ -101,7 +101,6 @@
               <span>Tipo de cuenta:</span> <select name="accountType" class="select select-bordered bg-white w-1/2 drop-shadow">
                 <c:choose>
                   <c:when test="${empty accountTypes}">
-                    <!-- Mostrar mensaje si tipo de cuentas está vacía (no va a ocurrir) -->
                     <option disabled selected>Error: No hay tipos de cuenta para mostrar</option>
                   </c:when>
                   <c:otherwise>
@@ -149,7 +148,6 @@
             min="0" required />
         </div>
         <div class="modal-action">
-          <!-- if there is a button in form, it will close the modal -->
           <button type="button" onclick="modal_edit_account.close()" class="btn">
             Cancelar</button>
           <button type="submit" name="action" value="editAccount"

@@ -237,9 +237,18 @@ public class AdminAccountsServlet extends HttpServlet
 		try
 		{
 			Client client = getFullClient(clientId);
+			
+			BigDecimal totalLoansDebt = new BigDecimal(0);
+			
+			for(Loan loan : client.getLoans())
+			{
+				totalLoansDebt = totalLoansDebt.add
+						(loansBusiness.calcOutstandingBalance(loan));
+			}
+			
 			request.setAttribute("client", client);
+			request.setAttribute("totalLoansDebt", totalLoansDebt);
 			request.setAttribute("accountTypes", accountTypesBusiness.list());
-
 			Helper.redirect("/WEB-INF/AdminClientAccounts.jsp", request,
 					response);
 		} catch (BusinessException ex)
