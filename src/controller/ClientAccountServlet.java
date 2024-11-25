@@ -111,10 +111,8 @@ public class ClientAccountServlet extends HttpServlet
 				
 				Account auxAccount = accountBusiness.read(selectedAccountId);
 
-				req.setAttribute("selectedAcountId", selectedAccountId);
+				req.setAttribute("selectedAccount", auxAccount);
 				req.setAttribute("movementsPage", movementsPage);
-				req.setAttribute("selectedAccountBalance",
-						auxAccount.getBalance());
 			}
 			req.setAttribute("client", client);			
 		} catch (BusinessException ex)

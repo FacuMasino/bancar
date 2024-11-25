@@ -7,6 +7,7 @@
 <c:set var="client" value="${requestScope.client}" />
 <c:set var="movements" value="${requestScope.movementsPage.content != null ? requestScope.movementsPage.content : emptyList}" />
 <c:set var="page" value="${requestScope.movementsPage}" />
+<c:set var="selectedAccount" value="${requestScope.selectedAccount}" />
 
 <t:masterpage title="Mi Cuenta" customNavbar="true">
   <t:clientwrapper activeMenuItem="accountMenu">
@@ -33,7 +34,7 @@
                 <c:forEach var="account" items="${client.accounts}"
                   varStatus="status">
                   <option value="${account.id}"
-                    <c:if test="${account.id == selectedAcountId}">selected</c:if>>
+                    <c:if test="${account.id == selectedAccount.id}">selected</c:if>>
                     Cuenta Nro: ${account.id}</option>
                 </c:forEach>
               </c:otherwise>
@@ -42,14 +43,11 @@
         </form>
         <div
           class=" flex flex-col p-4 mb-4 border border border-gray-300 rounded-lg  gap-6 w-full bg-white">
-          <div class="flex flex-col p-2 gap-4  w-full  ">
-            <div class="flex flex-row text-lg">
-              <p>Cuenta Nro: ${client.clientId}</p>
-            </div>
-            <div>
-              <p class="font-bold text-2xl">Saldo:
-                $ ${selectedAccountBalance}</p>
-            </div>
+          <div class="flex flex-col p-2 gap-3">
+            <span class="font-semibold text-gray-600">${selectedAccount.accountType.name} - Nro. ${selectedAccount.id}</span>
+            <h2 class="font-bold text-2xl">
+              Saldo: $ ${selectedAccount.balance}
+            </h2>
           </div>
         </div>
         <div
