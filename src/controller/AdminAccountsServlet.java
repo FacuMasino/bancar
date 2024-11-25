@@ -24,6 +24,7 @@ import domainModel.Movement;
 import domainModel.Message.MessageType;
 import exceptions.BusinessException;
 import utils.Helper;
+import utils.Page;
 
 @WebServlet(urlPatterns = { "/Admin/Accounts", "/Admin/Accounts/" })
 public class AdminAccountsServlet extends HttpServlet
@@ -52,20 +53,24 @@ public class AdminAccountsServlet extends HttpServlet
 
 		int clientId = Optional.ofNullable(request.getParameter("clientId"))
 				.map(Integer::parseInt).orElse(0);
+		
 		if (clientId == 0)
 		{
 			response.sendRedirect("Clients");
 			return;
+		}	
+		
+		///si entra acá es porque viene por el HREF
+		if(request.getParameter("accountId") == null)
+		{
+			viewClientAccounts(request, response, clientId);
+			
 		}
-
-		viewClientAccounts(request, response, clientId);
-
-		//// SI ENTRA ACÁ VIENE POR EL HREF
-
-		if (request.getParameter("id") != null)
+		else 
 		{
 			listMovements(request, response);
 		}
+		
 	}
 
 	protected void doPost(HttpServletRequest request,
@@ -273,10 +278,13 @@ public class AdminAccountsServlet extends HttpServlet
 	private void listMovements(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException
 	{
+		int page = Optional.ofNullable(
+				request.getParameter("page")).map(Integer::parseInt).orElse(1);
+
+		int pageSize = Optional.ofNullable(
+				request.getParameter("pageSize")).map(Integer::parseInt).orElse(10);
 		try
 		{
-			// TODO: Cargar lista cuando funcione eḷ negocio
-			// Enviar atributo con la lista
 			int accountId = Optional
 					.ofNullable(request.getParameter("accountId"))
 					.map(Integer::parseInt).orElse(0);
@@ -287,13 +295,17 @@ public class AdminAccountsServlet extends HttpServlet
 			Account account = accountsBusiness.read(accountId);
 			ArrayList<Movement> movementsList = new ArrayList<Movement>();
 			movementsList = movementsBusiness.listByIdAccount(accountId);
+			Page<Movement> movementsPage = new Page<Movement>(page, pageSize, movementsList);
+			
 
 			request.setAttribute("client", client);
 			request.setAttribute("account", account);
-			request.setAttribute("movementsList", movementsList);
+			request.setAttribute("movementsList",  movementsList);
+			request.setAttribute("page", movementsPage);
 			Helper.redirect("/WEB-INF/AdminAccountDetails.jsp", request,
 					response);
-		} catch (BusinessException e)
+		} 
+		catch (BusinessException e)
 		{
 			Helper.setReqMessage(request, e.getMessage(), MessageType.ERROR);
 			Helper.redirect("/Admin/Clients", request, response);

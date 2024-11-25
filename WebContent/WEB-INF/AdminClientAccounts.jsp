@@ -62,11 +62,15 @@
                   <h2 class="font-bold text-xl mb-6">
                     Cuenta: <span>${account.getAccountType().getName()}</span>
                   </h2>
-                 <a href="/Admin/Accounts?accountId=${account.id}&clientId=${client.clientId}" class="btn btn-ghost" title="Movimientos">
+                 <a href="?accountId=${account.id}&clientId=${client.clientId}" class="btn btn-ghost" title="Movimientos">
+                 
+                 
+                 
+                 
                    <i data-lucide="eye"></i>
                  </a>
                   </div>
-                  <span class="font-bold text-xl text-green-600">${account.balance}</span>
+                  <span class="font-bold text-xl ${account.balance < 0 ? 'text-red-500' : 'text-green-500'}">$${account.balance}</span>
                   <div class="flex flex-col w-fit mb-4">
                <div class="flex justify-between gap-2">
                       <span> Nro. de cuenta: </span> <span>${account.id}</span>
