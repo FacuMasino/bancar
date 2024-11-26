@@ -81,7 +81,7 @@
           <tbody>
             <c:forEach var="movement" items="${movementsList}" varStatus="status">
               <tr class="hover">
-                <td>${movement.movementDate}</td>
+                <td>${movement.dateTime}</td>
                 <td>${movement.details}</td>
                 <td class="text-green-600 font-semibold">${movement.amount}</td>
               </tr>

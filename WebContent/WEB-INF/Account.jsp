@@ -105,7 +105,7 @@
                       <c:forEach var="movement" items="${movements}"
                         varStatus="status">
                         <tr class="hover">
-                          <td>${movement.movementDate}</td>
+                          <td>${movement.dateTime}</td>
                           <td>${movement.details}</td>
                           <td>
                             <span 
