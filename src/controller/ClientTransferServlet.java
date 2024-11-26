@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import businessLogicImpl.AccountsBusiness;
+import businessLogicImpl.ClientsBusiness;
 import businessLogicImpl.TransfersBusiness;
 import domainModel.Account;
 import domainModel.Client;
@@ -22,21 +23,26 @@ public class ClientTransferServlet extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
 	private TransfersBusiness transfersBusiness;
+	private ClientsBusiness clientsBusiness;
 	private AccountsBusiness accountsBusiness;
 	private Client sessionClient;
+	private Client destinationClient;
 	private Movement movement;
+	private String action;
 	private String originAccountId;
 	private String destinationAccountCbu;
 	private String transferAmount;
 	private String transferType;
 	private String transferDescription;
-	private int originAccId;
-	private int destinationAccId;
+	private Account originAccount;
+	private Account destinationAccount;
+	private boolean success;
     
     public ClientTransferServlet()
     {
         super();
         transfersBusiness = new TransfersBusiness();
+        clientsBusiness = new ClientsBusiness();
         accountsBusiness = new AccountsBusiness();
         movement = new Movement();
     }
@@ -45,18 +51,37 @@ public class ClientTransferServlet extends HttpServlet
 			HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException
 	{
-		fetchSessionClient(request, response);
-		bindAccountsDDL(request, response);
-		Helper.redirect("/WEB-INF/Transfer.jsp", request, response);
+		action = request.getParameter("action");
+
+		if (action == null || action.isEmpty())
+		{
+			fetchSessionClient(request, response);
+			bindAccountsDDL(request, response);
+			Helper.redirect("/WEB-INF/Transfer.jsp", request, response);
+		}
 	}
 
 	protected void doPost(
 			HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException
-	{		
-		mapControls(request, response);
-		confirmTransfer();
-		doGet(request, response);
+	{
+		action = request.getParameter("action");
+
+		switch (action)
+		{
+			case "goToConfirmation":
+				mapControls(request, response);
+				Helper.redirect("/WEB-INF/TransferConfirmation.jsp", request, response);
+				break;
+			case "goToDetails":
+				confirmTransfer();
+				Helper.redirect("/WEB-INF/TransactionDetails.jsp", request, response);
+				System.out.println(originAccount.toString()); // TEST
+				System.out.println(sessionClient.toString()); // TEST
+				System.out.println(destinationAccount.toString()); // TEST
+				System.out.println(destinationClient.toString()); // TEST
+				break;
+		}
 	}
 	
 	private void fetchSessionClient(
@@ -93,14 +118,41 @@ public class ClientTransferServlet extends HttpServlet
 
 		if (originAccountId != null && !originAccountId.isEmpty())
 		{
-			originAccId = Integer.parseInt(originAccountId);
+			int origAccountId = Integer.parseInt(originAccountId);
+
+			try
+			{
+				originAccount = accountsBusiness.read(origAccountId);
+			}
+			catch (BusinessException e)
+			{
+				e.printStackTrace();
+			}
 		}
 		
 		destinationAccountCbu = request.getParameter("destinationAccountCbu");
 		
 		if (destinationAccountCbu != null && !destinationAccountCbu.isEmpty())
 		{
-			destinationAccId = accountsBusiness.findId(destinationAccountCbu);
+			try
+			{
+				int destAccountId = accountsBusiness.findId(destinationAccountCbu);
+				destinationAccount = accountsBusiness.read(destAccountId);
+			}
+			catch (BusinessException e)
+			{
+				e.printStackTrace();
+			}
+			
+			try
+			{
+				int destClientId = clientsBusiness.findClientId(destinationAccount);
+				destinationClient = clientsBusiness.read(destClientId);
+			}
+			catch (BusinessException e)
+			{
+				e.printStackTrace();
+			}
 		}
 
 		transferAmount = request.getParameter("transferAmount");
@@ -136,7 +188,7 @@ public class ClientTransferServlet extends HttpServlet
 	{
 		try
 		{
-			transfersBusiness.create(movement, originAccId, destinationAccId);
+			success = transfersBusiness.create(movement, originAccount.getId(), destinationAccount.getId());
 		}
 		catch (BusinessException e)
 		{

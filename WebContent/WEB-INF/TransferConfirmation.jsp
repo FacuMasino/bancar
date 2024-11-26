@@ -70,11 +70,11 @@
         <dialog id="modal_confirmation_Transfer" class="modal">
           <div class="modal-box bg-white">
             <h3 class="text-lg font-bold">Transferir</h3>
-            <p class="py-4">Esta acción no se puede deshacer,¿Está seguro de continuar?</p>
+            <p class="py-4">Esta acción no se puede deshacer. ¿Desea continuar?</p>
             <div class="modal-action">
-              <form method="post" action="TransferServlet">
+              <form method="post" action="Transfer">
                 <a href="Transfer.jsp" class="btn">Cancelar</a>
-                <button type="submit" class="btn btn-primary" name="action" value="transfer">
+                <button type="submit" class="btn btn-primary" name="action" value="goToDetails">
                   Continuar
                 </button>
               </form>
