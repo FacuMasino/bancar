@@ -72,7 +72,8 @@ public class MovementsDao implements IMovementsDao
 		
 		try
 		{
-			db.setPreparedStatement("SELECT * FROM Movements;");
+			db.setPreparedStatement("SELECT * FROM Movements where AccountId =?;");
+			db.getPreparedStatement().setInt(1, accountId);
 			rs = db.getPreparedStatement().executeQuery();
 			
 			while(rs.next())

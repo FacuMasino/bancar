@@ -306,7 +306,7 @@ public class AdminAccountsServlet extends HttpServlet
 			Client client = getFullClient(clientId);
 			Account account = accountsBusiness.read(accountId);
 			ArrayList<Movement> movementsList = new ArrayList<Movement>();
-			movementsList = movementsBusiness.listByIdAccount(accountId);
+			movementsList = movementsBusiness.list(accountId);
 			Page<Movement> movementsPage = new Page<Movement>(page, pageSize, movementsList);
 			
 

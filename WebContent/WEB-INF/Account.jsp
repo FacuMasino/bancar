@@ -26,7 +26,7 @@
             onchange="this.form.submit()">
             <c:choose>
               <c:when test="${empty client.accounts}">
-                <!-- Mostrar mensaje si accounts está vacía -->
+                <!-- Mostrar mensaje si accounts estï¿½ vacï¿½a -->
                 <option disabled selected>
                   No hay cuentas disponibles
                 </option>
@@ -54,7 +54,7 @@
         <div
           class=" flex flex-col p-4 border border border-gray-300 rounded-lg  gap-6 w-full bg-white">
           <div class="flex justify-between">
-            <h2 class="font-bold text-xl">Últimos Movimientos</h2>
+            <h2 class="font-bold text-xl">ï¿½ltimos Movimientos</h2>
             <label class="input input-sm input-bordered flex items-center gap-2">
               <input type="text" class="grow"
               placeholder="Buscar cuenta, monto" name="searchInput">
@@ -65,7 +65,7 @@
             <div class="flex flex-col mb-4">
               <div class="flex justify-between">
                 <div class="flex gap-2.5 items-center">
-                  <span>Tamaño de página</span>
+                  <span>Tamaï¿½o de pï¿½gina</span>
                   <select name="pageSize" onchange="this.form.submit()"
                     class="select select-bordered select-sm w-fit bg-white">
                     <c:forEach var="size" items="${page.pageSizes}">
@@ -77,7 +77,6 @@
                 </div>
                 <div class="flex gap-2.5">
                   <input name="transactionDate" type="date" class="border p-1 rounded border-gray-200">
-                  
                   <select name="movementTypeId"  class="select select-bordered select-sm w-fit bg-white">
               <c:choose>
                 <c:when test="${empty movementTypes}">
@@ -93,26 +92,13 @@
                 </c:otherwise>
               </c:choose>
             </select>
-                  
-                  
-                   <!--   
-                  
-                   <select class="select select-bordered select-sm w-fit bg-white"
-                    name="transactionType">
-                    <option selected>Seleccione tipo</option>
-                    <option>Transferencia</option>
-                    <option>Pago</option>
-                    <option>Crédito</option>
-                  </select>
-                  
-                  -->
                 </div>
               </div>
               <table class="table bg-white w-full">
                 <thead>
                   <tr>
                     <th>Fecha</th>
-                    <th>Descripción</th>
+                    <th>Descripciï¿½n</th>
                     <th>Monto</th>
                   </tr>
                 </thead>
