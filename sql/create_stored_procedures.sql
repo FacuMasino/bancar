@@ -189,7 +189,7 @@ END $$
 CREATE PROCEDURE insert_account (
     OUT _NewAccountId INT,
     IN _Cbu VARCHAR(22),
-    IN _Balance DECIMAL(10, 2),
+    IN _Balance DECIMAL(15, 2),
     IN _AccountTypeId INT,
     IN _ClientId INT
 ) 
@@ -202,7 +202,7 @@ END $$
 CREATE PROCEDURE update_account (
     IN _AccountId INT,
     IN _Cbu VARCHAR(22),
-    IN _Balance DECIMAL(10, 2),
+    IN _Balance DECIMAL(15, 2),
     IN _AccountTypeId INT
 ) 
 BEGIN
@@ -211,15 +211,38 @@ BEGIN
     WHERE AccountId = _AccountId;
 END $$
 
+CREATE PROCEDURE update_account_balance (
+    IN _AccountId INT,
+    IN _Amount DECIMAL(15, 2)
+) 
+BEGIN
+    DECLARE _Balance DECIMAL(15, 2);
+
+    IF EXISTS (SELECT 1 FROM Accounts WHERE AccountId = _AccountId) THEN
+        SELECT Balance INTO _Balance
+        FROM Accounts
+        WHERE AccountId = _AccountId;
+
+        UPDATE Accounts
+        SET Balance = _Balance + _Amount
+        WHERE AccountId = _AccountId;
+    END IF;
+END $$
+
+-- Movement
+
 CREATE PROCEDURE insert_movement (
+    OUT _NewMovementId INT,
+    IN _MovementDateTime TIMESTAMP,
     IN _Details VARCHAR(500),
     IN _Amount DECIMAL(15, 2),
     IN _MovementTypeId INT,
     IN _AccountId INT
 )
 BEGIN
-    INSERT INTO Movements (Details, Amount, MovementTypeId, AccountId)
-    VALUES (_Details, _Amount, _MovementTypeId, _AccountId);
+    INSERT INTO Movements (MovementDateTime, Details, Amount, MovementTypeId, AccountId)
+    VALUES (_MovementDateTime, _Details, _Amount, _MovementTypeId, _AccountId);
+    SET _NewMovementId = LAST_INSERT_ID();
 END $$
 
 -- Loan
@@ -266,7 +289,6 @@ BEGIN
     DECLARE _DueDate DATE;
     DECLARE counter INT DEFAULT 0;
 
-    -- CATCH del error
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
         ROLLBACK;
@@ -279,19 +301,76 @@ BEGIN
         SELECT InstallmentsQuantity INTO _InstallmentsQty FROM Loans WHERE LoanId = _LoanId;
         SELECT CreationDate INTO _CreationDate FROM Loans WHERE LoanId = _LoanId;
 
-        -- ACLARACIÓN
         -- El cálculo del interés no tiene en cuenta la cantidad de días que pudiera tener cada mes.
         SET _InterestToPay = ((_InterestRate / 12.00) * _InstallmentsQty / 100.00) * _RequestedAmount;
         SET _FinalAmount = _RequestedAmount + _InterestToPay;
         SET _InstallmentAmount = _FinalAmount / _InstallmentsQty;
+
         WHILE counter < _InstallmentsQty DO
             SET counter = counter + 1;
             -- Incremento la fecha de vencimiento sumando meses según counter
             SET _DueDate = DATE_ADD(_CreationDate, Interval counter MONTH);
             CALL insert_installment(counter, _InstallmentAmount,_DueDate, _LoanId);
         END WHILE;
+
         SET _GeneratedInstallments = counter;
     COMMIT;
+END $$
+
+-- Transfer
+
+CREATE PROCEDURE generate_transfer (
+    OUT _Success INT,
+    IN _MovementDateTime TIMESTAMP,
+    IN _Details VARCHAR(500),
+    IN _Amount DECIMAL(15, 2),
+    IN _MovementTypeId INT,
+    IN _OriginAccountId INT,
+    IN _DestinationAccountId INT
+)
+BEGIN
+    DECLARE _aux1 INT;
+    DECLARE _aux2 INT;
+
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+    BEGIN
+        SET _Success = 0;
+        ROLLBACK;
+    END;
+
+    SET _Success = 0;
+
+    START TRANSACTION;
+        CALL insert_movement(
+            _aux1,
+            _MovementDateTime,
+            _Details,
+            -_Amount,
+            _MovementTypeId,
+            _OriginAccountId
+        );
+
+        CALL insert_movement(
+            _aux2,
+            _MovementDateTime,
+            _Details,
+            _Amount,
+            _MovementTypeId,
+            _DestinationAccountId
+        );
+
+        CALL update_account_balance(
+            _OriginAccountId,
+            -_Amount
+        );
+
+        CALL update_account_balance(
+            _DestinationAccountId,
+            _Amount
+        );
+    COMMIT;
+
+    SET _Success = 1;
 END $$
 
 DELIMITER ;
