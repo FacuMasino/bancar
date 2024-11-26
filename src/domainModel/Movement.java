@@ -1,92 +1,80 @@
-	package domainModel;
+package domainModel;
 
 import java.math.BigDecimal;
-import java.sql.Date;
+import java.time.LocalDateTime;
 
-//Movement tiene los detalles propio del movimiento(unilateral) y la cuenta,
-//ya sea de debito o acreditacion
-/*
- Apertura de cuenta: genera 
- */
-
-public class Movement {
-
-	private int movementId;
-	private Date movementDate;
+public class Movement
+{
+	private int id;
+	private LocalDateTime dateTime;
 	private String details;
 	private BigDecimal amount;
 	private MovementType movementType;
-	private int accountId;
 
 	public Movement()
 	{
 		
 	}
-	
-	public Movement(int movementId, Date movementDate, int accountId, String details, BigDecimal amount) {
 
-		this.movementId = movementId;
-		this.movementDate = movementDate;
-		this.accountId = accountId;
-		this.details = details;
-		this.amount = amount;
+	public int getId()
+	{
+		return id;
 	}
 
-	public int getMovementId() {
-		return movementId;
+	public void setId(int id)
+	{
+		this.id = id;
 	}
 
-	public void setMovementId(int movementId) {
-		this.movementId = movementId;
+	public LocalDateTime getDateTime()
+	{
+		return dateTime;
 	}
 
-	public Date getMovementDate() {
-		return movementDate;
+	public void setDateTime(LocalDateTime dateTime)
+	{
+		this.dateTime = dateTime;
 	}
 
-	public void setMovementDate(Date movementDate) {
-		this.movementDate = movementDate;
-	}
-
-	public int getAccountId() {
-		return accountId;
-	}
-
-	public void setAccountId(int accountId) {
-		this.accountId = accountId;
-	}
-
-	public String getDetails() {
+	public String getDetails()
+	{
 		return details;
 	}
 
-	public void setDetails(String details) {
+	public void setDetails(String details)
+	{
 		this.details = details;
 	}
 
-	public BigDecimal getAmount() {
+	public BigDecimal getAmount()
+	{
 		return amount;
 	}
 
-	public void setAmount(BigDecimal amount) {
+	public void setAmount(BigDecimal amount)
+	{
 		this.amount = amount;
 	}
 
-	public MovementType getMovementType() {
+	public MovementType getMovementType()
+	{
 		return movementType;
 	}
 
-	public void setMovementType(MovementType movementType) {
+	public void setMovementType(MovementType movementType)
+	{
 		this.movementType = movementType;
 	}
 
 	@Override
 	public String toString()
 	{
-		return "Movement [movementId=" + movementId + ", movementDate="
-				+ movementDate + ", details=" + details + ", amount=" + amount
-				+ ", movementType=" + movementType + ", accountId=" + accountId
-				+ "]";
+		return "Movement: [" +
+				"id=" + id +
+				", dateTime=" + dateTime +
+				", details=" + details +
+				", amount=" + amount +
+				", movementType=" + movementType +
+				"]";
 	}
-	
 }

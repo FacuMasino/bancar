@@ -8,7 +8,6 @@ public class MovementType
 	public MovementType () 
 	{
 		
-		
 	}
 	
 	public int getId()
@@ -31,8 +30,12 @@ public class MovementType
 		this.name = name;
 	}
 	
+	@Override
 	public String toString()
 	{
-		return "id: " + id + " name: " + name;
+		return "MovementType: [" +
+				"id=" + id +
+				", name=" + name +
+				"]";
 	}
 }
