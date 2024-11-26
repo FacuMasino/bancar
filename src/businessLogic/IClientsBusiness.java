@@ -11,5 +11,4 @@ public interface IClientsBusiness
 	public boolean update(Client client) throws BusinessException;
 	public boolean toggleActiveStatus(int clientId, boolean currentActiveStatus) throws BusinessException;
 	public ArrayList<Client> list() throws BusinessException;
-	public Client findClientByUserId(int userId) throws BusinessException;
 }

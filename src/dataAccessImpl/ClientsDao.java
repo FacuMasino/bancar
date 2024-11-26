@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import dataAccess.IClientsDao;
+import domainModel.Account;
 import domainModel.Client;
 import domainModel.User;
 
@@ -25,8 +26,6 @@ public class ClientsDao extends Dao<Client> implements IClientsDao
 		handleUserId(client);
 		countriesDao.handleId(client.getNationality());
 		addressesDao.handleId(client.getAddress());
-		// TODO: accountsDao.handleId(client.getAccounts());
-		// TODO: accountsDao.handleId(client.getLoans());
 		
 		try
 		{
@@ -61,9 +60,6 @@ public class ClientsDao extends Dao<Client> implements IClientsDao
 			}
 			
 			assignResultSet(client, rs);
-			
-			// TODO: client.setAccounts(accountsDao.list(client.getId()));
-			// TODO: client.setLoans(loansDao.list(client.getId()));
 		}
 		catch (Exception ex)
 		{
@@ -73,12 +69,6 @@ public class ClientsDao extends Dao<Client> implements IClientsDao
 		
 		return client;
 	}
-	
-	@Override
-	public Client readByUserId(int userId) throws SQLException
-	{
-		return read(findClientId(userId));
-	}
 
 	@Override
 	public boolean update(Client client) throws SQLException
@@ -86,8 +76,6 @@ public class ClientsDao extends Dao<Client> implements IClientsDao
 		handleUserId(client);
 		countriesDao.handleId(client.getNationality());
 		addressesDao.handleId(client.getAddress());
-		// TODO: accountsDao.handleId(client.getAccounts());
-		// TODO: accountsDao.handleId(client.getLoans());
 		
 		int rows = 0;
 		
@@ -206,7 +194,31 @@ public class ClientsDao extends Dao<Client> implements IClientsDao
 		}
 	}
 	
-	public void handleUserId(Client client) throws SQLException
+	public int findClientId(Account account) throws SQLException
+	{
+		ResultSet rs;
+		
+		try
+		{
+			db.setPreparedStatement("SELECT ClientId FROM Accounts WHERE AccountId = ?;");
+			db.getPreparedStatement().setInt(1, account.getId());
+			rs = db.getPreparedStatement().executeQuery();
+			
+			if(!rs.next())
+			{
+				return 0;
+			}
+			
+			return rs.getInt("ClientId");
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+			throw ex;
+		}
+	}
+	
+	private void handleUserId(Client client) throws SQLException
 	{
 		User user = new User();
 		user.setUserId(client.getUserId());

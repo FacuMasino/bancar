@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import businessLogic.IClientsBusiness;
 import dataAccessImpl.ClientsDao;
+import domainModel.Account;
 import domainModel.Client;
 import exceptions.BusinessException;
 import exceptions.InvalidFieldsException;
@@ -155,37 +156,46 @@ public class ClientsBusiness implements IClientsBusiness
 					"Ocurrió un error desconocido al obtener los clientes.");
 		}
 	}
-
-	@Override
-	public Client findClientByUserId(int userId) throws BusinessException
+	
+	public int findClientId(int userId) throws BusinessException
 	{
-		try 
+		try
 		{
-			Client client = clientsDao.readByUserId(userId);
-			if(client == null)
-			{
-				throw new BusinessException(
-						"No se encontró un cliente asociado a este usuario.");
-			}
-			return client;
+			return clientsDao.findClientId(userId);
 		}
 		catch (SQLException ex)
 		{
+			ex.printStackTrace();
 			throw new SQLOperationException();
-		}
-		catch (BusinessException ex)
-		{
-			throw ex;
 		}
 		catch (Exception ex)
 		{
 			ex.printStackTrace();
 			throw new BusinessException(
-					"Ocurrió un error desconocido al leer el cliente.");
+					"Ocurrió un error desconocido al buscar el ID de cliente en la BD.");
 		}
 	}
 	
-	public void validateDni(Client client) throws BusinessException
+	public int findClientId(Account account) throws BusinessException
+	{
+		try
+		{
+			return clientsDao.findClientId(account);
+		}
+		catch (SQLException ex)
+		{
+			ex.printStackTrace();
+			throw new SQLOperationException();
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+			throw new BusinessException(
+					"Ocurrió un error desconocido al buscar el ID de cliente en la BD.");
+		}
+	}
+	
+	private void validateDni(Client client) throws BusinessException
 	{
 		try
 		{
@@ -209,5 +219,12 @@ public class ClientsBusiness implements IClientsBusiness
 			throw new BusinessException(
 					"Ocurrió un error desconocido al validar el DNI.");
 		}
+	}
+	
+	// TODO: Eliminar este método y reemplazar todos sus llamados por cliBiz.read(cliBiz.findClientId(userId))
+	// (Doble click en el nombre del método y click en Open Call Hierarchy para ver llamados)
+	public Client findClientByUserId(int userId) throws BusinessException
+	{
+		return read(findClientId(userId));
 	}
 }
