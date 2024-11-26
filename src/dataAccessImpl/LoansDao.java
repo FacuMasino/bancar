@@ -141,9 +141,10 @@ public class LoansDao implements ILoansDao
 	}
 
 	private void setUpdateParameters(Loan loan) throws SQLException
-	{
-		db.getPreparedStatement().setInt(1, loan.getLoanId());
-		db.getPreparedStatement().setInt(2, loan.getLoanStatus().getId());
+	{	
+		//TODO: bug?
+		db.getPreparedStatement().setInt(1, loan.getLoanStatus().getId());
+		db.getPreparedStatement().setInt(2, loan.getLoanId());
 	}
 
 	private Loan getLoan(ResultSet rs) throws SQLException

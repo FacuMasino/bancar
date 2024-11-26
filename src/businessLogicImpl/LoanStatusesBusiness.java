@@ -14,7 +14,7 @@ import exceptions.SQLOperationException;
 public class LoanStatusesBusiness implements ILoanStatusesBusiness
 {
 	private ILoanStatusesDao loanStatusesDao;
-	
+
 	public LoanStatusesBusiness()
 	{
 		loanStatusesDao = new LoanStatusesDao();
@@ -26,18 +26,34 @@ public class LoanStatusesBusiness implements ILoanStatusesBusiness
 		try
 		{
 			return loanStatusesDao.list();
+		} catch (SQLException ex)
+		{
+			ex.printStackTrace();
+			throw new SQLOperationException();
+		} catch (Exception ex)
+		{
+			ex.printStackTrace();
+			throw new BusinessException("Ocurrió un error al obtener "
+					+ "los estados de préstamos disponibles.");
+		}
+	}
+
+	@Override
+	public LoanStatus read(int loanStatusId) throws BusinessException
+	{
+		try
+		{
+			return loanStatusesDao.read(loanStatusId);
 		} 
 		catch (SQLException ex)
 		{
 			ex.printStackTrace();
 			throw new SQLOperationException();
-		}
-		catch (Exception ex)
+		} catch (Exception ex)
 		{
 			ex.printStackTrace();
-			throw new BusinessException
-				("Ocurrió un error al obtener "
-						+ "los estados de préstamos disponibles.");
+			throw new BusinessException("Ocurrió un error al obtener "
+					+ "el estado de préstamo.");
 		}
 	}
 

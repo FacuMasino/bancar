@@ -5,6 +5,9 @@
 <%@tag description="Client Wrapper with Navbar + Sidebar Menu"
   pageEncoding="UTF-8"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<c:set var="userName" value="${requestScope.userName}" />
 <%@attribute name="activeMenuItem" required="true"%>
 
 <div class="drawer lg:drawer-open">
@@ -30,9 +33,13 @@
           action="${pageContext.request.contextPath}/Login"
           class="flex-none">
           <ul class="menu menu-horizontal px-1 gap-3">
+            <li>
+              <h1>USER: ${userName}</h1>
+            </li>
             <li><a id="myProfileMenu" href="Profile.jsp"
               class="p-0">
-                <button value="viewProfile" name="action" class="btn btn-ghost">
+                <button value="viewProfile" name="action"
+                  class="btn btn-ghost">
                   <i data-lucide="user"></i> Mi Perfil
                 </button>
             </a></li>

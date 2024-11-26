@@ -1,10 +1,14 @@
 <%-- Este JSP Tag envuelve al resto de páginas que 
-    Pertenezcan al Área de Cliente. Lo hacemos así
+    Pertenezcan al Área de Admin. Lo hacemos así
     para poder utilizar el componente Drawer de DaisyUI
     que funciona como Navbar y Menú lateral --%>
 <%@tag description="Admin Wrapper with Navbar + Sidebar Menu"
   pageEncoding="UTF-8"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<c:set var="userName" value="${requestScope.userName}" />
+
 <%@attribute name="activeMenuItem" required="true"%>
 <div class="drawer lg:drawer-open">
   <input id="client-drawer" type="checkbox" class="drawer-toggle" />
@@ -25,6 +29,9 @@
         </div>
         <form method="post" action="${pageContext.request.contextPath}/Login" class="flex-none">
           <ul class="menu text-white menu-horizontal px-1 gap-3">
+          <li>
+          <h1>USER: ${userName}</h1>
+          </li>
             <li>
               <button value="logout" name="action" class="btn btn-ghost">
                 <i data-lucide="log-out"></i>
