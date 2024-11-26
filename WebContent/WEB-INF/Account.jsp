@@ -8,6 +8,7 @@
 <c:set var="movements" value="${requestScope.movementsPage.content != null ? requestScope.movementsPage.content : emptyList}" />
 <c:set var="page" value="${requestScope.movementsPage}" />
 <c:set var="selectedAccount" value="${requestScope.selectedAccount}" />
+<c:set var="movementTypes" value="${requestScope.movementTypes != null ? requestScope.movementTypes : emptyList}" />
 
 <t:masterpage title="Mi Cuenta" customNavbar="true">
   <t:clientwrapper activeMenuItem="accountMenu">
@@ -75,15 +76,36 @@
                   </select>
                 </div>
                 <div class="flex gap-2.5">
-                  <input name="transactionDate" type="date"
-                    class="border p-1 rounded border-gray-200"> <select
-                    class="select select-bordered select-sm w-fit bg-white"
+                  <input name="transactionDate" type="date" class="border p-1 rounded border-gray-200">
+                  
+                  <select name="movementTypeId"  class="select select-bordered select-sm w-fit bg-white">
+              <c:choose>
+                <c:when test="${empty movementTypes}">
+                  <option disabled selected>Error: No hay tipos
+                    de movimientos para mostrar</option>
+                </c:when>
+                <c:otherwise>
+                  <option selected disabled>Seleccione tipo de movimiento</option>
+                  <c:forEach var="movementType" items="${movementTypes}">
+                    <option value="${movementType.id}">${movementType.name}
+                    </option>
+                  </c:forEach>
+                </c:otherwise>
+              </c:choose>
+            </select>
+                  
+                  
+                   <!--   
+                  
+                   <select class="select select-bordered select-sm w-fit bg-white"
                     name="transactionType">
                     <option selected>Seleccione tipo</option>
                     <option>Transferencia</option>
                     <option>Pago</option>
                     <option>Crédito</option>
                   </select>
+                  
+                  -->
                 </div>
               </div>
               <table class="table bg-white w-full">

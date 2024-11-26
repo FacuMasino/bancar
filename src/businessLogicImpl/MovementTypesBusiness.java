@@ -1,10 +1,13 @@
 package businessLogicImpl;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+
 import businessLogic.IMovementTypesBusiness;
 import dataAccessImpl.MovementTypesDao;
 import domainModel.MovementType;
 import exceptions.BusinessException;
+import exceptions.SQLOperationException;
 
 public class MovementTypesBusiness implements IMovementTypesBusiness
 {
@@ -34,5 +37,23 @@ public class MovementTypesBusiness implements IMovementTypesBusiness
 		}
 		
 		return null;
+	}
+	
+	public ArrayList<MovementType> list() throws BusinessException
+	{
+		try
+		{
+			return movementTypesDao.list();
+		}
+		catch (SQLException ex)
+		{
+			throw new SQLOperationException();
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+			throw new BusinessException
+				("Ocurrió un error desconocido al obtener los tipos de movimiento.");
+		}
 	}
 }

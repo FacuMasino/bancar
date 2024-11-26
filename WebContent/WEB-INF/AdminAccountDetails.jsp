@@ -6,6 +6,7 @@
 
 <c:set var="client" value="${requestScope.client}" />
 <c:set var="listPage" value="${requestScope.page}" />
+<c:set var="movementTypes" value="${requestScope.movementTypes != null ? requestScope.movementTypes : emptyList}" />
 
 <t:masterpage title="Admin - Movimientos de cuenta" customNavbar="true">
   <t:adminwrapper activeMenuItem="">
@@ -52,17 +53,16 @@
           <div class="flex-end">
             <input name="transactionDate" type="date" class="border p-1 rounded border-gray-200">
             <!--  falta la parte del servlet -->
-            <select name="movementTypeId"
-              class="select select-bordered select-sm w-fit bg-white">
+            <select name="movementTypeId"  class="select select-bordered select-sm w-fit bg-white">
               <c:choose>
                 <c:when test="${empty movementTypes}">
                   <option disabled selected>Error: No hay tipos
                     de movimientos para mostrar</option>
                 </c:when>
                 <c:otherwise>
-                  <option value="">Seleccione tipo de movimiento</option>
-                  <c:forEach var="movementTpye" items="${movementTypes}">
-                    <option value="${movementype.Id}">${movementype.name}
+                  <option selected disabled>Seleccione tipo de movimiento</option>
+                  <c:forEach var="movementType" items="${movementTypes}">
+                    <option value="${movementType.id}">${movementType.name}
                     </option>
                   </c:forEach>
                 </c:otherwise>

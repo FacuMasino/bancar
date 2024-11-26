@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 
 import businessLogicImpl.AccountsBusiness;
 import businessLogicImpl.ClientsBusiness;
+import businessLogicImpl.MovementTypesBusiness;
 import businessLogicImpl.MovementsBusiness;
 import domainModel.Account;
 import domainModel.Client;
@@ -32,12 +33,14 @@ public class ClientAccountServlet extends HttpServlet
 	private static final long serialVersionUID = 1L;
 	private AccountsBusiness accountBusiness;
 	private MovementsBusiness movementBusiness;
+	private MovementTypesBusiness movementTypesBusiness;
 
 	public ClientAccountServlet()
 	{
 		super();
 		accountBusiness = new AccountsBusiness();
 		movementBusiness = new MovementsBusiness();
+		movementTypesBusiness = new MovementTypesBusiness();
 	}
 
 	protected void doGet(HttpServletRequest request,
@@ -92,13 +95,15 @@ public class ClientAccountServlet extends HttpServlet
 			{
 				System.out.println(
 						"\nEl cliente no tiene cuentas disponibles!!!");
-			} else
+			} 
+			else
 			{
 				if (req.getParameter("selectedAccountId") == null)
 				{
 					//fuerzo la seleccion a la primer cuenta disponible, porque si es una sola,no se puede seleccionar
 					selectedAccountId = accounts.get(0).getId();
-				} else
+				}
+				else
 				{
 					selectedAccountId = Integer.parseInt(
 							req.getParameter("selectedAccountId"));
@@ -113,9 +118,11 @@ public class ClientAccountServlet extends HttpServlet
 
 				req.setAttribute("selectedAccount", auxAccount);
 				req.setAttribute("movementsPage", movementsPage);
+				req.setAttribute("movementTypes", movementTypesBusiness.list());
 			}
 			req.setAttribute("client", client);			
-		} catch (BusinessException ex)
+		} 
+		catch (BusinessException ex)
 		{
 			ex.printStackTrace();
 			Helper.setReqMessage(req, ex.getMessage(), MessageType.ERROR);

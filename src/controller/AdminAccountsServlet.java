@@ -15,6 +15,7 @@ import businessLogicImpl.AccountTypesBusiness;
 import businessLogicImpl.AccountsBusiness;
 import businessLogicImpl.ClientsBusiness;
 import businessLogicImpl.LoansBusiness;
+import businessLogicImpl.MovementTypesBusiness;
 import businessLogicImpl.MovementsBusiness;
 import domainModel.Account;
 import domainModel.AccountType;
@@ -35,6 +36,7 @@ public class AdminAccountsServlet extends HttpServlet
 	private LoansBusiness loansBusiness;
 	private AccountTypesBusiness accountTypesBusiness;
 	private MovementsBusiness movementsBusiness;
+	private MovementTypesBusiness movementTypesBusiness;
 
 	public AdminAccountsServlet()
 	{
@@ -44,6 +46,7 @@ public class AdminAccountsServlet extends HttpServlet
 		loansBusiness = new LoansBusiness();
 		accountTypesBusiness = new AccountTypesBusiness();
 		movementsBusiness = new MovementsBusiness();
+		movementTypesBusiness = new MovementTypesBusiness();
 
 	}
 
@@ -311,6 +314,7 @@ public class AdminAccountsServlet extends HttpServlet
 			request.setAttribute("account", account);
 			request.setAttribute("movementsList",  movementsList);
 			request.setAttribute("page", movementsPage);
+			request.setAttribute("movementTypes", movementTypesBusiness.list());
 			Helper.redirect("/WEB-INF/AdminAccountDetails.jsp", request,
 					response);
 		} 
