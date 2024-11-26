@@ -10,68 +10,78 @@ import exceptions.SQLOperationException;
 
 public class MovementsBusiness implements IMovementsBusiness
 {
-	private MovementsDao movementDao;
-	
+	private MovementsDao movementsDao;
 	
 	public MovementsBusiness()
 	{
-		movementDao = new MovementsDao();
+		movementsDao = new MovementsDao();
 	}
 
 	@Override
-	public boolean create(Movement movement) throws BusinessException
+	public boolean create(Movement movement, int accountId) throws BusinessException
 	{
-		// TODO pendiente la creacion del movimiento es vida
+		try
+		{
+			if (0 < movementsDao.create(movement, accountId))
+			{
+				return true;
+			}
+		}
+		catch (SQLException ex)
+		{
+			throw new SQLOperationException();
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+			throw new BusinessException(
+					"Ocurrió un error desconocido al crear el movimiento.");
+		}
+		
 		return false;
 	}
 
 	@Override
 	public Movement read(int movementId) throws BusinessException
 	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean update(Movement movement) throws BusinessException
-	{
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean delete(int movementId)
-	{
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public ArrayList<Movement> list() throws BusinessException
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public int getId(Movement movement) throws BusinessException
-	{
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public ArrayList<Movement> listByIdAccount(int accountId)
-			throws BusinessException
-	{
-		try {
-			return movementDao.listByIdAccount(accountId);
-		} catch (SQLException ex) {
+		try 
+		{
+			return movementsDao.read(movementId);
+		}
+		catch (SQLException ex)
+		{
 			throw new SQLOperationException();
-		} catch (Exception ex) {
+		}
+		catch (Exception ex)
+		{
 			ex.printStackTrace();
-			throw new BusinessException("Ocurrió un error desconocido al leer los movimientos...");
+			throw new BusinessException
+				("Ocurrió un error desconocido al leer el movimiento.");
 		}
 	}
 
+	@Override
+	public ArrayList<Movement> list(int accountId) throws BusinessException
+	{
+		try
+		{
+			return movementsDao.list(accountId);
+		}
+		catch (SQLException ex)
+		{
+			throw new SQLOperationException();
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+			throw new BusinessException("Ocurrió un error desconocido al leer los movimientos.");
+		}
+	}
+	
+	// TODO: Eliminar este método y reemplazar todos sus llamados por list(int accountId) de los servlets
+	// (Doble click en el nombre del método y click en Open Call Hierarchy para ver llamados)
+	public ArrayList<Movement> listByIdAccount(int accountId) throws BusinessException
+	{
+		return list(accountId);
+	}
 }
