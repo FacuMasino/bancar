@@ -30,13 +30,24 @@
         <form method="post" action="${pageContext.request.contextPath}/Login" class="flex-none">
           <ul class="menu text-white menu-horizontal px-1 gap-3">
           <li>
-          <h1>USER: ${userName}</h1>
-          </li>
-            <li>
-              <button value="logout" name="action" class="btn btn-ghost">
-                <i data-lucide="log-out"></i>
-                Salir
-              </button>
+              <details>
+                <summary class="flex">
+                  <div class="bg-white text-black rounded-full p-1">
+                    <i data-lucide="user"></i>
+                  </div>
+                  <div class="flex flex-col">
+                    <span>Usuario</span>
+                    <span class="font-bold">${userName}</span>
+                  </div>
+                </summary>
+                <ul class="bg-white text-black shadow !mt-5 rounded p-2 w-full">
+                  <li>
+                    <button value="logout" name="action">
+                      Salir
+                    </button>
+                  </li>
+                </ul>
+              </details>
             </li>
           </ul>
         </form>

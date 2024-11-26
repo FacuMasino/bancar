@@ -33,20 +33,32 @@
           action="${pageContext.request.contextPath}/Login"
           class="flex-none">
           <ul class="menu menu-horizontal px-1 gap-3">
-            <li>
-              <h1>USER: ${userName}</h1>
-            </li>
             <li><a id="myProfileMenu" href="Profile.jsp"
               class="p-0">
                 <button value="viewProfile" name="action"
                   class="btn btn-ghost">
-                  <i data-lucide="user"></i> Mi Perfil
+                  Mi Perfil
                 </button>
             </a></li>
             <li>
-              <button value="logout" name="action" class="btn btn-ghost">
-                <i data-lucide="log-out"></i> Salir
-              </button>
+              <details>
+                <summary class="flex">
+                  <div class="bg-gray-100 rounded-full p-1">
+                    <i data-lucide="user"></i>
+                  </div>
+                  <div class="flex flex-col">
+                    <span>Usuario</span>
+                    <span class="font-bold">${userName}</span>
+                  </div>
+                </summary>
+                <ul class="bg-white shadow !mt-5 rounded p-2 w-full">
+                  <li>
+                    <button value="logout" name="action">
+                      Salir
+                    </button>
+                  </li>
+                </ul>
+              </details>
             </li>
           </ul>
         </form>

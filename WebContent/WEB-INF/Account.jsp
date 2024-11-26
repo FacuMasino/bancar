@@ -54,7 +54,7 @@
         <div
           class=" flex flex-col p-4 border border border-gray-300 rounded-lg  gap-6 w-full bg-white">
           <div class="flex justify-between">
-            <h2 class="font-bold text-xl">ï¿½ltimos Movimientos</h2>
+            <h2 class="font-bold text-xl">Últimos Movimientos</h2>
             <label class="input input-sm input-bordered flex items-center gap-2">
               <input type="text" class="grow"
               placeholder="Buscar cuenta, monto" name="searchInput">
@@ -65,7 +65,7 @@
             <div class="flex flex-col mb-4">
               <div class="flex justify-between">
                 <div class="flex gap-2.5 items-center">
-                  <span>Tamaï¿½o de pï¿½gina</span>
+                  <span>Tamaño de página</span>
                   <select name="pageSize" onchange="this.form.submit()"
                     class="select select-bordered select-sm w-fit bg-white">
                     <c:forEach var="size" items="${page.pageSizes}">
@@ -98,7 +98,7 @@
                 <thead>
                   <tr>
                     <th>Fecha</th>
-                    <th>Descripciï¿½n</th>
+                    <th>Descripción</th>
                     <th>Monto</th>
                   </tr>
                 </thead>
@@ -106,8 +106,9 @@
                   <c:choose>
                     <c:when test="${empty movements}">
                       <!-- Mostrar mensaje si no hay movimientos-->
-                      <h3 class="font-bold text-3xl">No hay
-                        movimientos disponibles</h3>
+                      <tr class="hover">
+                        <td class="text-center" colspan="3">No hay movimientos disponibles</td>
+                      </tr>
                     </c:when>
                     <c:otherwise>
                       <c:forEach var="movement" items="${movements}"
