@@ -28,7 +28,7 @@
             <label class="label pt-0">
               <span class="label-text font-semibold text-lg ">Cuenta</span>
             </label>
-            <select name="selectedAccountId" class="bg-white select text-black select-bordered w-full">
+            <select name="originAccountId" class="bg-white select text-black select-bordered w-full">
               <c:choose>
                 <c:when test="${empty accounts}">
                   <option disabled selected>Error: No hay cuentas para mostrar.</option>
@@ -82,7 +82,7 @@
             <label class="label pt-0">
               <span class="label-text font-semibold text-lg ">Concepto</span>
             </label>
-            <select name="transferConcept" class="bg-white select text-black select-bordered w-full">
+            <select name="transferType" class="bg-white select text-black select-bordered w-full">
               <option>Seleccione el motivo</option>
               <option>Alquileres</option>
               <option>Haberes</option>
@@ -94,7 +94,7 @@
             <label class="label">
               <span class="label-text font-semibold text-lg  leading-6">Referencia</span>
             </label>
-            <input type="text" name="transferReference" placeholder="Ingrese una referencia"
+            <input type="text" name="transferDescription" placeholder="Ingrese una referencia"
               class="input input-bordered w-full" required />
           </div>
         </div>

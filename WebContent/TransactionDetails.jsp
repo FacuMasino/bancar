@@ -47,7 +47,7 @@
         <div class="flex flex-col items-start px-8 py-6 gap-6">
           <div class="flex flex-col">
             <span class="text-sm text-slate-600">Fecha y hora</span>
-            <span class="text-sm font-bold">5 de noviembre de 2024, 04:43pm</span>
+            <span class="text-sm font-bold">6 de noviembre de 2024, 04:43pm</span>
           </div>
           <div class="flex flex-col">
             <span class="text-sm text-slate-600">Monto</span>

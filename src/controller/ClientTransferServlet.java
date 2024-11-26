@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,8 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import businessLogicImpl.AccountsBusiness;
+import businessLogicImpl.TransfersBusiness;
 import domainModel.Account;
 import domainModel.Client;
+import domainModel.Movement;
 import exceptions.BusinessException;
 import utils.Helper;
 
@@ -18,17 +21,24 @@ import utils.Helper;
 public class ClientTransferServlet extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
+	private TransfersBusiness transfersBusiness;
 	private AccountsBusiness accountsBusiness;
 	private Client sessionClient;
-	private Account originAccount;
-	private Account destinationAccount;
-	private String selectedAccountId;
+	private Movement movement;
+	private String originAccountId;
 	private String destinationAccountCbu;
+	private String transferAmount;
+	private String transferType;
+	private String transferDescription;
+	private int originAccId;
+	private int destinationAccId;
     
     public ClientTransferServlet()
     {
         super();
+        transfersBusiness = new TransfersBusiness();
         accountsBusiness = new AccountsBusiness();
+        movement = new Movement();
     }
 
 	protected void doGet(
@@ -44,7 +54,8 @@ public class ClientTransferServlet extends HttpServlet
 			HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException
 	{		
-		fetchControls(request, response);
+		mapControls(request, response);
+		confirmTransfer();
 		doGet(request, response);
 	}
 	
@@ -75,45 +86,61 @@ public class ClientTransferServlet extends HttpServlet
 		}
 	}
 	
-	private void fetchControls(
+	private void mapControls(
 			HttpServletRequest request, HttpServletResponse response)
 	{
-		selectedAccountId = request.getParameter("selectedAccountId");
-		destinationAccountCbu = request.getParameter("destinationAccountCbu");
-		
-		if (selectedAccountId != null && !selectedAccountId.isEmpty())
+		originAccountId = request.getParameter("originAccountId");
+
+		if (originAccountId != null && !originAccountId.isEmpty())
 		{
-			try
-			{
-				originAccount = accountsBusiness.read(Integer.parseInt(selectedAccountId));
-				System.out.println(originAccount.toString()); // test
-			}
-			catch (NumberFormatException e)
-			{
-				e.printStackTrace();
-			}
-			catch (BusinessException e)
-			{
-				e.printStackTrace();
-			}
+			originAccId = Integer.parseInt(originAccountId);
 		}
+		
+		destinationAccountCbu = request.getParameter("destinationAccountCbu");
 		
 		if (destinationAccountCbu != null && !destinationAccountCbu.isEmpty())
 		{
+			destinationAccId = accountsBusiness.findId(destinationAccountCbu);
+		}
+
+		transferAmount = request.getParameter("transferAmount");
+		
+		if (transferAmount != null && !transferAmount.isEmpty())
+		{
 			try
 			{
-				int destinationAccountId = accountsBusiness.findId(destinationAccountCbu);
-				destinationAccount = accountsBusiness.read(destinationAccountId);
-				System.out.println(destinationAccount.toString()); // test
-			}
+				movement.setAmount(new BigDecimal(transferAmount));
+	        }
 			catch (NumberFormatException e)
 			{
-				e.printStackTrace();
-			}
-			catch (BusinessException e)
-			{
-				e.printStackTrace();
-			}
+	            System.out.println("El monto no tiene un formato válido.");
+	        }
+		}
+
+		transferDescription = request.getParameter("transferDescription");
+		
+		if (transferDescription != null && !transferDescription.isEmpty())
+		{
+			movement.setDetails(transferDescription + " - ");
+		}
+
+		transferType = request.getParameter("transferType");
+		
+		if (transferType != null && !transferType.isEmpty())
+		{
+			movement.setDetails(movement.getDetails() + transferType);
+		}
+	}
+	
+	private void confirmTransfer()
+	{
+		try
+		{
+			transfersBusiness.create(movement, originAccId, destinationAccId);
+		}
+		catch (BusinessException e)
+		{
+			e.printStackTrace();
 		}
 	}
 }

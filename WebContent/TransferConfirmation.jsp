@@ -23,7 +23,7 @@
               <i data-lucide="app-window"></i>
             </div>
             <div class="flex flex-col leading-none">
-              <p class="text-lg  text-slate-600 ">Cuenta Origen</p>
+              <p class="text-lg  text-slate-600 ">Cuenta de origen</p>
               <p class="font-bold font-sans text-x  text-slate-600 ">Cta.1001</p>
               <p class="text-lg  order-1 text-slate-600 ">Saldo Disponible</p>
               <p class="font-bold order-2 font-sans text-x  text-slate-600 ">$55.000</p>
