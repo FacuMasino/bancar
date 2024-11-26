@@ -79,9 +79,6 @@ public class LoginServlet extends HttpServlet {
 			case "logout":
 				logout(request, response);
 				break;
-			case "viewProfile":
-				response.sendRedirect(request.getContextPath() + "/Client?action=viewProfile");
-				break;
 			default:
 				doGet(request,response);
 		}

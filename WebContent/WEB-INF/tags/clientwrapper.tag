@@ -33,13 +33,13 @@
           action="${pageContext.request.contextPath}/Login"
           class="flex-none">
           <ul class="menu menu-horizontal px-1 gap-3">
-            <li><a id="myProfileMenu" href="Profile.jsp"
-              class="p-0">
-                <button value="viewProfile" name="action"
-                  class="btn btn-ghost">
-                  Mi Perfil
-                </button>
-            </a></li>
+            <li>
+              <a id="myProfileMenu" 
+                href="${pageContext.request.contextPath}/Client?action=viewProfile"
+                class="btn btn-ghost">
+                    Mi Perfil
+              </a>
+            </li>
             <li>
               <details>
                 <summary class="flex">
