@@ -6,11 +6,7 @@ import domainModel.Movement;
 
 public interface IMovementsDao
 {
-	public boolean create(Movement movement) throws SQLException;
+	public int create(Movement movement, int accountId) throws SQLException;
 	public Movement read(int movementId) throws SQLException;
-	public boolean update(Movement movemen) throws SQLException;
-	public boolean delete(int movementId) throws SQLException;
-	public ArrayList<Movement> list() throws SQLException;
-	public int getId(Movement movement) throws SQLException;
-	public ArrayList<Movement> listByIdAccount(int accountId) throws SQLException;
+	public ArrayList<Movement> list(int accountId) throws SQLException;
 }

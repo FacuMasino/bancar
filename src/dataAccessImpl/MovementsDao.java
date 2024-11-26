@@ -2,159 +2,120 @@ package dataAccessImpl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
-
 import dataAccess.IMovementsDao;
-import domainModel.Account;
-import domainModel.AccountType;
 import domainModel.Movement;
-import domainModel.MovementType;
 
 public class MovementsDao implements IMovementsDao
 {
 	private Database db;
-	private MovementTypesDao movementTypeDao;
-
-	// TODO: revisar SP, es necesario el OUT?
+	private MovementTypesDao movementTypesDao;
 
 	public MovementsDao()
 	{
 		db = new Database();
-		movementTypeDao = new MovementTypesDao();
+		movementTypesDao = new MovementTypesDao();
 	}
 
 	@Override
-	public boolean create(Movement movement) throws SQLException
+	public int create(Movement movement, int accountId) throws SQLException
 	{
-		int rows = 0;
-
 		try
 		{
-			MovementType auxMovementType = new MovementType(); // creo un objeto
-																// auxMovementType
-																// auxiliar.
-			auxMovementType = movementTypeDao
-					.readByName(movement.getMovementType().getName());
-
-			movement.setMovementType(auxMovementType); // seteo el movementType
-														// completo
-
-			db.setPreparedStatement("{CALL insert_movement(?, ?, ?, ?)}");
-			setParameters(movement);
-			rows = db.getPreparedStatement().executeUpdate();
-		} catch (SQLException ex)
-		{
-			ex.printStackTrace();
-			throw ex;
+			db.setCallableStatement("{CALL insert_movement(?, ?, ?, ?, ?, ?)}");
+			setParameters(movement, accountId);
+			db.getCallableStatement().executeUpdate();
+			return db.getCallableStatement().getInt(1);
 		}
-
-		return (rows > 0);
+		catch(Exception exception)
+		{
+			exception.printStackTrace();
+		}
+		
+		return 0;
 	}
 
 	@Override
 	public Movement read(int movementId) throws SQLException
 	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	// TODO: un movimiento tendrá update? o es algo inalterable una vez
-	// realizado? en ese caso, herada DAO<Movement>?
-	@Override
-	public boolean update(Movement movemen) throws SQLException
-	{
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean delete(int movementId) throws SQLException
-	{
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public ArrayList<Movement> list() throws SQLException
-	{
-		ResultSet rsMovements;
-		ArrayList<Movement> movements = new ArrayList<Movement>();
-
-		try {
-			db.setPreparedStatement("SELECT * FROM Movements");
-			rsMovements = db.getPreparedStatement().executeQuery();
-
-			while (rsMovements.next()) {
-				
-				movements.add(getMovement(rsMovements));
+		Movement movement = new Movement();
+		ResultSet rs;
+		
+		try
+		{
+			db.setPreparedStatement("SELECT * FROM Movements WHERE MovementId = ?;");
+			db.getPreparedStatement().setInt(1, movementId);
+			rs = db.getPreparedStatement().executeQuery();
+			
+			if(!rs.next())
+			{
+				return null;
 			}
-		} catch (SQLException ex) {
+			
+			assignResultSet(movement, rs);
+		}
+		catch (SQLException ex)
+		{
 			ex.printStackTrace();
 			throw ex;
 		}
+		
+		return movement;
+	}
 
+	@Override
+	public ArrayList<Movement> list(int accountId) throws SQLException
+	{
+		ResultSet rs;
+		ArrayList<Movement> movements = new ArrayList<Movement>();
+		
+		try
+		{
+			db.setPreparedStatement("SELECT * FROM Movements;");
+			rs = db.getPreparedStatement().executeQuery();
+			
+			while(rs.next())
+			{
+				Movement movement = new Movement();
+				assignResultSet(movement, rs);
+				movements.add(movement);
+			}
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+		
 		return movements;
 	}
 
-	@Override
-	public int getId(Movement movement) throws SQLException
+	private void setParameters(Movement movement, int accountId) throws SQLException
 	{
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public ArrayList<Movement> listByIdAccount(int accountId) throws SQLException
-	{
-		ResultSet rsMovement;
-		// El negocio debe verificar que lo devuelto != null
-		ArrayList<Movement> auxMovementList = new ArrayList<Movement>();
-
-		try {
-			db.setPreparedStatement("SELECT * FROM Movements WHERE AccountId = ?;");
-			db.getPreparedStatement().setInt(1, accountId);
-			rsMovement = db.getPreparedStatement().executeQuery();
-
-			while (rsMovement.next()) {
-				auxMovementList.add(getMovement(rsMovement));
-			}
-
-		} catch (SQLException ex) {
-			ex.printStackTrace();
-			throw ex;
-		}
-
-		return auxMovementList;
-	}
-
-	private void setParameters(Movement movement) throws SQLException
-	{
-		db.getPreparedStatement().setString(1, movement.getDetails());
-		db.getPreparedStatement().setBigDecimal(2, movement.getAmount());
-		db.getPreparedStatement().setInt(3, movement.getMovementType().getId());
-		db.getPreparedStatement().setInt(4, movement.getAccountId());
+		db.getCallableStatement().registerOutParameter(1, java.sql.Types.INTEGER);
+		db.getCallableStatement().setTimestamp(2, Timestamp.valueOf(movement.getDateTime()));
+		db.getCallableStatement().setString(3, movement.getDetails());
+		db.getCallableStatement().setBigDecimal(4, movement.getAmount());
+		db.getCallableStatement().setInt(5, movement.getMovementType().getId());
+		db.getCallableStatement().setInt(6, accountId);
 	}
 	
-	private Movement getMovement(ResultSet rs) throws SQLException {
-		Movement auxMovement= new Movement();
+	private void assignResultSet(Movement movement, ResultSet rs) throws SQLException
+	{
+		try
+		{
+			movement.setId(rs.getInt("MovementId"));
+			movement.setDateTime(rs.getTimestamp("MovementDateTime").toLocalDateTime());
+			movement.setDetails(rs.getString("Details"));
+			movement.setAmount(rs.getBigDecimal("Amount"));
 
-		try {
-			auxMovement.setMovementId(rs.getInt("MovementId"));
-			auxMovement.setMovementDate(rs.getDate("MovementDate"));
-			auxMovement.setDetails(rs.getString("Details"));
-			auxMovement.setAmount(rs.getBigDecimal("Amount"));
-			auxMovement.setAccountId(rs.getInt("AccountId"));
-			
-			MovementType auxMovementType = new MovementType();
-			auxMovementType = movementTypeDao.read(rs.getInt("MovementTypeId"));
-
-			auxMovement.setMovementType(auxMovementType);
-
-		} catch (SQLException ex) {
+			int movementTypeId = rs.getInt("MovementTypeId");
+			movement.setMovementType(movementTypesDao.read(movementTypeId));
+		}
+		catch (SQLException ex)
+		{
 			ex.printStackTrace();
 			throw ex;
 		}
-
-		return auxMovement;
 	}
 }
