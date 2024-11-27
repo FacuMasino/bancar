@@ -9,11 +9,13 @@ public enum MovementTypeEnum
 
     private final int id;
 
-    MovementTypeEnum(int id) {
+    private MovementTypeEnum(int id)
+    {
         this.id = id;
     }
 
-    public int getId() {
+    public int getId()
+    {
         return id;
     }
 }

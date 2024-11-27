@@ -27,9 +27,10 @@ public class TransfersBusiness implements ITransfersBusiness
 			int destinationAccountId)
 					throws BusinessException
 	{
-		MovementTypeEnum transferType = MovementTypeEnum.TRANSFER;
 		movement.setDateTime(LocalDateTime.now());
-		movement.setMovementType(movementTypesBusiness.read(transferType.getId())); // TODO: Id harcodeado -> YA NO :)
+		movement.setMovementType(
+				movementTypesBusiness.read(
+						MovementTypeEnum.TRANSFER.getId()));
 		
 		try
 		{
