@@ -2,20 +2,30 @@ package businessLogicImpl;
 
 import java.sql.SQLException;
 
+import businessLogic.IAccountsBusiness;
 import businessLogic.IInstallmentsBusiness;
+import businessLogic.IMovementsBusiness;
 import dataAccess.IInstallmentsDao;
 import dataAccessImpl.InstallmentsDao;
+import domainModel.Account;
 import domainModel.Installment;
+import domainModel.Movement;
+import domainModel.MovementType;
+import domainModel.MovementTypeEnum;
 import exceptions.BusinessException;
 import exceptions.SQLOperationException;
 
 public class InstallmentsBusiness implements IInstallmentsBusiness
 {
 	private IInstallmentsDao installmentsDao;
+	private IMovementsBusiness movementsBusiness;
+	private IAccountsBusiness accountsBusiness;
 	
 	InstallmentsBusiness() 
 	{
 		installmentsDao = new InstallmentsDao();
+		movementsBusiness = new MovementsBusiness();
+		accountsBusiness = new AccountsBusiness();
 	}
 	
 	@Override
@@ -51,5 +61,50 @@ public class InstallmentsBusiness implements IInstallmentsBusiness
 			throw new BusinessException("Ocurrió un error desconocido al generar las cuotas.");
 		}
 	}
+
+	@Override
+	public boolean payInstallment(Installment installment, Account debitAccount)
+			throws BusinessException
+	{
+		try
+		{
+			MovementType movementType = new MovementType();
+			movementType.setId(MovementTypeEnum.LOAN_PAYMENT.getId());
+			
+			Movement movement = new Movement();
+			movement.setDetails("Cuota " + installment.getNumber()
+					+ " - Préstamo " + installment.getLoanId());
+			movement.setAmount(installment.getAmount());			
+			movement.setMovementType(movementType);
+
+			installment.setMovement(movement);
+			
+			// El siguiente método asigna el Id por referencia al objeto Movement
+			movementsBusiness.create(movement, debitAccount.getId());
+			
+			// Asignar id de movimiento a la cuota
+			update(installment);
+
+			// Actualizar saldo de la cuenta
+			debitAccount.setBalance(
+					debitAccount.getBalance().subtract(movement.getAmount()));
+			accountsBusiness.update(debitAccount);
+			
+			return true;
+		} 
+		catch (BusinessException ex)
+		{
+			throw ex;
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+			throw new BusinessException(
+					"Ocurrió un error desconocido al procesar el pago de la cuota.");
+		}
+		
+	}
+	
+	
 
 }

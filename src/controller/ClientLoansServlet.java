@@ -97,21 +97,27 @@ public class ClientLoansServlet extends HttpServlet {
 				break;
 			case "payInstallment":
 				payInstallment(req,res);
+				break;
 			default:
 				viewClientLoans(req, res);
 				break;
 		}
 	}
 
-	private void payInstallment(HttpServletRequest req, HttpServletResponse res)
+	private void payInstallment(HttpServletRequest req, HttpServletResponse res) 
+			throws ServletException, IOException
 	{
 		try
 		{
-			int loanId = Optional.ofNullable(req.getParameter("id"))
+			int loanId = Optional.ofNullable(req.getParameter("loanId"))
 					.map(Integer::parseInt)
 					.orElse(0);
 			
 			int installmentId = Optional.ofNullable(req.getParameter("installmentId"))
+					.map(Integer::parseInt)
+					.orElse(0);
+			
+			int debitAccountId = Optional.ofNullable(req.getParameter("debitAccountId"))
 					.map(Integer::parseInt)
 					.orElse(0);
 			
@@ -123,26 +129,40 @@ public class ClientLoansServlet extends HttpServlet {
 					.findFirst()
 					.orElse(null);
 			
-			if(auxLoan == null)
+			Account debitAccount = client.getAccounts().stream()
+					.filter(acc -> acc.getId() == debitAccountId)
+					.findFirst()
+					.orElse(null);
+			
+			if(auxLoan == null || debitAccount == null)
 			{
 				Helper.setReqMessage(req,
-						"Ocurrió un error al cargar los datos del préstamo.", MessageType.ERROR);
-				Helper.redirect("/WEB-INF/PayLoan.jsp", req, res);
+						"Ocurrió un error al obtener los datos del préstamo.", MessageType.ERROR);
+				viewClientLoans(req, res);
 				return; // Cortamos el flujo para evitar una excepción por volver a redireccionar
 			}
 			
-			boolean success = loansBusiness.payLoan(auxLoan, installmentId);
+			boolean success = loansBusiness.payLoan(auxLoan, installmentId, debitAccount);
 			if(success)
 			{
-				//... [en proceso]
+				// [en proceso] tengo que redireccionar al detalle del pago
+				// Por ahora solo seteo un msj de éxito
+				Helper.setReqMessage(req, "Pago exitoso!", MessageType.SUCCESS);
+				getSessionClient(req); // Actualizar datos del cliente
 			}
-			// manejar bssexceptions posibles [en proceso]
-		} catch (Exception ex)
+		}
+		catch (BusinessException ex)
+		{
+			Helper.setReqMessage(req, ex.getMessage(), MessageType.ERROR);
+		} 
+		catch (Exception ex)
 		{
 			Helper.setReqMessage(req,
 					"Error desconocido: " + ex.getMessage(), MessageType.ERROR);
 			ex.printStackTrace();
 		}
+		
+		viewClientLoans(req, res);
 	}
 
 	private void viewClientLoans(HttpServletRequest req, HttpServletResponse res)
@@ -162,8 +182,6 @@ public class ClientLoansServlet extends HttpServlet {
 			// Obtener estados y tipos 
 			loanStatuses = loanStatusesBusiness.list();
 			loanTypes = loanTypesBusiness.list();
-			
-			// System.out.println(clientLoans); // Descomentar para debuggear
 			
 			// Clasificar prestamos
 			LoanStatus pendingStatus = new LoanStatus();

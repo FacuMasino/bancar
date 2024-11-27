@@ -22,8 +22,10 @@ public class MovementsBusiness implements IMovementsBusiness
 	{
 		try
 		{
-			if (0 < movementsDao.create(movement, accountId))
+			int newMovementId = movementsDao.create(movement, accountId);
+			if (0 < newMovementId)
 			{
+				movement.setId(newMovementId);
 				return true;
 			}
 		}

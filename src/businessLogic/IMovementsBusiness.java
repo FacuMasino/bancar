@@ -1,6 +1,5 @@
 package businessLogic;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import domainModel.Movement;
 import exceptions.BusinessException;

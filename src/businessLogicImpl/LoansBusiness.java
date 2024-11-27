@@ -6,15 +6,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import businessLogic.IInstallmentsBusiness;
 import businessLogic.ILoansBusiness;
-import dataAccess.IInstallmentsDao;
 import dataAccess.ILoansDao;
-import dataAccessImpl.InstallmentsDao;
 import dataAccessImpl.LoansDao;
+import domainModel.Account;
 import domainModel.Client;
 import domainModel.Installment;
 import domainModel.Loan;
 import domainModel.LoanStatus;
+import domainModel.LoanStatusEnum;
 import domainModel.LoanType;
 import exceptions.BusinessException;
 import exceptions.SQLOperationException;
@@ -22,12 +23,12 @@ import exceptions.SQLOperationException;
 public class LoansBusiness implements ILoansBusiness 
 {
 	private ILoansDao loansDao;
-	private IInstallmentsDao installmentsDao;
+	private IInstallmentsBusiness installmentsBusiness;
 	
 	public LoansBusiness()
 	{
 		loansDao = new LoansDao();
-		installmentsDao = new InstallmentsDao();
+		installmentsBusiness = new InstallmentsBusiness();
 	}
 
 	// TODO: PENDIENTE Ningún método valida las reglas de negocio
@@ -97,7 +98,7 @@ public class LoansBusiness implements ILoansBusiness
 	{
 		try
 		{
-			if(installmentsDao.generate(loan.getLoanId()))
+			if(installmentsBusiness.generate(loan.getLoanId()))
 			{
 				LoanStatus loanStatus = new LoanStatus();
 				loanStatus.setId(2); // ESTADO APROBADO
@@ -109,10 +110,9 @@ public class LoansBusiness implements ILoansBusiness
 			throw new BusinessException
 			("No se pudo aprobar el préstamo, error al generar las cuotas.");
 		}
-		catch (SQLException ex)
+		catch (BusinessException ex)
 		{
-			throw new SQLOperationException(
-					"Ocurrió un error en nuestra base de datos, no se pudo aprobar el préstamo.");
+			throw ex;
 		}
 		catch (Exception ex)
 		{
@@ -191,14 +191,10 @@ public class LoansBusiness implements ILoansBusiness
 	}
 	
 	@Override
-	public boolean payLoan(Loan loan, int installmentId)
+	public boolean payLoan(Loan loan, int installmentId, Account debitAccount)
 			throws BusinessException
 	{
-		// Negocio de movimientos, tiene saldo?
-		// Generar movimiento
-		// Negocio de cuotas, pagar cuota
-		// Es última cuota? cambiar estado del préstamo
-		
+
 		try
 		{
 			Installment dueInstallment = loan.getPendingInstallments().stream()
@@ -210,13 +206,26 @@ public class LoansBusiness implements ILoansBusiness
 				throw new BusinessException("Ocurrió un error al obtener la cuota.");
 			}
 			
-			if (loan.getAccount().getBalance()
+			// Comprobar saldo
+			if (debitAccount.getBalance()
 					.compareTo(dueInstallment.getAmount()) < 0)
 			{
 				throw new BusinessException("Saldo insuficiente.");
 			}
 			
-			// En desarrollo
+			// Pagar: generar movimiento, actualizar cuota, descontar saldo
+			installmentsBusiness.payInstallment(dueInstallment, debitAccount);
+			
+			// Comprobar si es última cuota para actualizar estado del préstamo
+			if(dueInstallment.getNumber() == loan.getInstallmentsQuantity())
+			{
+				LoanStatus loanStatus = new LoanStatus();
+				loanStatus.setId(LoanStatusEnum.FINISHED.getId());
+				loan.setLoanStatus(loanStatus);
+				update(loan);
+			}
+			
+			return true;
 		} 
 		catch (BusinessException ex)
 		{
@@ -228,7 +237,5 @@ public class LoansBusiness implements ILoansBusiness
 			throw new BusinessException(
 					"Ocurrió un error desconocido al pagar el préstamo");
 		}
-		
-		return false;
 	}
 }

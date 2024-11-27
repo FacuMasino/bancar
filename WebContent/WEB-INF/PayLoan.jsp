@@ -78,6 +78,7 @@
             </select>
             <%-- Se envía el id del préstamo en un input oculto --%>
             <input type="hidden" name="loanId" value="${loan.loanId}" />
+            <input type="hidden" name="installmentId" value="${loan.pendingInstallments[0].installmentId}" />
             <button type="submit" class="btn btn-primary" name="action"
               value="payInstallment">
                 Confirmar Pago
