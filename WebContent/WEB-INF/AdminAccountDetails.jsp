@@ -7,6 +7,8 @@
 <c:set var="client" value="${requestScope.client}" />
 <c:set var="listPage" value="${requestScope.page}" />
 <c:set var="movementTypes" value="${requestScope.movementTypes != null ? requestScope.movementTypes : emptyList}" />
+<c:set var="movementsList" value="${requestScope.page.content}" />
+
 
 <t:masterpage title="Admin - Movimientos de cuenta" customNavbar="true">
   <t:adminwrapper activeMenuItem="">

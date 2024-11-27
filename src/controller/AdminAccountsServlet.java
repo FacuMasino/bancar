@@ -290,11 +290,7 @@ public class AdminAccountsServlet extends HttpServlet
 	private void listMovements(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException
 	{
-		int page = Optional.ofNullable(
-				request.getParameter("page")).map(Integer::parseInt).orElse(1);
-
-		int pageSize = Optional.ofNullable(
-				request.getParameter("pageSize")).map(Integer::parseInt).orElse(10);
+		
 		try
 		{
 			int accountId = Optional
@@ -306,13 +302,11 @@ public class AdminAccountsServlet extends HttpServlet
 			Client client = getFullClient(clientId);
 			Account account = accountsBusiness.read(accountId);
 			ArrayList<Movement> movementsList = new ArrayList<Movement>();
-			movementsList = movementsBusiness.list(accountId);
-			Page<Movement> movementsPage = new Page<Movement>(page, pageSize, movementsList);
-			
+			movementsList = movementsBusiness.list(accountId);			
+			Page<Movement> movementsPage = getMovementsPage(request,movementsList);
 
 			request.setAttribute("client", client);
 			request.setAttribute("account", account);
-			request.setAttribute("movementsList",  movementsList);
 			request.setAttribute("page", movementsPage);
 			request.setAttribute("movementTypes", movementTypesBusiness.list());
 			Helper.redirect("/WEB-INF/AdminAccountDetails.jsp", request,
@@ -325,4 +319,19 @@ public class AdminAccountsServlet extends HttpServlet
 			e.printStackTrace();
 		}
 	}
+	
+	private Page<Movement> getMovementsPage(HttpServletRequest req, 
+			List<Movement> movements)
+	{
+		int page = Optional.ofNullable(
+				req.getParameter("page")).map(Integer::parseInt).orElse(1);
+		
+		int pageSize = Optional.ofNullable(
+				req.getParameter("pageSize")).map(Integer::parseInt).orElse(10);
+	
+		
+		Page<Movement> movmentsPage = new Page<Movement>(page, pageSize, movements);
+		return movmentsPage;
+	}
+	
 }
