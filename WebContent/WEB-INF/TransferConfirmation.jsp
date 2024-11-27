@@ -8,7 +8,7 @@
 
       <div class="flex-col items-start mb-4  gap-2.5">
         <p class="font-bold text-3xl">Confirmar transferencia</p>
-        <p class="text-gray-600 text-xl">Verifica que los datos sean correctos antes de confirmar</p>
+        <p class="text-gray-600 text-xl">Verificá que los datos sean correctos antes de confirmar.</p>
       </div>
       <div class="flex-col md:max-w-[800px] items-center justify-center bg-white rounded-xl  max-w-md w-full overflow-hidden pb-8">
         <div class="flex-col items-start bg-red-600 rounded-t">
@@ -19,7 +19,7 @@
 
         <div class="flex flex-col items-center py-4">
           <p class="text-lg  text-slate-600 ">Monto a transferir</p>
-          <p class="font-bold  font-sans text-2xl  text-slate-600 ">$5.000</p>
+          <p class="font-bold  font-sans text-2xl  text-slate-600 ">$ ${movement.amount}</p>
         </div>
 
         <div class="flex flex-col items-start px-8 gap-6">
@@ -32,9 +32,9 @@
 
             <div class="flex flex-col leading-none">
               <p class="text-lg  text-slate-600 ">Cuenta de origen</p>
-              <p class="font-bold font-sans text-x  text-slate-600 ">Cta.1001</p>
+              <p class="font-bold font-sans text-x  text-slate-600 ">Cta. Nro. ${originAccount.id}</p>
               <p class="text-lg  order-1 text-slate-600 ">Saldo Disponible</p>
-              <p class="font-bold order-2 font-sans text-x  text-slate-600 ">$55.000</p>
+              <p class="font-bold order-2 font-sans text-x  text-slate-600 ">$ ${originAccount.balance}</p>
             </div>
 
           </div>
@@ -52,9 +52,15 @@
 
             <div class="flex flex-col leading-none">
               <p class="text-lg  text-slate-600">Cuenta de destino</p>
-              <p class="font-bold font-sans text-x  text-slate-600 ">Masino Facundo</p>
-              <p class="text-lg  order-1 text-slate-600 ">Cuenta.1005</p>
-              <p class="font-bold order-2 font-sans text-x  text-slate-600 ">DNI 10.010.010</p>
+              <p class="font-bold font-sans text-x  text-slate-600 ">
+              	${destinationClient.firstName} ${destinationClient.lastName}
+              </p>
+              <p class="text-lg  order-1 text-slate-600 ">
+              	Cta. Nro. ${destinationAccount.id}
+              </p>
+              <p class="font-bold order-2 font-sans text-x  text-slate-600 ">
+              	DNI ${destinationClient.dni}
+              </p>
             </div>
 
           </div>

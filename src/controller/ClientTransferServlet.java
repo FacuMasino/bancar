@@ -25,18 +25,18 @@ public class ClientTransferServlet extends HttpServlet
 	private TransfersBusiness transfersBusiness;
 	private ClientsBusiness clientsBusiness;
 	private AccountsBusiness accountsBusiness;
-	private Client sessionClient;
-	private Client destinationClient;
+	private boolean success;
 	private Movement movement;
+	private Client originClient;
+	private Client destinationClient;
+	private Account originAccount;
+	private Account destinationAccount;
 	private String action;
 	private String originAccountId;
 	private String destinationAccountCbu;
 	private String transferAmount;
 	private String transferType;
 	private String transferDescription;
-	private Account originAccount;
-	private Account destinationAccount;
-	private boolean success;
     
     public ClientTransferServlet()
     {
@@ -70,16 +70,13 @@ public class ClientTransferServlet extends HttpServlet
 		switch (action)
 		{
 			case "goToConfirmation":
+				fetchControls(request, response);
 				mapControls(request, response);
 				Helper.redirect("/WEB-INF/TransferConfirmation.jsp", request, response);
 				break;
 			case "goToDetails":
 				confirmTransfer();
 				Helper.redirect("/WEB-INF/TransactionDetails.jsp", request, response);
-				System.out.println(originAccount.toString()); // TEST
-				System.out.println(sessionClient.toString()); // TEST
-				System.out.println(destinationAccount.toString()); // TEST
-				System.out.println(destinationClient.toString()); // TEST
 				break;
 		}
 	}
@@ -91,7 +88,7 @@ public class ClientTransferServlet extends HttpServlet
 
         if (session != null)
         {
-        	sessionClient = (Client) session.getAttribute("client");
+        	originClient = (Client) session.getAttribute("client");
         }
 	}
 	
@@ -102,7 +99,7 @@ public class ClientTransferServlet extends HttpServlet
 		{
 			// TODO: Reemplazar accounts por sessionClient.getAccounts()
 			ArrayList<Account> accounts;
-			accounts = accountsBusiness.list(sessionClient.getId());
+			accounts = accountsBusiness.list(originClient.getId());
 			request.setAttribute("accounts", accounts);
 		}
 		catch (BusinessException e)
@@ -111,7 +108,7 @@ public class ClientTransferServlet extends HttpServlet
 		}
 	}
 	
-	private void mapControls(
+	private void fetchControls(
 			HttpServletRequest request, HttpServletResponse response)
 	{
 		originAccountId = request.getParameter("originAccountId");
@@ -184,11 +181,23 @@ public class ClientTransferServlet extends HttpServlet
 		}
 	}
 	
+	private void mapControls(
+			HttpServletRequest request, HttpServletResponse response)
+	{
+		request.setAttribute("movement", movement);
+		request.setAttribute("success", success);
+		request.setAttribute("originClient", originClient);
+		request.setAttribute("destinationClient", destinationClient);
+		request.setAttribute("originAccount", originAccount);
+		request.setAttribute("destinationAccount", destinationAccount);
+	}
+	
 	private void confirmTransfer()
 	{
 		try
 		{
-			success = transfersBusiness.create(movement, originAccount.getId(), destinationAccount.getId());
+			success = transfersBusiness.create(
+					movement, originAccount.getId(), destinationAccount.getId());
 		}
 		catch (BusinessException e)
 		{
