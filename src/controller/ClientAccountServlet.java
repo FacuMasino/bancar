@@ -80,6 +80,12 @@ public class ClientAccountServlet extends HttpServlet
 	{
 		Client client = new Client();
 		client = (Client)req.getSession().getAttribute("client");
+		
+		Integer movementTypeId = Optional.ofNullable(req.getParameter("movementTypeId"))
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .map(Integer::parseInt)
+                .orElse(null);
 
 		try
 		{
@@ -111,6 +117,11 @@ public class ClientAccountServlet extends HttpServlet
 				
 				ArrayList<Movement> movementsList = new ArrayList<Movement>();
 				movementsList = movementBusiness.listByIdAccount(selectedAccountId);
+				
+				if (movementTypeId != null)
+				{
+				    movementsList = movementBusiness.listFilter(selectedAccountId, movementTypeId);
+				} 
 				
 				Page<Movement> movementsPage = getMovementsPage(req,movementsList);
 				

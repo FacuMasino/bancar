@@ -89,7 +89,7 @@
               <tr class="hover">
                 <td>${movement.formattedDateTime}</td>
                 <td>${movement.details}</td>
-                <td class="text-green-600 font-semibold">${movement.amount}</td>
+                <td class="font-semibold ${movement.amount < 0 ? 'text-red-600':'text-green-600'}">${movement.amount}</td>           
               </tr>
             </c:forEach>
           </tbody>
