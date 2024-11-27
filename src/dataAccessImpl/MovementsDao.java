@@ -90,7 +90,34 @@ public class MovementsDao implements IMovementsDao
 		
 		return movements;
 	}
-
+	
+	public ArrayList<Movement> listFilter(int accountId, int movTypeId) throws SQLException
+	{
+		ResultSet rs;
+		ArrayList<Movement> movements = new ArrayList<Movement>();
+		
+		try
+		{
+			db.setPreparedStatement("SELECT * FROM Movements where AccountId =? AND MovementTypeId =? ;");
+			db.getPreparedStatement().setInt(1, accountId);
+			db.getPreparedStatement().setInt(2, movTypeId);
+			rs = db.getPreparedStatement().executeQuery();
+			
+			while(rs.next())
+			{
+				Movement movement = new Movement();
+				assignResultSet(movement, rs);
+				movements.add(movement);
+			}
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+		
+		return movements;
+	}
+	
 	private void setParameters(Movement movement, int accountId) throws SQLException
 	{
 		db.getCallableStatement().registerOutParameter(1, java.sql.Types.INTEGER);

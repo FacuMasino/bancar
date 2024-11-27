@@ -78,6 +78,25 @@ public class MovementsBusiness implements IMovementsBusiness
 		}
 	}
 	
+	
+	public ArrayList<Movement> listFilter(int accountId, int movTypeId) throws BusinessException
+	{
+	
+	try
+	{
+		return movementsDao.listFilter(accountId, movTypeId);
+	}
+	catch (SQLException ex)
+	{
+		throw new SQLOperationException();
+	}
+	catch (Exception ex)
+	{
+		ex.printStackTrace();
+		throw new BusinessException("Ocurrió un error desconocido al filtar por tipo de movimiento.");
+	}
+}
+	
 	// TODO: Eliminar este método y reemplazar todos sus llamados por list(int accountId) de los servlets
 	// (Doble click en el nombre del método y click en Open Call Hierarchy para ver llamados)
 	public ArrayList<Movement> listByIdAccount(int accountId) throws BusinessException

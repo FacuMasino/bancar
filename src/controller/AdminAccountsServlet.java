@@ -290,7 +290,6 @@ public class AdminAccountsServlet extends HttpServlet
 	private void listMovements(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException
 	{
-		
 		try
 		{
 			int accountId = Optional
@@ -298,11 +297,23 @@ public class AdminAccountsServlet extends HttpServlet
 					.map(Integer::parseInt).orElse(0);
 			int clientId = Optional.ofNullable(request.getParameter("clientId"))
 					.map(Integer::parseInt).orElse(0);
-
-			Client client = getFullClient(clientId);
-			Account account = accountsBusiness.read(accountId);
+			
+			Integer movementTypeId = Optional.ofNullable(request.getParameter("movementTypeId"))
+		                .map(String::trim)
+		                .filter(s -> !s.isEmpty())
+		                .map(Integer::parseInt)
+		                .orElse(null);
+			
 			ArrayList<Movement> movementsList = new ArrayList<Movement>();
-			movementsList = movementsBusiness.list(accountId);			
+			movementsList = movementsBusiness.list(accountId);
+							
+			if (movementTypeId != null)
+			{
+			    movementsList = movementsBusiness.listFilter(accountId, movementTypeId);
+			} 
+					
+			Client client = getFullClient(clientId);
+			Account account = accountsBusiness.read(accountId);	
 			Page<Movement> movementsPage = getMovementsPage(request,movementsList);
 
 			request.setAttribute("client", client);
@@ -328,10 +339,8 @@ public class AdminAccountsServlet extends HttpServlet
 		
 		int pageSize = Optional.ofNullable(
 				req.getParameter("pageSize")).map(Integer::parseInt).orElse(10);
-	
-		
+
 		Page<Movement> movmentsPage = new Page<Movement>(page, pageSize, movements);
 		return movmentsPage;
 	}
-	
-}
+	}

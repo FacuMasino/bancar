@@ -55,17 +55,21 @@
           <div class="flex-end">
             <input name="transactionDate" type="date" class="border p-1 rounded border-gray-200">
             <!--  falta la parte del servlet -->
-            <select name="movementTypeId"  class="select select-bordered select-sm w-fit bg-white">
+            <select name="movementTypeId"  class="select select-bordered select-sm w-fit bg-white"  onchange="this.form.submit()">
               <c:choose>
                 <c:when test="${empty movementTypes}">
                   <option disabled selected>Error: No hay tipos
                     de movimientos para mostrar</option>
                 </c:when>
                 <c:otherwise>
-                  <option selected disabled>Seleccione tipo de movimiento</option>
-                  <c:forEach var="movementType" items="${movementTypes}">
-                    <option value="${movementType.id}">${movementType.name}
-                    </option>
+                 <option value="" ${empty param.movementTypeId ? 'selected' : ''}>
+                Seleccione tipo de movimiento
+            </option>
+            <c:forEach var="movementType" items="${movementTypes}">
+                <option value="${movementType.id}" 
+                    ${param.movementTypeId == movementType.id ? 'selected' : ''}>
+                    ${movementType.name}
+                </option>
                   </c:forEach>
                 </c:otherwise>
               </c:choose>
@@ -83,7 +87,7 @@
           <tbody>
             <c:forEach var="movement" items="${movementsList}" varStatus="status">
               <tr class="hover">
-                <td>${movement.dateTime}</td>
+                <td>${movement.formattedDateTime}</td>
                 <td>${movement.details}</td>
                 <td class="text-green-600 font-semibold">${movement.amount}</td>
               </tr>

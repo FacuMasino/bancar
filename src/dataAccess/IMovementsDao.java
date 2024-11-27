@@ -9,4 +9,5 @@ public interface IMovementsDao
 	public int create(Movement movement, int accountId) throws SQLException;
 	public Movement read(int movementId) throws SQLException;
 	public ArrayList<Movement> list(int accountId) throws SQLException;
+	public ArrayList<Movement> listFilter(int accountId, int movTypeId) throws SQLException;
 }
