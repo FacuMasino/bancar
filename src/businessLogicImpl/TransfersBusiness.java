@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import businessLogic.ITransfersBusiness;
 import dataAccessImpl.TransfersDao;
 import domainModel.Movement;
+import domainModel.MovementTypeEnum;
 import exceptions.BusinessException;
 import exceptions.SQLOperationException;
 
@@ -26,8 +27,9 @@ public class TransfersBusiness implements ITransfersBusiness
 			int destinationAccountId)
 					throws BusinessException
 	{
+		MovementTypeEnum transferType = MovementTypeEnum.TRANSFER;
 		movement.setDateTime(LocalDateTime.now());
-		movement.setMovementType(movementTypesBusiness.read(4)); // TODO: ID hardcodiado
+		movement.setMovementType(movementTypesBusiness.read(transferType.getId())); // TODO: Id harcodeado -> YA NO :)
 		
 		try
 		{
