@@ -11,4 +11,5 @@ public interface IInstallmentsDao
 	public Installment read(int installmentId) throws SQLException;
 	public ArrayList<Installment> listByLoanId(int loanId) throws SQLException;
 	public ArrayList<Installment> listPendingsByLoanId(int loanId) throws SQLException;
+	public boolean update(Installment installment) throws SQLException;
 }

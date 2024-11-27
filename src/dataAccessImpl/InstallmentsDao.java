@@ -68,6 +68,27 @@ public class InstallmentsDao implements IInstallmentsDao
 			throw ex;
 		}
 	}
+	
+	@Override
+	public boolean update(Installment installment) throws SQLException
+	{
+		int rows = 0;
+		
+		try
+		{
+			db.setPreparedStatement("UPDATE Installments set MovementId = ? WHERE InstallmentId = ?");
+			db.getPreparedStatement().setInt(1, installment.getMovement().getId());
+			db.getPreparedStatement().setInt(2, installment.getInstallmentId());
+			rows = db.getPreparedStatement().executeUpdate();
+			
+			return (rows > 0);
+		}
+		catch (SQLException ex) 
+		{
+			ex.printStackTrace();
+			throw ex;
+		}
+	}
 
 	private Installment getInstallment(ResultSet rs)
 			throws SQLException

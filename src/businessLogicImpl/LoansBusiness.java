@@ -194,11 +194,41 @@ public class LoansBusiness implements ILoansBusiness
 	public boolean payLoan(Loan loan, int installmentId)
 			throws BusinessException
 	{
-		// TODO Auto-generated method stub
 		// Negocio de movimientos, tiene saldo?
 		// Generar movimiento
 		// Negocio de cuotas, pagar cuota
 		// Es última cuota? cambiar estado del préstamo
+		
+		try
+		{
+			Installment dueInstallment = loan.getPendingInstallments().stream()
+					.filter(l -> l.getInstallmentId() == installmentId)
+					.findFirst()
+					.orElse(null);
+			if(dueInstallment == null)
+			{
+				throw new BusinessException("Ocurrió un error al obtener la cuota.");
+			}
+			
+			if (loan.getAccount().getBalance()
+					.compareTo(dueInstallment.getAmount()) < 0)
+			{
+				throw new BusinessException("Saldo insuficiente.");
+			}
+			
+			// En desarrollo
+		} 
+		catch (BusinessException ex)
+		{
+			throw ex;
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+			throw new BusinessException(
+					"Ocurrió un error desconocido al pagar el préstamo");
+		}
+		
 		return false;
 	}
 }
