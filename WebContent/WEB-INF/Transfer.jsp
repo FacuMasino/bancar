@@ -1,5 +1,3 @@
-<%@page import="java.util.ArrayList" %>
-<%@page import="domainModel.Client" %>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags/" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
