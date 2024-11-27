@@ -2,6 +2,7 @@ package domainModel;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Movement
 {
@@ -13,7 +14,7 @@ public class Movement
 
 	public Movement()
 	{
-		
+		setDateTime(LocalDateTime.now());
 	}
 
 	public int getId()
@@ -29,6 +30,12 @@ public class Movement
 	public LocalDateTime getDateTime()
 	{
 		return dateTime;
+	}
+	
+	public String getFormattedDateTime()
+	{
+		return dateTime.format(
+				DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
 	}
 
 	public void setDateTime(LocalDateTime dateTime)

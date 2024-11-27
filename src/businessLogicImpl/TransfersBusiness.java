@@ -27,7 +27,6 @@ public class TransfersBusiness implements ITransfersBusiness
 			int destinationAccountId)
 					throws BusinessException
 	{
-		movement.setDateTime(LocalDateTime.now());
 		movement.setMovementType(
 				movementTypesBusiness.read(
 						MovementTypeEnum.TRANSFER.getId()));

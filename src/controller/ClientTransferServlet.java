@@ -44,7 +44,6 @@ public class ClientTransferServlet extends HttpServlet
         transfersBusiness = new TransfersBusiness();
         clientsBusiness = new ClientsBusiness();
         accountsBusiness = new AccountsBusiness();
-        movement = new Movement();
     }
 
 	protected void doGet(
@@ -76,6 +75,7 @@ public class ClientTransferServlet extends HttpServlet
 				break;
 			case "goToDetails":
 				confirmTransfer();
+				mapControls(request, response);
 				Helper.redirect("/WEB-INF/TransactionDetails.jsp", request, response);
 				break;
 		}
@@ -152,6 +152,7 @@ public class ClientTransferServlet extends HttpServlet
 			}
 		}
 
+		movement = new Movement();
 		transferAmount = request.getParameter("transferAmount");
 		
 		if (transferAmount != null && !transferAmount.isEmpty())
