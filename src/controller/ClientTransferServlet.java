@@ -167,7 +167,7 @@ public class ClientTransferServlet extends HttpServlet
 	            System.out.println("El monto no tiene un formato válido.");
 	        }
 		}
-
+		
 		transferDescription = request.getParameter("transferDescription");
 		
 		if (transferDescription != null && !transferDescription.isEmpty())

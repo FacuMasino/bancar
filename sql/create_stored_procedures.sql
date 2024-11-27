@@ -320,7 +320,7 @@ END $$
 -- Transfer
 
 CREATE PROCEDURE generate_transfer (
-    OUT _Success INT,
+    OUT _NewMovementId1 INT,
     IN _MovementDateTime TIMESTAMP,
     IN _Details VARCHAR(500),
     IN _Amount DECIMAL(15, 2),
@@ -329,20 +329,21 @@ CREATE PROCEDURE generate_transfer (
     IN _DestinationAccountId INT
 )
 BEGIN
-    DECLARE _aux1 INT;
-    DECLARE _aux2 INT;
+    DECLARE _NewMovementId2 INT;
 
     DECLARE EXIT HANDLER FOR SQLEXCEPTION 
     BEGIN
-        SET _Success = 0;
+        SET _NewMovementId1 = 0;
+        SET _NewMovementId2 = 0;
         ROLLBACK;
     END;
 
-    SET _Success = 0;
+    SET _NewMovementId1 = 0;
+    SET _NewMovementId2 = 0;
 
     START TRANSACTION;
         CALL insert_movement(
-            _aux1,
+            _NewMovementId1,
             _MovementDateTime,
             _Details,
             -_Amount,
@@ -351,7 +352,7 @@ BEGIN
         );
 
         CALL insert_movement(
-            _aux2,
+            _NewMovementId2,
             _MovementDateTime,
             _Details,
             _Amount,
@@ -369,8 +370,6 @@ BEGIN
             _Amount
         );
     COMMIT;
-
-    SET _Success = 1;
 END $$
 
 DELIMITER ;

@@ -1,7 +1,6 @@
 package businessLogicImpl;
 
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import businessLogic.ITransfersBusiness;
 import dataAccessImpl.TransfersDao;
 import domainModel.Movement;
@@ -33,7 +32,10 @@ public class TransfersBusiness implements ITransfersBusiness
 		
 		try
 		{
-			return transfersDao.create(movement, originAccountId, destinationAccountId);
+			if (0 < transfersDao.create(movement, originAccountId, destinationAccountId))
+			{
+				return true;
+			}
 		}
 		catch (SQLException ex)
 		{
@@ -43,7 +45,9 @@ public class TransfersBusiness implements ITransfersBusiness
 		{
 			ex.printStackTrace();
 			throw new BusinessException
-				("Ocurrió un error desconocido al crear el préstamo.");
+				("Ocurrió un error desconocido al realizar la transferencia.");
 		}
+		
+		return false;
 	}
 }

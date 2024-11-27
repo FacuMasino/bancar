@@ -5,7 +5,7 @@ import domainModel.Movement;
 
 public interface ITransfersDao
 {
-	public boolean create(
+	public int create(
 			Movement movement,
 			int originAccountId,
 			int destinationAccountId)

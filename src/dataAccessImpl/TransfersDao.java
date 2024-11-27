@@ -15,7 +15,7 @@ public class TransfersDao implements ITransfersDao
 	}
 
 	@Override
-	public boolean create(
+	public int create(
 			Movement movement,
 			int originAccountId,
 			int destinationAccountId)
@@ -26,7 +26,8 @@ public class TransfersDao implements ITransfersDao
 			db.setCallableStatement("{CALL generate_transfer(?, ?, ?, ?, ?, ?, ?)}");
 			setParameters(movement, originAccountId, destinationAccountId);
 			db.getCallableStatement().executeUpdate();
-			return (db.getCallableStatement().getInt(1) == 1);
+			movement.setId(db.getCallableStatement().getInt(1));
+			return movement.getId();
 		}
 		catch (SQLException ex)
 		{
