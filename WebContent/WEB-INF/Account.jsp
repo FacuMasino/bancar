@@ -62,6 +62,7 @@
             </label>
           </div>
           <form method="get" action="Client">
+            <input type="hidden" name="selectedAccountId" value="${selectedAccount.id}" />
             <div class="flex flex-col mb-4">
               <div class="flex justify-between">
                 <div class="flex gap-2.5 items-center">

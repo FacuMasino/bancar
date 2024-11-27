@@ -164,7 +164,19 @@ VALUES
 
 INSERT INTO Movements (Details, Amount, MovementTypeId, AccountId)
 VALUES 
-    ('Apertura de cuenta - cuenta 1', 1000.00, 1, 1),
+    ('Apertura de cuenta - Cta. 1', 10000.00, 1, 1),
+    ('Alta de préstamo - Cta. 1', 1000.00, 2, 1),
+    ('Alta de préstamo - Cta. 1', 1000.00, 2, 1),
+    ('Alta de préstamo - Cta. 1', 1000.00, 2, 1),
+    ('Alta de préstamo - Cta. 1', 1000.00, 2, 1),
+    ('Alta de préstamo - Cta. 1', 1000.00, 2, 1),
+    ('Alta de préstamo - Cta. 1', 1000.00, 2, 1),
+    ('Alta de préstamo - Cta. 1', 1000.00, 2, 1),
+    ('Alta de préstamo - Cta. 1', 1000.00, 2, 1),
+    ('Alta de préstamo - Cta. 1', 1000.00, 2, 1),
+    ('Alta de préstamo - Cta. 1', 1000.00, 2, 1),
+    ('Alta de préstamo - Cta. 1', 1000.00, 2, 1),
+    ('Alta de préstamo - Cta. 1', 1000.00, 2, 1),
     ('Alta de préstamo - cuenta 1', 5000.00, 2, 1),
     ('Pago parcial préstamo - cuenta 1', -1000.00, 3, 1),
     ('Transferencia entrante - cuenta 2', 2000.00, 4, 2),
