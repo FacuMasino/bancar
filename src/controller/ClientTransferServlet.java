@@ -15,6 +15,7 @@ import businessLogicImpl.TransfersBusiness;
 import domainModel.Account;
 import domainModel.Client;
 import domainModel.Movement;
+import domainModel.MovementTypeEnum;
 import exceptions.BusinessException;
 import utils.Helper;
 
@@ -191,6 +192,7 @@ public class ClientTransferServlet extends HttpServlet
 		request.setAttribute("destinationClient", destinationClient);
 		request.setAttribute("originAccount", originAccount);
 		request.setAttribute("destinationAccount", destinationAccount);
+		request.setAttribute("movementTypeId", MovementTypeEnum.TRANSFER.getId());
 	}
 	
 	private void confirmTransfer()
