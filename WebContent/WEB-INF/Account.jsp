@@ -3,6 +3,10 @@
 <%@page import="java.util.ArrayList"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags/"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+
+<!-- Necesario para el formato de números como moneda -->
+<fmt:setLocale value="es_AR"/>
 
 <c:set var="client" value="${requestScope.client}" />
 <c:set var="movements" value="${requestScope.movementsPage.content != null ? requestScope.movementsPage.content : emptyList}" />
@@ -47,7 +51,8 @@
           <div class="flex flex-col p-2 gap-3">
             <span class="font-semibold text-gray-600">${selectedAccount.accountType.name} - Nro. ${selectedAccount.id}</span>
             <h2 class="font-bold text-2xl">
-              Saldo: $ ${selectedAccount.balance}
+              Saldo:
+              <fmt:formatNumber value="${selectedAccount.balance}" type="currency" />
             </h2>
           </div>
         </div>
@@ -124,7 +129,7 @@
                           <td>
                             <span 
                               class="font-semibold ${movement.amount < 0 ? 'text-red-600':'text-green-600'}">
-                              $ ${movement.amount}
+                              <fmt:formatNumber value="${movement.amount}" type="currency" />
                             </span>
                           </td>
                         </tr>

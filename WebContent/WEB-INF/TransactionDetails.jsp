@@ -3,6 +3,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
 
+<!-- Necesario para el formato de números como moneda -->
+<fmt:setLocale value="es_AR"/>
+
 <t:masterpage title="Detalle de movimiento" customNavbar="true">
   <t:clientwrapper activeMenuItem="transferMenu">
     <div class="container md:max-w-md m-auto flex flex-col gap-4 justify-center py-4">
@@ -74,7 +77,10 @@
 	
 	          <div class="flex flex-col">
 	            <span class="text-sm text-slate-600">Monto</span>
-	            <span class="text-xl font-bold">$ ${movement.amount * -1}</span>
+	            <span class="text-xl font-bold">
+                <c:set var="amount" value="${movement.amount > 0 ? movement.amount : movement.amount * -1}" />
+                <fmt:formatNumber value="${amount}" type="currency" />
+              </span>
 	          </div>
 	
 			  <!-- Cuenta de origen -->
