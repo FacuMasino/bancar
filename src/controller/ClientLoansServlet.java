@@ -3,6 +3,7 @@ package controller;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -433,7 +434,8 @@ public class ClientLoansServlet extends HttpServlet {
 			List<Loan> loansList = new ArrayList<Loan>();
 			  
 			loansList = loansBusiness.list(client);
-	
+			Collections.sort(loansList); // Aplica ordenamiento por defecto (fecha descendente)
+			
 			client.setLoans(loansList); 
 			client.setAccounts(accountsList);
 			

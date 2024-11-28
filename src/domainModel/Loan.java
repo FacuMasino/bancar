@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
 
-public class Loan 
+public class Loan implements Comparable<Loan>
 {
 	private int loanId;
 	private Date creationDate;
@@ -129,5 +129,11 @@ public class Loan
 				+ ", client=" + client + ", account=" + account + "]";
 	}
 
-
+	// El criterio de ordenamiento por defecto es según fecha de creación
+	@Override
+	public int compareTo(Loan loan)
+	{
+		// Orden por fecha de mayor a menor
+		return loan.getCreationDate().compareTo(this.getCreationDate());
+	}
 }

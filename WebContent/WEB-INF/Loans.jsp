@@ -179,6 +179,7 @@
                 <tr>
                   <th>ID</th>
                   <th>Cuenta</th>
+                  <th>Fecha Solicitud</th>
                   <th>Tipo</th>
                   <th>Estado</th>
                   <th>Monto</th>
@@ -190,6 +191,10 @@
                   <tr class="hover">
                     <th>${loan.loanId}</th>
                     <td>${loan.account.id}</td>
+                    <td>
+                      <fmt:formatDate type="date" dateStyle="short"
+                        timeStyle="short" value="${loan.creationDate}" />
+                    </td>
                     <td>${loan.loanType.name}</td>
                     <td><c:choose>
                         <c:when test="${loan.loanStatus.id eq LoanStatusEnum.PENDING.id}">
