@@ -120,6 +120,27 @@ public class MovementsBusiness implements IMovementsBusiness
 					"Ocurrió un error desconocido al buscar los movimientos de la fecha consignada.");
 		}
 	}
+	
+	
+	public ArrayList<Movement> filterBySearch(int accountId, ArrayList<Movement> movements,
+			String searchInput) throws BusinessException
+	{
+		
+		try
+		{
+			return movementsDao.filterBySearch(accountId, movements, searchInput);
+		}
+		catch (SQLException ex)
+		{
+			throw new SQLOperationException();
+		} 
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+			throw new BusinessException(
+					"Ocurrió un error desconocido al realizar la búsqueda.");
+		}
+	}
 
 	// TODO: Eliminar este método y reemplazar todos sus llamados por list(int
 	// accountId) de los servlets
