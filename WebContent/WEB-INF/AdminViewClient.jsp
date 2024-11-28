@@ -1,5 +1,9 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags/"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+
+<!-- Necesario para el formato de números como moneda -->
+<fmt:setLocale value="es_AR"/>
 
 <c:set var="client" value="${requestScope.client}" />
 <c:set var="setIsDisabled" value="${!client.activeStatus ? 'disabled':''}" />
@@ -188,7 +192,7 @@
                 <tr class="hover">
                   <td>${account.id}</td>
                   <td>${account.accountType.name}</td>
-                  <td class="text-green-600 font-semibold">${account.balance}</td>
+                  <td class="text-green-600 font-semibold"> <fmt:formatNumber value="${account.balance}" type="currency" /></td>
                 </tr>
               </c:forEach>
             </tbody>
@@ -231,7 +235,7 @@
                     <tr class="hover">
                       <%-- <td>${loan.Loanid}</td>--%>
                       <td>${loan.loanType.loanTypeName}</td>
-                      <td class="text-black-600 font-semibold">${loan.requestedAmount}</td>
+                      <td class="text-black-600 font-semibold"><fmt:formatNumber value="${loan.requestedAmount}" type="currency" /></td>
                       <td
                         class="flex flex-col items-center w-fit px-2.5 rounded-full border border-yellow-500 text-yellow-500 font-semibold">${loan.loanStatus.loanStatusName}</td>
                     </tr>

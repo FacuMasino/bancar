@@ -1,4 +1,8 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags/" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+
+<!-- Necesario para el formato de números como moneda -->
+<fmt:setLocale value="es_AR"/>
 
 <t:masterpage title="Confirmar Transferencia" customNavbar="true">
   <t:clientwrapper activeMenuItem="transferMenu">
@@ -19,7 +23,7 @@
 
         <div class="flex flex-col items-center py-4">
           <p class="text-lg  text-slate-600 ">Monto a transferir</p>
-          <p class="font-bold  font-sans text-2xl  text-slate-600 ">$ ${movement.amount}</p>
+          <p class="font-bold  font-sans text-2xl  text-slate-600 "> <fmt:formatNumber value="${movement.amount}" type="currency" /></p>
         </div>
 
         <div class="flex flex-col items-start px-8 gap-6">
