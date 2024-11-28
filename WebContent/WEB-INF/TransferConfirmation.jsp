@@ -70,7 +70,9 @@
       <!-- Botones -->
 
       <div class="flex  md:max-w-[800px]  justify-end p-4 flex gap-3  w-full max-w-md overflow-hidden ">
-        <button class="btn btn-ghost">Cancelar</button>
+        <a href="${pageContext.request.contextPath}/Client/Transfer" class="btn btn-ghost">
+          Cancelar
+        </a>
         <button class="btn btn-primary" type="submit"
           onclick="modal_confirmation_Transfer.showModal()">Transferir</button>
         <dialog id="modal_confirmation_Transfer" class="modal">
