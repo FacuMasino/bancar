@@ -15,8 +15,9 @@ import businessLogicImpl.TransfersBusiness;
 import domainModel.Account;
 import domainModel.Client;
 import domainModel.Movement;
-import domainModel.MovementTypeEnum;
+import domainModel.Message.MessageType;
 import exceptions.BusinessException;
+import exceptions.InvalidFieldsException;
 import utils.Helper;
 
 @WebServlet(urlPatterns = { "/Client/Transfer", "/Client/Transfer/" })
@@ -47,22 +48,18 @@ public class ClientTransferServlet extends HttpServlet
         accountsBusiness = new AccountsBusiness();
     }
 
-	protected void doGet(
-			HttpServletRequest request, HttpServletResponse response)
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException
 	{
 		action = request.getParameter("action");
 
 		if (action == null || action.isEmpty())
 		{
-			fetchSessionClient(request, response);
-			bindAccountsDDL(request, response);
-			Helper.redirect("/WEB-INF/Transfer.jsp", request, response);
+			loadTransferPage(request, response);
 		}
 	}
 
-	protected void doPost(
-			HttpServletRequest request, HttpServletResponse response)
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException
 	{
 		action = request.getParameter("action");
@@ -72,8 +69,17 @@ public class ClientTransferServlet extends HttpServlet
 			case "goToConfirmation":
 				fetchControls(request, response);
 				mapControls(request, response);
+				
+				if (!validate(request, response))
+				{
+					loadTransferPage(request, response);
+					return;
+				}
+				
 				Helper.redirect("/WEB-INF/TransferConfirmation.jsp", request, response);
+
 				break;
+
 			case "goToDetails":
 				confirmTransfer();
 				mapControls(request, response);
@@ -82,8 +88,15 @@ public class ClientTransferServlet extends HttpServlet
 		}
 	}
 	
-	private void fetchSessionClient(
-			HttpServletRequest request, HttpServletResponse response)
+	private void loadTransferPage(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException
+	{
+		fetchSessionClient(request, response);
+		bindAccountsDDL(request, response);
+		Helper.redirect("/WEB-INF/Transfer.jsp", request, response);
+	}
+	
+	private void fetchSessionClient(HttpServletRequest request, HttpServletResponse response)
 	{
 		HttpSession session = request.getSession(false);
 
@@ -93,8 +106,7 @@ public class ClientTransferServlet extends HttpServlet
         }
 	}
 	
-	private void bindAccountsDDL(
-			HttpServletRequest request, HttpServletResponse response)
+	private void bindAccountsDDL(HttpServletRequest request, HttpServletResponse response)
 	{
 		try
 		{
@@ -109,8 +121,7 @@ public class ClientTransferServlet extends HttpServlet
 		}
 	}
 	
-	private void fetchControls(
-			HttpServletRequest request, HttpServletResponse response)
+	private void fetchControls(HttpServletRequest request, HttpServletResponse response)
 	{
 		originAccountId = request.getParameter("originAccountId");
 
@@ -183,8 +194,7 @@ public class ClientTransferServlet extends HttpServlet
 		}
 	}
 	
-	private void mapControls(
-			HttpServletRequest request, HttpServletResponse response)
+	private void mapControls(HttpServletRequest request, HttpServletResponse response)
 	{
 		request.setAttribute("movement", movement);
 		request.setAttribute("success", success);
@@ -192,17 +202,35 @@ public class ClientTransferServlet extends HttpServlet
 		request.setAttribute("destinationClient", destinationClient);
 		request.setAttribute("originAccount", originAccount);
 		request.setAttribute("destinationAccount", destinationAccount);
-		request.setAttribute("isCurrent", true); // Transferencia realizada en
-												// este momento, muestra msj
-												// en presente
+		request.setAttribute("isCurrent", true);
+	}
+	
+	private boolean validate(HttpServletRequest request, HttpServletResponse response)
+	{
+		try
+		{
+			transfersBusiness.validate(movement, originAccount, destinationAccount);
+		}
+		catch (InvalidFieldsException ex)
+		{
+			Helper.setReqErrorList(request, ex.getInvalidFields());
+			return false;
+		}
+		catch (BusinessException ex)
+		{
+			Helper.setReqMessage(request, ex.getMessage(), MessageType.ERROR);
+			ex.printStackTrace();
+			return false;
+		}
+
+		return true;
 	}
 	
 	private void confirmTransfer()
 	{
 		try
 		{
-			success = transfersBusiness.create(
-					movement, originAccount.getId(), destinationAccount.getId());
+			success = transfersBusiness.create(movement, originAccount, destinationAccount);
 		}
 		catch (BusinessException e)
 		{

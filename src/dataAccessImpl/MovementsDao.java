@@ -1,19 +1,13 @@
 package dataAccessImpl;
 
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Calendar;
-
 import dataAccess.IMovementsDao;
 import domainModel.Movement;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.text.ParseException;
 
 public class MovementsDao implements IMovementsDao
 {
@@ -152,6 +146,43 @@ public class MovementsDao implements IMovementsDao
 
 		return filteredMovements;
 	}
+	
+	public ArrayList<Movement> filterBySearch(int accountId, ArrayList<Movement> movements,
+			String searchInput) throws SQLException
+	{
+		ResultSet rs;
+	    ArrayList<Movement> searchedMovements = new ArrayList<Movement>();
+
+
+	    try
+		{
+			db.setPreparedStatement(
+					"SELECT * FROM Movements WHERE AccountId = ? AND (Details LIKE ? OR Amount LIKE ?);");
+			
+			String search = "%" + searchInput + "%";
+			
+			db.getPreparedStatement().setInt(1, accountId);
+	        db.getPreparedStatement().setString(2, search); 
+	        db.getPreparedStatement().setString(3, search);  
+
+			rs = db.getPreparedStatement().executeQuery();
+
+			while (rs.next())
+			{
+				Movement movement = new Movement();
+				assignResultSet(movement, rs);
+				searchedMovements.add(movement);
+			}
+		} 
+	    catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+
+		return searchedMovements;
+	}
+	
+	
 
 	private void setParameters(Movement movement, int accountId)
 			throws SQLException

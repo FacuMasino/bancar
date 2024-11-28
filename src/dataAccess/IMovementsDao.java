@@ -11,4 +11,5 @@ public interface IMovementsDao
 	public ArrayList<Movement> list(int accountId) throws SQLException;
 	public ArrayList<Movement> listFilter(int accountId, int movTypeId) throws SQLException;
 	public ArrayList<Movement> filterByDate (ArrayList<Movement> movements, String filterDate) throws SQLException;
-}
+	public ArrayList<Movement> filterBySearch(int accountId, ArrayList<Movement> movements,String searchInput)  throws SQLException;
+ }

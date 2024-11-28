@@ -309,6 +309,10 @@ public class AdminAccountsServlet extends HttpServlet
 			String transactionDateStr = Optional
 					.ofNullable(request.getParameter("transactionDate"))
 					.map(String::trim).filter(s -> !s.isEmpty()).orElse(null);
+			
+			String searchInput = Optional
+					.ofNullable(request.getParameter("searchInput"))
+					.map(String::trim).filter(s -> !s.isEmpty()).orElse(null);
 
 			ArrayList<Movement> movementsList = new ArrayList<Movement>();
 			movementsList = movementsBusiness.list(accountId);
@@ -324,6 +328,11 @@ public class AdminAccountsServlet extends HttpServlet
 
 				movementsList = movementsBusiness.filterByDate(movementsList,
 						transactionDateStr);
+			}
+			
+			if (searchInput != null) {
+				
+				movementsList = movementsBusiness.filterBySearch(accountId, movementsList, searchInput);
 			}
 
 			Client client = getFullClient(clientId);

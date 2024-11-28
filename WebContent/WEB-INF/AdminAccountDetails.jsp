@@ -9,12 +9,9 @@
 <c:set var="movementTypes"
   value="${requestScope.movementTypes != null ? requestScope.movementTypes : emptyList}" />
 <c:set var="movementsList" value="${requestScope.page.content}" />
-
-
 <t:masterpage title="Admin - Movimientos de cuenta" customNavbar="true">
   <t:adminwrapper activeMenuItem="">
-    <form method="get" action="Accounts"
-      class="container flex flex-col gap-4 mx-auto p-4 max-w-7xl mb-8">
+    <form method="get" action="Accounts" class="container flex flex-col gap-4 mx-auto p-4 max-w-7xl mb-8">
       <!-- Parámetros necesarios que deben enviarse a través del form -->
       <input type="hidden" name="clientId" value="${client.clientId}" /> <input
         type="hidden" name="accountId" value="${param.accountId}" />
@@ -49,8 +46,8 @@
         </div>
         <div class="flex justify-between p-2.5 mb-2">
           <label class="input input-sm input-bordered flex items-center gap-2">
-            <input type="text" class="grow" placeholder="Buscar cuenta, monto"
-            name="searchInput"> <i data-lucide="search"></i>
+            <input type="text" class="grow" placeholder="Buscar por descripción o monto"
+            name="searchInput"> <i data-lucide="search" ></i>
           </label>
           <div class="flex-end">
             <input name="transactionDate" type="date"
