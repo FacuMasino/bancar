@@ -101,7 +101,7 @@ public class LoansBusiness implements ILoansBusiness
 			if(installmentsBusiness.generate(loan.getLoanId()))
 			{
 				LoanStatus loanStatus = new LoanStatus();
-				loanStatus.setId(2); // ESTADO APROBADO
+				loanStatus.setId(LoanStatusEnum.APPROVED.getId());
 				
 				loan.setLoanStatus(loanStatus);
 				

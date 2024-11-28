@@ -1,8 +1,9 @@
 <%@page import="domainModel.MovementTypeEnum" %>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags/"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
 
-<t:masterpage title="Confirmar Transferencia" customNavbar="true">
+<t:masterpage title="Detalle de movimiento" customNavbar="true">
   <t:clientwrapper activeMenuItem="transferMenu">
     <div class="container md:max-w-md m-auto flex flex-col gap-4 justify-center py-4">
     
@@ -12,12 +13,28 @@
         <c:when test="${success == true}">
 	      <div class="flex flex-col items-center">
 	        <i data-lucide="circle-check" class="text-green-600 w-[48px] h-[48px]"></i>
-	        <h1 class="font-bold text-2xl">
-	          ¡Transacción exitosa!
-	        </h1>
-	        <p class="text-lg text-slate-600">
-	          Tu transferencia se realizó correctamente.
-	        </p>
+            <c:choose>
+              <%-- Si se trata de una operación que acaba de suceder --%>
+              <c:when test="${isCurrent == true}">
+      	        <h1 class="font-bold text-2xl">
+      	          ¡Transacción exitosa!
+      	        </h1>
+      	        <p class="text-lg text-slate-600">
+      	          Tu 
+                  ${movementTypeId == MovementTypeEnum.TRANSFER.id ? " transferencia " : " operación "}
+                  se realizó correctamente.
+      	        </p>
+              </c:when>
+              <%-- Si está viendo el detalle de una operación pasada --%>
+              <c:otherwise>
+                <h1 class="font-bold text-2xl">
+                  Detalle de transacción
+                </h1>
+                <p class="text-lg text-slate-600">
+                  Comprobante de operación
+                </p>
+              </c:otherwise>
+            </c:choose>
 	      </div>
         </c:when>
         <c:otherwise>
@@ -77,7 +94,7 @@
 			  <!-- Cuenta de destino / Cuota del préstamo -->
 			  
 		      <c:choose>
-		        <c:when test="${movementTypeId == MovementTypeEnum.TRANSFER.id}">
+		        <c:when test="${movement.movementType.id == MovementTypeEnum.TRANSFER.id}">
 		          <div class="flex bg-slate-100 gap-2.5 p-2.5 rounded-lg w-full">
 		            <i data-lucide="arrow-right-to-line"></i>
 		            <div class="flex flex-col">
@@ -90,13 +107,22 @@
 		            </div>
 		          </div>
 		        </c:when>
-		        <c:when test="${movementTypeId == MovementTypeEnum.LOAN_PAYMENT.id}">
-			      <!-- FACU, ACA TENES QUE PONER LA INFO DEL PAGO DE CUOTA DE PRESTAMO -->
-			      <!-- ACORDATE DE SETEAR EL SIGUIENTE ATRIBUTO DESDE EL SERVLET CORRESPONDIENTE: -->
-			      <!-- request.setAttribute("movementTypeId", MovementTypeEnum.LOAN_PAYMENT.getId()); -->
-			      <!-- TAMBIEN VAS A TENER QUE SETEAR LA VARIABLE BOOLEANA: -->
-			      <!-- request.setAttribute("success", success); -->
-			      <!-- PARA QUE FUNCIONEN LAS LINEAS 12 Y 39 DE ESTE JSP -->
+		        <c:when test="${movement.movementType.id == MovementTypeEnum.LOAN_PAYMENT.id}">
+			      <div class="flex bg-slate-100 gap-2.5 p-2.5 rounded-lg w-full">
+		            <i data-lucide="arrow-right-to-line"></i>
+		            <div class="flex flex-col">
+		              <span>Pago de préstamo</span>
+		              <span class="font-bold">
+		                Préstamo ${paidLoan.loanId}
+		              </span>
+		              <span>Cuota ${installment.number} de ${paidLoan.installmentsQuantity}</span>
+		              <span>
+                        Prox. Vencimiento
+                        <fmt:formatDate type="date" dateStyle="short" timeStyle="short" 
+                          value="${paidLoan.pendingInstallments[0].paymentDueDate}" /> 
+                      </span>
+		            </div>
+		          </div>
 		        </c:when>
 		   	  </c:choose>
 	
@@ -115,9 +141,11 @@
       <!-- Botones -->
 
       <div class="flex gap-2.5 justify-center">
-        <a href="${pageContext.request.contextPath}/Client/Transfer" class="btn btn-ghost">
-          Nueva transferencia
-        </a>
+        <c:if test="${movement.movementType.id == MovementTypeEnum.TRANSFER.id}">
+          <a href="${pageContext.request.contextPath}/Client/Transfer" class="btn btn-ghost">
+            Nueva transferencia
+          </a>
+        </c:if>
         <a href="${pageContext.request.contextPath}/Client" class="btn btn-primary">
           Ir a mi cuenta
         </a>

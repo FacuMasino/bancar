@@ -13,12 +13,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import businessLogic.IAccountsBusiness;
+import businessLogic.IInstallmentsBusiness;
 import businessLogic.ILoanStatusesBusiness;
 import businessLogic.ILoanTypesBusiness;
 import businessLogic.ILoansBusiness;
-import businessLogicImpl.AccountTypesBusiness;
 import businessLogicImpl.AccountsBusiness;
-import businessLogicImpl.ClientsBusiness;
+import businessLogicImpl.InstallmentsBusiness;
 import businessLogicImpl.LoanStatusesBusiness;
 import businessLogicImpl.LoanTypesBusiness;
 import businessLogicImpl.LoansBusiness;
@@ -27,8 +27,8 @@ import domainModel.Client;
 import domainModel.Installment;
 import domainModel.Loan;
 import domainModel.LoanStatus;
+import domainModel.LoanStatusEnum;
 import domainModel.LoanType;
-import domainModel.Message;
 import domainModel.Message.MessageType;
 import exceptions.BusinessException;
 import utils.Helper;
@@ -41,6 +41,7 @@ public class ClientLoansServlet extends HttpServlet {
 	private ILoansBusiness loansBusiness;
 	private ILoanTypesBusiness loanTypesBusiness;
 	private ILoanStatusesBusiness loanStatusesBusiness;
+	private IInstallmentsBusiness installmentsBusiness;
 	private Client client;
 
     public ClientLoansServlet() {
@@ -49,6 +50,7 @@ public class ClientLoansServlet extends HttpServlet {
 		loansBusiness = new LoansBusiness();
 		loanTypesBusiness = new LoanTypesBusiness();
 		loanStatusesBusiness = new LoanStatusesBusiness();
+		installmentsBusiness = new InstallmentsBusiness();
     }
 
 	protected void doGet(HttpServletRequest req, HttpServletResponse res)
@@ -107,6 +109,8 @@ public class ClientLoansServlet extends HttpServlet {
 	private void payInstallment(HttpServletRequest req, HttpServletResponse res) 
 			throws ServletException, IOException
 	{
+		int selectedLoanId = 0; // Variable para el scope del bloque catch
+		
 		try
 		{
 			int loanId = Optional.ofNullable(req.getParameter("loanId"))
@@ -120,6 +124,17 @@ public class ClientLoansServlet extends HttpServlet {
 			int debitAccountId = Optional.ofNullable(req.getParameter("debitAccountId"))
 					.map(Integer::parseInt)
 					.orElse(0);
+			
+			selectedLoanId = loanId;
+			
+			if(debitAccountId == 0)
+			{
+				Helper.setReqMessage(req,
+						"Debe seleccionar una cuenta para el pago.",
+						MessageType.ERROR);
+				viewPayLoan(req,res,loanId);
+				return;
+			}
 			
 			// Busca entre la lista de préstamos el que coincida con el id
 			// Para no volver a leerlo desde la DB, ya está cargado en el objeto
@@ -139,21 +154,29 @@ public class ClientLoansServlet extends HttpServlet {
 				Helper.setReqMessage(req,
 						"Ocurrió un error al obtener los datos del préstamo.", MessageType.ERROR);
 				viewClientLoans(req, res);
-				return; // Cortamos el flujo para evitar una excepción por volver a redireccionar
+				return;
 			}
 			
 			boolean success = loansBusiness.payLoan(auxLoan, installmentId, debitAccount);
+			
 			if(success)
 			{
-				// [en proceso] tengo que redireccionar al detalle del pago
-				// Por ahora solo seteo un msj de éxito
-				Helper.setReqMessage(req, "Pago exitoso!", MessageType.SUCCESS);
-				getSessionClient(req); // Actualizar datos del cliente
+				
+				Installment installment = installmentsBusiness.read(installmentId);
+				
+				req.setAttribute("installment", installment);
+				req.setAttribute("paidLoan", auxLoan);
+				req.setAttribute("movement", installment.getMovement());
+				req.setAttribute("originAccount", debitAccount);
+				showMovementDetails(req,res,true,true);
+				return;
 			}
 		}
-		catch (BusinessException ex)
+		catch (BusinessException ex) // Excepción producida durante el pago, vuelve a la misma vista
 		{
 			Helper.setReqMessage(req, ex.getMessage(), MessageType.ERROR);
+			viewPayLoan(req,res,selectedLoanId);
+			return;
 		} 
 		catch (Exception ex)
 		{
@@ -185,9 +208,9 @@ public class ClientLoansServlet extends HttpServlet {
 			
 			// Clasificar prestamos
 			LoanStatus pendingStatus = new LoanStatus();
-			pendingStatus.setId(1); // Id harcodeado, estado PENDIENTE		
+			pendingStatus.setId(LoanStatusEnum.PENDING.getId());		
 			LoanStatus approvedStatus = new LoanStatus();
-			approvedStatus.setId(2); // Id harcodeado, estado VIGENTE/APROBADO
+			approvedStatus.setId(LoanStatusEnum.APPROVED.getId());
 			
 			pendingLoans = loansBusiness.filter(pendingStatus, clientLoans);
 			approvedLoans = loansBusiness.filter(approvedStatus, clientLoans);
@@ -246,7 +269,24 @@ public class ClientLoansServlet extends HttpServlet {
 		}
 	}
 	
-	private void viewPayLoan(HttpServletRequest req, HttpServletResponse res)
+	private void showMovementDetails(HttpServletRequest req, HttpServletResponse res,
+			boolean success, boolean isCurrent)
+		throws ServletException, IOException
+	{
+		req.setAttribute("isCurrent", isCurrent);
+		req.setAttribute("success", success);
+		req.setAttribute("originClient", client);
+		
+		Helper.redirect("/WEB-INF/TransactionDetails.jsp", req, res);
+	}
+	
+	private void viewPayLoan(HttpServletRequest req, HttpServletResponse res) 
+			throws ServletException, IOException
+	{
+		viewPayLoan(req,res,0);
+	}
+	
+	private void viewPayLoan(HttpServletRequest req, HttpServletResponse res, int reqLoanId)
 		throws ServletException, IOException
 	{
 		try
@@ -259,9 +299,13 @@ public class ClientLoansServlet extends HttpServlet {
 					.map(Integer::parseInt)
 					.orElse(0);
 			
+			// Si ya viene un id preestablecido, se va a utilizar ese 
+			// para la búsqueda del préstamo
+			int selectedLoanId = (reqLoanId != 0) ? reqLoanId : loanId;
+
 			// Busca entre la lista de préstamos el que coincida con el id
 			Loan auxLoan = client.getLoans().stream()
-					.filter(loan -> loan.getLoanId() == loanId)
+					.filter(loan -> loan.getLoanId() == selectedLoanId)
 					.findFirst()
 					.orElse(null);
 			
@@ -310,7 +354,7 @@ public class ClientLoansServlet extends HttpServlet {
 			loanType.setId(loanTypeId);
 			
 			LoanStatus loanStatus = new LoanStatus();
-			loanStatus.setId(1); // ESTADO: EN REVISIÓN - ID 1 
+			loanStatus.setId(LoanStatusEnum.PENDING.getId());
 			
 			Account account = new Account();
 			account = accountsBusiness.read(accountId);

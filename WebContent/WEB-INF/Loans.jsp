@@ -1,4 +1,5 @@
 <%@page import="domainModel.Client"%>
+<%@page import="domainModel.LoanStatusEnum"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
 <jsp:useBean id="now" class="java.util.Date" />
@@ -191,17 +192,17 @@
                     <td>${loan.account.id}</td>
                     <td>${loan.loanType.name}</td>
                     <td><c:choose>
-                        <c:when test="${loan.loanStatus.id eq 1}">
+                        <c:when test="${loan.loanStatus.id eq LoanStatusEnum.PENDING.id}">
                           <span
                             class="flex flex-col items-center w-fit px-2.5 rounded-full border border-yellow-600 text-yellow-700 font-semibold">
                             En Revisión </span>
                         </c:when>
-                        <c:when test="${loan.loanStatus.id eq 2}">
+                        <c:when test="${loan.loanStatus.id eq LoanStatusEnum.APPROVED.id}">
                           <span
                             class="flex flex-col items-center w-fit px-2.5 rounded-full border border-blue-600 text-blue-600 font-semibold">
                             Vigente </span>
                         </c:when>
-                        <c:when test="${loan.loanStatus.id eq 2}">
+                        <c:when test="${loan.loanStatus.id eq LoanStatusEnum.FINISHED.id}">
                           <span
                             class="flex flex-col items-center w-fit px-2.5 rounded-full border border-green-600 text-green-600 font-semibold">
                             Finalizado </span>

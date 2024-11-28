@@ -21,11 +21,28 @@ public class InstallmentsBusiness implements IInstallmentsBusiness
 	private IMovementsBusiness movementsBusiness;
 	private IAccountsBusiness accountsBusiness;
 	
-	InstallmentsBusiness() 
+	public InstallmentsBusiness() 
 	{
 		installmentsDao = new InstallmentsDao();
 		movementsBusiness = new MovementsBusiness();
 		accountsBusiness = new AccountsBusiness();
+	}
+	
+	@Override
+	public Installment read(int installmentId) throws BusinessException
+	{
+		try {
+			return installmentsDao.read(installmentId);
+		} 
+		catch (SQLException ex)
+		{
+			throw new SQLOperationException();
+		} 
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+			throw new BusinessException("Ocurrió un error desconocido al obtener la cuota.");
+		}
 	}
 	
 	@Override
@@ -104,7 +121,5 @@ public class InstallmentsBusiness implements IInstallmentsBusiness
 		}
 		
 	}
-	
-	
 
 }
