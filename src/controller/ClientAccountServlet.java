@@ -2,6 +2,7 @@ package controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -117,6 +118,7 @@ public class ClientAccountServlet extends HttpServlet
 				
 				ArrayList<Movement> movementsList = new ArrayList<Movement>();
 				movementsList = movementBusiness.listByIdAccount(selectedAccountId);
+				Collections.sort(movementsList); // Ordena la lista según el método compareTo de la clase Movement
 				
 				if (movementTypeId != null)
 				{

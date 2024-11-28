@@ -91,7 +91,7 @@ public class InstallmentsBusiness implements IInstallmentsBusiness
 			Movement movement = new Movement();
 			movement.setDetails("Cuota " + installment.getNumber()
 					+ " - Préstamo " + installment.getLoanId());
-			movement.setAmount(installment.getAmount());			
+			movement.setAmount(installment.getAmount().negate());			
 			movement.setMovementType(movementType);
 
 			installment.setMovement(movement);
@@ -104,7 +104,7 @@ public class InstallmentsBusiness implements IInstallmentsBusiness
 
 			// Actualizar saldo de la cuenta
 			debitAccount.setBalance(
-					debitAccount.getBalance().subtract(movement.getAmount()));
+					debitAccount.getBalance().subtract(installment.getAmount()));
 			accountsBusiness.update(debitAccount);
 			
 			return true;

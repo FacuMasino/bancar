@@ -192,7 +192,9 @@ public class ClientTransferServlet extends HttpServlet
 		request.setAttribute("destinationClient", destinationClient);
 		request.setAttribute("originAccount", originAccount);
 		request.setAttribute("destinationAccount", destinationAccount);
-		request.setAttribute("movementTypeId", MovementTypeEnum.TRANSFER.getId());
+		request.setAttribute("isCurrent", true); // Transferencia realizada en
+												// este momento, muestra msj
+												// en presente
 	}
 	
 	private void confirmTransfer()

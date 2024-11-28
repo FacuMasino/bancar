@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class Movement
+public class Movement implements Comparable<Movement>
 {
 	private int id;
 	private LocalDateTime dateTime;
@@ -72,7 +72,7 @@ public class Movement
 	{
 		this.movementType = movementType;
 	}
-
+	
 	@Override
 	public String toString()
 	{
@@ -84,4 +84,12 @@ public class Movement
 				", movementType=" + movementType +
 				"]";
 	}
+
+	@Override
+	public int compareTo(Movement movement)
+	{
+		// Orden por fecha de mayor a menor
+		return movement.getDateTime().compareTo(this.getDateTime());
+	}
+
 }
