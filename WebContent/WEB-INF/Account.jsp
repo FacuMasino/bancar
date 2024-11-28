@@ -142,7 +142,10 @@
              </span>
             <div class="join flex justify-end w-full">
                <c:forEach var="i" begin="1" end="${page.totalPages}">
-                  <button value="${i}" name="page" class="join-item btn">${i}</button>
+                  <button value="${i}" name="page" class="join-item btn"
+                    ${page.totalPages <= 1 ? 'disabled' : ''}>
+                    ${i}
+                  </button>
               </c:forEach>
               </div>  
             </div>
