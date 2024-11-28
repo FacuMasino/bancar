@@ -1,11 +1,19 @@
 package dataAccessImpl;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
+
 import dataAccess.IMovementsDao;
 import domainModel.Movement;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.text.ParseException;
 
 public class MovementsDao implements IMovementsDao
 {
@@ -28,11 +36,11 @@ public class MovementsDao implements IMovementsDao
 			db.getCallableStatement().executeUpdate();
 			return db.getCallableStatement().getInt(1);
 		}
-		catch(Exception exception)
+		catch (Exception exception)
 		{
 			exception.printStackTrace();
 		}
-		
+
 		return 0;
 	}
 
@@ -41,26 +49,27 @@ public class MovementsDao implements IMovementsDao
 	{
 		Movement movement = new Movement();
 		ResultSet rs;
-		
+
 		try
 		{
-			db.setPreparedStatement("SELECT * FROM Movements WHERE MovementId = ?;");
+			db.setPreparedStatement(
+					"SELECT * FROM Movements WHERE MovementId = ?;");
 			db.getPreparedStatement().setInt(1, movementId);
 			rs = db.getPreparedStatement().executeQuery();
-			
-			if(!rs.next())
+
+			if (!rs.next())
 			{
 				return null;
 			}
-			
+
 			assignResultSet(movement, rs);
-		}
+		} 
 		catch (SQLException ex)
 		{
 			ex.printStackTrace();
 			throw ex;
 		}
-		
+
 		return movement;
 	}
 
@@ -69,14 +78,15 @@ public class MovementsDao implements IMovementsDao
 	{
 		ResultSet rs;
 		ArrayList<Movement> movements = new ArrayList<Movement>();
-		
+
 		try
 		{
-			db.setPreparedStatement("SELECT * FROM Movements where AccountId =?;");
+			db.setPreparedStatement(
+					"SELECT * FROM Movements where AccountId =?;");
 			db.getPreparedStatement().setInt(1, accountId);
 			rs = db.getPreparedStatement().executeQuery();
-			
-			while(rs.next())
+
+			while (rs.next())
 			{
 				Movement movement = new Movement();
 				assignResultSet(movement, rs);
@@ -87,59 +97,89 @@ public class MovementsDao implements IMovementsDao
 		{
 			ex.printStackTrace();
 		}
-		
+
 		return movements;
 	}
-	
-	public ArrayList<Movement> listFilter(int accountId, int movTypeId) throws SQLException
+
+	public ArrayList<Movement> listFilter(int accountId, int movTypeId)
+			throws SQLException
 	{
 		ResultSet rs;
 		ArrayList<Movement> movements = new ArrayList<Movement>();
-		
+
 		try
 		{
-			db.setPreparedStatement("SELECT * FROM Movements where AccountId =? AND MovementTypeId =? ;");
+			db.setPreparedStatement(
+					"SELECT * FROM Movements WHERE AccountId =? AND MovementTypeId =?;");
 			db.getPreparedStatement().setInt(1, accountId);
 			db.getPreparedStatement().setInt(2, movTypeId);
+
 			rs = db.getPreparedStatement().executeQuery();
-			
-			while(rs.next())
+
+			while (rs.next())
 			{
 				Movement movement = new Movement();
 				assignResultSet(movement, rs);
 				movements.add(movement);
 			}
-		}
-		catch (Exception ex)
+		} catch (Exception ex)
 		{
 			ex.printStackTrace();
 		}
-		
+
 		return movements;
 	}
-	
-	private void setParameters(Movement movement, int accountId) throws SQLException
+
+	public ArrayList<Movement> filterByDate(ArrayList<Movement> movements,
+			String filterDate) throws SQLException
 	{
-		db.getCallableStatement().registerOutParameter(1, java.sql.Types.INTEGER);
-		db.getCallableStatement().setTimestamp(2, Timestamp.valueOf(movement.getDateTime()));
+
+		LocalDate filterDateLocal = LocalDate.parse(filterDate);
+
+		ArrayList<Movement> filteredMovements = new ArrayList<>();
+
+		for (Movement movement : movements)
+		{
+			LocalDateTime dateMovement = movement.getDateTime();
+			LocalDate dateMov = dateMovement.toLocalDate();
+			System.out.println("Fecha extraída: " + dateMov);
+
+			if (dateMov.equals(filterDateLocal))
+			{
+				filteredMovements.add(movement);
+			}
+		}
+
+		return filteredMovements;
+	}
+
+	private void setParameters(Movement movement, int accountId)
+			throws SQLException
+	{
+		db.getCallableStatement().registerOutParameter(1,
+				java.sql.Types.INTEGER);
+		db.getCallableStatement().setTimestamp(2,
+				Timestamp.valueOf(movement.getDateTime()));
 		db.getCallableStatement().setString(3, movement.getDetails());
 		db.getCallableStatement().setBigDecimal(4, movement.getAmount());
 		db.getCallableStatement().setInt(5, movement.getMovementType().getId());
 		db.getCallableStatement().setInt(6, accountId);
 	}
-	
-	private void assignResultSet(Movement movement, ResultSet rs) throws SQLException
+
+	private void assignResultSet(Movement movement, ResultSet rs)
+			throws SQLException
 	{
 		try
 		{
 			movement.setId(rs.getInt("MovementId"));
-			movement.setDateTime(rs.getTimestamp("MovementDateTime").toLocalDateTime());
+			movement.setDateTime(
+					rs.getTimestamp("MovementDateTime").toLocalDateTime());
 			movement.setDetails(rs.getString("Details"));
 			movement.setAmount(rs.getBigDecimal("Amount"));
 
 			int movementTypeId = rs.getInt("MovementTypeId");
 			movement.setMovementType(movementTypesDao.read(movementTypeId));
-		}
+		} 
 		catch (SQLException ex)
 		{
 			ex.printStackTrace();
