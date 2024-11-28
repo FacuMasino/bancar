@@ -86,6 +86,10 @@ public class ClientAccountServlet extends HttpServlet
                 .filter(s -> !s.isEmpty())
                 .map(Integer::parseInt)
                 .orElse(null);
+		
+		String transactionDateStr = Optional
+				.ofNullable(req.getParameter("transactionDate"))
+				.map(String::trim).filter(s -> !s.isEmpty()).orElse(null);
 
 		try
 		{
@@ -122,6 +126,12 @@ public class ClientAccountServlet extends HttpServlet
 				{
 				    movementsList = movementBusiness.listFilter(selectedAccountId, movementTypeId);
 				} 
+				
+				if (transactionDateStr != null)
+				{
+					movementsList = movementBusiness.filterByDate(movementsList,
+							transactionDateStr);
+				}
 				
 				Page<Movement> movementsPage = getMovementsPage(req,movementsList);
 				

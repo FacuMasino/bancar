@@ -77,7 +77,7 @@
                   </select>
                 </div>
                 <div class="flex gap-2.5">
-                  <input name="transactionDate" type="date" class="border p-1 rounded border-gray-200">
+                  <input name="transactionDate" type="date" class="border p-1 rounded border-gray-200" value="${param.transactionDate}" onchange="this.form.submit()"> 
                   <select name="movementTypeId"  class="select select-bordered select-sm w-fit bg-white" onchange="this.form.submit()">
               <c:choose>
                      <c:when test="${empty movementTypes}">
