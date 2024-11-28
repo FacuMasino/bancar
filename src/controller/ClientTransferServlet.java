@@ -46,6 +46,11 @@ public class ClientTransferServlet extends HttpServlet
         transfersBusiness = new TransfersBusiness();
         clientsBusiness = new ClientsBusiness();
         accountsBusiness = new AccountsBusiness();
+    	movement = new Movement();
+    	originClient = new Client();
+    	destinationClient = new Client();
+    	originAccount = new Account();
+    	destinationAccount = new Account();
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -183,14 +188,17 @@ public class ClientTransferServlet extends HttpServlet
 		
 		if (transferDescription != null && !transferDescription.isEmpty())
 		{
-			movement.setDetails(transferDescription + " - ");
+			movement.setDetails(transferDescription);
 		}
 
 		transferType = request.getParameter("transferType");
 		
 		if (transferType != null && !transferType.isEmpty())
 		{
-			movement.setDetails(movement.getDetails() + transferType);
+			if (!"Seleccione el motivo".equals(transferType))
+			{				
+				movement.setDetails(movement.getDetails() + " (" + transferType + ")");
+			}
 		}
 	}
 	

@@ -32,8 +32,9 @@
                   <option disabled selected>Error: No hay cuentas para mostrar.</option>
                 </c:when>
                 <c:otherwise>
+                  <c:set var="draftAccountId" value="${originAccount.id}" />
                   <c:forEach var="account" items="${accounts}">
-                    <option value="${account.id}">
+                    <option value="${account.id}" ${draftAccountId==account.id ? 'selected' :''}>
                       CBU: ${account.cbu} - Saldo: $ ${account.balance} (${account.accountType.name})
                     </option>
                   </c:forEach>
@@ -57,14 +58,14 @@
               <span class="label-text font-semibold text-lg ">CBU</span>
             </label>
             <input type="number" name="destinationAccountCbu" placeholder="Ingrese el CBU de destino"
-              class="input input-bordered w-full" required />
+              class="input input-bordered w-full" value="${destinationAccount.cbu}" required />
           </div>
           <div class="form-control w-full">
             <label for="transferAmount" class="label">
               <span class="label-text font-semibold text-lg  leading-6">Monto a transferir</span>
             </label>
             <input type="number" name="transferAmount" placeholder="Ingrese monto a transferir"
-              class="input input-bordered w-full" min="1" required />
+              class="input input-bordered w-full" min="1" value="${movement.amount}" required />
           </div>
         </div>
       </div>
