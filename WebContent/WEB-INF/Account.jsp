@@ -56,21 +56,12 @@
             </h2>
           </div>
         </div>
-          <!--  <form method="get" action="Client"> -->
-        <div class=" flex flex-col p-4 border border border-gray-300 rounded-lg  gap-6 w-full bg-white">
+       <form method="get" action="Client">
+        <div class=" flex flex-col p-4 border border border-gray-300 rounded-lg  gap-6 w-full bg-white ">
           <div class="flex justify-between">
             <h2 class="font-bold text-xl">Últimos Movimientos</h2>
-            <label class="input input-sm input-bordered flex items-center gap-2">
-              <input type="text" class="grow"
-              placeholder="Buscar monto o descripción" name="searchInput" value="${param.searchInput}">
-              <i data-lucide="search" class="w-[20px] h-[20px]"></i>
-            </label>
-          </div>
-           <input type="hidden" name="selectedAccountId" value="${selectedAccount.id}" />
-            <div class="flex flex-col mb-4">
-              <div class="flex justify-between">
-                <div class="flex gap-2.5 items-center">
-                  <span>Tamaño de página</span> 
+             <div>
+              <span>Tamaño de página</span> 
                   <select name="pageSize" onchange="this.form.submit()"
                     class="select select-bordered select-sm w-fit bg-white">
                     <c:forEach var="size" items="${page.pageSizes}">
@@ -79,7 +70,15 @@
                         </option>
                     </c:forEach>
                   </select>
-                </div>
+                  </div>
+          </div>
+          <div class="flex flex-col mb-4">
+              <div class="flex justify-between">
+           <input type="hidden" name="selectedAccountId" value="${selectedAccount.id}" />
+                <label class="input input-sm input-bordered flex items-center gap-2">
+              <input type="text" placeholder="Buscar monto o descripción" name="searchInput" value="${param.searchInput}">
+              <i data-lucide="search" class="w-[20px] h-[20px]"></i>
+            </label>
                 <div class="flex gap-2.5">
                   <input name="transactionDate" type="date" class="border p-1 rounded border-gray-200" value="${param.transactionDate}" onchange="this.form.submit()"> 
                   <select name="movementTypeId"  class="select select-bordered select-sm w-fit bg-white" onchange="this.form.submit()">
@@ -102,6 +101,7 @@
               </c:choose>
             </select>
                 </div>
+               </form>
               </div>
               <table class="table bg-white w-full">
                 <thead>
@@ -153,7 +153,6 @@
               </c:forEach>
               </div>  
             </div>
-    
         </div>
       </div>
     </div>
