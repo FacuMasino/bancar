@@ -3,6 +3,10 @@
 <%@page import="java.util.ArrayList"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags/"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+
+<!-- Necesario para el formato de números como moneda -->
+<fmt:setLocale value="es_AR"/>
 
 <c:set var="client" value="${requestScope.client}" />
 <c:set var="listPage" value="${requestScope.page}" />
@@ -24,7 +28,7 @@
         <div class="flex flex-col p-2 gap-4 w-full">
           <span class="font-bold">${account.accountType.name}</span>
           <p
-            class="font-bold text-2xl ${account.balance < 0 ? 'text-red-500' : 'text-green-500'}">$${account.balance}</p>
+            class="font-bold text-2xl ${account.balance < 0 ? 'text-red-500' : 'text-green-500'}"><fmt:formatNumber value="${account.balance}" type="currency" /></p>
         </div>
       </div>
       <div
@@ -47,9 +51,9 @@
         <div class="flex justify-between p-2.5 mb-2">
           <label class="input input-sm input-bordered flex items-center gap-2">
             <input type="text" class="grow" placeholder="Buscar por descripción o monto"
-            name="searchInput"> <i data-lucide="search" ></i>
+            name="searchInput" value="${param.searchInput}"> <i data-lucide="search"  ></i>
           </label>
-          <div class="flex-end">
+          <div class="flex-end"> 
             <input name="transactionDate" type="date"
               class="border p-1 rounded border-gray-200"
               value="${param.transactionDate}" onchange="this.form.submit()">
@@ -99,7 +103,7 @@
                     <td>${movement.formattedDateTime}</td>
                     <td>${movement.details}</td>
                     <td
-                      class="font-semibold ${movement.amount < 0 ? 'text-red-600':'text-green-600'}">${movement.amount}</td>
+                      class="font-semibold ${movement.amount < 0 ? 'text-red-600':'text-green-600'}"><fmt:formatNumber value="${movement.amount}" type="currency"/></td>
                   </tr>
                 </c:forEach>
               </c:otherwise>

@@ -91,6 +91,12 @@ public class ClientAccountServlet extends HttpServlet
 		String transactionDateStr = Optional
 				.ofNullable(req.getParameter("transactionDate"))
 				.map(String::trim).filter(s -> !s.isEmpty()).orElse(null);
+		
+		String searchInput = Optional
+				.ofNullable(req.getParameter("searchInput"))
+				.map(String::trim).filter(s -> !s.isEmpty()).orElse(null);
+		
+		
 
 		try
 		{
@@ -133,6 +139,11 @@ public class ClientAccountServlet extends HttpServlet
 				{
 					movementsList = movementBusiness.filterByDate(movementsList,
 							transactionDateStr);
+				}
+				
+				if (searchInput != null) {
+					
+					movementsList = movementBusiness.filterBySearch(selectedAccountId, movementsList, searchInput);
 				}
 				
 				Page<Movement> movementsPage = getMovementsPage(req,movementsList);
