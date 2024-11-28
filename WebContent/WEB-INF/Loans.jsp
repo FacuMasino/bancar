@@ -7,6 +7,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
+<!-- Necesario para el formato de números como moneda -->
+<fmt:setLocale value="es_AR"/>
+
 <c:set var="approvedLoans"
   value="${requestScope.approvedLoans != null ? 
                                 requestScope.approvedLoans : emptyList }" />
@@ -47,14 +50,16 @@
                 class="flex justify-between items-center bg-white p-4">
                 <div>
                   <h3 class="text-lg font-medium text-gray-800">${loan.loanType.name}</h3>
-                  <p class="text-gray-600">Saldo otorgado: $
-                    ${loan.requestedAmount}</p>
+                  <p class="text-gray-600">Saldo otorgado:
+                    <fmt:formatNumber value="${loan.requestedAmount}" type="currency" />
+                  </p>
                   <p class="text-gray-600">Cuotas pendientes:
                     ${loan.pendingInstallments.size()}</p>
                 </div>
                 <div class="flex flex-col items-end">
-                  <p class="text-gray-600 font-medium">$
-                    ${loan.pendingInstallments[0].amount} / mes</p>
+                  <p class="text-gray-600 font-medium">
+                    <fmt:formatNumber value="${loan.pendingInstallments[0].amount}" type="currency" />
+                    / mes</p>
                   <%-- Obtengo el primer elemento de la lista para la fecha, ya que es la primer cuota que debe --%>
                   <c:set var="dueDate"
                     value="${loan.pendingInstallments[0].paymentDueDate}" />
@@ -96,8 +101,10 @@
                 class="flex justify-between items-center bg-white p-4">
                 <div>
                   <h3 class="text-lg font-medium text-gray-800">${loan.loanType.name}</h3>
-                  <p class="text-gray-600">Monto solicitado: $
-                    ${loan.requestedAmount}</p>
+                  <p class="text-gray-600">
+                    Monto solicitado:
+                    <fmt:formatNumber value="${loan.requestedAmount}" type="currency" />
+                  </p>
                   <p class="text-gray-600">
                     Fecha de solicitud:
                     <fmt:formatDate type="date" dateStyle="short"
@@ -218,7 +225,7 @@
                             Rechazado </span>
                         </c:otherwise>
                       </c:choose></td>
-                    <td>$ ${loan.requestedAmount}</td>
+                    <td><fmt:formatNumber value="${loan.requestedAmount}" type="currency" /></td>
                     <td>${loan.installmentsQuantity}</td>
                   </tr>
                 </c:forEach>

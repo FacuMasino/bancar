@@ -8,6 +8,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
+<!-- Necesario para el formato de números como moneda -->
+<fmt:setLocale value="es_AR"/>
+
 <c:set var="approvedLoans"
   value="${requestScope.approvedLoans != null ? 
                                 requestScope.approvedLoans : emptyList }" />
@@ -92,7 +95,9 @@
                             ${loan.client.firstName} ${loan.client.lastName}
                           </td>
                           <td>${loan.loanType.name}</td>
-                          <td>${loan.requestedAmount}</td>
+                          <td>
+                            <fmt:formatNumber value="${loan.requestedAmount}" type="currency" />                            
+                          </td>
                           <td>${loan.installmentsQuantity}</td>
                           <!-- BOTONES DE ACCION, APROBAR o DESAPROBAR -->
                           <td class="py-3">
@@ -170,7 +175,9 @@
                           ${loan.client.firstName} ${loan.client.lastName}
                         </td>
                         <td>${loan.loanType.name}</td>
-                        <td>$ ${loan.requestedAmount}</td>
+                        <td>
+                          <fmt:formatNumber value="${loan.requestedAmount}" type="currency" />
+                        </td>
                         <td>${loan.installmentsQuantity}</td>
                         <td>
                           <c:choose>
@@ -203,7 +210,9 @@
                         </c:forEach>
                         <c:choose>
                           <c:when test="${overdueAmount > 0}">
-                            <td>$ ${overdueAmount}</td>
+                            <td>
+                              <fmt:formatNumber value="${overdueAmount}" type="currency" />
+                            </td>
                           </c:when>
                           <c:otherwise>
                             <td>-</td>
