@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import businessLogic.IAccountsBusiness;
 import businessLogic.IInstallmentsBusiness;
 import businessLogic.ILoansBusiness;
+import businessLogic.IMovementsBusiness;
 import dataAccess.ILoansDao;
 import dataAccessImpl.LoansDao;
 import domainModel.Account;
@@ -17,6 +19,9 @@ import domainModel.Loan;
 import domainModel.LoanStatus;
 import domainModel.LoanStatusEnum;
 import domainModel.LoanType;
+import domainModel.Movement;
+import domainModel.MovementType;
+import domainModel.MovementTypeEnum;
 import exceptions.BusinessException;
 import exceptions.SQLOperationException;
 
@@ -24,11 +29,15 @@ public class LoansBusiness implements ILoansBusiness
 {
 	private ILoansDao loansDao;
 	private IInstallmentsBusiness installmentsBusiness;
+	private IAccountsBusiness accountsBusiness;
+	private IMovementsBusiness movementsBusiness;
 	
 	public LoansBusiness()
 	{
 		loansDao = new LoansDao();
 		installmentsBusiness = new InstallmentsBusiness();
+		accountsBusiness = new AccountsBusiness();
+		movementsBusiness = new MovementsBusiness();
 	}
 
 	// TODO: PENDIENTE Ningún método valida las reglas de negocio
@@ -98,13 +107,31 @@ public class LoansBusiness implements ILoansBusiness
 	{
 		try
 		{
+			// Generación de cuotas
 			if(installmentsBusiness.generate(loan.getLoanId()))
 			{
 				LoanStatus loanStatus = new LoanStatus();
 				loanStatus.setId(LoanStatusEnum.APPROVED.getId());
 				
-				loan.setLoanStatus(loanStatus);
+				// Generación de movimiento
+				MovementType movementType = new MovementType();
+				movementType.setId(MovementTypeEnum.NEW_LOAN.getId());
+
+				Movement movement = new Movement();
+				movement.setDetails("Acreditación - Préstamo " + loan.getLoanId());
+				movement.setAmount(loan.getRequestedAmount());			
+				movement.setMovementType(movementType);
 				
+				movementsBusiness.create(movement, loan.getAccount().getId());
+				
+				// Acreditación de saldo
+				Account creditAccount = loan.getAccount();
+				creditAccount.setBalance(creditAccount.getBalance()
+						.add(loan.getRequestedAmount()));
+				accountsBusiness.update(creditAccount);
+				
+				// Actualización de estado
+				loan.setLoanStatus(loanStatus);
 				return update(loan);
 			}
 			throw new BusinessException

@@ -55,9 +55,7 @@ public class AdminLoansServlet extends HttpServlet
 			break;
 		}
 	}
-	//TODO: AL APROBAR EL LOAN, GENERAR LOS INSTALLMENTS!! o.O
-	//TODO: MAPEAR EL MINI REPORTE DEL DINERO INVERTIDO,PRESTADO Y COSO
-	
+
 	private void approveLoan(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException
 	{
@@ -65,23 +63,16 @@ public class AdminLoansServlet extends HttpServlet
 				.map(Integer::parseInt).orElse(0);
 		try
 		{
-			LoanStatus loanStatusApproved = loanStatusesBusiness.read(2); // 2 is for approved, Vigente en BD!
-																			
-			Loan loanToApprove = loansBusiness.read(loanId);
-			loanToApprove.setLoanStatus(loanStatusApproved);
-			Boolean success = loansBusiness.update(loanToApprove);
+			
+			Boolean success = loansBusiness.approve(loansBusiness.read(loanId));
 
 			if (success)
 			{
 				Helper.setReqMessage(request, "Préstamo aprobado con éxito!",
 						MessageType.SUCCESS);
-			} else
-			{
-				Helper.setReqMessage(request, "Error al aprobar préstamo.",
-						MessageType.ERROR);
 			}
 			viewAdminLoans(request, response);
-		} catch (Exception ex) // Reemplazar por BusinessException
+		} catch (BusinessException ex)
 		{
 			Helper.setReqMessage(request, ex.getMessage(), MessageType.ERROR);
 			viewAdminLoans(request, response);
@@ -95,30 +86,22 @@ public class AdminLoansServlet extends HttpServlet
 				.map(Integer::parseInt).orElse(0);
 		try
 		{
-			// Pruebita
-			System.out.println("El id Loan que clickeeeee es: " + loanId);
+			LoanStatus rejectedStatus = new LoanStatus();
+			rejectedStatus.setId(LoanStatusEnum.REJECTED.getId());
 
-			LoanStatus loanStatusApproved = loanStatusesBusiness.read(4); // 2 is for rejeted, Rechazado en BD!
-
-			Loan loanToApprove = loansBusiness.read(loanId);
-			loanToApprove.setLoanStatus(loanStatusApproved);
-			Boolean success = loansBusiness.update(loanToApprove);
-
-			System.out.println("\n\nEl prestamo que rechace tiene esto: "
-					+ loanToApprove.toString());
+			Loan loanToReject = loansBusiness.read(loanId);
+			loanToReject.setLoanStatus(rejectedStatus);
+			Boolean success = loansBusiness.update(loanToReject);
 
 			if (success)
 			{
 				Helper.setReqMessage(request,
 						"Se rechazó el préstamo con éxito!",
 						MessageType.SUCCESS);
-			} else
-			{
-				Helper.setReqMessage(request, "Error al rechazar préstamo.",
-						MessageType.ERROR);
 			}
+			
 			viewAdminLoans(request, response);
-		} catch (Exception ex) // Reemplazar por BusinessException
+		} catch (BusinessException ex)
 		{
 			Helper.setReqMessage(request, ex.getMessage(), MessageType.ERROR);
 			viewAdminLoans(request, response);
