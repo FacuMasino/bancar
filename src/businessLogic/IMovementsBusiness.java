@@ -10,4 +10,6 @@ public interface IMovementsBusiness
 	public Movement read(int movementId) throws BusinessException;
 	public ArrayList<Movement> list(int accountId) throws BusinessException;
 	public ArrayList<Movement> listFilter(int accountId, int movTypeId) throws BusinessException;
+	public ArrayList<Movement> filterByDate (ArrayList<Movement> movements, String filterDate) throws BusinessException;
+
 }

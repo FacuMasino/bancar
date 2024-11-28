@@ -53,9 +53,8 @@
             <i data-lucide="search"></i>
           </label>
           <div class="flex-end">
-            <input name="transactionDate" type="date" class="border p-1 rounded border-gray-200">
-            <!--  falta la parte del servlet -->
-            <select name="movementTypeId"  class="select select-bordered select-sm w-fit bg-white"  onchange="this.form.submit()">
+            <input name="transactionDate" type="date" class="border p-1 rounded border-gray-200" value="${param.transactionDate}" onchange="this.form.submit()"> 
+              <select name="movementTypeId"  class="select select-bordered select-sm w-fit bg-white"  onchange="this.form.submit()">
               <c:choose>
                 <c:when test="${empty movementTypes}">
                   <option disabled selected>Error: No hay tipos
