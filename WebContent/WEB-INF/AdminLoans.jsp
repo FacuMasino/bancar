@@ -1,5 +1,6 @@
 <%@page import="domainModel.Client"%>
 <%@page import="domainModel.Loan"%>
+<%@page import="domainModel.LoanStatusEnum"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
 <jsp:useBean id="now" class="java.util.Date" />
@@ -23,7 +24,7 @@
 <t:masterpage title="Admin - Préstamos" customNavbar="true">
   <t:adminwrapper activeMenuItem="adminLoansMenu">
     <div class="p-4">
-      <h1 class="text-xl font-normal mb-6">Gestión de Préstamos</h1>
+      <h1 class="text-xl font-bold mb-6">Gestión de Préstamos</h1>
 
       <!-- Resumen de préstamos -->
       <div class="bg-white rounded-lg shadow-sm mb-6">
@@ -87,8 +88,9 @@
                         <tr class="hover border-b border-gray-200">
                           <td>${loan.loanId}</td>
                           <td>${loan.client.dni}</td>
-                          <td>"${loan.client.firstName}
-                            ${loan.client.lastName}"</td>
+                          <td>
+                            ${loan.client.firstName} ${loan.client.lastName}
+                          </td>
                           <td>${loan.loanType.name}</td>
                           <td>${loan.requestedAmount}</td>
                           <td>${loan.installmentsQuantity}</td>
@@ -113,8 +115,6 @@
                               </button>
                             </div>
                           </td>
-                          <td
-                            class="flex flex-col items-center justify-center w-fit px-2.5 rounded-full border border-yellow-500 text-yellow-500 font-semibold">${loan.loanStatus.name}</td>
                         </tr>
                       </c:forEach>
                     </c:otherwise>
@@ -125,127 +125,15 @@
           </div>
         </div>
       </form>
-
-      <!-- Préstamos activos/vigentes -->
-      <div class="bg-white rounded-lg shadow-sm mb-6">
-        <div class="p-4">
-          <h2 class="text-base font-medium mb-4">Préstamos Activos/Vigentes</h2>
-          <div class="overflow-x-auto">
-            <table class="w-full">
-              <thead>
-                <tr class="text-sm border-b border-gray-200">
-                  <th class="text-left py-2 font-bold">ID</th>
-                  <th class="text-left py-2 font-bold">DNI</th>
-                  <th class="text-left py-2 font-bold">Nombre y
-                    Apellido</th>
-                  <th class="text-left py-2 font-bold">Tipo de
-                    préstamo</th>
-                  <th class="text-left py-2 font-bold">Monto
-                    Solicitado</th>
-                  <th class="text-left py-2 font-bold">Cuotas</th>
-                  <th class="text-left py-2 font-bold">Deuda
-                    Pendiente</th>
-                </tr>
-              </thead>
-              <tbody>
-                <c:choose>
-                  <c:when test="${empty approvedLoans}">
-                    <!-- Mostrar mensaje si no hay prestamos pendientes -->
-                    <tr>
-                      <td colspan="6" class="text-center font-bold">No
-                        hay préstamos vigentes =D</td>
-                    </tr>
-                  </c:when>
-                  <c:otherwise>
-                    <c:forEach var="loan" items="${approvedLoans}"
-                      varStatus="status">
-                      <tr class="hover border-b border-gray-200">
-                        <td>${loan.loanId}</td>
-                        <td>${loan.client.dni}</td>
-                        <td>"${loan.client.firstName}
-                          ${loan.client.lastName}"</td>
-                        <td>${loan.loanType.name}</td>
-                        <td>${loan.requestedAmount}</td>
-                        <td>${loan.installmentsQuantity}</td>
-                        <!--aca poner deuda pendiente-->
-                        <td
-                          class="flex flex-col items-center w-fit px-2.5 rounded-full border border-blue-500 text-blue-500 font-semibold">${loan.loanStatus.name}</td>
-                      </tr>
-                    </c:forEach>
-                  </c:otherwise>
-                </c:choose>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <h2 class="text-base font-large mb-4 font-bold"> Historial de Prestamos </h2>
-      </div>
-
+      
       <!-- Préstamos rechazados -->
       <div class="bg-white rounded-lg shadow-sm mb-6">
         <div class="p-4">
-          <h2 class="text-base font-medium mb-4">Préstamos
-            Rechazados</h2>
+          <h2 class="text-base font-medium mb-4">
+            Historial de Préstamos
+          </h2>
           <div class="overflow-x-auto">
-            <table class="w-full">
-              <thead>
-                <tr class="text-sm border-b border-gray-200">
-                  <th class="text-left py-2 font-bold">ID</th>
-                  <th class="text-left py-2 font-bold">DNI</th>
-                  <th class="text-left py-2 font-bold">Nombre y
-                    Apellido</th>
-                  <th class="text-left py-2 font-bold">Tipo de
-                    préstamo</th>
-                  <th class="text-left py-2 font-bold">Monto
-                    Solicitado</th>
-                  <th class="text-left py-2 font-bold">Cuotas</th>
-                  <th class="text-left py-2 font-bold">Deuda
-                    Pendiente</th>
-                </tr>
-              </thead>
-              <tbody>
-                <c:choose>
-                  <c:when test="${empty rejectedLoans}">
-                    <!-- Mostrar mensaje si no hay prestamos rechazados -->
-                    <tr>
-                      <td colspan="6" class="text-center font-bold">No
-                        hay préstamos rechazados =D</td>
-                    </tr>
-                  </c:when>
-                  <c:otherwise>
-                    <c:forEach var="loan" items="${rejectedLoans}"
-                      varStatus="status">
-                      <tr class="hover border-b border-gray-200">
-                        <td>${loan.loanId}</td>
-                        <td>${loan.client.dni}</td>
-                        <td>"${loan.client.firstName}
-                          ${loan.client.lastName}"</td>
-                        <td>${loan.loanType.name}</td>
-                        <td>${loan.requestedAmount}</td>
-                        <td>${loan.installmentsQuantity}</td>
-                        <!--aca poner deuda pendiente-->
-                        <td
-                          class="flex flex-col items-center w-fit px-2.5 rounded-full border border-red-500 text-red-500 font-semibold">${loan.loanStatus.name}</td>
-                      </tr>
-                    </c:forEach>
-                  </c:otherwise>
-                </c:choose>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- Préstamos Finalizados -->
-      <div class="bg-white rounded-lg shadow-sm mb-6">
-        <div class="p-4">
-          <h2 class="text-base font-medium mb-4">Préstamos
-            Finalizados</h2>
-          <div class="overflow-x-auto">
-            <table class="w-full">
+            <table class="table">
               <thead>
                 <tr class="text-sm border-b border-gray-200">
                   <th class="text-left py-2 font-bold">ID</th>
@@ -258,31 +146,69 @@
                     Solicitado</th>
                   <th class="text-left py-2 font-bold">Cuotas</th>
                   <th class="text-left py-2 font-bold">Estado</th>
+                  <th class="text-left py-2 font-bold">Deuda
+                    Pendiente</th>
                 </tr>
               </thead>
               <tbody>
                 <c:choose>
-                  <c:when test="${empty endedLoans}">
-                    <!-- Mostrar mensaje si no hay prestamos rechazados -->
+                  <c:when test="${empty allLoans}">
+                    <!-- Mostrar mensaje si no hay prestamos -->
                     <tr>
-                      <td colspan="6" class="text-center font-bold">No
-                        hay Préstamos finalizados =D</td>
+                      <td colspan="7" class="text-center font-normal">
+                        No hay préstamos para mostrar
+                      </td>
                     </tr>
                   </c:when>
                   <c:otherwise>
-                    <c:forEach var="loan" items="${endedLoans}"
+                    <c:forEach var="loan" items="${allLoans}"
                       varStatus="status">
                       <tr class="hover border-b border-gray-200">
                         <td>${loan.loanId}</td>
                         <td>${loan.client.dni}</td>
-                        <td>"${loan.client.firstName}
-                          ${loan.client.lastName}"</td>
+                        <td>
+                          ${loan.client.firstName} ${loan.client.lastName}
+                        </td>
                         <td>${loan.loanType.name}</td>
-                        <td>${loan.requestedAmount}</td>
+                        <td>$ ${loan.requestedAmount}</td>
                         <td>${loan.installmentsQuantity}</td>
-                        <!--aca poner deuda pendiente-->
-                        <td
-                          class="flex flex-col items-center w-fit px-2.5 rounded-full border border-green-500 text-green-500 font-semibold">${loan.loanStatus.name}</td>
+                        <td>
+                          <c:choose>
+                            <c:when test="${loan.loanStatus.id eq LoanStatusEnum.PENDING.id}">
+                              <span
+                                class="flex flex-col items-center w-fit px-2.5 rounded-full border border-yellow-600 text-yellow-700 font-semibold">
+                                En Revisión </span>
+                            </c:when>
+                            <c:when test="${loan.loanStatus.id eq LoanStatusEnum.APPROVED.id}">
+                              <span
+                                class="flex flex-col items-center w-fit px-2.5 rounded-full border border-blue-600 text-blue-600 font-semibold">
+                                Vigente </span>
+                            </c:when>
+                            <c:when test="${loan.loanStatus.id eq LoanStatusEnum.FINISHED.id}">
+                              <span
+                                class="flex flex-col items-center w-fit px-2.5 rounded-full border border-green-600 text-green-600 font-semibold">
+                                Finalizado </span>
+                            </c:when>
+                            <c:otherwise>
+                              <span
+                                class="flex flex-col items-center w-fit px-2.5 rounded-full border border-red-600 text-red-600 font-semibold">
+                                Rechazado </span>
+                            </c:otherwise>
+                          </c:choose>
+                        </td>
+                        <!-- Deuda pendiente -->
+                        <c:set var="overdueAmount" value="0" />
+                        <c:forEach var="installment" items="${loan.pendingInstallments}">
+                            <c:set var="overdueAmount" value="${overdueAmount + installment.amount}" />
+                        </c:forEach>
+                        <c:choose>
+                          <c:when test="${overdueAmount > 0}">
+                            <td>$ ${overdueAmount}</td>
+                          </c:when>
+                          <c:otherwise>
+                            <td>-</td>
+                          </c:otherwise>
+                        </c:choose>
                       </tr>
                     </c:forEach>
                   </c:otherwise>

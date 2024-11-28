@@ -1,26 +1,21 @@
 package controller;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import businessLogicImpl.AccountsBusiness;
-import businessLogicImpl.ClientsBusiness;
 import businessLogicImpl.LoanStatusesBusiness;
 import businessLogicImpl.LoansBusiness;
-import domainModel.Account;
-import domainModel.AccountType;
-import domainModel.Client;
 import domainModel.Loan;
 import domainModel.LoanStatus;
+import domainModel.LoanStatusEnum;
 import domainModel.Message.MessageType;
 import exceptions.BusinessException;
 import utils.Helper;
@@ -29,16 +24,12 @@ import utils.Helper;
 public class AdminLoansServlet extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
-	private AccountsBusiness accountsBusiness;
-	private ClientsBusiness clientsBusiness;
 	private LoansBusiness loansBusiness;
 	private LoanStatusesBusiness loanStatusesBusiness;
 
 	public AdminLoansServlet()
 	{
 		super();
-		accountsBusiness = new AccountsBusiness();
-		clientsBusiness = new ClientsBusiness();
 		loansBusiness = new LoansBusiness();
 		loanStatusesBusiness = new LoanStatusesBusiness();
 	}
@@ -137,33 +128,23 @@ public class AdminLoansServlet extends HttpServlet
 	private void viewAdminLoans(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException
 	{
-		// TODO: Cargar lista cuando funcione eḷ negocio
-		// Enviar atributo con la lista
-		/*
-		 * 1 En revisión 2 Vigente 3 Finalizado 4 Rechazado
-		 */
+
 		try
 		{
-			List<Loan> loans = loansBusiness.list();
-
-			ArrayList<Loan> pendingLoans = (ArrayList<Loan>) loansBusiness
-					.filter(loanStatusesBusiness.read(1), loans);
-			ArrayList<Loan> approvedLoans = (ArrayList<Loan>) loansBusiness
-					.filter(loanStatusesBusiness.read(2), loans);
-			ArrayList<Loan> endedLoans = (ArrayList<Loan>) loansBusiness
-					.filter(loanStatusesBusiness.read(3), loans);
-			ArrayList<Loan> rejectedLoans = (ArrayList<Loan>) loansBusiness
-					.filter(loanStatusesBusiness.read(4), loans);
+			List<Loan> allLoans = loansBusiness.list();
+			allLoans.sort(null); // Orden por defecto, ascendente por fecha
+			
+			LoanStatus pendingStatus = new LoanStatus();
+			pendingStatus.setId(LoanStatusEnum.PENDING.getId());
+			
+			List<Loan> pendingLoans = loansBusiness.filter(pendingStatus, allLoans);
 
 			request.setAttribute("pendingLoans", pendingLoans);
-			request.setAttribute("approvedLoans", approvedLoans);
-			request.setAttribute("endedLoans", endedLoans);
-			request.setAttribute("rejectedLoans", rejectedLoans);
+			request.setAttribute("allLoans", allLoans);
 
-		} catch (BusinessException e)
+		} catch (BusinessException ex)
 		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Helper.setReqMessage(request, ex.getMessage(), MessageType.ERROR);
 		}
 
 		Helper.redirect("/WEB-INF/AdminLoans.jsp", request, response);

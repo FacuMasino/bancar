@@ -74,7 +74,7 @@
 	
 	          <div class="flex flex-col">
 	            <span class="text-sm text-slate-600">Monto</span>
-	            <span class="text-xl font-bold">$ ${movement.amount}</span>
+	            <span class="text-xl font-bold">$ ${movement.amount * -1}</span>
 	          </div>
 	
 			  <!-- Cuenta de origen -->

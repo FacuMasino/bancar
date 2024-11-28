@@ -178,7 +178,7 @@ public class LoansBusiness implements ILoansBusiness
 	{
 		return list.stream().filter(loan -> 
 							loan.getLoanStatus().getId() == loanStatus.getId())
-							.collect(Collectors.toCollection(ArrayList::new));
+							.collect(Collectors.toList());
 	}
 	
 	@Override
@@ -187,7 +187,7 @@ public class LoansBusiness implements ILoansBusiness
 	{
 		return list.stream().filter(loan -> 
 							loan.getLoanType().getId() == loanType.getId())
-							.collect(Collectors.toCollection(ArrayList::new));
+							.collect(Collectors.toList());
 	}
 	
 	@Override
