@@ -146,8 +146,9 @@ public class LoansDao implements ILoansDao
 		db.getPreparedStatement().setInt(1, loan.getLoanStatus().getId());
 		db.getPreparedStatement().setInt(2, loan.getLoanId());
 	}
-
-	private Loan getLoan(ResultSet rs) throws SQLException
+	
+	//Se cambia a protected para acceder desde otras clases del package(y no repetir codigo)
+	protected Loan getLoan(ResultSet rs) throws SQLException
 	{   
 		Loan auxLoan = new Loan();
                                
