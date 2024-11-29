@@ -26,10 +26,10 @@
           <%-- y usariamos min="<%=variableMin%>" --%>
           <input id="requestedAmountInput" name="requestedAmount" type="range" 
             min="100000" max="2000000" value="50000" 
-            oninput="updateValues(this.value, 'requestedAmount')" 
+            oninput="updateValues(this.value, 'requestedAmount', true)" 
             class="range range-primary" />
           <span class="font-bold text-xl text-center">
-            $ <span id="requestedAmount">100.000</span>
+            <span id="requestedAmount">100.000</span>
           </span>
         </div>
       </div>
@@ -41,7 +41,7 @@
             <span>48</span>
           </div>
           <input id="installmentsInput" name="installmentsQty" type="range" min="1" max="48" value="24" 
-            oninput="updateValues(this.value, 'installments')"
+            oninput="updateValues(this.value, 'installments', false)"
             class="range range-primary" />
           <span class="font-bold text-xl text-center">
             <span id="installments">24</span> Cuotas
@@ -52,11 +52,11 @@
         <h2 class="font-semibold text-lg self-start">Resumen del préstamo</h2>
         <div class="flex justify-between w-full">
           <span>Monto solicitado</span>
-          <span>$ <span id="amountSummary">-</span></span>
+          <span><span id="amountSummary">-</span></span>
         </div>
         <div class="flex justify-between w-full">
           <span>Monto total con intereses</span>
-          <span>$ <span id="finalCost">-</span></span>
+          <span><span id="finalCost">-</span></span>
         </div>
         <div class="flex justify-between w-full">
           <span>Plazo</span>
@@ -69,8 +69,8 @@
         </div>
         <div class="divider m-0"></div>
         <div class="flex justify-between w-full">
-          <span>Cuotas Mensual</span>
-          <span class="font-semibold">$ <span id="installmentsCost">-</span></span>
+          <span>Cuota Mensual</span>
+          <span class="font-semibold"><span id="installmentsCost">-</span></span>
         </div>
       </div>
       <h1 class="font-bold text-lg">Motivo del préstamo</h1>
