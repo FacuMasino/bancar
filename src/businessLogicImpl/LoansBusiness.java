@@ -203,6 +203,9 @@ public class LoansBusiness implements ILoansBusiness
 	public List<Loan> filter(LoanStatus loanStatus, List<Loan> list)
 		throws BusinessException
 	{
+		// La función Stream no modifica la lista original, si no
+		// que crea un nuevo objeto al cuál se le aplican las transformaciones.
+		// Devuelve un nuevo objeto distinto del original.
 		return list.stream().filter(loan -> 
 							loan.getLoanStatus().getId() == loanStatus.getId())
 							.collect(Collectors.toList());

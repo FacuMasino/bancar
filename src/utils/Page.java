@@ -30,6 +30,11 @@ public class Page<T> {
         return new ArrayList<>(fullContent.subList(startElementPos, endElementPos));
     }
 
+	public void setPageSizes(int[] pageSizes)
+	{
+		this.pageSizes = pageSizes;
+	}
+    
 	public int getCurrentPage() {
 		return currentPage;
 	}
