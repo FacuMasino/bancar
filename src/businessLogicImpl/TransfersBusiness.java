@@ -1,6 +1,8 @@
 package businessLogicImpl;
 
 import java.sql.SQLException;
+
+import businessLogic.IMovementsBusiness;
 import businessLogic.ITransfersBusiness;
 import dataAccessImpl.TransfersDao;
 import domainModel.Account;
@@ -13,23 +15,31 @@ public class TransfersBusiness implements ITransfersBusiness
 {
 	private TransfersDao transfersDao;
 	private MovementTypesBusiness movementTypesBusiness;
-
+	private IMovementsBusiness movementsBusiness;
+	
 	public TransfersBusiness()
 	{
 		transfersDao = new TransfersDao();
 		movementTypesBusiness = new MovementTypesBusiness();
+		movementsBusiness = new MovementsBusiness();
 	}
 
 	@Override
 	public boolean create(Movement movement, Account originAccount, Account destinationAccount)
 					throws BusinessException
 	{
+		movement.setTransactionId(movementsBusiness.generateTrxId());
 		movement.setMovementType(movementTypesBusiness.read(MovementTypeEnum.TRANSFER.getId()));
 		
 		try
 		{
 			if (0 < transfersDao.create(movement, originAccount.getId(), destinationAccount.getId()))
 			{
+				//Acortar id de transacción
+				String shortTrxId = movementsBusiness
+						.getShortTrxId(movement.getTransactionId());
+				movement.setTransactionId(shortTrxId);
+				
 				return true;
 			}
 		}

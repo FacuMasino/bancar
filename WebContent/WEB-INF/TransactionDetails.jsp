@@ -132,7 +132,7 @@
 		        </c:when>
 		   	  </c:choose>
 	
-	          <span class="text-sm text-slate-600">Nro. de transacción ${movement.id}</span>
+	          <span class="text-sm text-slate-600">Nro. de transacción ${movement.transactionId}</span>
 	
 	          <button class="btn btn-ghost border-gray-200 self-center"
 	            onclick="printDiv('printableReceipt')">            

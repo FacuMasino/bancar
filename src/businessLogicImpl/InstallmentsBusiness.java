@@ -94,10 +94,11 @@ public class InstallmentsBusiness implements IInstallmentsBusiness
 			movement.setAmount(installment.getAmount().negate());			
 			movement.setMovementType(movementType);
 
-			installment.setMovement(movement);
 			
 			// El siguiente método asigna el Id por referencia al objeto Movement
 			movementsBusiness.create(movement, debitAccount.getId());
+			
+			installment.setMovement(movement);
 			
 			// Asignar id de movimiento a la cuota
 			update(installment);

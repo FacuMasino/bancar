@@ -233,6 +233,7 @@ END $$
 
 CREATE PROCEDURE insert_movement (
     OUT _NewMovementId INT,
+    IN _TransactionId CHAR(36),
     IN _MovementDateTime TIMESTAMP,
     IN _Details VARCHAR(500),
     IN _Amount DECIMAL(15, 2),
@@ -240,8 +241,8 @@ CREATE PROCEDURE insert_movement (
     IN _AccountId INT
 )
 BEGIN
-    INSERT INTO Movements (MovementDateTime, Details, Amount, MovementTypeId, AccountId)
-    VALUES (_MovementDateTime, _Details, _Amount, _MovementTypeId, _AccountId);
+    INSERT INTO Movements (TransactionId, MovementDateTime, Details, Amount, MovementTypeId, AccountId)
+    VALUES (_TransactionId, _MovementDateTime, _Details, _Amount, _MovementTypeId, _AccountId);
     SET _NewMovementId = LAST_INSERT_ID();
 END $$
 
@@ -321,6 +322,7 @@ END $$
 
 CREATE PROCEDURE generate_transfer (
     OUT _NewMovementId1 INT,
+    IN _TransactionId CHAR(36),
     IN _MovementDateTime TIMESTAMP,
     IN _Details VARCHAR(500),
     IN _Amount DECIMAL(15, 2),
@@ -344,6 +346,7 @@ BEGIN
     START TRANSACTION;
         CALL insert_movement(
             _NewMovementId1,
+            _TransactionId,
             _MovementDateTime,
             _Details,
             -_Amount,
@@ -353,6 +356,7 @@ BEGIN
 
         CALL insert_movement(
             _NewMovementId2,
+            _TransactionId,
             _MovementDateTime,
             _Details,
             _Amount,

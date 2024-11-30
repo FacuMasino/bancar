@@ -7,6 +7,7 @@ import java.time.format.DateTimeFormatter;
 public class Movement implements Comparable<Movement>
 {
 	private int id;
+	private String transactionId;
 	private LocalDateTime dateTime;
 	private String details;
 	private BigDecimal amount;
@@ -73,6 +74,16 @@ public class Movement implements Comparable<Movement>
 		this.movementType = movementType;
 	}
 	
+	public String getTransactionId()
+	{
+		return transactionId;
+	}
+
+	public void setTransactionId(String transactionId)
+	{
+		this.transactionId = transactionId;
+	}
+
 	@Override
 	public String toString()
 	{

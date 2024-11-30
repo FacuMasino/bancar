@@ -29,10 +29,15 @@ public class MovementsBusiness implements IMovementsBusiness
 	{
 		try
 		{
+			// UUID de transacción
+			movement.setTransactionId(generateTrxId());
+			
 			int newMovementId = movementsDao.create(movement, accountId);
 			if (0 < newMovementId)
 			{
 				movement.setId(newMovementId);
+				movement.setTransactionId(
+						getShortTrxId(movement.getTransactionId()));
 				return true;
 			}
 		}
@@ -55,7 +60,10 @@ public class MovementsBusiness implements IMovementsBusiness
 	{
 		try
 		{
-			return movementsDao.read(movementId);
+			Movement movement = movementsDao.read(movementId);
+			movement.setTransactionId(
+					getShortTrxId(movement.getTransactionId()));
+			return movement;
 		} 
 		catch (SQLException ex)
 		{
@@ -74,7 +82,42 @@ public class MovementsBusiness implements IMovementsBusiness
 	{
 		try
 		{
-			return movementsDao.list(accountId);
+			ArrayList<Movement> movements = movementsDao.list(accountId);
+			for(Movement mov : movements) // Acortar ID de transacción
+			{
+				mov.setTransactionId(
+						getShortTrxId(mov.getTransactionId()));
+			}
+			
+			return movements;
+		} 
+		catch (SQLException ex)
+		{
+			throw new SQLOperationException();
+		} 
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+			throw new BusinessException(
+					"Ocurrió un error desconocido al leer los movimientos.");
+		}
+	}
+	
+	// Para obtener 2 movimientos con el mismo TransactionId (Transferencias)
+	// TODO: No es lo más óptimo, si llegaramos debería haber una tabla de Transferencias
+	@Override
+	public ArrayList<Movement> list(String transactionId) throws BusinessException
+	{
+		try
+		{
+			ArrayList<Movement> movements = movementsDao.list(transactionId);
+			for(Movement mov : movements) // Acortar ID de transacción
+			{
+				mov.setTransactionId(
+						getShortTrxId(mov.getTransactionId()));
+			}
+			
+			return movements;
 		} 
 		catch (SQLException ex)
 		{
@@ -172,7 +215,7 @@ public class MovementsBusiness implements IMovementsBusiness
 	// (Importante usar CHAR(36) en la columna de la DB)
 	// Posible función para vincular 2 movimientos entre sí
 	// Genera una cadena de 36 caracteres (32 más 4 guiones)
-    public static String generateTrxId() {
+    public String generateTrxId() {
         UUID uuid = UUID.randomUUID();
         return uuid.toString();  // Ejemplo: 123e4567-e89b-12d3-a456-426614174000
     }
@@ -187,7 +230,7 @@ public class MovementsBusiness implements IMovementsBusiness
     // debería ser idéntica.
     // Ejemplo de uso:
     // String trxId = generateTransactionId("originAccouontId", "destinationAccountId", "2024-11-30T12:00:00");
-    public static String generateTrxId(String... details) 
+    String generateTrxId(String... details) 
     		throws BusinessException 
     {
         try {
@@ -208,7 +251,7 @@ public class MovementsBusiness implements IMovementsBusiness
     // [EN DESARROLLO]
     // En ambos casos para mostrar el nro de transacción al usuario
     // Deberíamos acortarlo ya que es largo (Pero se guarda el original en DB)
-    public static String getShortTrxId(String fullTransactionId) {
+    public String getShortTrxId(String fullTransactionId) {
         // Devuelve los últimos 10 caracteres
         return fullTransactionId.substring(fullTransactionId.length() - 10);
     }

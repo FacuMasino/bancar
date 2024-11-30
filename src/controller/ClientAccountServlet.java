@@ -203,12 +203,12 @@ public class ClientAccountServlet extends HttpServlet
 			
 			if(movementTypeId == MovementTypeEnum.TRANSFER.getId())
 			{
-				// En desarrollo
+				// TODO: En desarrollo [Facu] hasta resolver lo de las transferencias
 			}
 			
 			if(movementTypeId == MovementTypeEnum.LOAN_PAYMENT.getId())
 			{
-				// En desarrollo
+				// TODO: IDEM
 			}
 			
 			req.setAttribute("isCurrent", false);

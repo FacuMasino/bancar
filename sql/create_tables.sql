@@ -130,6 +130,7 @@ CREATE TABLE
 CREATE TABLE
     Movements (
         MovementId INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+        TransactionId CHAR(36) NOT NULL, -- Siempre va a tener 36 CH de longitud
         MovementDateTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
         Details VARCHAR(500) NOT NULL,
         Amount DECIMAL(15, 2) NOT NULL,

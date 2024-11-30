@@ -25,7 +25,7 @@ public class MovementsDao implements IMovementsDao
 	{
 		try
 		{
-			db.setCallableStatement("{CALL insert_movement(?, ?, ?, ?, ?, ?)}");
+			db.setCallableStatement("{CALL insert_movement(?,?, ?, ?, ?, ?, ?)}");
 			setParameters(movement, accountId);
 			db.getCallableStatement().executeUpdate();
 			return db.getCallableStatement().getInt(1);
@@ -66,6 +66,37 @@ public class MovementsDao implements IMovementsDao
 		return movement;
 	}
 
+	// Para obtener 2 movimientos con el mismo TransactionId (Transferencias)
+	// TODO: No es lo más óptimo, si llegaramos debería haber una tabla de Transferencias 
+	@Override
+	public ArrayList<Movement> list(String transactionId) throws SQLException
+	{
+		ResultSet rs;
+		ArrayList<Movement> movements = new ArrayList<Movement>();
+
+		try
+		{
+			db.setPreparedStatement(
+					"SELECT * FROM Movements where TransactionId = ? ;");
+			db.getPreparedStatement().setString(1, transactionId);
+			rs = db.getPreparedStatement().executeQuery();
+
+			while (rs.next())
+			{
+				Movement movement = new Movement();
+				assignResultSet(movement, rs);
+				movements.add(movement);
+			}
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+			throw ex;
+		}
+
+		return movements;
+	}
+	
 	@Override
 	public ArrayList<Movement> list(int accountId) throws SQLException
 	{
@@ -168,12 +199,13 @@ public class MovementsDao implements IMovementsDao
 	{
 		db.getCallableStatement().registerOutParameter(1,
 				java.sql.Types.INTEGER);
-		db.getCallableStatement().setTimestamp(2,
+		db.getCallableStatement().setString(2, movement.getTransactionId());
+		db.getCallableStatement().setTimestamp(3,
 				Timestamp.valueOf(movement.getDateTime()));
-		db.getCallableStatement().setString(3, movement.getDetails());
-		db.getCallableStatement().setBigDecimal(4, movement.getAmount());
-		db.getCallableStatement().setInt(5, movement.getMovementType().getId());
-		db.getCallableStatement().setInt(6, accountId);
+		db.getCallableStatement().setString(4, movement.getDetails());
+		db.getCallableStatement().setBigDecimal(5, movement.getAmount());
+		db.getCallableStatement().setInt(6, movement.getMovementType().getId());
+		db.getCallableStatement().setInt(7, accountId);
 	}
 
 	private void assignResultSet(Movement movement, ResultSet rs)
@@ -182,6 +214,7 @@ public class MovementsDao implements IMovementsDao
 		try
 		{
 			movement.setId(rs.getInt("MovementId"));
+			movement.setTransactionId(rs.getString("TransactionId"));
 			movement.setDateTime(
 					rs.getTimestamp("MovementDateTime").toLocalDateTime());
 			movement.setDetails(rs.getString("Details"));
