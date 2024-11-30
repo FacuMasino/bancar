@@ -30,12 +30,11 @@ public class MovementsDao implements IMovementsDao
 			db.getCallableStatement().executeUpdate();
 			return db.getCallableStatement().getInt(1);
 		}
-		catch (Exception exception)
+		catch (Exception ex)
 		{
-			exception.printStackTrace();
+			ex.printStackTrace();
+			throw ex;
 		}
-
-		return 0;
 	}
 
 	@Override
@@ -90,12 +89,14 @@ public class MovementsDao implements IMovementsDao
 		catch (Exception ex)
 		{
 			ex.printStackTrace();
+			throw ex;
 		}
 
 		return movements;
 	}
 
-	public ArrayList<Movement> listFilter(int accountId, int movTypeId)
+	@Override
+	public ArrayList<Movement> list(int accountId, int movTypeId)
 			throws SQLException
 	{
 		ResultSet rs;
@@ -104,7 +105,7 @@ public class MovementsDao implements IMovementsDao
 		try
 		{
 			db.setPreparedStatement(
-					"SELECT * FROM Movements WHERE AccountId =? AND MovementTypeId =?;");
+					"SELECT * FROM Movements WHERE AccountId = ? AND MovementTypeId = ?;");
 			db.getPreparedStatement().setInt(1, accountId);
 			db.getPreparedStatement().setInt(2, movTypeId);
 
@@ -119,40 +120,17 @@ public class MovementsDao implements IMovementsDao
 		} catch (Exception ex)
 		{
 			ex.printStackTrace();
+			throw ex;
 		}
 
 		return movements;
 	}
-
-	public ArrayList<Movement> filterByDate(ArrayList<Movement> movements,
-			String filterDate) throws SQLException
-	{
-
-		LocalDate filterDateLocal = LocalDate.parse(filterDate);
-
-		ArrayList<Movement> filteredMovements = new ArrayList<>();
-
-		for (Movement movement : movements)
-		{
-			LocalDateTime dateMovement = movement.getDateTime();
-			LocalDate dateMov = dateMovement.toLocalDate();
-			System.out.println("Fecha extraída: " + dateMov);
-
-			if (dateMov.equals(filterDateLocal))
-			{
-				filteredMovements.add(movement);
-			}
-		}
-
-		return filteredMovements;
-	}
 	
-	public ArrayList<Movement> filterBySearch(int accountId, ArrayList<Movement> movements,
+	public ArrayList<Movement> search(int accountId, ArrayList<Movement> movements,
 			String searchInput) throws SQLException
 	{
 		ResultSet rs;
 	    ArrayList<Movement> searchedMovements = new ArrayList<Movement>();
-
 
 	    try
 		{
@@ -177,6 +155,7 @@ public class MovementsDao implements IMovementsDao
 	    catch (Exception ex)
 		{
 			ex.printStackTrace();
+			throw ex;
 		}
 
 		return searchedMovements;

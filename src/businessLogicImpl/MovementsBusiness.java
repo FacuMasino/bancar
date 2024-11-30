@@ -1,6 +1,8 @@
 package businessLogicImpl;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import businessLogic.IMovementsBusiness;
 import dataAccessImpl.MovementsDao;
@@ -82,13 +84,13 @@ public class MovementsBusiness implements IMovementsBusiness
 		}
 	}
 
-	public ArrayList<Movement> listFilter(int accountId, int movTypeId)
+	@Override
+	public ArrayList<Movement> list(int accountId, int movTypeId)
 			throws BusinessException
 	{
-
 		try
 		{
-			return movementsDao.listFilter(accountId, movTypeId);
+			return movementsDao.list(accountId, movTypeId);
 		} 
 		catch (SQLException ex)
 		{
@@ -102,33 +104,43 @@ public class MovementsBusiness implements IMovementsBusiness
 		}
 	}
 
+	@Override
 	public ArrayList<Movement> filterByDate(ArrayList<Movement> movements,
 			String filterDate) throws BusinessException
 	{
 		try
-		{
-			return movementsDao.filterByDate(movements, filterDate);
+		{		
+			LocalDate filterDateLocal = LocalDate.parse(filterDate);
+			
+			ArrayList<Movement> filteredMovements = new ArrayList<>();
+			
+			for (Movement movement : movements)
+			{
+				
+				LocalDate movementDate = movement.getDateTime().toLocalDate();
+				
+				if (movementDate.equals(filterDateLocal))
+				{
+					filteredMovements.add(movement);
+				}
+			}
+			
+			return filteredMovements;
 		}
-		catch (SQLException ex)
+		catch (DateTimeParseException ex)
 		{
-			throw new SQLOperationException();
-		} 
-		catch (Exception ex)
-		{
-			ex.printStackTrace();
 			throw new BusinessException(
-					"Ocurrió un error desconocido al buscar los movimientos de la fecha consignada.");
+					"El formato de fecha provisto es inválido.");
 		}
 	}
 	
-	
-	public ArrayList<Movement> filterBySearch(int accountId, ArrayList<Movement> movements,
+	@Override
+	public ArrayList<Movement> search(int accountId, ArrayList<Movement> movements,
 			String searchInput) throws BusinessException
 	{
-		
 		try
 		{
-			return movementsDao.filterBySearch(accountId, movements, searchInput);
+			return movementsDao.search(accountId, movements, searchInput);
 		}
 		catch (SQLException ex)
 		{

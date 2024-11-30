@@ -271,7 +271,7 @@ public class AdminAccountsServlet extends HttpServlet
 			Client client = clientsBusiness.read(clientId);
 
 			ArrayList<Account> accountsList = new ArrayList<Account>();
-			accountsList = accountsBusiness.listByIdClient(clientId);
+			accountsList = accountsBusiness.list(clientId);
 
 			List<Loan> loansList = new ArrayList<Loan>();
 
@@ -319,7 +319,7 @@ public class AdminAccountsServlet extends HttpServlet
 
 			if (movementTypeId != null)
 			{
-				movementsList = movementsBusiness.listFilter(accountId,
+				movementsList = movementsBusiness.list(accountId,
 						movementTypeId);
 			}
 
@@ -332,7 +332,7 @@ public class AdminAccountsServlet extends HttpServlet
 			
 			if (searchInput != null) {
 				
-				movementsList = movementsBusiness.filterBySearch(accountId, movementsList, searchInput);
+				movementsList = movementsBusiness.search(accountId, movementsList, searchInput);
 			}
 
 			Client client = getFullClient(clientId);

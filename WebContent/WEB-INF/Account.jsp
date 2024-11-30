@@ -98,7 +98,7 @@
                     </option>
                   </c:when>
                   <c:otherwise>
-                    <option value="" ${empty param.movementTypeId ? 'selected' : ''}>
+                    <option value="0" ${empty param.movementTypeId ? 'selected' : ''}>
                       Seleccione tipo de movimiento
                     </option>
                     <c:forEach var="movementType" items="${movementTypes}">

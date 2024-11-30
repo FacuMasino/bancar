@@ -155,7 +155,7 @@
                   </c:forEach>
                 </c:when>
                 <c:otherwise>
-                  <option value="0" disabled>No se pudieron
+                  <option value="0" selected disabled>No se pudieron
                     obtener los datos</option>
                 </c:otherwise>
               </c:choose>
@@ -171,7 +171,7 @@
                   </c:forEach>
                 </c:when>
                 <c:otherwise>
-                  <option value="0" disabled>No se pudieron
+                  <option value="0" selected disabled>No se pudieron
                     obtener los datos</option>
                 </c:otherwise>
               </c:choose>

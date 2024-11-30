@@ -147,7 +147,7 @@ public class AdminClientsServlet extends HttpServlet
 			client = clientsBusiness.read(clientId);
 
 			ArrayList<Account> accountsList = new ArrayList<Account>();
-			accountsList = accountsBusiness.listByIdClient(clientId);
+			accountsList = accountsBusiness.list(clientId);
 
 			List<Loan> loansList = new ArrayList<Loan>();
 
@@ -400,7 +400,7 @@ public class AdminClientsServlet extends HttpServlet
 			try
 			{
 				accounts = accountsBusiness
-						.listByIdClient(client.getClientId());
+						.list(client.getClientId());
 				client.setAccounts(accounts);
 			}
 			catch (BusinessException ex)

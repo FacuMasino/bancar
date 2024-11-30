@@ -11,19 +11,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import businessLogicImpl.AccountsBusiness;
-import businessLogicImpl.ClientsBusiness;
 import businessLogicImpl.MovementTypesBusiness;
 import businessLogicImpl.MovementsBusiness;
 import domainModel.Account;
 import domainModel.Client;
-import domainModel.LoanStatus;
-import domainModel.LoanType;
 import domainModel.Message.MessageType;
 import domainModel.Movement;
-import domainModel.User;
 import exceptions.BusinessException;
 import utils.Helper;
 import utils.Page;
@@ -83,8 +78,6 @@ public class ClientAccountServlet extends HttpServlet
 		client = (Client)req.getSession().getAttribute("client");
 		
 		Integer movementTypeId = Optional.ofNullable(req.getParameter("movementTypeId"))
-                .map(String::trim)
-                .filter(s -> !s.isEmpty())
                 .map(Integer::parseInt)
                 .orElse(null);
 		
@@ -95,65 +88,54 @@ public class ClientAccountServlet extends HttpServlet
 		String searchInput = Optional
 				.ofNullable(req.getParameter("searchInput"))
 				.map(String::trim).filter(s -> !s.isEmpty()).orElse(null);
-		
-		
 
 		try
 		{
-
 			ArrayList<Account> accounts = new ArrayList<Account>();
-			accounts = accountBusiness.listByIdClient(client.getClientId());
+			accounts = accountBusiness.list(client.getClientId());
 			
 			client.setAccounts(accounts);
 
 			int selectedAccountId;
 
-			if (accounts.isEmpty())
+			if (req.getParameter("selectedAccountId") == null)
 			{
-				System.out.println(
-						"\nEl cliente no tiene cuentas disponibles!!!");
-			} 
+				//fuerzo la seleccion a la primer cuenta disponible, porque si es una sola,no se puede seleccionar
+				selectedAccountId = accounts.get(0).getId();
+			}
 			else
 			{
-				if (req.getParameter("selectedAccountId") == null)
-				{
-					//fuerzo la seleccion a la primer cuenta disponible, porque si es una sola,no se puede seleccionar
-					selectedAccountId = accounts.get(0).getId();
-				}
-				else
-				{
-					selectedAccountId = Integer.parseInt(
-							req.getParameter("selectedAccountId"));
-				}
-				
-				ArrayList<Movement> movementsList = new ArrayList<Movement>();
-				movementsList = movementBusiness.listByIdAccount(selectedAccountId);
-				Collections.sort(movementsList); // Ordena la lista según el método compareTo de la clase Movement
-				
-				if (movementTypeId != null)
-				{
-				    movementsList = movementBusiness.listFilter(selectedAccountId, movementTypeId);
-				} 
-				
-				if (transactionDateStr != null)
-				{
-					movementsList = movementBusiness.filterByDate(movementsList,
-							transactionDateStr);
-				}
-				
-				if (searchInput != null) {
-					
-					movementsList = movementBusiness.filterBySearch(selectedAccountId, movementsList, searchInput);
-				}
-				
-				Page<Movement> movementsPage = getMovementsPage(req,movementsList);
-				
-				Account auxAccount = accountBusiness.read(selectedAccountId);
-
-				req.setAttribute("selectedAccount", auxAccount);
-				req.setAttribute("movementsPage", movementsPage);
-				req.setAttribute("movementTypes", movementTypesBusiness.list());
+				selectedAccountId = Integer.parseInt(
+						req.getParameter("selectedAccountId"));
 			}
+			
+			ArrayList<Movement> movementsList = new ArrayList<Movement>();
+			movementsList = movementBusiness.listByIdAccount(selectedAccountId);
+			Collections.sort(movementsList); // Ordena la lista según el método compareTo de la clase Movement
+			
+			if (movementTypeId != null)
+			{
+			    movementsList = movementBusiness.list(selectedAccountId, movementTypeId);
+			}
+			
+			if (transactionDateStr != null)
+			{
+				movementsList = movementBusiness.filterByDate(movementsList,
+						transactionDateStr);
+			}
+			
+			if (searchInput != null) {
+				
+				movementsList = movementBusiness.search(selectedAccountId, movementsList, searchInput);
+			}
+			
+			Page<Movement> movementsPage = getMovementsPage(req,movementsList);
+			
+			Account auxAccount = accountBusiness.read(selectedAccountId);
+
+			req.setAttribute("selectedAccount", auxAccount);
+			req.setAttribute("movementsPage", movementsPage);
+			req.setAttribute("movementTypes", movementTypesBusiness.list());
 			req.setAttribute("client", client);			
 		} 
 		catch (BusinessException ex)

@@ -136,6 +136,11 @@ public class AccountsBusiness implements IAccountsBusiness
 	{
 		try
 		{
+			ArrayList<Account> accounts = accountsDao.list(clientId);
+			if(accounts.isEmpty())
+			{
+				throw new BusinessException("El cliente no posee cuentas activas");
+			}
 			return accountsDao.list(clientId);
 		}
 		catch (SQLException ex)
@@ -147,13 +152,6 @@ public class AccountsBusiness implements IAccountsBusiness
 			ex.printStackTrace();
 			throw new BusinessException("Ocurrió un error desconocido al leer las cuentas.");
 		}
-	}
-	
-	// TODO: Eliminar este método y reemplazar todos sus llamados por list(int clientId) de los servlets
-	// (Doble click en el nombre del método y click en Open Call Hierarchy para ver llamados)
-	public ArrayList<Account> listByIdClient(int clientId) throws BusinessException
-	{
-		return list(clientId);
 	}
 	
 	public int findId(String cbu)

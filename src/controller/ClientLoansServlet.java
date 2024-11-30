@@ -224,7 +224,8 @@ public class ClientLoansServlet extends HttpServlet {
 			req.setAttribute("historyPage", historyPage);
 			req.setAttribute("approvedLoans", approvedLoans);
 			req.setAttribute("pendingLoans", pendingLoans);
-		} catch (BusinessException ex)
+		} 
+		catch (BusinessException | NumberFormatException ex)
 		{
 			Helper.setReqMessage(req, ex.getMessage(), MessageType.ERROR);
 		}
@@ -233,7 +234,7 @@ public class ClientLoansServlet extends HttpServlet {
 	}
 	
 	private Page<Loan> getLoansHistoryPage(HttpServletRequest req)
-			throws BusinessException
+			throws BusinessException, NumberFormatException
 	{
 		try
 		{
@@ -264,9 +265,15 @@ public class ClientLoansServlet extends HttpServlet {
 			
 			Page<Loan> loansPage = new Page<Loan>(page, pageSize, clientLoans);
 			return loansPage;
-		} catch (BusinessException ex)
+		} 
+		catch (BusinessException ex)
 		{
 			throw ex;
+		}
+		catch (NumberFormatException  ex)
+		{
+			throw new NumberFormatException(
+					"Se han recibido parámetros erróneos.");
 		}
 	}
 	
