@@ -104,7 +104,7 @@
                     <option disabled selected>Error: No hay tipos de cuenta para mostrar</option>
                   </c:when>
                   <c:otherwise>
-                    <option selected disabled >Seleccione una cuenta</option>
+                    <option value="0" selected>Seleccione una cuenta</option>
                     <c:forEach var="accountType" items="${accountTypes}">
                       <option value="${accountType.id}">
                         ${accountType.name}</option>

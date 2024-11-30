@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import businessLogic.IAccountsBusiness;
 import dataAccessImpl.AccountsDao;
 import domainModel.Account;
+import domainModel.Message.MessageType;
 import exceptions.BusinessException;
 import exceptions.SQLOperationException;
+import utils.Helper;
 
 public class AccountsBusiness implements IAccountsBusiness
 {
@@ -21,8 +23,18 @@ public class AccountsBusiness implements IAccountsBusiness
 	@Override
 	public boolean create(Account account) throws BusinessException
 	{
+		ArrayList <Account> accounts = new ArrayList <Account> ();
+		
+		
 		try
 		{
+			accounts = accountsDao.list(account.getClientId());
+			
+			if (accounts.size()==3) 
+			{
+				throw new BusinessException ("El cliente no puede tener más de 3 cuentas activas.");	
+			}
+
 			int newAccountId = accountsDao.getLastId() + 1;
 			account.setCbu(generateCBU(newAccountId));
 
@@ -34,6 +46,11 @@ public class AccountsBusiness implements IAccountsBusiness
 		catch (SQLException ex)
 		{
 			throw new SQLOperationException();
+		}
+		
+		catch (BusinessException ex)
+		{
+			throw ex;
 		}
 		catch (Exception ex)
 		{

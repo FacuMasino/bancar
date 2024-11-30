@@ -106,26 +106,26 @@ public class AdminAccountsServlet extends HttpServlet
 				.map(Integer::parseInt).orElse(0);
 
 		Account account = new Account();
+		String accountTypeId = request.getParameter("accountType");
+		int typeId = Integer.parseInt(accountTypeId);
 
 		try
 		{
-			String accountTypeId = request.getParameter("accountType");
-			int typeId = Integer.parseInt(accountTypeId);
+			if (typeId == 0) 
+			{
+				Helper.setReqMessage(request, 
+						"Debe seleccionar tipo de cuenta a crear", MessageType.ERROR);
+				viewClientAccounts(request, response, clientId);
+				return;
+			}
+			
 			AccountType accountType;
 			accountType = accountTypesBusiness.read(typeId);
-			account.setAccountType(accountType);
-		} 
-		catch (BusinessException e)
-		{
-			e.printStackTrace();
-		}
+			account.setAccountType(accountType);	
+			account.setBalance(new BigDecimal("10000.00"));
+			account.setClientId(clientId);
+			account.setCbu(account.getCbu());
 
-		account.setBalance(new BigDecimal("10000.00"));
-		account.setClientId(clientId);
-		account.setCbu(account.getCbu());
-
-		try
-		{
 			Boolean success = accountsBusiness.create(account);
 			Client client = getFullClient(clientId);
 
@@ -146,13 +146,14 @@ public class AdminAccountsServlet extends HttpServlet
 
 			Helper.redirect("/WEB-INF/AdminClientAccounts.jsp", request,
 					response);
-		}
+			
+		} 
 		catch (BusinessException ex)
 		{
 			Helper.setReqMessage(request, ex.getMessage(), MessageType.ERROR);
-			Helper.redirect("/WEB-INF/AdminClientAccounts.jsp", request,
-					response);
 			ex.printStackTrace();
+			viewClientAccounts(request, response, clientId);
+			return;
 		}
 	}
 
