@@ -79,7 +79,7 @@ public class ClientAccountServlet extends HttpServlet
 		
 		Integer movementTypeId = Optional.ofNullable(req.getParameter("movementTypeId"))
                 .map(Integer::parseInt)
-                .orElse(null);
+                .orElse(0);
 		
 		String transactionDateStr = Optional
 				.ofNullable(req.getParameter("transactionDate"))
@@ -113,7 +113,7 @@ public class ClientAccountServlet extends HttpServlet
 			movementsList = movementBusiness.listByIdAccount(selectedAccountId);
 			Collections.sort(movementsList); // Ordena la lista según el método compareTo de la clase Movement
 			
-			if (movementTypeId != null)
+			if (movementTypeId != 0)
 			{
 			    movementsList = movementBusiness.list(selectedAccountId, movementTypeId);
 			}
