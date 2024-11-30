@@ -19,6 +19,7 @@ import domainModel.Account;
 import domainModel.Client;
 import domainModel.Message.MessageType;
 import domainModel.Movement;
+import domainModel.MovementTypeEnum;
 import exceptions.BusinessException;
 import utils.Helper;
 import utils.Page;
@@ -59,6 +60,9 @@ public class ClientAccountServlet extends HttpServlet
 		case "viewProfile":
 			viewProfile(request, response);
 			break;
+		case "details":
+			showTransactionDetails(request, response);
+			break;
 		default:
 			showMovements(request, response);
 		}
@@ -77,7 +81,7 @@ public class ClientAccountServlet extends HttpServlet
 		Client client = new Client();
 		client = (Client)req.getSession().getAttribute("client");
 		
-		Integer movementTypeId = Optional.ofNullable(req.getParameter("movementTypeId"))
+		int movementTypeId = Optional.ofNullable(req.getParameter("movementTypeId"))
                 .map(Integer::parseInt)
                 .orElse(0);
 		
@@ -177,4 +181,50 @@ public class ClientAccountServlet extends HttpServlet
 		return movmentsPage;
 	}
 
+	private void showTransactionDetails(HttpServletRequest req, HttpServletResponse res)
+		throws ServletException, IOException
+	{
+		Client client = new Client();
+		client = (Client)req.getSession().getAttribute("client");
+		try
+		{
+			int movementId = Optional.ofNullable(req.getParameter("movementId"))
+					.map(Integer::parseInt)
+					.orElse(0);
+			
+			int movementTypeId = Optional.ofNullable(req.getParameter("typeId"))
+					.map(Integer::parseInt)
+					.orElse(0);
+			
+			if(movementId == 0 || movementTypeId == 0)
+			{
+				throw new Exception("Los datos de la transacción son inválidos.");
+			}
+			
+			if(movementTypeId == MovementTypeEnum.TRANSFER.getId())
+			{
+				// En desarrollo
+			}
+			
+			if(movementTypeId == MovementTypeEnum.LOAN_PAYMENT.getId())
+			{
+				// En desarrollo
+			}
+			
+			req.setAttribute("isCurrent", false);
+			req.setAttribute("success", true);
+			req.setAttribute("originClient", client);
+			
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+			Helper.setReqMessage(req, ex.getMessage(), MessageType.ERROR);
+			showMovements(req,res);
+			return;
+		}
+		
+		Helper.redirect("/WEB-INF/TransactionDetails.jsp", req, res);
+	}
+	
 }

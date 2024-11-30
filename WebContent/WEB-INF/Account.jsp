@@ -1,4 +1,5 @@
 <%@page import="domainModel.Client"%>
+<%@page import="domainModel.MovementTypeEnum"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags/"%>
@@ -119,6 +120,7 @@
                 <th>Fecha</th>
                 <th>Descripción</th>
                 <th>Monto</th>
+                <th>Acciones</th>
               </tr>
             </thead>
             <tbody>
@@ -140,6 +142,18 @@
                           class="font-semibold ${movement.amount < 0 ? 'text-red-600':'text-green-600'}">
                           <fmt:formatNumber value="${movement.amount}" type="currency" />
                         </span>
+                      </td>
+                      <td>
+                        <c:set var="movType" value="${movement.movementType.id}" />
+                        <c:choose>
+                          <c:when
+                            test="${movType != MovementTypeEnum.NEW_ACCOUNT.id and movType != MovementTypeEnum.NEW_LOAN.id}">
+                            <i data-lucide="eye"></i>
+                          </c:when>
+                          <c:otherwise>
+                            -
+                          </c:otherwise>
+                        </c:choose>
                       </td>
                     </tr>
                   </c:forEach>
