@@ -85,4 +85,36 @@ public class ReportsDao implements IReportsDao
 		}
 		return amount;
 	}
+
+	@Override
+	public int getOverdueLoansCount() throws SQLException
+	{
+		ResultSet rs;
+		String query = 
+				"SELECT COUNT(DISTINCT LoanId) AS overdueLoansCount "
+				+ "FROM Installments "
+				+ "WHERE PaymentDueDate < CURDATE() "
+				+ "AND MovementId IS NULL";
+		
+		int count = 0;
+		
+		try 
+		{
+			db.setPreparedStatement(query);
+			rs = db.getPreparedStatement().executeQuery();
+			
+			if (!rs.next()) 
+			{
+				return count;
+			}
+			count  = rs.getInt("overdueLoansCount");
+		}
+		catch(SQLException ex)
+		{
+			ex.printStackTrace();
+			throw ex;
+		}
+
+		return count;
+	}
 }

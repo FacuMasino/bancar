@@ -62,8 +62,28 @@ public class ReportsBusiness implements IReportsBusiness
 		{
 			ex.printStackTrace();
 			throw new BusinessException(
-					"Ocurrió un error desconocido la deuda total por préstamos...");
+					"Ocurrió un error desconocido al obtener la deuda total por préstamos...");
 		}
 	}
 
+
+
+	@Override
+	public int getOverdueLoansCount() throws BusinessException
+	{
+		try
+		{
+			return reportsDao.getOverdueLoansCount();
+		} 
+		catch (SQLException ex)
+		{
+			throw new SQLOperationException();
+		} 
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+			throw new BusinessException(
+					"Ocurrió un error desconocido al obtener la cantidad de prestamos con cuotas atrasadas...");
+		}
+	}
 }

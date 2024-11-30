@@ -2,6 +2,7 @@ package controller;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -38,7 +39,8 @@ public class AdminPanelServlet extends HttpServlet {
 	private LoansBusiness loansBusiness;
 	
 	private int clientsQty;
-	private int approvedLoansQty;
+	private int approvedLoansCount;
+	private int overdueLoansCount;
 	private List<Loan> loansList;
 
     public AdminPanelServlet() {
@@ -87,23 +89,57 @@ public class AdminPanelServlet extends HttpServlet {
 			//clientsQty = clientsBusiness.list().size();
 			clientsQty = clientsBusiness.listActiveClients().size();
 			
-			//Muestro Cantidad de prestamos vigentes
-			loansList = loansBusiness.list();
-			LoanStatus loanStatus = new LoanStatus();
-			loanStatus.setId(LoanStatusEnum.APPROVED.getId());
-			approvedLoansQty = loansBusiness.filter(loanStatus, loansList).size();
+			//Muestro Cantidad de prestamos vigentes y vencidas
+			approvedLoansCount = calculateApprovedLoansCount();
+			overdueLoansCount = reportsBusiness.getOverdueLoansCount();
 			
-			//Muestro Deuda total por prestamos
+			//Muestro Deuda total por prestamos y tasa morosidad
 			BigDecimal totalPendingAmount = reportsBusiness.getOutstandingInstallmentsAmount();
+			BigDecimal defaultRate = calculateDefaultRate();
 			
+			//Mapeo
 			request.setAttribute("clientsQty", clientsQty);
-			request.setAttribute("approvedLoansQty", approvedLoansQty);
+			request.setAttribute("approvedLoansCount", approvedLoansCount);
+			request.setAttribute("overdueLoansCount", overdueLoansCount);
 			request.setAttribute("totalPendingAmount", totalPendingAmount);
 			request.setAttribute("totalFunds", totalFunds);
+			request.setAttribute("defaultRate", defaultRate);
 		} 
 		catch (BusinessException e)
 		{
 			e.printStackTrace();
 		}
+	}
+	
+	private int calculateApprovedLoansCount()
+	{
+		int approvedLoansCount = 0; 
+		
+		try
+		{
+			loansList = loansBusiness.list();
+			LoanStatus loanStatus = new LoanStatus();
+			loanStatus.setId(LoanStatusEnum.APPROVED.getId());
+			approvedLoansCount = loansBusiness.filter(loanStatus, loansList).size();
+		} catch (BusinessException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return approvedLoansCount;
+	}
+
+	private BigDecimal calculateDefaultRate() throws BusinessException
+	{
+		BigDecimal overdueLoansCount = new BigDecimal(reportsBusiness.getOverdueLoansCount());
+		BigDecimal approvedLoansCount = new BigDecimal(calculateApprovedLoansCount());
+		
+		System.out.println("overdueLoansCount: " + overdueLoansCount);
+		System.out.println("approvedLoansCount: " + approvedLoansCount);
+		
+		if(approvedLoansCount == BigDecimal.valueOf(0))
+			return new BigDecimal(0);
+		else
+			return  overdueLoansCount.divide(approvedLoansCount, 2, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100));
 	}
 }

@@ -3,9 +3,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <c:set var="clientsQty"  value="${requestScope.clientsQty != null ? requestScope.clientsQty : 0}" />
-<c:set var="approvedLoansQty"  value="${requestScope.approvedLoansQty != null ? requestScope.approvedLoansQty : 0}" />
+<c:set var="approvedLoansCount"  value="${requestScope.approvedLoansCount != null ? requestScope.approvedLoansCount : 0}" />
+<c:set var="overdueLoansCount"  value="${requestScope.overdueLoansCount != null ? requestScope.overdueLoansCount : 0}" />
 <c:set var="totalPendingAmount"  value="${requestScope.totalPendingAmount != null ? requestScope.totalPendingAmount : 0}" />
 <c:set var="totalFunds"  value="${requestScope.totalFunds != null ? requestScope.totalFunds : 0}" />
+<c:set var="defaultRate"  value="${requestScope.defaultRate != null ? requestScope.defaultRate : 0}" />
+
+
 
 <t:masterpage title="Admin - Panel" customNavbar="true">
   <t:adminwrapper activeMenuItem="adminPanelMenu">
@@ -25,7 +29,7 @@
             <p>Préstamos Activos</p>
             <i data-lucide="credit-card"></i>
           </div>
-          <p class="text-red-600 text-xl font-bold">${approvedLoansQty}</p>
+          <p class="text-red-600 text-xl font-bold">${approvedLoansCount}</p>
         </div>
         <div class="bg-white rounded rounded-lg flex flex-col justify-between gap-2.5 px-8 py-6">
           <div class="flex justify-between">
@@ -65,6 +69,16 @@
             <p class="font-semibold">Clientes por provincia</p>
             <div class="flex flex-col items-center">
               <div id="chartDonut"></div>
+            </div>
+          </div>
+        </div>
+        <div class="xl:col-span-5">
+          <div class="bg-white rounded-lg flex flex-col gap-4 p-8">
+            <p class="font-semibold">Tasa de Morosidad : Préstamos con cuotas vencidas / Préstamos vigentes</p>
+            <h3 class="font-semibold">Préstamos con cuotas vencidas: ${overdueLoansCount}</h3>
+            <h3 class="font-semibold">Préstamos vigentes: ${approvedLoansCount}</h3>
+            <div class="flex flex-col items-center">
+              <span class="text-xl font-bold text-red-600">${defaultRate}% </span>
             </div>
           </div>
         </div>
