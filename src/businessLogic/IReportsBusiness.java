@@ -13,4 +13,6 @@ public interface IReportsBusiness
 	public List<Loan> getLoansByDateRange(Date startDate, Date endDate) throws BusinessException;
 	public BigDecimal getOutstandingInstallmentsAmount() throws BusinessException;
 	public int getOverdueLoansCount() throws BusinessException;
+	public BigDecimal profitsEarned() throws BusinessException;
+	public BigDecimal profitsToEarn() throws BusinessException;
 }

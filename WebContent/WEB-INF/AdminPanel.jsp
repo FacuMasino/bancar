@@ -8,8 +8,8 @@
 <c:set var="totalPendingAmount"  value="${requestScope.totalPendingAmount != null ? requestScope.totalPendingAmount : 0}" />
 <c:set var="totalFunds"  value="${requestScope.totalFunds != null ? requestScope.totalFunds : 0}" />
 <c:set var="defaultRate"  value="${requestScope.defaultRate != null ? requestScope.defaultRate : 0}" />
-
-
+<c:set var="profitsEarned"  value="${requestScope.profitsEarned != null ? requestScope.profitsEarned : 0}" />
+<c:set var="profitsToEarn"  value="${requestScope.profitsToEarn != null ? requestScope.profitsToEarn : 0}" />
 
 <t:masterpage title="Admin - Panel" customNavbar="true">
   <t:adminwrapper activeMenuItem="adminPanelMenu">
@@ -80,6 +80,14 @@
             <div class="flex flex-col items-center">
               <span class="text-xl font-bold text-red-600">${defaultRate}% </span>
             </div>
+          </div>
+        </div>
+        <div class="xl:col-span-5">
+          <div class="bg-white rounded-lg flex flex-col gap-4 p-8">
+            <h3 class="text-l font-bold">Beneficios de Préstamos (intereses de cuotas pagadas):</h3> 
+            <h3 class="text-l font-bold text-green-600">$ ${profitsEarned}</h3>
+            <h3 class="text-l font-bold">Beneficio de Préstamos futuro (intereses de cuotas por pagar):</h3> 
+            <h3 class="text-l font-bold text-red-600">$ ${profitsToEarn}</h3>
           </div>
         </div>
       </div>

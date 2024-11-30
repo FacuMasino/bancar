@@ -97,6 +97,12 @@ public class AdminPanelServlet extends HttpServlet {
 			BigDecimal totalPendingAmount = reportsBusiness.getOutstandingInstallmentsAmount();
 			BigDecimal defaultRate = calculateDefaultRate();
 			
+			//Muestro Ganancias obtenidas y ganancias futuras
+			BigDecimal profitsEarned = reportsBusiness.profitsEarned();
+			System.out.println("GANANCIAS: " + profitsEarned);
+			BigDecimal profitsToEarn = reportsBusiness.profitsToEarn();
+			System.out.println("GANANCIAS FUTURAS: " + profitsToEarn);
+			
 			//Mapeo
 			request.setAttribute("clientsQty", clientsQty);
 			request.setAttribute("approvedLoansCount", approvedLoansCount);
@@ -104,6 +110,8 @@ public class AdminPanelServlet extends HttpServlet {
 			request.setAttribute("totalPendingAmount", totalPendingAmount);
 			request.setAttribute("totalFunds", totalFunds);
 			request.setAttribute("defaultRate", defaultRate);
+			request.setAttribute("profitsEarned", profitsEarned);
+			request.setAttribute("profitsToEarn", profitsToEarn);
 		} 
 		catch (BusinessException e)
 		{

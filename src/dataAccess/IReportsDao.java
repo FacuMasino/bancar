@@ -12,4 +12,6 @@ public interface IReportsDao
 	public List<Loan> getLoansByDateRange(Date startDate, Date endDate) throws SQLException;
 	public BigDecimal getOutstandingInstallmentsAmount() throws SQLException;
 	public int getOverdueLoansCount() throws SQLException;
+	public BigDecimal profitsEarned() throws SQLException;
+	public BigDecimal profitsToEarn() throws SQLException;
 }
