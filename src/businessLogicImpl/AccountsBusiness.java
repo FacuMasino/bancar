@@ -134,12 +134,16 @@ public class AccountsBusiness implements IAccountsBusiness
 	@Override
 	public ArrayList<Account> list(int clientId) throws BusinessException
 	{
+		//TODO: revisar este list...que pasa si estoy listando todos las cuentas de todos los clientes?
+		//cuando encuentre un cliente sin cuentas me tira la ex?
+		//TODO: parche: Exception comentada para que funcione el listado de clientes
 		try
 		{
 			ArrayList<Account> accounts = accountsDao.list(clientId);
 			if(accounts.isEmpty())
 			{
-				throw new BusinessException("El cliente no posee cuentas activas");
+				//TODO: seño... Esta EXCEPTION ME ESTA MOLESTANDO....
+				//throw new BusinessException("El cliente no posee cuentas activas");
 			}
 			return accountsDao.list(clientId);
 		}

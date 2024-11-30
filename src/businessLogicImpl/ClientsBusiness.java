@@ -3,6 +3,9 @@ package businessLogicImpl;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
 import businessLogic.IClientsBusiness;
 import dataAccessImpl.ClientsDao;
 import domainModel.Account;
@@ -154,6 +157,25 @@ public class ClientsBusiness implements IClientsBusiness
 			ex.printStackTrace();
 			throw new BusinessException(
 					"Ocurrió un error desconocido al obtener los clientes.");
+		}
+	}
+	
+	public ArrayList<Client> listActiveClients() throws BusinessException 
+	{
+		try
+		{	
+			//aplico filtro de clientes activos a la lista de clientes general.
+			return (ArrayList<Client>) clientsDao.list().stream().filter(client->client.getActiveStatus() == true).collect(Collectors.toList());
+		}
+		catch (SQLException ex)
+		{
+			throw new SQLOperationException();
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+			throw new BusinessException(
+					"Ocurrió un error desconocido al obtener los clientes activos.");
 		}
 	}
 	

@@ -17,10 +17,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import businessLogicImpl.AccountsBusiness;
 import businessLogicImpl.ClientsBusiness;
 import businessLogicImpl.LoansBusiness;
 import businessLogicImpl.ReportsBusiness;
-import dataAccessImpl.ReportsDao;
+import domainModel.Account;
 import domainModel.Loan;
 import domainModel.LoanStatus;
 import domainModel.LoanStatusEnum;
@@ -33,6 +34,7 @@ public class AdminPanelServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private ReportsBusiness reportsBusiness;
 	private ClientsBusiness clientsBusiness;
+	private AccountsBusiness accountsBusiness;
 	private LoansBusiness loansBusiness;
 	
 	private int clientsQty;
@@ -43,6 +45,7 @@ public class AdminPanelServlet extends HttpServlet {
     	
         reportsBusiness = new ReportsBusiness();
         clientsBusiness = new ClientsBusiness();
+        accountsBusiness = new AccountsBusiness();
         loansBusiness = new LoansBusiness();
         loansList = new ArrayList<Loan>();
     }
@@ -77,8 +80,12 @@ public class AdminPanelServlet extends HttpServlet {
 		
 		try
 		{
+			//Muestro fondos totales, suponemos en principio, la suma de todas las cuentas..
+			BigDecimal totalFunds = accountsBusiness.list().stream().map(Account::getBalance).reduce(BigDecimal.ZERO,BigDecimal::add);
+			
 			//Muestro Cantidad de clientes
-			clientsQty = clientsBusiness.list().size();
+			//clientsQty = clientsBusiness.list().size();
+			clientsQty = clientsBusiness.listActiveClients().size();
 			
 			//Muestro Cantidad de prestamos vigentes
 			loansList = loansBusiness.list();
@@ -92,6 +99,7 @@ public class AdminPanelServlet extends HttpServlet {
 			request.setAttribute("clientsQty", clientsQty);
 			request.setAttribute("approvedLoansQty", approvedLoansQty);
 			request.setAttribute("totalPendingAmount", totalPendingAmount);
+			request.setAttribute("totalFunds", totalFunds);
 		} 
 		catch (BusinessException e)
 		{

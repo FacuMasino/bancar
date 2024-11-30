@@ -5,7 +5,7 @@
 <c:set var="clientsQty"  value="${requestScope.clientsQty != null ? requestScope.clientsQty : 0}" />
 <c:set var="approvedLoansQty"  value="${requestScope.approvedLoansQty != null ? requestScope.approvedLoansQty : 0}" />
 <c:set var="totalPendingAmount"  value="${requestScope.totalPendingAmount != null ? requestScope.totalPendingAmount : 0}" />
-
+<c:set var="totalFunds"  value="${requestScope.totalFunds != null ? requestScope.totalFunds : 0}" />
 
 <t:masterpage title="Admin - Panel" customNavbar="true">
   <t:adminwrapper activeMenuItem="adminPanelMenu">
@@ -18,7 +18,7 @@
             <p>Fondos Totales</p>
             <i data-lucide="landmark"></i>
           </div>
-          <p class="text-green-600 text-xl font-bold">$10.950.324,90 (WIP)</p>
+          <p class="text-green-600 text-xl font-bold">$${totalFunds}</p>
         </div>
         <div class="bg-white rounded rounded-lg flex flex-col justify-between gap-2.5 px-8 py-6">
           <div class="flex justify-between">
