@@ -1,9 +1,13 @@
 package businessLogicImpl;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.UUID;
+
 import businessLogic.IMovementsBusiness;
 import dataAccessImpl.MovementsDao;
 import domainModel.Movement;
@@ -163,4 +167,49 @@ public class MovementsBusiness implements IMovementsBusiness
 	{
 		return list(accountId);
 	}
+	
+	// [EN DESARROLLO] Opcion 1
+	// (Importante usar CHAR(36) en la columna de la DB)
+	// Posible función para vincular 2 movimientos entre sí
+	// Genera una cadena de 36 caracteres (32 más 4 guiones)
+    public static String generateTrxId() {
+        UUID uuid = UUID.randomUUID();
+        return uuid.toString();  // Ejemplo: 123e4567-e89b-12d3-a456-426614174000
+    }
+    
+    // [EN DESARROLLO] Opcion 2
+    // (Importante usar CHAR(64) en la columna de DB)
+    // Esta función utiliza el algoritmo SHA-256 para codificar
+    // una salida única en base a cierta entrada.
+    // Esa es la principal diff con la anterior, da la posibilidad
+    // de verificar que un nro de trx pertenezca a una transferencia.
+    // Ya que si se vuelve a generar utilizando los mismos datos, la salida
+    // debería ser idéntica.
+    // Ejemplo de uso:
+    // String trxId = generateTransactionId("originAccouontId", "destinationAccountId", "2024-11-30T12:00:00");
+    public static String generateTrxId(String... details) 
+    		throws BusinessException 
+    {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            String input = String.join("-", details);
+            byte[] hashBytes = digest.digest(input.getBytes());
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hashBytes) {
+                hexString.append(String.format("%02x", b));
+            }
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException ex) {
+        	ex.printStackTrace();
+            throw new BusinessException("Error al generar el número de transacción.");
+        }
+    }
+    
+    // [EN DESARROLLO]
+    // En ambos casos para mostrar el nro de transacción al usuario
+    // Deberíamos acortarlo ya que es largo (Pero se guarda el original en DB)
+    public static String getShortTrxId(String fullTransactionId) {
+        // Devuelve los últimos 10 caracteres
+        return fullTransactionId.substring(fullTransactionId.length() - 10);
+    }
 }
