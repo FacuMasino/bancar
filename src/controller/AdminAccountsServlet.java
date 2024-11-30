@@ -101,7 +101,6 @@ public class AdminAccountsServlet extends HttpServlet
 	private void saveNewAccount(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException
 	{
-
 		int clientId = Optional.ofNullable(request.getParameter("clientId"))
 				.map(Integer::parseInt).orElse(0);
 
@@ -229,6 +228,7 @@ public class AdminAccountsServlet extends HttpServlet
 		catch (BusinessException ex)
 		{
 			Helper.setReqMessage(request, ex.getMessage(), MessageType.ERROR);
+			ex.printStackTrace();
 			request.setAttribute("client", client);
 			Helper.redirect("/WEB-INF/AdminClientAccounts.jsp", request,
 					response);

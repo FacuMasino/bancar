@@ -1,5 +1,6 @@
 package businessLogicImpl;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,11 +20,13 @@ public class ClientsBusiness implements IClientsBusiness
 {
 	private ClientsDao clientsDao;
 	private UsersBusiness usersBusiness;
+	private AccountsBusiness accountsBusiness;
 	
 	public ClientsBusiness()
 	{
 		clientsDao = new ClientsDao();
 		usersBusiness = new UsersBusiness();
+		accountsBusiness = new AccountsBusiness();
 	}
 
 	@Override
@@ -123,15 +126,26 @@ public class ClientsBusiness implements IClientsBusiness
 	}
 
 	@Override
-	public boolean toggleActiveStatus(int clientId, boolean currentActiveStatus) throws BusinessException
+	public boolean toggleActiveStatus(int clientId, boolean currentActiveStatus)
+			throws BusinessException
 	{
 		try
 		{
+			if (currentActiveStatus)
+			{
+				validateAccountsBalance(clientId);		
+			}
+
 			return clientsDao.toggleActiveStatus(clientId, currentActiveStatus);
 		}
 		catch (SQLException ex)
 		{
 			throw new SQLOperationException();
+		}
+		catch (BusinessException ex)
+		{
+			System.err.println("Error al eliminar el cliente: " + ex.getMessage());
+		    throw ex;
 		}
 		catch (Exception ex)
 		{
@@ -139,6 +153,7 @@ public class ClientsBusiness implements IClientsBusiness
 			throw new BusinessException(
 					"Ocurrió un error desconocido al eliminar el cliente.");
 		}
+		
 	}
 
 	@Override
@@ -243,10 +258,39 @@ public class ClientsBusiness implements IClientsBusiness
 		}
 	}
 	
+	private void validateAccountsBalance(int clientId) throws BusinessException
+	{
+		int CountNegativeAccounts = 0;
+		ArrayList<Account> accounts = accountsBusiness.list(clientId);
+
+		for (Account account : accounts)
+		{
+			if (account.getBalance().compareTo(BigDecimal.ZERO) < 0)
+			{
+				CountNegativeAccounts++;
+			}
+		}
+		if (CountNegativeAccounts > 0)
+		{
+			if (CountNegativeAccounts > 1)
+			{
+				throw new BusinessException(
+						"No es posible procesar la baja del cliente. Registra cuentas con deuda.");
+			} 
+			else
+			{
+				throw new BusinessException(
+						"No es posible procesar la baja del cliente. Registra cuenta con deuda.");
+			}
+		}
+
+	}
+	
 	// TODO: Eliminar este método y reemplazar todos sus llamados por cliBiz.read(cliBiz.findClientId(userId))
 	// (Doble click en el nombre del método y click en Open Call Hierarchy para ver llamados)
 	public Client findClientByUserId(int userId) throws BusinessException
 	{
 		return read(findClientId(userId));
 	}
-}
+	
+	}
