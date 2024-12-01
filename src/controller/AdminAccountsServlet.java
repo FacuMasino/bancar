@@ -133,12 +133,7 @@ public class AdminAccountsServlet extends HttpServlet
 				Helper.setReqMessage(request, "Cuenta creada exitosamente.",
 						MessageType.SUCCESS);
 			}
-			else
-			{
-				Helper.setReqMessage(request, "No se pudo crear la cuenta.",
-						MessageType.ERROR);
-			}
-
+		
 			System.out.println("Cuenta creada exitosamente.");
 			request.setAttribute("client", client);
 			request.setAttribute("accountTypes", accountTypesBusiness.list());
