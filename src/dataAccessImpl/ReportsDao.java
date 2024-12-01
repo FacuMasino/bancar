@@ -6,7 +6,9 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import dataAccess.IReportsDao;
 import domainModel.Loan;
@@ -207,6 +209,81 @@ public class ReportsDao implements IReportsDao
 			e.printStackTrace();
 		}
 		return auxProfit;
+	}
+
+	@Override
+	public Map<String, Integer> getClientsByProvince() throws SQLException
+	{
+		Map<String,Integer> clientsByProvince = new HashMap<>();
+		ResultSet rs;
+		String query = 
+				"SELECT p.ProvinceName AS ProvinceName, "
+				+ "COUNT(cl.ClientId) AS ClientCount "
+				+ "FROM Clients cl "
+				+ "INNER JOIN "
+				+ "Addresses a ON cl.AddressId = a.AddressId "
+				+ "INNER JOIN "
+				+ "Cities ci ON a.CityId = ci.CityId "
+				+ "INNER JOIN "
+				+ "Provinces p ON ci.ProvinceId = p.ProvinceId "
+				+ "WHERE cl.ActiveStatus = 1 "
+				+ "GROUP BY "
+				+ "p.ProvinceName "
+				+ "ORDER BY "
+				+ "ClientCount DESC;";
+		
+		try
+		{
+			db.setPreparedStatement(query);
+			rs = db.getPreparedStatement().executeQuery();
+			
+			while (rs.next()) {
+				clientsByProvince.put(rs.getString("ProvinceName"),rs.getInt("ClientCount"));
+			}
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return clientsByProvince;
+	}
+
+	@Override
+	public Map<String, Integer> getLoansAmountPeriod(Date startDate,
+			Date endDate) throws SQLException
+	{
+		//WIP Gonzo
+		Map<String,Integer> loansAmountPeriod = new HashMap<>();
+		ResultSet rs;
+		
+		String query = 
+				"SELECT YEAR(MovementDateTime) AS Year, "
+				+ "MONTH(MovementDateTime) AS Month, "
+				+ "SUM(Amount) AS TotalAmount "
+				+ "FROM "
+				+ "Movements "
+				+ "WHERE "
+				+ "MovementTypeId = 2 "
+				+ "AND MovementDateTime BETWEEN ? AND ? "
+				+ "GROUP BY "
+				+ "YEAR(MovementDateTime), "
+				+ "MONTH(MovementDateTime) "
+				+ "Year, "
+				+ "Month;";
+		try
+		{
+			db.setPreparedStatement(query);
+			rs = db.getPreparedStatement().executeQuery();
+			
+			while (rs.next()) {
+				//clientsByProvince.put(rs.getString("ProvinceName"),rs.getInt("ClientCount"));
+			}
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return loansAmountPeriod;
 	}
 
 }

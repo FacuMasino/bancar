@@ -209,7 +209,8 @@
           <table class="table bg-white w-full">
             <thead>
               <tr>
-                <%--<th class="text-gray-700">ID Prestamo</th>--%>
+                <th class="text-gray-700">ID Prestamo</th>
+                <th class="text-gray-700">Fecha de solicitud</th>
                 <th class="text-gray-700">Tipo</th>
                 <th class="text-gray-700">Monto</th>
                 <%-- <th class="text-gray-700">Cuotas</th>--%>
@@ -222,7 +223,7 @@
             <tbody>
               <%-- If en JSTL --%>
               <c:choose>
-                <c:when test="${empty loansList}">
+                <c:when test="${empty client.loans}">
                   <!-- Mostrar mensaje si no hay prestamos -->
                   <tr>
                     <td colspan="6" class="text-center">No hay préstamos
@@ -233,11 +234,35 @@
                   <c:forEach var="loan" items="${client.loans}"
                     varStatus="status">
                     <tr class="hover">
-                      <%-- <td>${loan.Loanid}</td>--%>
-                      <td>${loan.loanType.loanTypeName}</td>
-                      <td class="text-black-600 font-semibold"><fmt:formatNumber value="${loan.requestedAmount}" type="currency" /></td>
-                      <td
-                        class="flex flex-col items-center w-fit px-2.5 rounded-full border border-yellow-500 text-yellow-500 font-semibold">${loan.loanStatus.loanStatusName}</td>
+                     <td>${loan.loanId}</td>
+                      <td>
+                      <fmt:formatDate type="date" dateStyle="short"
+                        timeStyle="short" value="${loan.creationDate}"/>
+                       </td>
+                      <td>${loan.loanType.name}</td>
+                      <td class="text-black-600 font-semibold"><fmt:formatNumber value="${loan.requestedAmount}" type="currency" /></td>                   
+                     <td> <c:choose>
+                        <c:when test="${loan.loanStatus.id == 1}">
+                          <span
+                            class="flex flex-col items-center w-fit px-2.5 rounded-full border border-yellow-600 text-yellow-700 font-semibold">
+                            En Revisión </span>
+                        </c:when>
+                        <c:when test="${loan.loanStatus.id == 2}">
+                          <span
+                            class="flex flex-col items-center w-fit px-2.5 rounded-full border border-blue-600 text-blue-600 font-semibold">
+                            Vigente </span>
+                        </c:when>
+                        <c:when test="${loan.loanStatus.id == 3}">
+                          <span
+                            class="flex flex-col items-center w-fit px-2.5 rounded-full border border-green-600 text-green-600 font-semibold">
+                            Finalizado </span>
+                        </c:when>
+                        <c:otherwise>
+                          <span
+                            class="flex flex-col items-center w-fit px-2.5 rounded-full border border-red-600 text-red-600 font-semibold">
+                            Rechazado </span>
+                        </c:otherwise>
+                      </c:choose></td>
                     </tr>
                   </c:forEach>
                 </c:otherwise>

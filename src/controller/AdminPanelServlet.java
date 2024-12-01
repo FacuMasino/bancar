@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.sql.Date;
@@ -29,6 +30,9 @@ import domainModel.LoanStatusEnum;
 import domainModel.Message.MessageType;
 import exceptions.BusinessException;
 import utils.Helper;
+import utils.MapCovert;
+
+
 
 @WebServlet(urlPatterns = {"/Admin","/Admin/"})
 public class AdminPanelServlet extends HttpServlet {
@@ -42,6 +46,14 @@ public class AdminPanelServlet extends HttpServlet {
 	private int approvedLoansCount;
 	private int overdueLoansCount;
 	private List<Loan> loansList;
+	private HashMap<String,Integer> clientsByProvince;
+	private BigDecimal totalFunds;
+	private BigDecimal totalPendingAmount;
+	private BigDecimal defaultRate;
+	private BigDecimal profitsEarned;
+	private BigDecimal profitsToEarn;
+	private String provinces;
+	private String provinceClients;
 
     public AdminPanelServlet() {
     	
@@ -50,6 +62,14 @@ public class AdminPanelServlet extends HttpServlet {
         accountsBusiness = new AccountsBusiness();
         loansBusiness = new LoansBusiness();
         loansList = new ArrayList<Loan>();
+        clientsByProvince = new HashMap<>();
+        totalFunds = new BigDecimal(0);
+        totalPendingAmount = new BigDecimal(0);
+        defaultRate = new BigDecimal(0);
+        profitsEarned = new BigDecimal(0);
+        profitsToEarn = new BigDecimal(0);
+        provinces = new String();
+        provinceClients = new String();
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -67,7 +87,7 @@ public class AdminPanelServlet extends HttpServlet {
 		//ArrayList<Loan> listita = (ArrayList<Loan>) reportsBusiness.getLoansByDateRange(startDate, endDate);
 		/////
 		
-		showStaticData(request,response);
+		showStaticData(request);
 		
 		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/AdminPanel.jsp");
 		rd.forward(request, response);
@@ -77,13 +97,13 @@ public class AdminPanelServlet extends HttpServlet {
 		doGet(request, response);
 	}
 	
-	void showStaticData(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	void showStaticData(HttpServletRequest request) throws ServletException, IOException
 	{
 		
 		try
 		{
 			//Muestro fondos totales, suponemos en principio, la suma de todas las cuentas..
-			BigDecimal totalFunds = accountsBusiness.list().stream().map(Account::getBalance).reduce(BigDecimal.ZERO,BigDecimal::add);
+			totalFunds = accountsBusiness.list().stream().map(Account::getBalance).reduce(BigDecimal.ZERO,BigDecimal::add);
 			
 			//Muestro Cantidad de clientes
 			//clientsQty = clientsBusiness.list().size();
@@ -94,24 +114,22 @@ public class AdminPanelServlet extends HttpServlet {
 			overdueLoansCount = reportsBusiness.getOverdueLoansCount();
 			
 			//Muestro Deuda total por prestamos y tasa morosidad
-			BigDecimal totalPendingAmount = reportsBusiness.getOutstandingInstallmentsAmount();
-			BigDecimal defaultRate = calculateDefaultRate();
+			totalPendingAmount = reportsBusiness.getOutstandingInstallmentsAmount();
+			defaultRate = calculateDefaultRate();
 			
 			//Muestro Ganancias obtenidas y ganancias futuras
-			BigDecimal profitsEarned = reportsBusiness.profitsEarned();
-			System.out.println("GANANCIAS: " + profitsEarned);
-			BigDecimal profitsToEarn = reportsBusiness.profitsToEarn();
-			System.out.println("GANANCIAS FUTURAS: " + profitsToEarn);
+			profitsEarned = reportsBusiness.profitsEarned();
+			profitsToEarn = reportsBusiness.profitsToEarn();
 			
-			//Mapeo
-			request.setAttribute("clientsQty", clientsQty);
-			request.setAttribute("approvedLoansCount", approvedLoansCount);
-			request.setAttribute("overdueLoansCount", overdueLoansCount);
-			request.setAttribute("totalPendingAmount", totalPendingAmount);
-			request.setAttribute("totalFunds", totalFunds);
-			request.setAttribute("defaultRate", defaultRate);
-			request.setAttribute("profitsEarned", profitsEarned);
-			request.setAttribute("profitsToEarn", profitsToEarn);
+			//Muestro Clientes por Provincia charDonut
+			clientsByProvince = (HashMap<String, Integer>) reportsBusiness.getClientsByProvince();
+			System.out.println("Clientes por Provincia: " + clientsByProvince.toString());
+			
+			provinces = MapCovert.mapKeysToLiteralString(clientsByProvince);
+			provinceClients = MapCovert.mapValuesToLiteralString(clientsByProvince);	
+			
+			mapData(request);
+			
 		} 
 		catch (BusinessException e)
 		{
@@ -119,6 +137,20 @@ public class AdminPanelServlet extends HttpServlet {
 		}
 	}
 	
+	private void mapData(HttpServletRequest request)
+	{
+		request.setAttribute("clientsQty", clientsQty);
+		request.setAttribute("approvedLoansCount", approvedLoansCount);
+		request.setAttribute("overdueLoansCount", overdueLoansCount);
+		request.setAttribute("totalPendingAmount", totalPendingAmount);
+		request.setAttribute("totalFunds", totalFunds);
+		request.setAttribute("defaultRate", defaultRate);
+		request.setAttribute("profitsEarned", profitsEarned);
+		request.setAttribute("profitsToEarn", profitsToEarn);
+		request.setAttribute("provinces", provinces);
+		request.setAttribute("provinceClients", provinceClients);
+	}
+
 	private int calculateApprovedLoansCount()
 	{
 		int approvedLoansCount = 0; 
@@ -131,19 +163,23 @@ public class AdminPanelServlet extends HttpServlet {
 			approvedLoansCount = loansBusiness.filter(loanStatus, loansList).size();
 		} catch (BusinessException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return approvedLoansCount;
 	}
 
-	private BigDecimal calculateDefaultRate() throws BusinessException
+	private BigDecimal calculateDefaultRate()
 	{
-		BigDecimal overdueLoansCount = new BigDecimal(reportsBusiness.getOverdueLoansCount());
+		BigDecimal overdueLoansCount = new BigDecimal(0);
 		BigDecimal approvedLoansCount = new BigDecimal(calculateApprovedLoansCount());
-		
-		System.out.println("overdueLoansCount: " + overdueLoansCount);
-		System.out.println("approvedLoansCount: " + approvedLoansCount);
+		try
+		{
+			overdueLoansCount = new BigDecimal(reportsBusiness.getOverdueLoansCount());
+		} 
+		catch (BusinessException e)
+		{
+			e.printStackTrace();
+		}
 		
 		if(approvedLoansCount == BigDecimal.valueOf(0))
 			return new BigDecimal(0);

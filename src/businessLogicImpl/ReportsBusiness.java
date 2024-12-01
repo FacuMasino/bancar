@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import businessLogic.IReportsBusiness;
 import dataAccess.IReportsDao;
@@ -105,6 +106,25 @@ public class ReportsBusiness implements IReportsBusiness
 			ex.printStackTrace();
 			throw new BusinessException(
 					"Ocurrió un error desconocido al obtener las ganancias futuras por prestamos...");
+		}
+	}
+
+	@Override
+	public Map<String, Integer> getClientsByProvince() throws BusinessException
+	{
+		try
+		{
+			return reportsDao.getClientsByProvince();
+		} 
+		catch (SQLException e)
+		{
+			throw new SQLOperationException();
+		} 
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+			throw new BusinessException(
+					"Ocurrió un error desconocido al obtener los clientes por provincia");
 		}
 	}
 }
