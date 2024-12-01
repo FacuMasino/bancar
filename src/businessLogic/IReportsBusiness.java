@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import domainModel.Loan;
 import exceptions.BusinessException;
@@ -15,4 +16,5 @@ public interface IReportsBusiness
 	public int getOverdueLoansCount() throws BusinessException;
 	public BigDecimal profitsEarned() throws BusinessException;
 	public BigDecimal profitsToEarn() throws BusinessException;
+	public Map<String,Integer> getClientsByProvince() throws BusinessException;
 }

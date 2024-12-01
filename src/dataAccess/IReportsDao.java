@@ -1,6 +1,7 @@
 package dataAccess;
 
 import java.util.List;
+import java.util.Map;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.SQLException;
@@ -14,4 +15,6 @@ public interface IReportsDao
 	public int getOverdueLoansCount() throws SQLException;
 	public BigDecimal profitsEarned() throws SQLException;
 	public BigDecimal profitsToEarn() throws SQLException;
+	public Map<String,Integer> getClientsByProvince() throws SQLException;
+	public Map<String,Integer> getLoansAmountPeriod(Date startDate, Date endDate) throws SQLException;
 }

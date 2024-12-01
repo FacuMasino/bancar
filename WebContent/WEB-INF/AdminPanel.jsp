@@ -10,6 +10,9 @@
 <c:set var="defaultRate"  value="${requestScope.defaultRate != null ? requestScope.defaultRate : 0}" />
 <c:set var="profitsEarned"  value="${requestScope.profitsEarned != null ? requestScope.profitsEarned : 0}" />
 <c:set var="profitsToEarn"  value="${requestScope.profitsToEarn != null ? requestScope.profitsToEarn : 0}" />
+<c:set var="provinces"  value="${requestScope.provinces != null ? requestScope.provinces : 0}" />
+<c:set var="provinceClients"  value="${requestScope.provinceClients != null ? requestScope.provinceClients : 0}" />
+
 
 <t:masterpage title="Admin - Panel" customNavbar="true">
   <t:adminwrapper activeMenuItem="adminPanelMenu">
@@ -94,12 +97,8 @@
     </div>
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/adminPanel.js"></script>
     <script>
-    	// Cuando reciba los atributos debe quedar así:
-    	// let provinces = ${provinces};
-    	// let provinceClients = ${provinceClients};
-    	
-    	let provinces = ['Córdoba', 'Mendoza', 'Buenos Aires'];
-    	let provinceClients = [25, 30, 50];
+    	 let provinces = ${provinces};
+    	 let provinceClients = ${provinceClients};
     	
     	drawDonutChart("chartDonut", provinceClients, provinces);
     	

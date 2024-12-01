@@ -154,15 +154,6 @@ public class ClientAccountServlet extends HttpServlet
 	private void viewProfile(HttpServletRequest req,
 			HttpServletResponse res) throws ServletException, IOException
 	{
-		/*
-		 * Nota para Gonza:
-		 * No hace falta volver a obtener el cliente, porque si el usuario
-		 * está acá, es porque inició sesión. Y si lo hizo entonces
-		 * el cliente ya está almacenado en la session con el nombre de 
-		 * atributo "client". Siempre va a estar, si no está entonces no
-		 * tiene forma de llegar a esta página porque cerró sesión o nunca la inició
-		 */
-
 		Client auxClient = (Client)req.getSession().getAttribute("client");
 		req.setAttribute("client", auxClient);
 		
