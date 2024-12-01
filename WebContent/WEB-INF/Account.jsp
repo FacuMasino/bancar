@@ -148,7 +148,9 @@
                         <c:choose>
                           <c:when
                             test="${movType != MovementTypeEnum.NEW_ACCOUNT.id and movType != MovementTypeEnum.NEW_LOAN.id}">
-                            <i data-lucide="eye"></i>
+                            <a href="?movementId=${movement.id}&action=details">
+                              <i data-lucide="eye"></i>
+                            </a>
                           </c:when>
                           <c:otherwise>
                             -

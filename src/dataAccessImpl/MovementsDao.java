@@ -4,6 +4,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+
+import dataAccess.IAccountsDao;
 import dataAccess.IMovementsDao;
 import domainModel.Movement;
 import java.time.LocalDate;
@@ -13,20 +15,22 @@ public class MovementsDao implements IMovementsDao
 {
 	private Database db;
 	private MovementTypesDao movementTypesDao;
-
+	private IAccountsDao accountsDao;
+	
 	public MovementsDao()
 	{
 		db = new Database();
 		movementTypesDao = new MovementTypesDao();
+		accountsDao = new AccountsDao();
 	}
 
 	@Override
-	public int create(Movement movement, int accountId) throws SQLException
+	public int create(Movement movement) throws SQLException
 	{
 		try
 		{
 			db.setCallableStatement("{CALL insert_movement(?,?, ?, ?, ?, ?, ?)}");
-			setParameters(movement, accountId);
+			setParameters(movement);
 			db.getCallableStatement().executeUpdate();
 			return db.getCallableStatement().getInt(1);
 		}
@@ -194,7 +198,7 @@ public class MovementsDao implements IMovementsDao
 	
 	
 
-	private void setParameters(Movement movement, int accountId)
+	private void setParameters(Movement movement)
 			throws SQLException
 	{
 		db.getCallableStatement().registerOutParameter(1,
@@ -205,7 +209,7 @@ public class MovementsDao implements IMovementsDao
 		db.getCallableStatement().setString(4, movement.getDetails());
 		db.getCallableStatement().setBigDecimal(5, movement.getAmount());
 		db.getCallableStatement().setInt(6, movement.getMovementType().getId());
-		db.getCallableStatement().setInt(7, accountId);
+		db.getCallableStatement().setInt(7, movement.getAccount().getId());
 	}
 
 	private void assignResultSet(Movement movement, ResultSet rs)
@@ -222,6 +226,9 @@ public class MovementsDao implements IMovementsDao
 
 			int movementTypeId = rs.getInt("MovementTypeId");
 			movement.setMovementType(movementTypesDao.read(movementTypeId));
+			
+			int accountId = rs.getInt("AccountId");
+			movement.setAccount(accountsDao.read(accountId));
 		} 
 		catch (SQLException ex)
 		{

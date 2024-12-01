@@ -24,7 +24,7 @@ public class MovementsBusiness implements IMovementsBusiness
 	}
 
 	@Override
-	public boolean create(Movement movement, int accountId)
+	public boolean create(Movement movement)
 			throws BusinessException
 	{
 		try
@@ -32,12 +32,10 @@ public class MovementsBusiness implements IMovementsBusiness
 			// UUID de transacción
 			movement.setTransactionId(generateTrxId());
 			
-			int newMovementId = movementsDao.create(movement, accountId);
+			int newMovementId = movementsDao.create(movement);
 			if (0 < newMovementId)
 			{
 				movement.setId(newMovementId);
-				movement.setTransactionId(
-						getShortTrxId(movement.getTransactionId()));
 				return true;
 			}
 		}
@@ -60,10 +58,7 @@ public class MovementsBusiness implements IMovementsBusiness
 	{
 		try
 		{
-			Movement movement = movementsDao.read(movementId);
-			movement.setTransactionId(
-					getShortTrxId(movement.getTransactionId()));
-			return movement;
+			return movementsDao.read(movementId);
 		} 
 		catch (SQLException ex)
 		{
@@ -83,11 +78,6 @@ public class MovementsBusiness implements IMovementsBusiness
 		try
 		{
 			ArrayList<Movement> movements = movementsDao.list(accountId);
-			for(Movement mov : movements) // Acortar ID de transacción
-			{
-				mov.setTransactionId(
-						getShortTrxId(mov.getTransactionId()));
-			}
 			
 			return movements;
 		} 
@@ -111,12 +101,6 @@ public class MovementsBusiness implements IMovementsBusiness
 		try
 		{
 			ArrayList<Movement> movements = movementsDao.list(transactionId);
-			for(Movement mov : movements) // Acortar ID de transacción
-			{
-				mov.setTransactionId(
-						getShortTrxId(mov.getTransactionId()));
-			}
-			
 			return movements;
 		} 
 		catch (SQLException ex)
@@ -201,16 +185,6 @@ public class MovementsBusiness implements IMovementsBusiness
 		}
 	}
 
-	// TODO: Eliminar este método y reemplazar todos sus llamados por list(int
-	// accountId) de los servlets
-	// (Doble click en el nombre del método y click en Open Call Hierarchy para
-	// ver llamados)
-	public ArrayList<Movement> listByIdAccount(int accountId)
-			throws BusinessException
-	{
-		return list(accountId);
-	}
-	
 	// [EN DESARROLLO] Opcion 1
 	// (Importante usar CHAR(36) en la columna de la DB)
 	// Posible función para vincular 2 movimientos entre sí

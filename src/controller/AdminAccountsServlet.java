@@ -118,15 +118,17 @@ public class AdminAccountsServlet extends HttpServlet
 				return;
 			}
 			
+			Client client = clientsBusiness.read(clientId);
+			
 			AccountType accountType;
 			accountType = accountTypesBusiness.read(typeId);
 			account.setAccountType(accountType);	
 			account.setBalance(new BigDecimal("10000.00"));
-			account.setClientId(clientId);
+			account.setClient(client);
 			account.setCbu(account.getCbu());
 
 			Boolean success = accountsBusiness.create(account);
-			Client client = getFullClient(clientId);
+			client = getFullClient(clientId);
 
 			if (success)
 			{
@@ -134,7 +136,6 @@ public class AdminAccountsServlet extends HttpServlet
 						MessageType.SUCCESS);
 			}
 		
-			System.out.println("Cuenta creada exitosamente.");
 			request.setAttribute("client", client);
 			request.setAttribute("accountTypes", accountTypesBusiness.list());
 

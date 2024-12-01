@@ -6,7 +6,7 @@ import exceptions.BusinessException;
 
 public interface IMovementsBusiness
 {
-	public boolean create(Movement movement, int accountId) throws BusinessException;
+	public boolean create(Movement movement) throws BusinessException;
 	public Movement read(int movementId) throws BusinessException;
 	public ArrayList<Movement> list(int accountId) throws BusinessException;
 	public ArrayList<Movement> list(int accountId, int movTypeId) throws BusinessException;

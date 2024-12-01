@@ -121,8 +121,9 @@ public class LoansBusiness implements ILoansBusiness
 				movement.setDetails("Acreditación - Préstamo " + loan.getLoanId());
 				movement.setAmount(loan.getRequestedAmount());			
 				movement.setMovementType(movementType);
+				movement.setAccount(loan.getAccount());
 				
-				movementsBusiness.create(movement, loan.getAccount().getId());
+				movementsBusiness.create(movement);
 				
 				// Acreditación de saldo
 				Account creditAccount = loan.getAccount();

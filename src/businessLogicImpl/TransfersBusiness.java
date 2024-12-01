@@ -17,15 +17,12 @@ public class TransfersBusiness implements ITransfersBusiness
 	private TransfersDao transfersDao;
 	private MovementTypesBusiness movementTypesBusiness;
 	private IMovementsBusiness movementsBusiness;
-	private ClientsBusiness clientsBusiness;
 	
 	public TransfersBusiness()
 	{
 		transfersDao = new TransfersDao();
 		movementTypesBusiness = new MovementTypesBusiness();
 		movementsBusiness = new MovementsBusiness();
-		clientsBusiness= new ClientsBusiness();
-		
 	}
 
 	@Override
@@ -39,11 +36,6 @@ public class TransfersBusiness implements ITransfersBusiness
 		{
 			if (0 < transfersDao.create(movement, originAccount.getId(), destinationAccount.getId()))
 			{
-				//Acortar id de transacción
-				String shortTrxId = movementsBusiness
-						.getShortTrxId(movement.getTransactionId());
-				movement.setTransactionId(shortTrxId);
-				
 				return true;
 			}
 		}
@@ -70,9 +62,7 @@ public class TransfersBusiness implements ITransfersBusiness
 			throw new BusinessException("La cuenta de destino no existe.");
 		}
 
-		int destionationClientId= destinationAccount.getClientId();
-		Client destinationClient = new Client();
-		destinationClient = clientsBusiness.read(destionationClientId);
+		Client destinationClient = destinationAccount.getClient();
 		
 		//TODO: Evaluar si inactivamos las cuentas al dar de baja cliente, eso va a cambiar la validacion
 		if (!destinationClient.getActiveStatus() && destinationAccount.getActiveStatus())

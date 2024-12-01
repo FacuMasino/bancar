@@ -46,6 +46,23 @@ public class InstallmentsBusiness implements IInstallmentsBusiness
 	}
 	
 	@Override
+	public Installment read(Movement movement) throws BusinessException
+	{
+		try {
+			return installmentsDao.read(movement);
+		} 
+		catch (SQLException ex)
+		{
+			throw new SQLOperationException();
+		} 
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+			throw new BusinessException("Ocurrió un error desconocido al obtener la cuota.");
+		}
+	}
+	
+	@Override
 	public boolean update(Installment installment) throws BusinessException
 	{
 		try {
@@ -93,10 +110,10 @@ public class InstallmentsBusiness implements IInstallmentsBusiness
 					+ " - Préstamo " + installment.getLoanId());
 			movement.setAmount(installment.getAmount().negate());			
 			movement.setMovementType(movementType);
-
+			movement.setAccount(debitAccount);
 			
 			// El siguiente método asigna el Id por referencia al objeto Movement
-			movementsBusiness.create(movement, debitAccount.getId());
+			movementsBusiness.create(movement);
 			
 			installment.setMovement(movement);
 			

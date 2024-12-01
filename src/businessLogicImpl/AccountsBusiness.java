@@ -28,7 +28,7 @@ public class AccountsBusiness implements IAccountsBusiness
 		
 		try
 		{
-			accounts = accountsDao.list(account.getClientId());
+			accounts = accountsDao.list(account.getClient().getClientId());
 			
 			if (accounts.size()==3) 
 			{

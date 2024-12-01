@@ -12,7 +12,8 @@ public class Movement implements Comparable<Movement>
 	private String details;
 	private BigDecimal amount;
 	private MovementType movementType;
-
+	private Account account;
+	
 	public Movement()
 	{
 		setDateTime(LocalDateTime.now());
@@ -82,6 +83,16 @@ public class Movement implements Comparable<Movement>
 	public void setTransactionId(String transactionId)
 	{
 		this.transactionId = transactionId;
+	}
+
+	public Account getAccount()
+	{
+		return account;
+	}
+
+	public void setAccount(Account account)
+	{
+		this.account = account;
 	}
 
 	@Override

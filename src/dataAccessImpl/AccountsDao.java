@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import dataAccess.IAccountsDao;
+import dataAccess.IClientsDao;
 import domainModel.Account;
 import domainModel.AccountType;
 
@@ -11,11 +12,13 @@ public class AccountsDao implements IAccountsDao
 {
 	private Database db;
 	private AccountTypesDao accountTypesDao;
-
+	private IClientsDao clientsDao;
+	
 	public AccountsDao()
 	{
 		db = new Database();
 		accountTypesDao = new AccountTypesDao();
+		clientsDao = new ClientsDao();
 	}
 
 	@Override
@@ -228,7 +231,7 @@ public class AccountsDao implements IAccountsDao
 	    
 	    if (!isUpdate) // TODO: En realidad, es posible prescindir de este if, pero create() y update() deberían tener clientId como parámetro de entrada.
 	    {
-	    	db.getCallableStatement().setInt(5, account.getClientId());
+	    	db.getCallableStatement().setInt(5, account.getClient().getClientId());
 	    }
 	}
 
@@ -245,7 +248,8 @@ public class AccountsDao implements IAccountsDao
 			int accountTypeId = rs.getInt("AccountTypeId");
 			account.setAccountType(accountTypesDao.read(accountTypeId));
 
-			account.setClientId(rs.getInt("ClientId"));
+			int clientId = rs.getInt("ClientId");
+			account.setClient(clientsDao.read(clientId));
 		}
 		catch (SQLException ex)
 		{
