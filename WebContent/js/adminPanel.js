@@ -20,14 +20,14 @@ const waitForLucideSVGs = async ()=> {
   });
 }
 
-const drawDonutChart = async (divId) => {
+const drawDonutChart = async (divId, clients, provinces) => {
 	var options = {
-	  series: [25, 25, 50],
+	  series: clients,
 	  chart: {
 	  width: 400,
 	  type: 'pie',
 	},
-	labels: ['Córdoba', 'Mendoza', 'Buenos Aires'],
+	labels: provinces,
 	responsive: [{
 	  breakpoint: 480,
 	  options: {
@@ -49,14 +49,14 @@ const drawDonutChart = async (divId) => {
 	chart.render();
 }
 
-const drawBarChart = async (divId) => {
+const drawBarChart = async (divId, loans, transfers, dates) => {
 	var options = {
 	        series: [{
 	        name: 'Prestamos Otorgados',
-	        data: [44, 55, 57, 56, 61, 58, 63, 60, 66]
+	        data: loans
 	      }, {
 	        name: 'Transferencias Realizadas',
-	        data: [76, 85, 101, 98, 87, 105, 91, 114, 94]
+	        data: transfers
 	      }],
 	        chart: {
 	        type: 'bar',
@@ -78,7 +78,7 @@ const drawBarChart = async (divId) => {
 	        colors: ['transparent']
 	      },
 	      xaxis: {
-	        categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct'],
+	        categories: dates
 	      },
 	      yaxis: {
 	        title: {

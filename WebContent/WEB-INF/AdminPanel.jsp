@@ -94,8 +94,30 @@
     </div>
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/adminPanel.js"></script>
     <script>
-      	drawBarChart("chartColumns");
-    	drawDonutChart("chartDonut");
+    	// Cuando reciba los atributos debe quedar así:
+    	// let provinces = ${provinces};
+    	// let provinceClients = ${provinceClients};
+    	
+    	let provinces = ['Córdoba', 'Mendoza', 'Buenos Aires'];
+    	let provinceClients = [25, 30, 50];
+    	
+    	drawDonutChart("chartDonut", provinceClients, provinces);
+    	
+    	// Cuando reciba los atributos debe quedar así:
+    	// let loans = ${chartLoans};
+    	// let transfers = ${chartTransfers};
+    	// let dates = ${chartDates};
+    	
+    	let loans = [44, 55, 57, 56, 61]; // No es cantidad, sino total de dinero
+    	let transfers = [76, 85, 101, 98, 87];
+    	let dates = ['Mar', 'Abr', 'May', 'Jun', 'Ago'];
+    	
+    	// El orden y la cantidad de datos deben coincidir en los 3 arrays
+    	// en dates puede haber nombres de meses o números.
+    	// En el caso de que el usuario seleccione un rango menor a 1 mes por ej
+    	// 20 dias, entonces en dates tendrias ['1', '2', ...] y asi hasta 20 dias.
+    	
+      	drawBarChart("chartColumns", loans, transfers, dates);
     </script>
   </t:adminwrapper>
 </t:masterpage>
