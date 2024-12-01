@@ -144,15 +144,12 @@ public class AdminClientsServlet extends HttpServlet
 
 		try
 		{
-			client = clientsBusiness.read(clientId);
-
 			ArrayList<Account> accountsList = new ArrayList<Account>();
-			accountsList = accountsBusiness.list(clientId);
-
 			List<Loan> loansList = new ArrayList<Loan>();
-
+			
+			client = clientsBusiness.read(clientId);
+			accountsList = accountsBusiness.list(clientId);
 			loansList = loansBusiness.list(client);
-
 			client.setLoans(loansList);
 			client.setAccounts(accountsList);
 
