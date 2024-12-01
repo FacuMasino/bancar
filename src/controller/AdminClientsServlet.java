@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import javax.servlet.ServletException;
@@ -31,6 +32,7 @@ import domainModel.Movement;
 import domainModel.MovementType;
 import exceptions.BusinessException;
 import exceptions.InvalidFieldsException;
+import exceptions.NoActiveAccountsException;
 import utils.Helper;
 import utils.Page;
 
@@ -399,6 +401,11 @@ public class AdminClientsServlet extends HttpServlet
 				accounts = accountsBusiness
 						.list(client.getClientId());
 				client.setAccounts(accounts);
+			}
+			catch (NoActiveAccountsException ex)
+			{
+				client.setAccounts(Collections.emptyList());
+				continue;
 			}
 			catch (BusinessException ex)
 			{

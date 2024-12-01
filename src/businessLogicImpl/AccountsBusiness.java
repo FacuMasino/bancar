@@ -8,6 +8,7 @@ import dataAccessImpl.AccountsDao;
 import domainModel.Account;
 import domainModel.Message.MessageType;
 import exceptions.BusinessException;
+import exceptions.NoActiveAccountsException;
 import exceptions.SQLOperationException;
 import utils.Helper;
 
@@ -154,19 +155,25 @@ public class AccountsBusiness implements IAccountsBusiness
 		//TODO: revisar este list...que pasa si estoy listando todos las cuentas de todos los clientes?
 		//cuando encuentre un cliente sin cuentas me tira la ex?
 		//TODO: parche: Exception comentada para que funcione el listado de clientes
+		// Lo correcto sería que arroje la excepción, Si alguien está llamando a este list para un cliente especifico,
+		// Debe estar activo, y si no está activo entonces no debería estar intentando hacer nada con sus cuentas,
+		// Ya que al darlo de baja tambien deberian haberse dado de baja sus cuentas
 		try
 		{
 			ArrayList<Account> accounts = accountsDao.list(clientId);
 			if(accounts.isEmpty())
 			{
-				//TODO: seño... Esta EXCEPTION ME ESTA MOLESTANDO....
-				//throw new BusinessException("El cliente no posee cuentas activas");
+				throw new NoActiveAccountsException();
 			}
 			return accountsDao.list(clientId);
 		}
 		catch (SQLException ex)
 		{
 			throw new SQLOperationException();
+		}
+		catch (NoActiveAccountsException ex)
+		{
+			throw ex;
 		}
 		catch (Exception ex)
 		{

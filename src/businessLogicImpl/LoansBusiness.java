@@ -118,7 +118,7 @@ public class LoansBusiness implements ILoansBusiness
 				movementType.setId(MovementTypeEnum.NEW_LOAN.getId());
 
 				Movement movement = new Movement();
-				movement.setDetails("Acreditación - Préstamo " + loan.getLoanId());
+				movement.setDetails("Préstamo Nro. " + loan.getLoanId());
 				movement.setAmount(loan.getRequestedAmount());			
 				movement.setMovementType(movementType);
 				movement.setAccount(loan.getAccount());

@@ -57,10 +57,18 @@ public class ClientLoansServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse res)
 			throws ServletException, IOException
 	{
-		
 		String action = req.getParameter("action");
-		getSessionClient(req); // Obtener cliente y sus datos
 		
+		try
+		{
+			getSessionClient(req, res); // Obtener cliente y sus datos
+		} catch (BusinessException ex)
+		{
+			Helper.setReqMessage(req, ex.getMessage(), MessageType.ERROR);
+			Helper.redirect("/WEB-INF/Loans.jsp", req, res);
+			return;
+		}
+
 		if(action == null || action.isEmpty())
 		{
 			viewClientLoans(req, res);
@@ -85,7 +93,16 @@ public class ClientLoansServlet extends HttpServlet {
 			throws ServletException, IOException
 	{
 		String action = req.getParameter("action");
-		getSessionClient(req); // Obtener cliente y sus datos
+		
+		try
+		{
+			getSessionClient(req, res); // Obtener cliente y sus datos
+		} catch (BusinessException ex)
+		{
+			Helper.setReqMessage(req, ex.getMessage(), MessageType.ERROR);
+			Helper.redirect("/WEB-INF/Loans.jsp", req, res);
+			return;
+		}
 		
 		if(action == null || action.isEmpty())
 		{
@@ -381,12 +398,9 @@ public class ClientLoansServlet extends HttpServlet {
 			{
 				Helper.setReqMessage(req, 
 						"Solicitud de aprobación enviada con éxito!", MessageType.SUCCESS);
-			} else
-			{
-				Helper.setReqMessage(req, 
-						"Ocurrió un error al solicitar el préstamo.", MessageType.ERROR);
 			}
 			
+			getSessionClient(req,res); // Actualiza los datos completos del cliente
 		} catch (BusinessException ex)
 		{
 			Helper.setReqMessage(req, ex.getMessage(), MessageType.ERROR);
@@ -397,7 +411,6 @@ public class ClientLoansServlet extends HttpServlet {
 			Helper.setReqMessage(req, "Ocurrió un error desconocido.", MessageType.ERROR);
 		}
 		
-		getSessionClient(req); // Actualiza los datos completos del cliente
 		viewClientLoans(req,res);
 	}
 
@@ -428,7 +441,8 @@ public class ClientLoansServlet extends HttpServlet {
 	 * El cliente se asigna al atributo client en este servlet
 	 * para poder ser accedido desde cualquiera de sus métodos.
 	 */
-	private void getSessionClient(HttpServletRequest req) 
+	private void getSessionClient(HttpServletRequest req, HttpServletResponse res)
+			throws ServletException, IOException, BusinessException 
 	{
 		try
 		{
@@ -451,7 +465,8 @@ public class ClientLoansServlet extends HttpServlet {
 		}
 		catch (BusinessException ex) 
 		{
-			Helper.setReqMessage(req, "Ocurrió un error al obtener los datos del cliente.", MessageType.ERROR);
+			req.setAttribute("client", client);
+			throw ex;
 		}
 	}
 }

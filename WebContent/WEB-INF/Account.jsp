@@ -128,7 +128,7 @@
                 <c:when test="${empty movements}">
                   <!-- Mostrar mensaje si no hay movimientos-->
                   <tr class="hover">
-                    <td class="text-center" colspan="3">No hay movimientos disponibles</td>
+                    <td class="text-center" colspan="4">No hay movimientos disponibles</td>
                   </tr>
                 </c:when>
                 <c:otherwise>
@@ -136,7 +136,7 @@
                     varStatus="status">
                     <tr class="hover">
                       <td>${movement.formattedDateTime}</td>
-                      <td>${movement.details}</td>
+                      <td>${movement.movementType.name} - ${movement.details}</td>
                       <td>
                         <span 
                           class="font-semibold ${movement.amount < 0 ? 'text-red-600':'text-green-600'}">
