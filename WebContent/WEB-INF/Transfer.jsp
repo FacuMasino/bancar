@@ -103,7 +103,8 @@
 
       <div class="flex justify-end p-4 flex gap-3 w-full">
         <a href="Account.jsp" class="btn btn-ghost">Cancelar</a>
-        <button type="submit" class="btn btn-primary" name="action" value="goToConfirmation">
+        <button type="submit" class="btn btn-primary" name="action"
+          value="goToConfirmation" ${empty accounts ? 'disabled':''}>
           Continuar
         </button>
       </div>
