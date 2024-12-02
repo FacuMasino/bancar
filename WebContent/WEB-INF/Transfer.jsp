@@ -82,11 +82,10 @@
               <span class="label-text font-semibold text-lg ">Concepto</span>
             </label>
             <select name="transferType" class="bg-white select text-black select-bordered w-full">
-              <option>Seleccione el motivo</option>
               <option>Alquileres</option>
               <option>Haberes</option>
               <option>Servicios</option>
-              <option>Varios</option>
+              <option selected>Varios</option>
             </select>
           </div>
           <div class="form-control w-full">

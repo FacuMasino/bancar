@@ -222,7 +222,7 @@ public class ClientsBusiness implements IClientsBusiness
 		catch (SQLException ex)
 		{
 			ex.printStackTrace();
-			throw new SQLOperationException();
+			throw new SQLOperationException(ex.getMessage());
 		}
 		catch (Exception ex)
 		{

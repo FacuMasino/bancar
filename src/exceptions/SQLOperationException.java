@@ -11,7 +11,7 @@ public class SQLOperationException extends BusinessException {
 	
 	public SQLOperationException(String message)
 	{
-		super(message);
+		super("Ocurrió un error al realizar la operación en nuestra base de datos. " + message);
 	}
 
 }

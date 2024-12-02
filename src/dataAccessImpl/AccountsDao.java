@@ -56,7 +56,7 @@ public class AccountsDao implements IAccountsDao
 
 			if (!rs.next())
 			{
-				return null;
+				throw new SQLException("No se encontró ninguna cuenta con el ID " + accountId);
 			}
 
 			assignResultSet(account, rs);

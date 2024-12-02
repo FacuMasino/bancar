@@ -72,7 +72,7 @@ public class AccountsBusiness implements IAccountsBusiness
 		}
 		catch (SQLException ex)
 		{
-			throw new SQLOperationException();
+			throw new SQLOperationException(ex.getMessage());
 		}
 		catch (Exception ex)
 		{
@@ -182,18 +182,21 @@ public class AccountsBusiness implements IAccountsBusiness
 		}
 	}
 	
-	public int findId(String cbu)
+	public int findId(String cbu) throws BusinessException
 	{
 		try
 		{
-			return accountsDao.findId(cbu);
+			int accountId = accountsDao.findId(cbu);
+			if (accountId == 0)
+			{
+				throw new BusinessException("El CBU no existe.");
+			}
+			return accountId;
 		}
-		catch (SQLException e)
+		catch (SQLException ex)
 		{
-			e.printStackTrace();
+			throw new SQLOperationException(ex.getMessage());
 		}
-		
-		return 0;
 	}
 
 	/*

@@ -3,6 +3,8 @@ package controller;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Optional;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -34,11 +36,6 @@ public class ClientTransferServlet extends HttpServlet
 	private Account originAccount;
 	private Account destinationAccount;
 	private String action;
-	private String originAccountId;
-	private String destinationAccountCbu;
-	private String transferAmount;
-	private String transferType;
-	private String transferDescription;
     
     public ClientTransferServlet()
     {
@@ -56,12 +53,7 @@ public class ClientTransferServlet extends HttpServlet
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException
 	{
-		action = request.getParameter("action");
-
-		if (action == null || action.isEmpty())
-		{
-			loadTransferPage(request, response);
-		}
+		loadTransferPage(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -72,46 +64,73 @@ public class ClientTransferServlet extends HttpServlet
 		switch (action)
 		{
 			case "goToConfirmation":
-				fetchControls(request, response);
-				mapControls(request, response);
-				
-				if (!validate(request, response))
-				{
-					loadTransferPage(request, response);
-					return;
-				}
-				
-				Helper.redirect("/WEB-INF/TransferConfirmation.jsp", request, response);
-
+				goToConfirmation(request, response);
 				break;
 
 			case "goToDetails":
-				confirmTransfer();
-				mapControls(request, response);
-				Helper.redirect("/WEB-INF/TransactionDetails.jsp", request, response);
+				goToDetails(request, response);
 				break;
 		}
 	}
 	
-	private void loadTransferPage(HttpServletRequest request, HttpServletResponse response)
+	private void goToDetails(HttpServletRequest req, HttpServletResponse res) 
 			throws ServletException, IOException
 	{
-		fetchSessionClient(request, response);
-		bindAccountsDDL(request, response);
-		Helper.redirect("/WEB-INF/Transfer.jsp", request, response);
+		try
+		{
+			success = transfersBusiness.create(movement, originAccount, destinationAccount);
+		} catch (BusinessException ex)
+		{
+			Helper.setReqMessage(req, ex.getMessage(), MessageType.ERROR);
+		}
+		setTransferAttributes(req, res);
+		Helper.redirect("/WEB-INF/TransactionDetails.jsp", req, res);
 	}
 	
-	private void fetchSessionClient(HttpServletRequest request, HttpServletResponse response)
+	private void goToConfirmation(HttpServletRequest req, HttpServletResponse res) 
+			throws ServletException, IOException
 	{
-		HttpSession session = request.getSession(false);
-
-        if (session != null)
-        {
-        	originClient = (Client) session.getAttribute("client");
-        }
+		try
+		{
+			fetchControls(req, res);
+			setTransferAttributes(req, res);
+			
+			if (!validate(req, res))
+			{
+				loadTransferPage(req, res);
+				return;
+			}
+			
+		} catch (BusinessException ex)
+		{
+			Helper.setReqMessage(req, ex.getMessage(), MessageType.ERROR);
+			loadTransferPage(req, res);
+			return;
+		}
+		
+		Helper.redirect("/WEB-INF/TransferConfirmation.jsp", req, res);
 	}
 	
-	private void bindAccountsDDL(HttpServletRequest request, HttpServletResponse response)
+	private void loadTransferPage(HttpServletRequest req, HttpServletResponse res)
+			throws ServletException, IOException
+	{
+		// Si el usuario está en esta página es porque inició sesión
+		// En la session va a estar el atributo client, no hace falta comprobarlo
+		HttpSession session = req.getSession(false);
+		originClient = (Client)session.getAttribute("client");
+		
+		try
+		{
+			bindAccountsDDL(req, res);
+		} catch (BusinessException ex)
+		{
+			Helper.setReqMessage(req, ex.getMessage(), MessageType.ERROR);
+		}
+		Helper.redirect("/WEB-INF/Transfer.jsp", req, res);
+	}
+	
+	private void bindAccountsDDL(HttpServletRequest request, HttpServletResponse response) 
+			throws BusinessException
 	{
 		try
 		{
@@ -120,89 +139,47 @@ public class ClientTransferServlet extends HttpServlet
 			accounts = accountsBusiness.list(originClient.getId());
 			request.setAttribute("accounts", accounts);
 		}
-		catch (BusinessException e)
+		catch (BusinessException ex)
 		{
-			e.printStackTrace();
+			throw ex;
 		}
 	}
 	
-	private void fetchControls(HttpServletRequest request, HttpServletResponse response)
+	private void fetchControls(HttpServletRequest req, HttpServletResponse res) 
+			throws ServletException, IOException, BusinessException
 	{
-		originAccountId = request.getParameter("originAccountId");
-
-		if (originAccountId != null && !originAccountId.isEmpty())
-		{
-			int origAccountId = Integer.parseInt(originAccountId);
-
-			try
-			{
-				originAccount = accountsBusiness.read(origAccountId);
-			}
-			catch (BusinessException e)
-			{
-				e.printStackTrace();
-			}
-		}
+		int originAccountId = Optional.ofNullable(req.getParameter("originAccountId"))
+				.map(Integer::parseInt).orElse(0);
+		String destinationAccountCbu = Optional.ofNullable(req.getParameter("destinationAccountCbu")).orElse("");
+		BigDecimal transferAmount = Optional.ofNullable(req.getParameter("transferAmount"))
+				.map(BigDecimal::new).orElse(BigDecimal.ZERO);
+		String transferDescription = Optional.ofNullable(req.getParameter("transferDescription")).orElse("");
+		String transferType = req.getParameter("transferType");
 		
-		destinationAccountCbu = request.getParameter("destinationAccountCbu");
-		
-		if (destinationAccountCbu != null && !destinationAccountCbu.isEmpty())
+		try
 		{
-			try
-			{
-				int destAccountId = accountsBusiness.findId(destinationAccountCbu);
-				destinationAccount = accountsBusiness.read(destAccountId);
-			}
-			catch (BusinessException e)
-			{
-				e.printStackTrace();
-			}
+			originAccount = accountsBusiness.read(originAccountId);
 			
-			try
-			{
-				int destClientId = clientsBusiness.findClientId(destinationAccount);
-				destinationClient = clientsBusiness.read(destClientId);
-			}
-			catch (BusinessException e)
-			{
-				e.printStackTrace();
-			}
-		}
-
-		movement = new Movement();
-		transferAmount = request.getParameter("transferAmount");
-		
-		if (transferAmount != null && !transferAmount.isEmpty())
-		{
-			try
-			{
-				movement.setAmount(new BigDecimal(transferAmount));
-	        }
-			catch (NumberFormatException e)
-			{
-	            System.out.println("El monto no tiene un formato válido.");
-	        }
-		}
-		
-		transferDescription = request.getParameter("transferDescription");
-		
-		if (transferDescription != null && !transferDescription.isEmpty())
-		{
+			int destAccountId = accountsBusiness.findId(destinationAccountCbu);
+			destinationAccount = accountsBusiness.read(destAccountId);
+			
+			int destClientId = clientsBusiness.findClientId(destinationAccount);
+			destinationClient = clientsBusiness.read(destClientId);
+			
+			movement = new Movement();
+			movement.setAmount(transferAmount);
+			
 			movement.setDetails(transferDescription);
+			
+			movement.setDetails(movement.getDetails() + " (" + transferType + ")");
 		}
-
-		transferType = request.getParameter("transferType");
-		
-		if (transferType != null && !transferType.isEmpty())
+		catch (BusinessException ex)
 		{
-			if (!"Seleccione el motivo".equals(transferType))
-			{				
-				movement.setDetails(movement.getDetails() + " (" + transferType + ")");
-			}
+			throw ex;
 		}
 	}
 	
-	private void mapControls(HttpServletRequest request, HttpServletResponse response)
+	private void setTransferAttributes(HttpServletRequest request, HttpServletResponse response)
 	{
 		request.setAttribute("movement", movement);
 		request.setAttribute("success", success);
@@ -232,17 +209,5 @@ public class ClientTransferServlet extends HttpServlet
 		}
 
 		return true;
-	}
-	
-	private void confirmTransfer()
-	{
-		try
-		{
-			success = transfersBusiness.create(movement, originAccount, destinationAccount);
-		}
-		catch (BusinessException e)
-		{
-			e.printStackTrace();
-		}
 	}
 }
