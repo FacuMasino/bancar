@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+
+import javax.mail.MessagingException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,6 +21,7 @@ import businessLogicImpl.ProvincesBusiness;
 import businessLogicImpl.RolesBusiness;
 import dataAccessImpl.MovementsDao;
 import businessLogicImpl.CountriesBusiness;
+import businessLogicImpl.EmailBusiness;
 import businessLogicImpl.LoansBusiness;
 import domainModel.Account;
 import domainModel.Address;
@@ -47,6 +50,7 @@ public class AdminClientsServlet extends HttpServlet
 	private CountriesBusiness countriesBusiness;
 	private RolesBusiness rolesBusiness;
 	private Client client;
+	private EmailBusiness emailBusiness;
 
 	public AdminClientsServlet()
 	{
@@ -57,6 +61,7 @@ public class AdminClientsServlet extends HttpServlet
 		provincesBusiness = new ProvincesBusiness();
 		countriesBusiness = new CountriesBusiness();
 		rolesBusiness = new RolesBusiness();
+		emailBusiness = new EmailBusiness();
 		client = new Client();
 	}
 
@@ -277,11 +282,16 @@ public class AdminClientsServlet extends HttpServlet
 		try
 		{
 			clientsBusiness.create(client);
-			
+			emailBusiness.sendWelcome(client);
 			Helper.setReqMessage(
 					request, "Cliente creado exitosamente.", MessageType.SUCCESS);
-			
-			System.out.println("Cliente creado exitosamente.");
+			listClients(request, response);
+		}
+		catch (MessagingException ex)
+		{
+			Helper.setReqMessage(request,
+					"El cliente fue creado con éxito pero no pudo enviarse el email de bienvenida",
+					MessageType.SUCCESS);
 			listClients(request, response);
 		}
 		catch (InvalidFieldsException ex)

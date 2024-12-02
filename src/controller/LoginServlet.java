@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import org.eclipse.jdt.internal.compiler.ast.NumberLiteral;
 
 import businessLogicImpl.ClientsBusiness;
+import businessLogicImpl.EmailBusiness;
 import businessLogicImpl.UsersBusiness;
 import domainModel.Client;
 import domainModel.Message;
@@ -39,7 +40,7 @@ public class LoginServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException 
-	{
+	{		
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("user") == null) {
             Helper.redirect("Login.jsp", request, response);
