@@ -14,11 +14,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import businessLogic.IAccountsBusiness;
+import businessLogic.IClientsBusiness;
 import businessLogic.IInstallmentsBusiness;
 import businessLogic.ILoansBusiness;
 import businessLogic.IMovementTypesBusiness;
 import businessLogic.IMovementsBusiness;
 import businessLogicImpl.AccountsBusiness;
+import businessLogicImpl.ClientsBusiness;
 import businessLogicImpl.InstallmentsBusiness;
 import businessLogicImpl.LoansBusiness;
 import businessLogicImpl.MovementTypesBusiness;
@@ -43,6 +45,7 @@ public class ClientAccountServlet extends HttpServlet
 	private IMovementTypesBusiness movementTypesBusiness;
 	private IInstallmentsBusiness installmentsBusiness;
 	private ILoansBusiness loansBusiness;
+	private IClientsBusiness clientsBusiness;
 
 	public ClientAccountServlet()
 	{
@@ -52,6 +55,7 @@ public class ClientAccountServlet extends HttpServlet
 		movementTypesBusiness = new MovementTypesBusiness();
 		installmentsBusiness = new InstallmentsBusiness();
 		loansBusiness = new LoansBusiness();
+		clientsBusiness = new ClientsBusiness();
 	}
 
 	protected void doGet(HttpServletRequest request,
@@ -103,14 +107,15 @@ public class ClientAccountServlet extends HttpServlet
 		String searchInput = Optional
 				.ofNullable(req.getParameter("searchInput"))
 				.map(String::trim).filter(s -> !s.isEmpty()).orElse(null);
-
+		
 		Client client = new Client();
 		
 		try
 		{
-			client = (Client)req.getSession().getAttribute("client");
-			System.out.println(client);
-			
+
+			int clientId = ((Client)req.getSession().getAttribute("client")).getClientId();
+			client = clientsBusiness.read(clientId);
+
 			ArrayList<Account> accounts = new ArrayList<Account>();
 			accounts = accountsBusiness.list(client.getClientId());
 			
@@ -156,12 +161,13 @@ public class ClientAccountServlet extends HttpServlet
 			req.setAttribute("selectedAccount", auxAccount);
 			req.setAttribute("movementsPage", movementsPage);
 			req.setAttribute("movementTypes", movementTypesBusiness.list());
+			req.setAttribute("client", client);
 		} 
 		catch (BusinessException ex)
 		{
 			ex.printStackTrace();
 			Helper.setReqMessage(req, ex.getMessage(), MessageType.ERROR);
-			req.setAttribute("client", client);			
+			req.setAttribute("client", client);
 		}
 
 		Helper.redirect("/WEB-INF/Account.jsp", req, res);

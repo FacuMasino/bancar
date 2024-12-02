@@ -51,7 +51,6 @@ public class AdminFilter implements Filter
 			Helper.redirect("/Login", req, (HttpServletResponse)response);
 			return; // salir de el filtro
 		}
-		request.setAttribute("userName", user.getUsername());
 		// Si pasa la validación, se deja acceder a la ruta /Client
         chain.doFilter(request, response); // Continúa con el siguiente filtro o servlet
     }

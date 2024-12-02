@@ -165,7 +165,7 @@ public class AccountsBusiness implements IAccountsBusiness
 			{
 				throw new NoActiveAccountsException();
 			}
-			return accountsDao.list(clientId);
+			return accounts;
 		}
 		catch (SQLException ex)
 		{

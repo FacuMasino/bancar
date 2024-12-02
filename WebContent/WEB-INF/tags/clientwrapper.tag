@@ -7,7 +7,7 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<c:set var="userName" value="${requestScope.userName}" />
+<c:set var="username" value="${sessionScope.user.username}" />
 <%@attribute name="activeMenuItem" required="true"%>
 
 <div class="drawer lg:drawer-open">
@@ -48,7 +48,7 @@
                   </div>
                   <div class="flex flex-col">
                     <span>Usuario</span>
-                    <span class="font-bold">${userName}</span>
+                    <span class="font-bold">${username}</span>
                   </div>
                 </summary>
                 <ul class="bg-white shadow !mt-5 rounded p-2 w-full">
