@@ -3,6 +3,7 @@ package businessLogicImpl;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -125,6 +126,44 @@ public class ReportsBusiness implements IReportsBusiness
 			ex.printStackTrace();
 			throw new BusinessException(
 					"Ocurrió un error desconocido al obtener los clientes por provincia");
+		}
+	}
+
+	@Override
+	public Map<String, BigDecimal> getLoansAmountByMonthPeriod(LocalDate startDate,LocalDate endDate) throws BusinessException
+	{
+		try
+		{
+			return reportsDao.getLoansAmountByMonthPeriod(startDate, endDate);
+		} 
+		catch (SQLException e)
+		{
+			throw new SQLOperationException();
+		} 
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+			throw new BusinessException(
+					"Ocurrió un error desconocido al obtener los montos de prestamos por periodo(MES)");
+		}
+	}
+
+	@Override
+	public Map<String, BigDecimal> getLoansAmountByDayPeriod(LocalDate startDate, LocalDate endDate) throws BusinessException
+	{
+		try
+		{
+			return reportsDao.getLoansAmountByDayPeriod(startDate, endDate);
+		} 
+		catch (SQLException e)
+		{
+			throw new SQLOperationException();
+		} 
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+			throw new BusinessException(
+					"Ocurrió un error desconocido al obtener los montos de prestamos por periodo(DIA)");
 		}
 	}
 }

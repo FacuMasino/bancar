@@ -5,12 +5,10 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
-import java.sql.Date;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -30,23 +28,22 @@ import domainModel.LoanStatusEnum;
 import domainModel.Message.MessageType;
 import exceptions.BusinessException;
 import utils.Helper;
-import utils.MapCovert;
+import utils.MapTools;
 
-
-
-@WebServlet(urlPatterns = {"/Admin","/Admin/"})
-public class AdminPanelServlet extends HttpServlet {
+@WebServlet(urlPatterns = { "/Admin", "/Admin/" })
+public class AdminPanelServlet extends HttpServlet
+{
 	private static final long serialVersionUID = 1L;
 	private ReportsBusiness reportsBusiness;
 	private ClientsBusiness clientsBusiness;
 	private AccountsBusiness accountsBusiness;
 	private LoansBusiness loansBusiness;
-	
+
 	private int clientsQty;
 	private int approvedLoansCount;
 	private int overdueLoansCount;
 	private List<Loan> loansList;
-	private HashMap<String,Integer> clientsByProvince;
+	private HashMap<String, Integer> clientsByProvince;
 	private BigDecimal totalFunds;
 	private BigDecimal totalPendingAmount;
 	private BigDecimal defaultRate;
@@ -54,38 +51,42 @@ public class AdminPanelServlet extends HttpServlet {
 	private BigDecimal profitsToEarn;
 	private String provinces;
 	private String provinceClients;
+	private LinkedHashMap<String, BigDecimal> loansAmountByPeriod;
+	private String periods;
+	private String loansGivenAmount;
 
-    public AdminPanelServlet() {
-    	
-        reportsBusiness = new ReportsBusiness();
-        clientsBusiness = new ClientsBusiness();
-        accountsBusiness = new AccountsBusiness();
-        loansBusiness = new LoansBusiness();
-        loansList = new ArrayList<Loan>();
-        clientsByProvince = new HashMap<>();
-        totalFunds = new BigDecimal(0);
-        totalPendingAmount = new BigDecimal(0);
-        defaultRate = new BigDecimal(0);
-        profitsEarned = new BigDecimal(0);
-        profitsToEarn = new BigDecimal(0);
-        provinces = new String();
-        provinceClients = new String();
-    }
+	public AdminPanelServlet()
+	{
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		reportsBusiness = new ReportsBusiness();
+		clientsBusiness = new ClientsBusiness();
+		accountsBusiness = new AccountsBusiness();
+		loansBusiness = new LoansBusiness();
+		loansList = new ArrayList<Loan>();
+		clientsByProvince = new HashMap<>();
+		totalFunds = new BigDecimal(0);
+		totalPendingAmount = new BigDecimal(0);
+		defaultRate = new BigDecimal(0);
+		profitsEarned = new BigDecimal(0);
+		profitsToEarn = new BigDecimal(0);
+		provinces = new String();
+		provinceClients = new String();
+		loansAmountByPeriod = new LinkedHashMap<>();
+		periods = new String();
+		loansGivenAmount = new String();
+	}
+
+	protected void doGet(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException
+	{
 		String loginSuccess = Optional.ofNullable(request.getParameter("login"))
 				.orElse("");
-		if(loginSuccess.equals("true"))
+		if (loginSuccess.equals("true"))
 		{
-			Helper.setReqMessage(request, "Iniciaste sesión con éxito!", MessageType.SUCCESS);
+			Helper.setReqMessage(request, "Iniciaste sesión con éxito!",
+					MessageType.SUCCESS);
 		}
 		
-		/////
-		//Pruebita fechas
-		Date startDate = Date.valueOf("2023-01-10");
-		Date endDate = Date.valueOf("2023-01-11");
-		//ArrayList<Loan> listita = (ArrayList<Loan>) reportsBusiness.getLoansByDateRange(startDate, endDate);
-		/////
+		manageBarChart(request);
 		
 		showStaticData(request);
 		
@@ -93,51 +94,95 @@ public class AdminPanelServlet extends HttpServlet {
 		rd.forward(request, response);
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException
+	{
 		doGet(request, response);
 	}
-	
-	void showStaticData(HttpServletRequest request) throws ServletException, IOException
+
+	private void manageBarChart(HttpServletRequest request)
 	{
+		// Gestion fechas del barChart:
+		// Por default levanto como fechas todo el 2024, descarto null y cadena vacia ""
+		String startDate = Optional.ofNullable(request.getParameter("startDate"))
+				.filter(date -> !date.isEmpty()).orElse("2024-01-01");
+		String endDate = Optional.ofNullable(request.getParameter("endDate"))
+				.filter(date -> !date.isEmpty()).orElse("2025-01-01");
+		
+		//Pregunto si las fechas estan alvezre
+		if (!LocalDate.parse(endDate).isAfter(LocalDate.parse(startDate)))
+		{
+			startDate = "2024-01-01";
+			endDate = "2025-01-01";
+			Helper.setReqMessage(request, "La fecha de inicio debe ser anterior...", MessageType.ERROR);
+		}
 		
 		try
 		{
-			//Muestro fondos totales, suponemos en principio, la suma de todas las cuentas..
-			totalFunds = accountsBusiness.list().stream().map(Account::getBalance).reduce(BigDecimal.ZERO,BigDecimal::add);
-			
-			//Muestro Cantidad de clientes
-			//clientsQty = clientsBusiness.list().size();
+			//Pregunto si la fecha de inicio y fin estan dentro del mismo mes...
+			if(LocalDate.parse(startDate).getYear() == LocalDate.parse(endDate).getYear() && LocalDate.parse(startDate).getMonth() == LocalDate.parse(endDate).getMonth())
+			{
+				loansAmountByPeriod = (LinkedHashMap<String, BigDecimal>) reportsBusiness.getLoansAmountByDayPeriod(LocalDate.parse(startDate), LocalDate.parse(endDate));
+			}
+			else
+			{
+				loansAmountByPeriod = (LinkedHashMap<String, BigDecimal>) reportsBusiness.getLoansAmountByMonthPeriod(LocalDate.parse(startDate), LocalDate.parse(endDate));
+			}
+		} 
+		catch (BusinessException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		periods = MapTools.mapKeysToLiteralString(loansAmountByPeriod);
+		loansGivenAmount = MapTools.mapValuesToLiteralString(loansAmountByPeriod);
+
+		// Muestro Flujo de dinero en prestamos otorgados
+		request.setAttribute("periods", periods);
+		request.setAttribute("loansGivenAmount", loansGivenAmount);
+		
+	}
+
+	void showStaticData(HttpServletRequest request)throws ServletException, IOException
+	{
+		try
+		{
+			// Muestro fondos totales, suponemos en principio, la suma de todas
+			// las cuentas..
+			totalFunds = accountsBusiness.list().stream().map(Account::getBalance).reduce(BigDecimal.ZERO, BigDecimal::add);
+
+			// Muestro Cantidad de clientes
+			// clientsQty = clientsBusiness.list().size();
 			clientsQty = clientsBusiness.listActiveClients().size();
-			
-			//Muestro Cantidad de prestamos vigentes y vencidas
+
+			// Muestro Cantidad de prestamos vigentes y vencidas
 			approvedLoansCount = calculateApprovedLoansCount();
 			overdueLoansCount = reportsBusiness.getOverdueLoansCount();
-			
-			//Muestro Deuda total por prestamos y tasa morosidad
+
+			// Muestro Deuda total por prestamos y tasa morosidad
 			totalPendingAmount = reportsBusiness.getOutstandingInstallmentsAmount();
 			defaultRate = calculateDefaultRate();
-			
-			//Muestro Ganancias obtenidas y ganancias futuras
+
+			// Muestro Ganancias obtenidas y ganancias futuras
 			profitsEarned = reportsBusiness.profitsEarned();
 			profitsToEarn = reportsBusiness.profitsToEarn();
-			
-			//Muestro Clientes por Provincia charDonut
+
+			// Muestro Clientes por Provincia charDonut
 			clientsByProvince = (HashMap<String, Integer>) reportsBusiness.getClientsByProvince();
+			provinces = MapTools.mapKeysToLiteralString(clientsByProvince);
+			provinceClients = MapTools.mapValuesToLiteralString(clientsByProvince);
 			System.out.println("Clientes por Provincia: " + clientsByProvince.toString());
-			
-			provinces = MapCovert.mapKeysToLiteralString(clientsByProvince);
-			provinceClients = MapCovert.mapValuesToLiteralString(clientsByProvince);	
-			
-			mapData(request);
-			
-		} 
+
+			mapAllDataToFront(request);
+
+		}
 		catch (BusinessException e)
 		{
 			e.printStackTrace();
 		}
 	}
-	
-	private void mapData(HttpServletRequest request)
+
+	private void mapAllDataToFront(HttpServletRequest request)
 	{
 		request.setAttribute("clientsQty", clientsQty);
 		request.setAttribute("approvedLoansCount", approvedLoansCount);
@@ -151,10 +196,11 @@ public class AdminPanelServlet extends HttpServlet {
 		request.setAttribute("provinceClients", provinceClients);
 	}
 
+	
 	private int calculateApprovedLoansCount()
 	{
-		int approvedLoansCount = 0; 
-		
+		int approvedLoansCount = 0;
+
 		try
 		{
 			loansList = loansBusiness.list();
@@ -168,6 +214,13 @@ public class AdminPanelServlet extends HttpServlet {
 		return approvedLoansCount;
 	}
 
+	
+	/**
+	 * 
+	 * Metodo que calcula la tasa de morosidad segun la formula: (Cantidad
+	 * prestamos con cuotas impagas) / (Cantidad de prestamos aprobados) * 100
+	 */
+
 	private BigDecimal calculateDefaultRate()
 	{
 		BigDecimal overdueLoansCount = new BigDecimal(0);
@@ -175,15 +228,15 @@ public class AdminPanelServlet extends HttpServlet {
 		try
 		{
 			overdueLoansCount = new BigDecimal(reportsBusiness.getOverdueLoansCount());
-		} 
-		catch (BusinessException e)
+		} catch (BusinessException e)
 		{
 			e.printStackTrace();
 		}
-		
-		if(approvedLoansCount == BigDecimal.valueOf(0))
+
+		if (approvedLoansCount == BigDecimal.valueOf(0))
 			return new BigDecimal(0);
 		else
-			return  overdueLoansCount.divide(approvedLoansCount, 2, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100));
+			return overdueLoansCount.divide(approvedLoansCount, 2, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100));
 	}
+
 }

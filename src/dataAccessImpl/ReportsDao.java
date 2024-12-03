@@ -5,13 +5,17 @@ import java.math.RoundingMode;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import dataAccess.IReportsDao;
 import domainModel.Loan;
+import utils.DateRangeFormatter;
+import utils.MapTools;
 
 public class ReportsDao implements IReportsDao
 {
@@ -46,8 +50,6 @@ public class ReportsDao implements IReportsDao
 			ex.printStackTrace();
 			throw ex;
 		}
-		System.out.println("\nDesde el Dao, la startDate es: " + startDate);
-		System.out.println("\nDesde el Dao, la endDate es: " + endDate);
 		return loans;
 	}
 
@@ -121,12 +123,9 @@ public class ReportsDao implements IReportsDao
 		return count;
 	}
 
-	/*
-	 Segun calculo de interes en SP generate_installments,tenemos que:
-	 
-	 interesPorInstallment = (InterestRate/(12*100))*requestedAmount
-	 en base a este interes, calculamos la ganancia obtenida hasta el momento, y lo que queda por ganar...
-	 */
+	/**
+	 * Metodo que calcula los interes ganados por todas las cuotas pagadas.
+	 **/
 	
 	//TODO: Ambas funciones se podrian optimizar en una sola...solo cambia la query y coso
 	
@@ -159,7 +158,10 @@ public class ReportsDao implements IReportsDao
 
 		return profits;
 	}
-
+	
+	/**
+	 * Metodo que calcula los interes por ganar, por las cuotas aun no pagadas.
+	 **/
 	@Override
 	public BigDecimal profitsToEarn() throws SQLException
 	{
@@ -190,6 +192,15 @@ public class ReportsDao implements IReportsDao
 		return profitsToEarn;
 	}
 	
+	/**
+	 * 
+	 * Metodo para calcular la ganancia obtenida o por obtener de un prestamo.Se calcula el interes de la cuota y se multiplica por la cantidad de cuotas.
+	 * -Para el caso de las cuotas pagadas, seran cantidad de cuotas pagadas
+	 * -Para el caso de las cuotas aun no pagadas, seran cantidad de cuotas aun no pagadas.
+	 * 
+	 * interesPorInstallment = (InterestRate/(12*100))*requestedAmount
+	 * 
+	 */
 	private BigDecimal calculateProfit(ResultSet rs)
 	{
 		Loan loan = new Loan();
@@ -211,6 +222,9 @@ public class ReportsDao implements IReportsDao
 		return auxProfit;
 	}
 
+	/**
+	 *	Metodo que devuelve un Map del estilo {Provincia : cantidad_clientes} 
+	 **/
 	@Override
 	public Map<String, Integer> getClientsByProvince() throws SQLException
 	{
@@ -247,43 +261,97 @@ public class ReportsDao implements IReportsDao
 		}
 		return clientsByProvince;
 	}
-
+	/**
+	 *	Metodo que devuelve un Map del estilo {Mes : Monto_otorgado_porPrestamos} 
+	 *IMPORTANTE: suma un dia a la consulta para obtener la fecha endDate inclusive.Because TimeStamp jode con el horario en las query
+	 **/
 	@Override
-	public Map<String, Integer> getLoansAmountPeriod(Date startDate,
-			Date endDate) throws SQLException
+	public Map<String, BigDecimal> getLoansAmountByMonthPeriod(LocalDate startDate,LocalDate endDate) throws SQLException
 	{
-		//WIP Gonzo
-		Map<String,Integer> loansAmountPeriod = new HashMap<>();
+		ArrayList<String> periods = (ArrayList<String>) DateRangeFormatter.generateFormattedMonths(startDate, endDate);
+		
+		//Creo un Map que tiene como keys: periodos entre startDate y endDate. Como values 0.0
+		LinkedHashMap<String,BigDecimal> loansAmountByPeriod = new LinkedHashMap<>();
+		loansAmountByPeriod = (LinkedHashMap<String, BigDecimal>) MapTools.assignKeysFromList(periods, BigDecimal.valueOf(0));
 		ResultSet rs;
 		
 		String query = 
-				"SELECT YEAR(MovementDateTime) AS Year, "
-				+ "MONTH(MovementDateTime) AS Month, "
-				+ "SUM(Amount) AS TotalAmount "
+				"SELECT "
+				+ 	"UPPER(DATE_FORMAT(MovementDateTime, '%b-%y')) AS MonthYear, "
+				+ 	"SUM(Amount) AS TotalAmount "
 				+ "FROM "
-				+ "Movements "
+				+ 	"Movements "
 				+ "WHERE "
-				+ "MovementTypeId = 2 "
-				+ "AND MovementDateTime BETWEEN ? AND ? "
+				+ 	"MovementTypeId = 2 "
+				+ 	"AND MovementDateTime BETWEEN ? AND ? "
 				+ "GROUP BY "
-				+ "YEAR(MovementDateTime), "
-				+ "MONTH(MovementDateTime) "
-				+ "Year, "
-				+ "Month;";
+				+ 	"MonthYear "
+				+ "ORDER BY "
+				+ 	"MonthYear DESC ";
 		try
 		{
 			db.setPreparedStatement(query);
+			db.getPreparedStatement().setString(1, startDate.toString());
+			db.getPreparedStatement().setString(2, endDate.toString());
 			rs = db.getPreparedStatement().executeQuery();
 			
-			while (rs.next()) {
-				//clientsByProvince.put(rs.getString("ProvinceName"),rs.getInt("ClientCount"));
+			while (rs.next()) 
+			{
+				//Si la key ya existe, el metodo PUT actualiza el value.
+				loansAmountByPeriod.put(rs.getString("MonthYear"), rs.getBigDecimal("TotalAmount"));
 			}
 		}
 		catch (SQLException e)
 		{
 			e.printStackTrace();
 		}
-		return loansAmountPeriod;
+		return loansAmountByPeriod;
+	}
+
+	@Override
+	public Map<String, BigDecimal> getLoansAmountByDayPeriod(LocalDate startDate, LocalDate endDate) throws SQLException
+	{
+		// WIP Gonzo
+		ArrayList<String> periods = (ArrayList<String>) DateRangeFormatter.generateFormattedDays(startDate, endDate);
+
+		// Creo un Map que tiene como keys: periodos entre startDate y endDate.
+		// Como values 0.0
+		LinkedHashMap<String, BigDecimal> loansAmountByPeriod = new LinkedHashMap<>();
+		loansAmountByPeriod = (LinkedHashMap<String, BigDecimal>) MapTools
+				.assignKeysFromList(periods, BigDecimal.valueOf(0));
+		ResultSet rs;
+
+		String query = 
+				"SELECT "
+				+ "DATE_FORMAT(MovementDateTime, '%d/%m') AS DayMonth, "
+				+ "SUM(Amount) AS TotalAmount "
+				+ "FROM "
+				+ "Movements "
+				+ "WHERE " 
+				+ "MovementTypeId = 2 "
+				+ "AND MovementDateTime BETWEEN ? AND ? "
+				+ "GROUP BY "
+				+ "DayMonth " 
+				+ "ORDER BY " 
+				+ "STR_TO_DATE(DayMonth, '%d/%m') ASC; ";
+		try
+		{
+			db.setPreparedStatement(query);
+			db.getPreparedStatement().setString(1, startDate.toString());
+			db.getPreparedStatement().setString(2, endDate.toString());
+			rs = db.getPreparedStatement().executeQuery();
+
+			while (rs.next())
+			{
+				// Si la key ya existe, el metodo PUT actualiza el value.
+				loansAmountByPeriod.put(rs.getString("DayMonth"),
+						rs.getBigDecimal("TotalAmount"));
+			}
+		} catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return loansAmountByPeriod;
 	}
 
 }

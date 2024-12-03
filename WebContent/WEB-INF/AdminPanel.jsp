@@ -12,7 +12,8 @@
 <c:set var="profitsToEarn"  value="${requestScope.profitsToEarn != null ? requestScope.profitsToEarn : 0}" />
 <c:set var="provinces"  value="${requestScope.provinces != null ? requestScope.provinces : 0}" />
 <c:set var="provinceClients"  value="${requestScope.provinceClients != null ? requestScope.provinceClients : 0}" />
-
+<c:set var="loansGivenAmount"  value="${requestScope.loansGivenAmount != null ? requestScope.loansGivenAmount : 0}" />
+<c:set var="periods"  value="${requestScope.periods != null ? requestScope.periods : 0}" />
 
 <t:masterpage title="Admin - Panel" customNavbar="true">
   <t:adminwrapper activeMenuItem="adminPanelMenu">
@@ -55,7 +56,7 @@
             <p class="font-semibold">Flujo de dinero</p>
             <div class="flex justify-between">
               <p class="font-semibold">Período</p>
-              <form method="get" action="AdminReportsServlet" class="flex justify-between gap-4">
+              <form method="get" action="Admin" class="flex justify-between gap-4">
                 <div class="flex justify-around gap-4">
                   <input type="date" name="startDate">
                   <input type="date" name="endDate">
@@ -97,26 +98,18 @@
     </div>
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/adminPanel.js"></script>
     <script>
-    	 let provinces = ${provinces};
-    	 let provinceClients = ${provinceClients};
+    	let provinces = ${provinces};
+    	let provinceClients = ${provinceClients};
     	
     	drawDonutChart("chartDonut", provinceClients, provinces);
     	
-    	// Cuando reciba los atributos debe quedar así:
-    	// let loans = ${chartLoans};
+    	let loansGivenAmount = ${loansGivenAmount};
+    	let periods = ${periods};
+    	
     	// let transfers = ${chartTransfers};
-    	// let dates = ${chartDates};
-    	
-    	let loans = [44, 55, 57, 56, 61]; // No es cantidad, sino total de dinero
     	let transfers = [76, 85, 101, 98, 87];
-    	let dates = ['Mar', 'Abr', 'May', 'Jun', 'Ago'];
     	
-    	// El orden y la cantidad de datos deben coincidir en los 3 arrays
-    	// en dates puede haber nombres de meses o números.
-    	// En el caso de que el usuario seleccione un rango menor a 1 mes por ej
-    	// 20 dias, entonces en dates tendrias ['1', '2', ...] y asi hasta 20 dias.
-    	
-      	drawBarChart("chartColumns", loans, transfers, dates);
+      	drawBarChart("chartColumns", loansGivenAmount, transfers, periods);
     </script>
   </t:adminwrapper>
 </t:masterpage>
