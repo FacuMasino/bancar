@@ -54,7 +54,7 @@
                     <fmt:formatNumber value="${loan.requestedAmount}" type="currency" />
                   </p>
                   <p class="text-gray-600">Cuotas pendientes:
-                    ${loan.pendingInstallments.size()}</p>
+                    ${loan.pendingInstallments.size()} de ${loan.installmentsQuantity}</p>
                 </div>
                 <div class="flex flex-col items-end">
                   <p class="text-gray-600 font-medium">

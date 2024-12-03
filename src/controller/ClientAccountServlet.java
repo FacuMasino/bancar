@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -218,8 +219,18 @@ public class ClientAccountServlet extends HttpServlet
 				Movement receiverMovement = transferMovements.stream()
 						.filter(m -> m.getId() != movement.getId()).findFirst()
 						.get();
-				req.setAttribute("destinationAccount", receiverMovement.getAccount());
-				req.setAttribute("destinationClient", receiverMovement.getAccount().getClient());
+				if(movement.getAmount().compareTo(BigDecimal.ZERO) < 0)
+				{
+					req.setAttribute("destinationAccount", receiverMovement.getAccount());
+					req.setAttribute("destinationClient", receiverMovement.getAccount().getClient());
+					req.setAttribute("originAccount", movement.getAccount());
+					req.setAttribute("originClient", client);
+				} else {
+					req.setAttribute("destinationAccount", movement.getAccount());
+					req.setAttribute("destinationClient", client);
+					req.setAttribute("originAccount", receiverMovement.getAccount());
+					req.setAttribute("originClient", receiverMovement.getAccount().getClient());
+				}
 			}
 			
 			if(movement.getMovementType().getId() == MovementTypeEnum.LOAN_PAYMENT.getId())
@@ -228,13 +239,14 @@ public class ClientAccountServlet extends HttpServlet
 				Loan loan = loansBusiness.read(installment.getLoanId());
 				req.setAttribute("installment", installment);
 				req.setAttribute("paidLoan", loan);
+				req.setAttribute("originClient", client);
+				req.setAttribute("originAccount", movement.getAccount());
 			}
 			
-			req.setAttribute("originAccount", movement.getAccount());
 			req.setAttribute("movement", movement);
 			req.setAttribute("isCurrent", false);
 			req.setAttribute("success", true);
-			req.setAttribute("originClient", client);
+			
 		}
 		catch (NoSuchElementException ex)
 		{

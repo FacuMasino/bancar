@@ -173,10 +173,6 @@ public class InstallmentsDao implements IInstallmentsDao
 		
 		try
 		{
-			//TODO: Consultar sobre esta query... devuelve las installments pendientes
-			//pero, no deberia de ser SOLO de los Aprobados? 
-			//no habria que ponerle un INNER JOIN a LoanStatuses pa preguntar por VIGENTE? 
-			//ESTE metodo solo se llama en LoansDao, cuando s asigna el RS en el list de Loans
 			db.setPreparedStatement("SELECT * FROM Installments WHERE loanId = ? AND MovementId IS NULL");
 			db.getPreparedStatement().setInt(1, loanId);
 			rsInstallment = db.getPreparedStatement().executeQuery();
