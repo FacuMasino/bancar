@@ -5,7 +5,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import businessLogic.IAccountsBusiness;
 import dataAccessImpl.AccountsDao;
+import dataAccessImpl.ClientsDao;
+import dataAccessImpl.LoansDao;
 import domainModel.Account;
+import domainModel.Client;
 import domainModel.Message.MessageType;
 import exceptions.BusinessException;
 import exceptions.NoActiveAccountsException;
@@ -15,10 +18,14 @@ import utils.Helper;
 public class AccountsBusiness implements IAccountsBusiness
 {
 	private AccountsDao accountsDao;
+	private LoansDao loansDao;
+	private Client client;
+	private Account account; 
 	
 	public AccountsBusiness()
 	{
 		accountsDao = new AccountsDao();
+		loansDao = new LoansDao();
 	}
 	
 	@Override
@@ -106,22 +113,48 @@ public class AccountsBusiness implements IAccountsBusiness
     {
         try 
         {
-            Account account = accountsDao.read(accountId);
-        
-            if (account.getBalance().compareTo(BigDecimal.ZERO) >= 0)
-            { 
-                return accountsDao.delete(accountId);   
-            }      
-            else
-            {
-                    throw new BusinessException
-                            ( "No se puede eliminar una cuenta con saldo negativo.");
-             }
+            account = accountsDao.read(accountId);
+       		ArrayList <Account> accountsList = new ArrayList <Account>();
+       	    client = account.getClient();
+       		int clientId = client.getId();
+       		accountsList = accountsDao.list (clientId);
+       		
+       		if ( accountsList.size() == 1 && loansDao.currentLoans(client))
+       		{
+       			if (!(account.getBalance().compareTo(BigDecimal.ZERO) >= 0))
+       			{
+       				throw new BusinessException
+                    ( "No se puede dar de baja la cuenta. El cliente registra"
+                    		+ " prestamos vigentes y tiene saldo negativo en su cuenta.");
+       			}
+       			else 
+       			{
+       				throw new BusinessException
+                    ( "No se puede dar de baja la cuenta ya que el cliente registra prestamos vigentes.");
+       			}
+       		}
+       		else 
+       		{
+       			if (account.getBalance().compareTo(BigDecimal.ZERO) >= 0) 
+       			{
+       			 return accountsDao.delete(accountId);   
+                }      
+                else
+                {
+                  throw new BusinessException
+                    ( "No se puede eliminar una cuenta con saldo negativo."); 
+       			}
+       		}
+       			
         }
         catch (SQLException ex)
         {
             throw new SQLOperationException();
         }
+        catch (BusinessException ex)
+		{
+			throw ex;
+		}
         catch (Exception ex)
         {
             ex.printStackTrace();
@@ -213,4 +246,6 @@ public class AccountsBusiness implements IAccountsBusiness
 		
 		return entity + branch + firstDV + accNumber + lastDV;
 	}
+
+
 }

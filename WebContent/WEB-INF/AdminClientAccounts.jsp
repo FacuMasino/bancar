@@ -100,7 +100,7 @@
             <div class="flex items-center justify-end w-full gap-2.5">
               <span>Tipo de cuenta:</span> <select name="accountType" class="select select-bordered bg-white w-1/2 drop-shadow">
                 <c:choose>
-                  <c:when test="${empty accountTypes}">
+                 <c:when test="${empty accountTypes}">
                     <option disabled selected>Error: No hay tipos de cuenta para mostrar</option>
                   </c:when>
                   <c:otherwise>

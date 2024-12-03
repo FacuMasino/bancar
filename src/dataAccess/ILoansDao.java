@@ -13,4 +13,6 @@ public interface ILoansDao
 	public boolean update(Loan loan) throws SQLException;
 	public List<Loan> list() throws SQLException;
 	public List<Loan> list(Client client) throws SQLException;
+	public boolean currentLoans (Client client) throws SQLException;
+	
 }

@@ -186,7 +186,7 @@ public class AdminAccountsServlet extends HttpServlet
 					response);
 		} 
 		catch (BusinessException ex)
-		{
+		{   
 			Helper.setReqMessage(request, ex.getMessage(), MessageType.ERROR);
 			Helper.redirect("/WEB-INF/AdminClientAccounts.jsp", request,
 					response);
@@ -203,17 +203,17 @@ public class AdminAccountsServlet extends HttpServlet
 		Client client = new Client();
 
 		try
-		{
+		{	
 			client = getFullClient(clientId);
 			Boolean success = accountsBusiness.delete(accountId);
-
+		
 			if (success)
 			{
 				Helper.setReqMessage(request, "Cuenta eliminada con éxito!",
 						MessageType.SUCCESS);
 			} 
 			else
-			{
+			{	
 				Helper.setReqMessage(request, "No se pudo eliminar la cuenta",
 						MessageType.ERROR);
 			}
@@ -225,9 +225,7 @@ public class AdminAccountsServlet extends HttpServlet
 		{
 			Helper.setReqMessage(request, ex.getMessage(), MessageType.ERROR);
 			ex.printStackTrace();
-			request.setAttribute("client", client);
-			Helper.redirect("/WEB-INF/AdminClientAccounts.jsp", request,
-					response);
+		    viewClientAccounts (request, response, clientId); 
 		}
 	}
 
@@ -254,10 +252,10 @@ public class AdminAccountsServlet extends HttpServlet
 					response);
 		}
 		catch (BusinessException ex)
-		{
+		{	
 			Helper.setReqMessage(request, ex.getMessage(), MessageType.ERROR);
 			Helper.redirect("/Admin/Clients", request, response);
-
+	
 		}
 	}
 

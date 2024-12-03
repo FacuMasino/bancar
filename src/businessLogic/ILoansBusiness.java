@@ -22,4 +22,6 @@ public interface ILoansBusiness
 	public boolean payLoan(Loan loan, int installmentId, Account debitAccount) throws BusinessException;
 	public List<Loan> filter(LoanStatus loanStatus, List<Loan> list) throws BusinessException;
 	public List<Loan> filter(LoanType loanType, List<Loan> list) throws BusinessException;
+	public boolean currentLoans (Client client) throws BusinessException;
+	
 }

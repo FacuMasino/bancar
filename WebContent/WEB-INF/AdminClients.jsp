@@ -86,7 +86,9 @@
                         <ul tabindex="0" class="dropdown-content menu bg-white rounded-box z-[1] w-52 p-2 border-slate-200 drop-shadow">
                           <li><a href="Clients?clientId=${client.clientId}&action=view">Ver cliente</a></li>
                           <li><a href="Clients?clientId=${client.clientId}&action=edit">Editar cliente</a></li>
+                           <c:if test="${client.activeStatus == true}">
                           <li><a href="Accounts?clientId=${client.clientId}">Gestionar cuentas</a></li>
+                               </c:if>
                         </ul>
                       </div>
                     </td>

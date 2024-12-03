@@ -269,4 +269,22 @@ public class LoansBusiness implements ILoansBusiness
 					"Ocurrió un error desconocido al pagar el préstamo");
 		}
 	}
+	
+	public boolean currentLoans (Client client) throws BusinessException
+	{
+		try
+		{
+			return loansDao.currentLoans(client);
+		}
+		catch (SQLException ex)
+		{
+			throw new SQLOperationException();
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+			throw new BusinessException
+				("Ocurrió un error desconocido al verificar préstamos vigentes o en revisión.");
+		}
+	}
 }

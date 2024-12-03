@@ -211,4 +211,32 @@ public class LoansDao implements ILoansDao
 
 		return auxLoansList;
 	}
+	
+	public boolean currentLoans (Client client)  throws SQLException
+	{	
+		ResultSet rsLoans;
+
+		try
+		{
+			int countLoans = 0; 
+			
+			db.setPreparedStatement("SELECT * FROM Loans WHERE ClientId = ? AND LoanStatusId = 2");
+			db.getPreparedStatement().setInt(1, client.getClientId());
+			rsLoans = db.getPreparedStatement().executeQuery();
+
+			while (rsLoans.next()) 
+			{
+				countLoans ++;
+			}
+			
+			return countLoans > 0;  
+	
+		} 
+		catch (SQLException ex) 
+		{
+			ex.printStackTrace();
+			throw ex;
+		}
+	
+	}
 }
