@@ -122,11 +122,14 @@
 		                Préstamo ${paidLoan.loanId}
 		              </span>
 		              <span>Cuota ${installment.number} de ${paidLoan.installmentsQuantity}</span>
-		              <span>
-                        Prox. Vencimiento
-                        <fmt:formatDate type="date" dateStyle="short" timeStyle="short" 
-                          value="${paidLoan.pendingInstallments[0].paymentDueDate}" /> 
-                      </span>
+                      <%-- Solo mostrar el prox. vencimiento si está viendo el detalle de su operación actual --%>
+                      <c:if test="${isCurrent}">
+  		              <span>
+                          Prox. Vencimiento
+                          <fmt:formatDate type="date" dateStyle="short" timeStyle="short" 
+                            value="${paidLoan.pendingInstallments[0].paymentDueDate}" /> 
+                        </span>
+                      </c:if>
 		            </div>
 		          </div>
 		        </c:when>
