@@ -95,12 +95,8 @@ public class AdminLoansServlet extends HttpServlet
 				.map(Integer::parseInt).orElse(0);
 		try
 		{
-			LoanStatus rejectedStatus = new LoanStatus();
-			rejectedStatus.setId(LoanStatusEnum.REJECTED.getId());
-
 			Loan loanToReject = loansBusiness.read(loanId);
-			loanToReject.setLoanStatus(rejectedStatus);
-			Boolean success = loansBusiness.update(loanToReject);
+			Boolean success = loansBusiness.reject(loanToReject);
 
 			if (success)
 			{

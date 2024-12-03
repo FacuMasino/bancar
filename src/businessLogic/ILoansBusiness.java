@@ -16,6 +16,8 @@ public interface ILoansBusiness
 	public Loan read(int loanId) throws BusinessException;
 	public boolean update(Loan loan) throws BusinessException;
 	public boolean approve(Loan loan) throws BusinessException;
+	public boolean reject(Loan loan) throws BusinessException;
+	public int rejectAll(Client client) throws BusinessException;
 	public List<Loan> list() throws BusinessException;
 	public List<Loan> list(Client client) throws BusinessException;
 	public BigDecimal calcOutstandingBalance(Loan auxLoan);

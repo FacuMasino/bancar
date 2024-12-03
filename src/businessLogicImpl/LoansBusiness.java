@@ -80,9 +80,10 @@ public class LoansBusiness implements ILoansBusiness
 		}
 	}
 
-	// Este método debería utilizarse solo por 2 motivos:
+	// Este método debería utilizarse solo por estos motivos:
 	// - El Admin aprueba el préstamo y deben generarse las cuotas + actualizar estado
 	// - Se cambia el estado a Finalizado porque pagó la última cuota
+	// - El Admin rechaza el préstamo
 	@Override
 	public boolean update(Loan loan) throws BusinessException
 	{
@@ -99,6 +100,46 @@ public class LoansBusiness implements ILoansBusiness
 			ex.printStackTrace();
 			throw new BusinessException
 				("Ocurrió un error desconocido al actualizar el préstamo.");
+		}
+	}
+	
+	@Override
+	public boolean reject(Loan loan) throws BusinessException
+	{
+		LoanStatus rejectedStatus = new LoanStatus();
+		rejectedStatus.setId(LoanStatusEnum.REJECTED.getId());
+		loan.setLoanStatus(rejectedStatus);
+		return update(loan);
+	}
+	
+	@Override
+	public int rejectAll(Client client) throws BusinessException
+	{
+		int rejected = 0;
+		LoanStatus pendingStatus = new LoanStatus();
+		pendingStatus.setId(LoanStatusEnum.PENDING.getId());
+		
+		try
+		{
+			List<Loan> clientLoans = list(client);
+			clientLoans = filter(pendingStatus, clientLoans);
+			if(clientLoans.isEmpty()) return 0;
+			
+			LoanStatus rejectedStatus = new LoanStatus();
+			rejectedStatus.setId(LoanStatusEnum.REJECTED.getId());
+			
+			for(Loan loan : clientLoans)
+			{
+				loan.setLoanStatus(rejectedStatus);
+				update(loan);
+				rejected++;
+			}
+			
+			return rejected;
+		}
+		catch (BusinessException ex)
+		{
+			throw ex;
 		}
 	}
 	

@@ -8,6 +8,7 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import businessLogic.IClientsBusiness;
+import businessLogic.ILoansBusiness;
 import dataAccessImpl.ClientsDao;
 import dataAccessImpl.LoansDao;
 import domainModel.Account;
@@ -22,14 +23,14 @@ public class ClientsBusiness implements IClientsBusiness
 	private ClientsDao clientsDao;
 	private UsersBusiness usersBusiness;
 	private AccountsBusiness accountsBusiness;
-	private LoansDao loansDao; 
+	private ILoansBusiness loansBusiness;
 	
 	public ClientsBusiness()
 	{
 		clientsDao = new ClientsDao();
 		usersBusiness = new UsersBusiness();
 		accountsBusiness = new AccountsBusiness();
-		loansDao = new LoansDao();
+		loansBusiness = new LoansBusiness();
 	}
 
 	@Override
@@ -136,10 +137,13 @@ public class ClientsBusiness implements IClientsBusiness
 		{
 			if (currentActiveStatus)
 			{
-				validationsBeforeDelete(clientId);	
+				validationsBeforeDelete(clientId);
 				
+				// Rechazar todos los préstamos que aún no se aprobaron
+				Client client = read(clientId);
+				loansBusiness.rejectAll(client);
 			}
-
+			
 			return clientsDao.toggleActiveStatus(clientId, currentActiveStatus);
 		}
 		catch (SQLException ex)
@@ -262,6 +266,10 @@ public class ClientsBusiness implements IClientsBusiness
 		}
 	}
 	
+	// TODO: Estas validaciones deberían hacerse individualmente en cada negocio
+	// Cada validación en su negocio correspondiente, ejemplo:
+	// accountsBusiness.delete tendrá sus validaciones y devolverá una excepción
+	// según corresponda. Esto evita validaciones repetidas
 	private void validationsBeforeDelete(int clientId) throws BusinessException
 	{
 		int CountNegativeAccounts = 0;
@@ -292,7 +300,7 @@ public class ClientsBusiness implements IClientsBusiness
 			}
 		}
 		
-		if (loansDao. currentLoans(client))
+		if (loansBusiness.currentLoans(client))
         	{
         		throw new BusinessException
         		( "No es posible procesar la baja del cliente. Tiene prestamos vigentes.");
