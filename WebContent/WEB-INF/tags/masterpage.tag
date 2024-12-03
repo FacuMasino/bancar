@@ -12,7 +12,7 @@
 <c:set var="msgErrorList" value="${requestScope.errorList != null ? requestScope.errorList : emptyList}" />
 
 <!DOCTYPE html>
-<html data-theme="light">
+<html data-theme="light" lang="es-AR">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
 	    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.13/dist/full.min.css" 

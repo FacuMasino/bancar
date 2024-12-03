@@ -24,13 +24,15 @@
           <!-- el min y max habría que establecerlo en la db -->
           <!-- podría venir como un atributo desde el sevlet -->
           <%-- y usariamos min="<%=variableMin%>" --%>
-          <input id="requestedAmountInput" name="requestedAmount" type="range" 
-            min="100000" max="2000000" value="50000" 
+          <input id="requestedAmountRange" name="requestedAmount" type="range" 
+            min="100000" max="2000000" value="100000" 
             oninput="updateValues(this.value, 'requestedAmount', true)" 
             class="range range-primary" />
-          <span class="font-bold text-xl text-center">
-            <span id="requestedAmount">100.000</span>
-          </span>
+          <label class="input input-bordered self-center flex items-center gap-2 max-w-xs">
+            <i data-lucide="circle-dollar-sign"></i> <input id="requestedAmount"
+            type="text" class="text-end w-[5rem]" onchange="updateRangeInput(event)"
+            onblur="formatAmountInput(event)" onfocus="removeDots()" value="100.000">
+          </label>
         </div>
       </div>
       <div class="flex flex-col items-center gap-3 p-6 bg-white rounded-xl drop-shadow">
@@ -43,9 +45,10 @@
           <input id="installmentsInput" name="installmentsQty" type="range" min="1" max="48" value="24" 
             oninput="updateValues(this.value, 'installments', false)"
             class="range range-primary" />
-          <span class="font-bold text-xl text-center">
-            <span id="installments">24</span> Cuotas
-          </span>
+          <label class="self-center flex items-center gap-2 max-w-fit">
+            <input id="installments" type="text" class="text-center bg-white text-lg w-[1.5rem] font-bold" value="24" disabled="">
+            <span class="badge">Cuotas</span>
+          </label>
         </div>
       </div>
       <div class="flex flex-col items-center gap-3 p-6 bg-white rounded-xl drop-shadow">
