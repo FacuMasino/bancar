@@ -166,4 +166,42 @@ public class ReportsBusiness implements IReportsBusiness
 					"Ocurrió un error desconocido al obtener los montos de prestamos por periodo(DIA)");
 		}
 	}
+
+	@Override
+	public Map<String, BigDecimal> getTransfersAmountByMonthPeriod(LocalDate startDate, LocalDate endDate) throws BusinessException
+	{
+		try
+		{
+			return reportsDao.getTransfersAmountByMonthPeriod(startDate, endDate);
+		} 
+		catch (SQLException e)
+		{
+			throw new SQLOperationException();
+		} 
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+			throw new BusinessException(
+					"Ocurrió un error desconocido al obtener los montos de transferencias por periodo(MES)");
+		}
+	}
+
+	@Override
+	public Map<String, BigDecimal> getTransfersAmountByDayPeriod(LocalDate startDate, LocalDate endDate) throws BusinessException
+	{
+		try
+		{
+			return reportsDao.getTransfersAmountByDayPeriod(startDate, endDate);
+		} 
+		catch (SQLException e)
+		{
+			throw new SQLOperationException();
+		} 
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+			throw new BusinessException(
+					"Ocurrió un error desconocido al obtener los montos de transferencias por periodo(DIA)");
+		}
+	}
 }

@@ -52,8 +52,10 @@ public class AdminPanelServlet extends HttpServlet
 	private String provinces;
 	private String provinceClients;
 	private LinkedHashMap<String, BigDecimal> loansAmountByPeriod;
+	private LinkedHashMap<String, BigDecimal> transfersAmountByPeriod;
 	private String periods;
 	private String loansGivenAmount;
+	private String transfersDoneAmount;
 
 	public AdminPanelServlet()
 	{
@@ -72,8 +74,10 @@ public class AdminPanelServlet extends HttpServlet
 		provinces = new String();
 		provinceClients = new String();
 		loansAmountByPeriod = new LinkedHashMap<>();
+		transfersAmountByPeriod = new LinkedHashMap<>();
 		periods = new String();
 		loansGivenAmount = new String();
+		transfersDoneAmount = new String();
 	}
 
 	protected void doGet(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException
@@ -103,10 +107,8 @@ public class AdminPanelServlet extends HttpServlet
 	{
 		// Gestion fechas del barChart:
 		// Por default levanto como fechas todo el 2024, descarto null y cadena vacia ""
-		String startDate = Optional.ofNullable(request.getParameter("startDate"))
-				.filter(date -> !date.isEmpty()).orElse("2024-01-01");
-		String endDate = Optional.ofNullable(request.getParameter("endDate"))
-				.filter(date -> !date.isEmpty()).orElse("2025-01-01");
+		String startDate = Optional.ofNullable(request.getParameter("startDate")).filter(date -> !date.isEmpty()).orElse("2024-01-01");
+		String endDate = Optional.ofNullable(request.getParameter("endDate")).filter(date -> !date.isEmpty()).orElse("2025-01-01");
 		
 		//Pregunto si las fechas estan alvezre
 		if (!LocalDate.parse(endDate).isAfter(LocalDate.parse(startDate)))
@@ -122,10 +124,12 @@ public class AdminPanelServlet extends HttpServlet
 			if(LocalDate.parse(startDate).getYear() == LocalDate.parse(endDate).getYear() && LocalDate.parse(startDate).getMonth() == LocalDate.parse(endDate).getMonth())
 			{
 				loansAmountByPeriod = (LinkedHashMap<String, BigDecimal>) reportsBusiness.getLoansAmountByDayPeriod(LocalDate.parse(startDate), LocalDate.parse(endDate));
+				transfersAmountByPeriod = (LinkedHashMap<String, BigDecimal>) reportsBusiness.getTransfersAmountByDayPeriod(LocalDate.parse(startDate), LocalDate.parse(endDate));
 			}
 			else
 			{
 				loansAmountByPeriod = (LinkedHashMap<String, BigDecimal>) reportsBusiness.getLoansAmountByMonthPeriod(LocalDate.parse(startDate), LocalDate.parse(endDate));
+				transfersAmountByPeriod = (LinkedHashMap<String, BigDecimal>) reportsBusiness.getTransfersAmountByMonthPeriod(LocalDate.parse(startDate), LocalDate.parse(endDate));
 			}
 		} 
 		catch (BusinessException e)
@@ -136,11 +140,12 @@ public class AdminPanelServlet extends HttpServlet
 
 		periods = MapTools.mapKeysToLiteralString(loansAmountByPeriod);
 		loansGivenAmount = MapTools.mapValuesToLiteralString(loansAmountByPeriod);
+		transfersDoneAmount = MapTools.mapValuesToLiteralString(transfersAmountByPeriod);
 
-		// Muestro Flujo de dinero en prestamos otorgados
+		// Muestro Flujo de dinero en prestamos otorgados y en transferencias realizadas
 		request.setAttribute("periods", periods);
 		request.setAttribute("loansGivenAmount", loansGivenAmount);
-		
+		request.setAttribute("transfersDoneAmount", transfersDoneAmount);
 	}
 
 	void showStaticData(HttpServletRequest request)throws ServletException, IOException

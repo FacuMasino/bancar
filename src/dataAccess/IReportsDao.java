@@ -19,4 +19,6 @@ public interface IReportsDao
 	public Map<String,Integer> getClientsByProvince() throws SQLException;
 	public Map<String,BigDecimal> getLoansAmountByMonthPeriod(LocalDate startDate, LocalDate endDate) throws SQLException;
 	public Map<String,BigDecimal> getLoansAmountByDayPeriod(LocalDate startDate, LocalDate endDate) throws SQLException;
+	public Map<String,BigDecimal> getTransfersAmountByMonthPeriod(LocalDate startDate, LocalDate endDate) throws SQLException;
+	public Map<String,BigDecimal> getTransfersAmountByDayPeriod(LocalDate startDate, LocalDate endDate) throws SQLException;
 }

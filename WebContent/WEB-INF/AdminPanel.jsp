@@ -106,8 +106,7 @@
     	let loansGivenAmount = ${loansGivenAmount};
     	let periods = ${periods};
     	
-    	// let transfers = ${chartTransfers};
-    	let transfers = [76, 85, 101, 98, 87];
+    	let transfers = ${transfersDoneAmount};
     	
       	drawBarChart("chartColumns", loansGivenAmount, transfers, periods);
     </script>

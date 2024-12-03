@@ -307,11 +307,10 @@ public class ReportsDao implements IReportsDao
 		}
 		return loansAmountByPeriod;
 	}
-
+	//TODO: estos 4 metodos se pueden optimizar en 2 (quizas 1) ver Gonzoo
 	@Override
 	public Map<String, BigDecimal> getLoansAmountByDayPeriod(LocalDate startDate, LocalDate endDate) throws SQLException
 	{
-		// WIP Gonzo
 		ArrayList<String> periods = (ArrayList<String>) DateRangeFormatter.generateFormattedDays(startDate, endDate);
 
 		// Creo un Map que tiene como keys: periodos entre startDate y endDate.
@@ -352,6 +351,94 @@ public class ReportsDao implements IReportsDao
 			e.printStackTrace();
 		}
 		return loansAmountByPeriod;
+	}
+
+	@Override
+	public Map<String, BigDecimal> getTransfersAmountByMonthPeriod(LocalDate startDate, LocalDate endDate) throws SQLException
+	{
+		ArrayList<String> periods = (ArrayList<String>) DateRangeFormatter.generateFormattedMonths(startDate, endDate);
+		
+		//Creo un Map que tiene como keys: periodos entre startDate y endDate. Como values 0.0
+		LinkedHashMap<String,BigDecimal> transfersAmountByPeriod = new LinkedHashMap<>();
+		transfersAmountByPeriod = (LinkedHashMap<String, BigDecimal>) MapTools.assignKeysFromList(periods, BigDecimal.valueOf(0));
+		ResultSet rs;
+		
+		String query = 
+				"SELECT "
+				+ 	"UPPER(DATE_FORMAT(MovementDateTime, '%b-%y')) AS MonthYear, "
+				+ 	"SUM(Amount) AS TotalAmount "
+				+ "FROM "
+				+ 	"Movements "
+				+ "WHERE "
+				+ 	"MovementTypeId = 4 "
+				+ 	" AND Amount > 0 "
+				+ 	"AND MovementDateTime BETWEEN ? AND ? "
+				+ "GROUP BY "
+				+ 	"MonthYear "
+				+ "ORDER BY "
+				+ 	"MonthYear DESC ";
+		try
+		{
+			db.setPreparedStatement(query);
+			db.getPreparedStatement().setString(1, startDate.toString());
+			db.getPreparedStatement().setString(2, endDate.toString());
+			rs = db.getPreparedStatement().executeQuery();
+			
+			while (rs.next()) 
+			{
+				//Si la key ya existe, el metodo PUT actualiza el value.
+				transfersAmountByPeriod.put(rs.getString("MonthYear"), rs.getBigDecimal("TotalAmount"));
+			}
+		}
+		catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return transfersAmountByPeriod;
+	}
+
+	@Override
+	public Map<String, BigDecimal> getTransfersAmountByDayPeriod(LocalDate startDate, LocalDate endDate) throws SQLException
+	{
+		ArrayList<String> periods = (ArrayList<String>) DateRangeFormatter.generateFormattedDays(startDate, endDate);
+
+		// Creo un Map que tiene como keys: periodos entre startDate y endDate.
+		// Como values 0.0
+		LinkedHashMap<String, BigDecimal> transfersAmountByPeriod = new LinkedHashMap<>();
+		transfersAmountByPeriod = (LinkedHashMap<String, BigDecimal>) MapTools.assignKeysFromList(periods, BigDecimal.valueOf(0));
+		ResultSet rs;
+
+		String query = 
+				"SELECT "
+				+ "DATE_FORMAT(MovementDateTime, '%d/%m') AS DayMonth, "
+				+ "SUM(Amount) AS TotalAmount "
+				+ "FROM "
+				+ "Movements "
+				+ "WHERE " 
+				+ "MovementTypeId = 4 "
+				+ "AND Amount > 0 " 
+				+ "AND MovementDateTime BETWEEN ? AND ? "
+				+ "GROUP BY "
+				+ "DayMonth " 
+				+ "ORDER BY " 
+				+ "DayMonth; ";
+		try
+		{
+			db.setPreparedStatement(query);
+			db.getPreparedStatement().setString(1, startDate.toString());
+			db.getPreparedStatement().setString(2, endDate.toString());
+			rs = db.getPreparedStatement().executeQuery();
+
+			while (rs.next())
+			{
+				// Si la key ya existe, el metodo PUT actualiza el value.
+				transfersAmountByPeriod.put(rs.getString("DayMonth"),rs.getBigDecimal("TotalAmount"));
+			}
+		} catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return transfersAmountByPeriod;
 	}
 
 }
