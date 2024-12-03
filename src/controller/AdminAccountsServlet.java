@@ -181,15 +181,16 @@ public class AdminAccountsServlet extends HttpServlet
 				Helper.setReqMessage(request, "No se pudo modificar la cuenta",
 						MessageType.ERROR);
 			}
-			request.setAttribute("client", client);
-			Helper.redirect("/WEB-INF/AdminClientAccounts.jsp", request,
-					response);
+			 viewClientAccounts(request, response, clientId);
+			 request.setAttribute("client", client);
+		
 		} 
 		catch (BusinessException ex)
 		{   
 			Helper.setReqMessage(request, ex.getMessage(), MessageType.ERROR);
-			Helper.redirect("/WEB-INF/AdminClientAccounts.jsp", request,
-					response);
+			ex.printStackTrace();
+			viewClientAccounts (request, response, clientId); 
+			return;	
 		}
 	}
 
@@ -208,7 +209,7 @@ public class AdminAccountsServlet extends HttpServlet
 			Boolean success = accountsBusiness.delete(accountId);
 		
 			if (success)
-			{
+			{ 
 				Helper.setReqMessage(request, "Cuenta eliminada con éxito!",
 						MessageType.SUCCESS);
 			} 

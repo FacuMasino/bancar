@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import businessLogic.IClientsBusiness;
 import dataAccessImpl.ClientsDao;
+import dataAccessImpl.LoansDao;
 import domainModel.Account;
 import domainModel.Client;
 import exceptions.BusinessException;
@@ -21,12 +22,14 @@ public class ClientsBusiness implements IClientsBusiness
 	private ClientsDao clientsDao;
 	private UsersBusiness usersBusiness;
 	private AccountsBusiness accountsBusiness;
+	private LoansDao loansDao; 
 	
 	public ClientsBusiness()
 	{
 		clientsDao = new ClientsDao();
 		usersBusiness = new UsersBusiness();
 		accountsBusiness = new AccountsBusiness();
+		loansDao = new LoansDao();
 	}
 
 	@Override
@@ -133,7 +136,8 @@ public class ClientsBusiness implements IClientsBusiness
 		{
 			if (currentActiveStatus)
 			{
-				validateAccountsBalance(clientId);		
+				validationsBeforeDelete(clientId);	
+				
 			}
 
 			return clientsDao.toggleActiveStatus(clientId, currentActiveStatus);
@@ -258,11 +262,15 @@ public class ClientsBusiness implements IClientsBusiness
 		}
 	}
 	
-	private void validateAccountsBalance(int clientId) throws BusinessException
+	private void validationsBeforeDelete(int clientId) throws BusinessException
 	{
 		int CountNegativeAccounts = 0;
 		ArrayList<Account> accounts = accountsBusiness.list(clientId);
-
+		Client client;
+		try
+		{
+			client = clientsDao.read(clientId);
+		
 		for (Account account : accounts)
 		{
 			if (account.getBalance().compareTo(BigDecimal.ZERO) < 0)
@@ -283,7 +291,18 @@ public class ClientsBusiness implements IClientsBusiness
 						"No es posible procesar la baja del cliente. Registra cuenta con deuda.");
 			}
 		}
-
+		
+		if (loansDao. currentLoans(client))
+        	{
+        		throw new BusinessException
+        		( "No es posible procesar la baja del cliente. Tiene prestamos vigentes.");
+        	}
+	    }
+		 catch (SQLException e)
+		{
+			e.printStackTrace();
+			throw new SQLOperationException(e.getMessage());
+		}
 	}
 	
 	// TODO: Eliminar este método y reemplazar todos sus llamados por cliBiz.read(cliBiz.findClientId(userId))
