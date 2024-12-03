@@ -31,7 +31,7 @@
           <label class="input input-bordered self-center flex items-center gap-2 max-w-xs">
             <i data-lucide="circle-dollar-sign"></i> <input id="requestedAmount"
             type="text" class="text-end w-[5rem]" onchange="updateRangeInput(event)"
-            onblur="formatAmountInput(event)" onfocus="removeDots()" value="100.000">
+            onfocus="removeDots()" value="100.000">
           </label>
         </div>
       </div>

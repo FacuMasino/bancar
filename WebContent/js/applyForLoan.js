@@ -29,23 +29,27 @@ const updateRangeInput = (event) => {
 	updateSummaryValues();
 }
 
-const formatAmountInput = (event) => {
-	// TODO: Por ahora no funciona, hace que se triggee el mensaje de "Ingrese un monto válido"
-	//event.target.value = ARNumber.format(event.target.value);
-}
-
 // Filtrado de inputs en base a una función dada
 // Tomado de https://stackoverflow.com/a/469362
 const setInputFilter = (textbox, inputFilter, errMsg) => {
-  [ "input", "keydown", "keyup", "mousedown", "mouseup", "select", "contextmenu", "drop", "focusout" ].forEach(function(event) {
+  [ "input", "keydown", "keyup", "mousedown", "mouseup", "contextmenu", "drop", "focusout" ].forEach(function(event) {
     textbox.addEventListener(event, function(e) {
+    	removeDots();
+    	// Valor aceptado por la regexp
       if (inputFilter(this.value)) {
-        // Accepted value.
-        if ([ "keydown", "mousedown", "focusout" ].indexOf(e.type) >= 0){
+      	
+      	if ([ "keydown", "mousedown", "focusout" ].indexOf(e.type) >= 0){
           this.classList.remove("input-error");
           this.setCustomValidity("");
         }
-
+        
+      	// Formatear número si fue válido y dejó de hacer foco en input
+        if(["focusout"].indexOf(e.type) >= 0){
+        	let formated = ARNumber.format(parseInt(this.value));
+        	if(!isNaN(formated)) this.value = formated;
+        }
+        
+        // Actualizar último valor aceptado
         this.oldValue = this.value;
         this.oldSelectionStart = this.selectionStart;
         this.oldSelectionEnd = this.selectionEnd;
@@ -96,5 +100,5 @@ const updateSummaryValues = () => {
 updateSummaryValues();
 
 setInputFilter(document.getElementById("requestedAmount"), function(value) {
-  return /^\d+(?:[.,]\d*)?$|^\d*$/.test(value); // Solo números, comas y puntos
-}, "Ingresa un monto válido");
+  return /^\d+(?:[.]\d*)?$|^\d*$/.test(value); // Solo números, comas y puntos
+}, "Ingrese solo valores numéricos.");
