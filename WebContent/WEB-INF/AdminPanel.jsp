@@ -58,8 +58,8 @@
               <p class="font-semibold">Período</p>
               <form method="get" action="Admin" class="flex justify-between gap-4">
                 <div class="flex justify-around gap-4">
-                  <input type="date" name="startDate">
-                  <input type="date" name="endDate">
+                  <input type="date" name="startDate" value="${param.startDate}">
+                  <input type="date" name="endDate" value="${param.endDate}">
                 </div>
                 <button type="submit" class="btn btn-primary"
                   name="action" value="updateDateRange">Aplicar filtro</button>
