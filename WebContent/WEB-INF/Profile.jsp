@@ -21,50 +21,57 @@
               <label
                 class="block text-sm font-medium text-gray-700 mb-2">Nombre
                 Completo</label> <input type="text" name="clientName"
-                value="${client.firstName } ${client.lastName }" disabled
+                value="${client.firstName} ${client.lastName}" disabled
                 class="input input-bordered w-full" />
             </div>
 
             <div>
               <label
                 class="block text-sm font-medium text-gray-700 mb-2">Usuario</label>
-              <input type="text" name="clientSurname" value=${client.getUsername() }
+              <input type="text" name="clientSurname" value="${client.username}"
                 disabled class="input input-bordered w-full" />
             </div>
 
             <div>
               <label
                 class="block text-sm font-medium text-gray-700 mb-2">DNI</label>
-              <input type="text" name="clientDni" value=${client.dni }
+              <input type="text" name="clientDni" value="${client.dni}"
                 disabled class="input input-bordered w-full" />
             </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">DNI</label>
+              <input type="text" name="clientDni" value="${client.cuil}"
+                disabled class="input input-bordered w-full" />
+            </div>            
 
             <div>
               <label
                 class="block text-sm font-medium text-gray-700 mb-2">Email</label>
               <input type="text" name="clientEmail"
-                value=${client.email } disabled
+                value="${client.email}" disabled
                 class="input input-bordered w-full" />
             </div>
 
             <div>
               <label
                 class="block text-sm font-medium text-gray-700 mb-2">Teléfono</label>
-              <input type="text" name="clientPhone" value=${client.phone }
+              <input type="text" name="clientPhone" value="${client.phone}"
                 disabled class="input input-bordered w-full" />
             </div>
 
             <div>
               <label
                 class="block text-sm font-medium text-gray-700 mb-2">Dirección</label>
-              <input type="text" name="clientAddress" value="${client.getAddress().streetName } ${client.getAddress().streetNumber }"
+              <input type="text" name="clientAddress"
+                value="${client.address.streetName} ${client.address.streetNumber}"
                 disabled class="input input-bordered w-full" />
             </div>
 
             <div>
               <label
                 class="block text-sm font-medium text-gray-700 mb-2">Provincia</label>
-              <input type="text" name="clientProvince" value="${client.getAddress().getProvince().name }"
+              <input type="text" name="clientProvince" value="${client.address.province.name}"
                 disabled class="input input-bordered w-full" />
             </div>
 
@@ -72,7 +79,15 @@
               <label
                 class="block text-sm font-medium text-gray-700 mb-2">Localidad</label>
               <input type="text" name="clientLocality"
-                value="${client.getAddress().getCity().name }" disabled
+                value="${client.address.city.name}" disabled
+                class="input input-bordered w-full" />
+            </div>
+            
+            <div>
+              <label
+                class="block text-sm font-medium text-gray-700 mb-2">Nacionalidad</label>
+              <input type="text" name="clientLocality"
+                value="${client.address.country.name}" disabled
                 class="input input-bordered w-full" />
             </div>
           </div>
