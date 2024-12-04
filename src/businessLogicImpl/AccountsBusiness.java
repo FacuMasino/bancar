@@ -122,28 +122,25 @@ public class AccountsBusiness implements IAccountsBusiness
 
 			if (accountsList.size() == 1 && loansDao.currentLoans(client))
 			{
-				if (!(account.getBalance().compareTo(BigDecimal.ZERO) >= 0))
+				// Caso saldo negativo
+				if (account.getBalance().compareTo(BigDecimal.ZERO) < 0)
 				{
 					throw new BusinessException(
-							"Existen prestamos vigentes y  saldo negativo en la cuenta N° "
+							"Existen prestamos vigentes y saldo negativo en la cuenta N° "
 									+ accountId);
-				} else
-				{
-					throw new BusinessException("Existen prestamos vigentes.");
 				}
+				throw new BusinessException("El cliente posee prestamos sin saldar.");
 			}
-			else
+			
+			// No se permite la eliminación con saldo negativo
+			if (account.getBalance().compareTo(BigDecimal.ZERO) < 0)
 			{
-				if (account.getBalance().compareTo(BigDecimal.ZERO) >= 0)
-				{
-					return accountsDao.delete(accountId);
-				}
-				else
-				{
-					throw new BusinessException("Cuenta con saldo negativo.");
-				}
+				throw new BusinessException("Cuenta con saldo negativo.");
 			}
-		} 
+			
+			// TODO: Debemos permitir que se "elimine" una cuenta con saldo ?
+			return accountsDao.delete(accountId);
+		}
 		catch (SQLException ex)
 		{
 			throw new SQLOperationException();
@@ -168,10 +165,7 @@ public class AccountsBusiness implements IAccountsBusiness
 
 			for (Account account : accounts)
 			{
-				int accountId = account.getId();
-				AccountsBusiness accountsBusiness = new AccountsBusiness();
-				
-				accountsBusiness.delete(accountId);
+				delete(account.getId());
 				countDeleted++;
 			}
 			return countDeleted == accounts.size();
