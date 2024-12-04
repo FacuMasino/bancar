@@ -27,8 +27,7 @@
             </span>
           </div>
           <input type="hidden" name="clientId" value="${client.getClientId()}" />
-          <button class="btn mr-4 btn-neutral" type="submit" name="action"
-            value="toggleActiveStatus">
+          <button class="btn mr-4 btn-neutral" type="button" onclick="modal_cancel_client.showModal()">
             Dar de baja/alta
           </button>
         </div>
@@ -87,7 +86,7 @@
           <div class="flex flex-col w-full">
             <div class="form-control w-full">
               <label for="clientSex" class="label">
-                <span class="label-text font-bold">G&eacute;nero</span>
+                <span class="label-text font-bold">Género</span>
               </label>
             </div>
             <select name="clientSex" class="bg-white select select-bordered w-full" ${setIsDisabled}>
@@ -148,7 +147,7 @@
           <div class="flex flex-col w-full">
             <div class="form-control w-full">
               <label for="clientPhone" class="label">
-                <span class="label-text font-bold">Tel&eacute;fono (Sin 0 ni 15)</span>
+                <span class="label-text font-bold">Teléfono (Sin 0 ni 15)</span>
               </label>
             </div>
             <input type="number" name="clientPhone"
@@ -285,6 +284,52 @@
             Guardar cambios
           </button>
         </div>
+        
+        <!-- MODAL Confirmación de baja/alta -->
+        <dialog id="modal_cancel_client" class="modal">
+          <div class="modal-box bg-white">
+            <div class="sm:flex sm:items-start">
+              <div class="mx-auto flex size-12 shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:size-10">
+                <svg class="size-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z"></path>
+                </svg>
+              </div>
+              <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                <h3 class="text-base font-semibold text-gray-900" id="modal-title">Confirmación</h3>
+                <div class="my-2">
+                  <p class="text-gray-500">
+                    Está seguro que desea 
+                    <span class="font-semibold">dar de ${client.activeStatus ? 'baja':'alta'}</span>
+                    al cliente?
+                  </p>
+                </div>
+                <c:if test="${client.activeStatus}">
+                    <ul class="list-disc list-inside text-sm">
+                      <li>
+                        Se eliminarán todas las cuentas
+                      </li>
+                      <li>
+                        Se rechazarán los préstamos en revisión
+                      </li>
+                      <li>
+                        El cliente ya no podrá acceder al Home Banking
+                      </li>
+                    </ul>
+                </c:if>
+              </div>
+            </div>
+            <div class="modal-action">
+                <button type="submit" class="btn btn-primary" name="action" 
+                  value="toggleActiveStatus">
+                  Confirmar
+                </button>
+                <button type="button" class="btn" 
+                  onclick="modal_cancel_client.close()">
+                  Cancelar
+                </button>
+            </div>
+          </div>
+        </dialog>
       </form>
     </div>
   </t:adminwrapper>
