@@ -8,7 +8,7 @@
     <div class="flex-none">
       <ul class="menu menu-horizontal px-1 gap-3">
         <li>
-          <a href="Home.jsp" class="btn btn-tertiary bg-base-200">
+          <a href="${pageContext.request.contextPath}/BecomeClient.jsp" class="btn btn-tertiary bg-base-200">
             Quiero ser cliente
           </a>
         </li>

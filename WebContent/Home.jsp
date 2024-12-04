@@ -8,7 +8,7 @@
       </h1>
       <p class="mb-4">Abri tu cuenta gratis y empezá a disfrutar de todos
         los beneficios.</p>
-      <a href="#" class="btn bg-white text-red-600 w-fit mb-4">Solicitá tu
+      <a href="BecomeClient.jsp" class="btn bg-white text-red-600 w-fit mb-4">Solicitá tu
         cuenta hoy ></a>
     </div>
   </div>
