@@ -113,27 +113,33 @@ public class ClientAccountServlet extends HttpServlet
 		
 		try
 		{
-
 			int clientId = ((Client)req.getSession().getAttribute("client")).getClientId();
 			client = clientsBusiness.read(clientId);
+			
+			int selectedAccountId = Optional
+					.ofNullable(req.getParameter("selectedAccountId"))
+					.map(Integer::parseInt).orElse(0);
 
 			ArrayList<Account> accounts = new ArrayList<Account>();
 			accounts = accountsBusiness.list(client.getClientId());
 			
+			if(accounts.size() == 0) // Si no tiene cuentas, redireccionar y salir
+			{
+				Helper.setReqMessage(req, "No hay cuentas para mostrar.", MessageType.SUCCESS);
+				req.setAttribute("client", client);
+				Helper.redirect("/WEB-INF/Account.jsp", req, res);
+				return;
+			}
+			
 			client.setAccounts(accounts);
 
-			int selectedAccountId;
-
-			if (req.getParameter("selectedAccountId") == null)
+			if (selectedAccountId == 0) // Si no seleccionó cuenta
 			{
-				//fuerzo la seleccion a la primer cuenta disponible, porque si es una sola,no se puede seleccionar
+				//fuerzo la seleccion a la primer cuenta disponible
 				selectedAccountId = accounts.get(0).getId();
 			}
-			else
-			{
-				selectedAccountId = Integer.parseInt(
-						req.getParameter("selectedAccountId"));
-			}
+			
+			Account auxAccount = accountsBusiness.read(selectedAccountId);
 			
 			ArrayList<Movement> movementsList = new ArrayList<Movement>();
 			movementsList = movementsBusiness.list(selectedAccountId);
@@ -157,8 +163,6 @@ public class ClientAccountServlet extends HttpServlet
 			
 			Page<Movement> movementsPage = getMovementsPage(req,movementsList);
 			
-			Account auxAccount = accountsBusiness.read(selectedAccountId);
-
 			req.setAttribute("selectedAccount", auxAccount);
 			req.setAttribute("movementsPage", movementsPage);
 			req.setAttribute("movementTypes", movementTypesBusiness.list());

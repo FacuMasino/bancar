@@ -45,144 +45,155 @@
           </c:choose>
         </select>
       </div>
-      <div
-        class="flex flex-col p-4 mb-4 border border border-gray-300 rounded-lg  gap-6 w-full bg-white">
-        <div class="flex flex-col p-2 gap-3">
-          <span class="font-semibold text-gray-600">
-            ${selectedAccount.accountType.name} - Nro. ${selectedAccount.id}
-          </span>
-          <h2 class="font-bold text-2xl">
-            Saldo:
-            <fmt:formatNumber value="${selectedAccount.balance}" type="currency" />
-          </h2>
-        </div>
-      </div>
-      <div class="flex flex-col p-4 border border border-gray-300 rounded-lg  gap-6 w-full bg-white">
-      
-        <div class="flex justify-between">
-          <h2 class="font-bold text-xl">Últimos Movimientos</h2>
-          <!-- BUSCADOR -->
-          <label class="input input-sm input-bordered flex items-center gap-2">
-            <input type="text" placeholder="Monto, descripción" name="searchInput" value="${param.searchInput}">
-            <button type="submit">
-              <i data-lucide="search" class="w-[20px] h-[20px]"></i>
-            </button>
-          </label>
-        </div>
-        
-        <div class="flex flex-col mb-4">
-          <!-- FILTROS DE PÁGINA -->
-          <div class="flex justify-between mb-2">
-            <div>
-              <span>Tamaño de página</span> 
-              <select name="pageSize" onchange="this.form.submit()"
-                class="select select-bordered select-sm w-fit bg-white">
-                <c:forEach var="size" items="${page.pageSizes}">
-                  <option ${param.pageSize == size ? 'selected':''}>
-                    ${size}
-                  </option>
-                </c:forEach>
-              </select>
-            </div>
-            <div class="flex gap-2.5">
-              <div class="flex gap-2.5 items-center">
-                <span>Fecha</span>
-                <input name="transactionDate" type="date"
-                  class="border p-1 rounded border-gray-200"
-                  value="${param.transactionDate}" onchange="this.form.submit()">
-              </div>
-              <select name="movementTypeId"  class="select select-bordered select-sm w-fit bg-white" onchange="this.form.submit()">
-                <c:choose>
-                  <c:when test="${empty movementTypes}">
-                    <option disabled selected>
-                      Error: No hay tipos de movimientos para mostrar
-                    </option>
-                  </c:when>
-                  <c:otherwise>
-                    <option value="0" ${empty param.movementTypeId ? 'selected' : ''}>
-                      Seleccione tipo de movimiento
-                    </option>
-                    <c:forEach var="movementType" items="${movementTypes}">
-                        <option value="${movementType.id}" 
-                          ${param.movementTypeId == movementType.id ? 'selected' : ''}>
-                          ${movementType.name}
-                        </option>
-                    </c:forEach>
-                  </c:otherwise>
-                </c:choose>
-              </select>
+      <c:choose>
+        <c:when test="${empty client.accounts}">
+          <div class="flex flex-col items-center mt-6">
+            <img src="${pageContext.request.contextPath}/images/empty-cuate.svg" class="w-80" />
+            <h3 class="font-semibold text-xl">
+              Ups! Parece que no tenés cuentas activas
+            </h3>
+          </div>
+        </c:when>
+        <c:otherwise>
+          <div
+            class="flex flex-col p-4 mb-4 border border border-gray-300 rounded-lg  gap-6 w-full bg-white">
+            <div class="flex flex-col p-2 gap-3">
+              <span class="font-semibold text-gray-600">
+                ${selectedAccount.accountType.name} - Nro. ${selectedAccount.id}
+              </span>
+              <h2 class="font-bold text-2xl">
+                Saldo:
+                <fmt:formatNumber value="${selectedAccount.balance}" type="currency" />
+              </h2>
             </div>
           </div>
-          <!-- TABLA -->
-          <table class="table bg-white w-full">
-            <thead>
-              <tr>
-                <th>Fecha</th>
-                <th>Descripción</th>
-                <th>Monto</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              <c:choose>
-                <c:when test="${empty movements}">
-                  <!-- Mostrar mensaje si no hay movimientos-->
-                  <tr class="hover">
-                    <td class="text-center" colspan="4">No hay movimientos disponibles</td>
-                  </tr>
-                </c:when>
-                <c:otherwise>
-                  <c:forEach var="movement" items="${movements}"
-                    varStatus="status">
-                    <tr class="hover">
-                      <td>${movement.formattedDateTime}</td>
-                      <td>${movement.movementType.name} - ${movement.details}</td>
-                      <td>
-                        <span 
-                          class="font-semibold ${movement.amount < 0 ? 'text-red-600':'text-green-600'}">
-                          <fmt:formatNumber value="${movement.amount}" type="currency" />
-                        </span>
-                      </td>
-                      <td>
-                        <c:set var="movType" value="${movement.movementType.id}" />
-                        <c:choose>
-                          <c:when
-                            test="${movType != MovementTypeEnum.NEW_ACCOUNT.id and movType != MovementTypeEnum.NEW_LOAN.id}">
-                            <a href="?movementId=${movement.id}&action=details">
-                              <i data-lucide="eye"></i>
-                            </a>
-                          </c:when>
-                          <c:otherwise>
-                            -
-                          </c:otherwise>
-                        </c:choose>
-                      </td>
-                    </tr>
-                  </c:forEach>
-                </c:otherwise>
-              </c:choose>
-            </tbody>
-          </table>
-            
-          <!-- BOTONES PAGINADO -->
-          <div class="flex w-full items-center p-2.5">
-           <span class="w-full">
-            Mostrando 
-            ${page.startElementPos} a ${page.endElementPos}
-            de ${page.totalElements}
-           </span>
-          <div class="join flex justify-end w-full">
-             <c:forEach var="i" begin="1" end="${page.totalPages}">
-                <button value="${i}" name="page" class="join-item btn"
-                  ${page.totalPages <= 1 ? 'disabled' : ''}>
-                  ${i}
+          <div class="flex flex-col p-4 border border border-gray-300 rounded-lg  gap-6 w-full bg-white">
+          
+            <div class="flex justify-between">
+              <h2 class="font-bold text-xl">Últimos Movimientos</h2>
+              <!-- BUSCADOR -->
+              <label class="input input-sm input-bordered flex items-center gap-2">
+                <input type="text" placeholder="Monto, descripción" name="searchInput" value="${param.searchInput}">
+                <button type="submit">
+                  <i data-lucide="search" class="w-[20px] h-[20px]"></i>
                 </button>
-            </c:forEach>
-            </div>  
-          </div>
+              </label>
+            </div>
             
-        </div>
-      </div>
+            <div class="flex flex-col mb-4">
+              <!-- FILTROS DE PÁGINA -->
+              <div class="flex justify-between mb-2">
+                <div>
+                  <span>Tamaño de página</span> 
+                  <select name="pageSize" onchange="this.form.submit()"
+                    class="select select-bordered select-sm w-fit bg-white">
+                    <c:forEach var="size" items="${page.pageSizes}">
+                      <option ${param.pageSize == size ? 'selected':''}>
+                        ${size}
+                      </option>
+                    </c:forEach>
+                  </select>
+                </div>
+                <div class="flex gap-2.5">
+                  <div class="flex gap-2.5 items-center">
+                    <span>Fecha</span>
+                    <input name="transactionDate" type="date"
+                      class="border p-1 rounded border-gray-200"
+                      value="${param.transactionDate}" onchange="this.form.submit()">
+                  </div>
+                  <select name="movementTypeId"  class="select select-bordered select-sm w-fit bg-white" onchange="this.form.submit()">
+                    <c:choose>
+                      <c:when test="${empty movementTypes}">
+                        <option disabled selected>
+                          Error: No hay tipos de movimientos para mostrar
+                        </option>
+                      </c:when>
+                      <c:otherwise>
+                        <option value="0" ${empty param.movementTypeId ? 'selected' : ''}>
+                          Seleccione tipo de movimiento
+                        </option>
+                        <c:forEach var="movementType" items="${movementTypes}">
+                            <option value="${movementType.id}" 
+                              ${param.movementTypeId == movementType.id ? 'selected' : ''}>
+                              ${movementType.name}
+                            </option>
+                        </c:forEach>
+                      </c:otherwise>
+                    </c:choose>
+                  </select>
+                </div>
+              </div>
+              <!-- TABLA -->
+              <table class="table bg-white w-full">
+                <thead>
+                  <tr>
+                    <th>Fecha</th>
+                    <th>Descripción</th>
+                    <th>Monto</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <c:choose>
+                    <c:when test="${empty movements}">
+                      <!-- Mostrar mensaje si no hay movimientos-->
+                      <tr class="hover">
+                        <td class="text-center" colspan="4">No hay movimientos disponibles</td>
+                      </tr>
+                    </c:when>
+                    <c:otherwise>
+                      <c:forEach var="movement" items="${movements}"
+                        varStatus="status">
+                        <tr class="hover">
+                          <td>${movement.formattedDateTime}</td>
+                          <td>${movement.movementType.name} - ${movement.details}</td>
+                          <td>
+                            <span 
+                              class="font-semibold ${movement.amount < 0 ? 'text-red-600':'text-green-600'}">
+                              <fmt:formatNumber value="${movement.amount}" type="currency" />
+                            </span>
+                          </td>
+                          <td>
+                            <c:set var="movType" value="${movement.movementType.id}" />
+                            <c:choose>
+                              <c:when
+                                test="${movType != MovementTypeEnum.NEW_ACCOUNT.id and movType != MovementTypeEnum.NEW_LOAN.id}">
+                                <a href="?movementId=${movement.id}&action=details">
+                                  <i data-lucide="eye"></i>
+                                </a>
+                              </c:when>
+                              <c:otherwise>
+                                -
+                              </c:otherwise>
+                            </c:choose>
+                          </td>
+                        </tr>
+                      </c:forEach>
+                    </c:otherwise>
+                  </c:choose>
+                </tbody>
+              </table>
+                
+              <!-- BOTONES PAGINADO -->
+              <div class="flex w-full items-center p-2.5">
+               <span class="w-full">
+                Mostrando 
+                ${page.startElementPos} a ${page.endElementPos}
+                de ${page.totalElements}
+               </span>
+              <div class="join flex justify-end w-full">
+                 <c:forEach var="i" begin="1" end="${page.totalPages}">
+                    <button value="${i}" name="page" class="join-item btn"
+                      ${page.totalPages <= 1 ? 'disabled' : ''}>
+                      ${i}
+                    </button>
+                </c:forEach>
+                </div>  
+              </div>
+            </div>
+          </div>
+        </c:otherwise>
+      </c:choose>
     </form>
   </t:clientwrapper>
 </t:masterpage>
