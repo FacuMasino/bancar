@@ -394,7 +394,7 @@ public class AdminClientsServlet extends HttpServlet
 		}
 		catch (BusinessException ex)
 		{
-			Helper.setReqMessage(request, ex.getMessage(), MessageType.ERROR);
+			Helper.setReqMessage(request," No es posible dar de baja el cliente. " +  ex.getMessage(), MessageType.ERROR);
 			listClients(request, response);
 		}
 	}
