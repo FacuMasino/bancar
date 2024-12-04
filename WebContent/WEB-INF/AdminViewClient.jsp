@@ -187,14 +187,26 @@
               </tr>
             </thead>
             <tbody>
-              <c:forEach var="account" items="${client.accounts}"
-                varStatus="status">
-                <tr class="hover">
-                  <td>${account.id}</td>
-                  <td>${account.accountType.name}</td>
-                  <td class="text-green-600 font-semibold"> <fmt:formatNumber value="${account.balance}" type="currency" /></td>
-                </tr>
-              </c:forEach>
+              <c:choose>
+                <c:when test="${empty client.accounts}">
+                  <!-- Mostrar mensaje si no hay prestamos -->
+                  <tr>
+                    <td colspan="3" class="text-center">
+                      El cliente no posee cuentas
+                    </td>
+                  </tr>
+                </c:when>
+                <c:otherwise>
+                  <c:forEach var="account" items="${client.accounts}"
+                    varStatus="status">
+                    <tr class="hover">
+                      <td>${account.id}</td>
+                      <td>${account.accountType.name}</td>
+                      <td class="text-green-600 font-semibold"> <fmt:formatNumber value="${account.balance}" type="currency" /></td>
+                    </tr>
+                  </c:forEach>
+                </c:otherwise>
+             </c:choose>
             </tbody>
           </table>
         </div>
@@ -212,12 +224,8 @@
                 <th class="text-gray-700">ID Prestamo</th>
                 <th class="text-gray-700">Fecha de solicitud</th>
                 <th class="text-gray-700">Tipo</th>
-                <th class="text-gray-700">Monto</th>
-                <%-- <th class="text-gray-700">Cuotas</th>--%>
+                <th class="text-gray-700">Monto Solicitado</th>
                 <th class="text-gray-700">Estado</th>
-                <!--  
-                  <th class="text-gray-700">Campo extra</th>
-                  -->
               </tr>
             </thead>
             <tbody>
@@ -226,8 +234,9 @@
                 <c:when test="${empty client.loans}">
                   <!-- Mostrar mensaje si no hay prestamos -->
                   <tr>
-                    <td colspan="6" class="text-center">No hay préstamos
-                      para mostrar.</td>
+                    <td colspan="5" class="text-center">
+                      No hay préstamos para mostrar.
+                    </td>
                   </tr>
                 </c:when>
                 <c:otherwise>
@@ -236,9 +245,9 @@
                     <tr class="hover">
                      <td>${loan.loanId}</td>
                       <td>
-                      <fmt:formatDate type="date" dateStyle="short"
-                        timeStyle="short" value="${loan.creationDate}"/>
-                       </td>
+                        <fmt:formatDate type="date" dateStyle="short"
+                          timeStyle="short" value="${loan.creationDate}"/>
+                      </td>
                       <td>${loan.loanType.name}</td>
                       <td class="text-black-600 font-semibold"><fmt:formatNumber value="${loan.requestedAmount}" type="currency" /></td>                   
                      <td> <c:choose>
