@@ -112,82 +112,81 @@ public class AccountsBusiness implements IAccountsBusiness
 
 	@Override
 	public boolean delete(int accountId) throws BusinessException
-    {
-        try 
-        {
-            account = accountsDao.read(accountId);
-       		ArrayList <Account> accountsList = new ArrayList <Account>();
-       	    client = account.getClient();
-       		int clientId = client.getId();
-       		accountsList = accountsDao.list (clientId);
-       		
-       		if ( accountsList.size() == 1 && loansDao.currentLoans(client))
-       		{
-       			if (!(account.getBalance().compareTo(BigDecimal.ZERO) >= 0))
-       			       			{
-       				throw new BusinessException
-                    ( "Existen prestamos vigentes y  saldo negativo en la cuenta N° " + accountId);
-       			}
-       			else 
-            	{
-       				throw new BusinessException
-                    ( "Existen prestamos vigentes.");
-       			}
-       		}
-       		else 
-       		{  
-       			if (account.getBalance().compareTo(BigDecimal.ZERO) >= 0) 
-       			{
-       			 return accountsDao.delete(accountId);   
-                }      
-                else
-                	{
-                	 throw new BusinessException
-                     ( "Cuenta con saldo negativo."); 
-        			}
-       			}		
-        }
-        catch (SQLException ex)
-        {
-            throw new SQLOperationException();
-        }
-        catch (BusinessException ex)
-		{
-			throw ex;
-		}
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-            throw new BusinessException
-                ("Ocurrió un error desconocido al eliminar la cuenta.");
-        }
-    }
-	
-	public boolean delete (ArrayList<Account> accounts) throws BusinessException
 	{
-		try 
+		try
 		{
-			int countDeleted = 0;
-			
-			 for (Account account : accounts)
-			 {
-			    int accountId = account.getId();
-				AccountsBusiness accountsBusiness = new AccountsBusiness ();;
-				accountsBusiness.delete(accountId);
-				countDeleted ++; 
-		     }
-				 return countDeleted == accounts.size();   
-		}	
+			account = accountsDao.read(accountId);
+			ArrayList<Account> accountsList = new ArrayList<Account>();
+			client = account.getClient();
+			int clientId = client.getId();
+			accountsList = accountsDao.list(clientId);
+
+			if (accountsList.size() == 1 && loansDao.currentLoans(client))
+			{
+				if (!(account.getBalance().compareTo(BigDecimal.ZERO) >= 0))
+				{
+					throw new BusinessException(
+							"Existen prestamos vigentes y  saldo negativo en la cuenta N° "
+									+ accountId);
+				} else
+				{
+					throw new BusinessException("Existen prestamos vigentes.");
+				}
+			}
+			else
+			{
+				if (account.getBalance().compareTo(BigDecimal.ZERO) >= 0)
+				{
+					return accountsDao.delete(accountId);
+				}
+				else
+				{
+					throw new BusinessException("Cuenta con saldo negativo.");
+				}
+			}
+		} 
+		catch (SQLException ex)
+		{
+			throw new SQLOperationException();
+		}
 		catch (BusinessException ex)
 		{
 			throw ex;
 		}
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-            throw new BusinessException
-                ("Ocurrió un error desconocido al eliminar las cuentas del cliente.");	
-        }
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+			throw new BusinessException(
+					"Ocurrió un error desconocido al eliminar la cuenta.");
+		}
+    }
+	
+	public boolean delete(ArrayList<Account> accounts) throws BusinessException
+	{
+		try
+		{
+			int countDeleted = 0;
+
+			for (Account account : accounts)
+			{
+				int accountId = account.getId();
+				AccountsBusiness accountsBusiness = new AccountsBusiness();
+				
+				accountsBusiness.delete(accountId);
+				countDeleted++;
+			}
+			return countDeleted == accounts.size();
+		} 
+		catch (BusinessException ex)
+		{
+			throw ex;
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+			throw new BusinessException(
+					"Ocurrió un error desconocido al eliminar las cuentas del cliente.");
+		}
 	}
 	@Override
 	public ArrayList<Account> list() throws BusinessException

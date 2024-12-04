@@ -137,31 +137,32 @@ public class ClientsBusiness implements IClientsBusiness
 		{
 			if (currentActiveStatus)
 			{
-				
-				Client	client = clientsDao.read(clientId);
+				Client client = clientsDao.read(clientId);
 				loansBusiness.currentLoans(client);
-				
-				ArrayList <Account> accounts = new ArrayList <Account> ();
-				accounts = accountsBusiness.list(clientId); 
-				
+
+				ArrayList<Account> accounts = new ArrayList<Account>();
+				accounts = accountsBusiness.list(clientId);
+
 				if (accounts.size() > 0)
 				{
 					accountsBusiness.delete(accounts);
-	
-				}			
-				// Rechazar todos los préstamos que aún no se aprobaron (STATUS EN REVISION)
+
+				}
+				// Rechazar todos los préstamos que aún no se aprobaron (STATUS
+				// EN REVISION)
 				loansBusiness.rejectAll(client);
 			}
 			return clientsDao.toggleActiveStatus(clientId, currentActiveStatus);
-		}
+		} 
 		catch (SQLException ex)
 		{
 			throw new SQLOperationException();
 		}
 		catch (BusinessException ex)
 		{
-			System.err.println("Error al eliminar el cliente: " + ex.getMessage());
-		    throw ex;
+			System.err.println(
+					"Error al eliminar el cliente: " + ex.getMessage());
+			throw ex;
 		}
 		catch (Exception ex)
 		{
@@ -169,7 +170,7 @@ public class ClientsBusiness implements IClientsBusiness
 			throw new BusinessException(
 					"Ocurrió un error desconocido al eliminar el cliente.");
 		}
-		
+
 	}
 
 	@Override
@@ -280,5 +281,4 @@ public class ClientsBusiness implements IClientsBusiness
 	{
 		return read(findClientId(userId));
 	}
-	
-	}
+}
