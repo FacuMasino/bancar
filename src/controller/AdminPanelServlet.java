@@ -9,6 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
 import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -106,15 +107,19 @@ public class AdminPanelServlet extends HttpServlet
 	private void manageBarChart(HttpServletRequest request)
 	{
 		// Gestion fechas del barChart:
-		// Por default levanto como fechas todo el 2024, descarto null y cadena vacia ""
-		String startDate = Optional.ofNullable(request.getParameter("startDate")).filter(date -> !date.isEmpty()).orElse("2024-01-01");
-		String endDate = Optional.ofNullable(request.getParameter("endDate")).filter(date -> !date.isEmpty()).orElse("2025-01-01");
+		// Por default levanto como fechas todo el año actual, descarto null y cadena vacia ""
+		LocalDate currentDate = LocalDate.now();
+		LocalDate firstDay = currentDate.with(TemporalAdjusters.firstDayOfYear());
+		LocalDate firstDayNextYear = currentDate.with(TemporalAdjusters.lastDayOfYear()).plusDays(1);
+		
+		String startDate = Optional.ofNullable(request.getParameter("startDate")).filter(date -> !date.isEmpty()).orElse(firstDay.toString());
+		String endDate = Optional.ofNullable(request.getParameter("endDate")).filter(date -> !date.isEmpty()).orElse(firstDayNextYear.toString());
 		
 		//Pregunto si las fechas estan alvezre
 		if (!LocalDate.parse(endDate).isAfter(LocalDate.parse(startDate)))
 		{
-			startDate = "2024-01-01";
-			endDate = "2025-01-01";
+			startDate = firstDay.toString();
+			endDate = firstDayNextYear.toString();
 			Helper.setReqMessage(request, "La fecha de inicio debe ser anterior...", MessageType.ERROR);
 		}
 		
@@ -142,6 +147,9 @@ public class AdminPanelServlet extends HttpServlet
 		loansGivenAmount = MapTools.mapValuesToLiteralString(loansAmountByPeriod);
 		transfersDoneAmount = MapTools.mapValuesToLiteralString(transfersAmountByPeriod);
 
+		// Fechas por defecto
+		request.setAttribute("defaultStartDate", startDate);
+		request.setAttribute("defaultEndDate", endDate);
 		// Muestro Flujo de dinero en prestamos otorgados y en transferencias realizadas
 		request.setAttribute("periods", periods);
 		request.setAttribute("loansGivenAmount", loansGivenAmount);
