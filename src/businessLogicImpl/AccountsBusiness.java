@@ -186,11 +186,9 @@ public class AccountsBusiness implements IAccountsBusiness
         {
             ex.printStackTrace();
             throw new BusinessException
-                ("Ocurrió un error desconocido al eliminar las cuentas del cliente.");
+                ("Ocurrió un error desconocido al eliminar las cuentas del cliente.");	
         }
-		
 	}
-
 	@Override
 	public ArrayList<Account> list() throws BusinessException
 	{

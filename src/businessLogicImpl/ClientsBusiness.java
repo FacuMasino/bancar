@@ -273,33 +273,7 @@ public class ClientsBusiness implements IClientsBusiness
 					"Ocurrió un error desconocido al validar el DNI.");
 		}
 	}
-	
-	// TODO: Estas validaciones deberían hacerse individualmente en cada negocio
-	// Cada validación en su negocio correspondiente, ejemplo:
-	// accountsBusiness.delete tendrá sus validaciones y devolverá una excepción
-	// según corresponda. Esto evita validaciones repetidas
-	/*private void validationsBeforeDelete(int clientId) throws BusinessException
-	{
-		////int CountNegativeAccounts = 0;
-		//////ArrayList<Account> accounts = accountsBusiness.list(clientId);
-		Client client;
-		try
-		{
-			client = clientsDao.read(clientId);
 		
-			if (loansBusiness.currentLoans(client))
-        	{
-        		throw new BusinessException
-        		( "No es posible procesar la baja del cliente. Tiene prestamos vigentes.");
-        	}
-	    }
-		 catch (SQLException e)
-		{
-			e.printStackTrace();
-			throw new SQLOperationException(e.getMessage());
-		}
-	}*/
-	
 	// TODO: Eliminar este método y reemplazar todos sus llamados por cliBiz.read(cliBiz.findClientId(userId))
 	// (Doble click en el nombre del método y click en Open Call Hierarchy para ver llamados)
 	public Client findClientByUserId(int userId) throws BusinessException

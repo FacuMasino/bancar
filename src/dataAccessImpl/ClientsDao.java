@@ -107,14 +107,13 @@ public class ClientsDao extends Dao<Client> implements IClientsDao
 			AccountsDao accountsDao = new AccountsDao();
 			ArrayList<Account> accountsList = new ArrayList<>();
 				
-				accountsList =	accountsDao.list(clientId);
+			accountsList =	accountsDao.list(clientId);
 			
-			 for (Account account : accountsList) {
-				 
+			 for (Account account : accountsList) 
+			 {
 				 int accountId = account.getId();
-					accountsDao.delete(accountId)  ;
-		        }
-		
+				 accountsDao.delete(accountId);
+		       }
 		}
 		catch (SQLException ex)
 		{
