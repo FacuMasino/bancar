@@ -1,8 +1,8 @@
 package controller;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,9 +14,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import businessLogic.ILoanStatusesBusiness;
 import businessLogic.ILoanTypesBusiness;
+import businessLogic.ILoansBusiness;
+import businessLogic.IReportsBusiness;
 import businessLogicImpl.LoanStatusesBusiness;
 import businessLogicImpl.LoanTypesBusiness;
 import businessLogicImpl.LoansBusiness;
+import businessLogicImpl.ReportsBusiness;
 import domainModel.Loan;
 import domainModel.LoanStatus;
 import domainModel.LoanStatusEnum;
@@ -30,9 +33,10 @@ import utils.Page;
 public class AdminLoansServlet extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
-	private LoansBusiness loansBusiness;
+	private ILoansBusiness loansBusiness;
 	private ILoanStatusesBusiness loanStatusesBusiness;
 	private ILoanTypesBusiness loanTypesBusiness;
+	private IReportsBusiness reportsBusiness;
 	private List<Loan> allLoans;
 	
 	public AdminLoansServlet()
@@ -41,6 +45,7 @@ public class AdminLoansServlet extends HttpServlet
 		loansBusiness = new LoansBusiness();
 		loanStatusesBusiness = new LoanStatusesBusiness();
 		loanTypesBusiness = new LoanTypesBusiness();
+		reportsBusiness = new ReportsBusiness();
 	}
 
 	protected void doGet(HttpServletRequest request,
@@ -126,12 +131,25 @@ public class AdminLoansServlet extends HttpServlet
 			loanStatuses = loanStatusesBusiness.list();
 			loanTypes = loanTypesBusiness.list();
 			
-			allLoans = loansBusiness.list(); // Lista completa
+			// Lista completa de préstamos
+			allLoans = loansBusiness.list();
 			allLoans.sort(null); // Orden por defecto, ascendente por fecha
 
+			// Obtener listados paginados
 			Page<Loan> pendingsPage = getPendingsPage(req);
 			Page<Loan> historyPage = getHistoryPage(req);
 			
+			// Obtener monto total requerido
+			LoanStatus pendingStatus = new LoanStatus();
+			pendingStatus.setId(LoanStatusEnum.PENDING.getId());
+			List<Loan> pendingLoans = loansBusiness.filter(pendingStatus, allLoans);
+			BigDecimal totalRequestedAmount = loansBusiness.getRequestedAmount(pendingLoans);
+			
+			// Obtener monto total adeudado
+			BigDecimal overdueLoansAmount = reportsBusiness.getOutstandingInstallmentsAmount();
+			
+			req.setAttribute("overdueLoansAmount", overdueLoansAmount);
+			req.setAttribute("totalRequestedAmount", totalRequestedAmount);
 			req.setAttribute("loanStatuses", loanStatuses);
 			req.setAttribute("loanTypes", loanTypes);
 			req.setAttribute("pendingsPage", pendingsPage);

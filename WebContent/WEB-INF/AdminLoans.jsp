@@ -32,18 +32,18 @@
           <div class="space-y-4">
             <div>
               <p class="text-sm text-gray-500">
-                Monto total solicitado (préstamos pendientes):
+                Monto total solicitado (En revisión):
               </p>
               <p class="text-lg text-blue-600 font-medium">
-                $ 1.350.000  (NO IMPLEMENTADO)
+                <fmt:formatNumber value="${totalRequestedAmount}" type="currency" />
               </p>
             </div>
             <div>
               <p class="text-sm text-gray-500">
-                Monto total adeudado (préstamos activos):
+                Monto total adeudado (Vigentes):
               </p>
               <p class="text-lg text-red-600 font-medium">
-                $ 1.000.000 (NO IMPLEMENTADO)
+                <fmt:formatNumber value="${overdueLoansAmount}" type="currency" />
               </p>
             </div>
           </div>
@@ -312,6 +312,7 @@
                         </c:otherwise>
                       </c:choose>
                     </td>
+                    
                     <!-- Deuda pendiente -->
                     <c:set var="overdueAmount" value="0" />
                     <c:forEach var="installment" items="${loan.pendingInstallments}">
@@ -327,6 +328,7 @@
                         <td>-</td>
                       </c:otherwise>
                     </c:choose>
+                    
                   </tr>
                 </c:forEach>
               </c:otherwise>

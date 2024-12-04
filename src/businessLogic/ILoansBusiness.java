@@ -25,5 +25,6 @@ public interface ILoansBusiness
 	public List<Loan> filter(LoanStatus loanStatus, List<Loan> list) throws BusinessException;
 	public List<Loan> filter(LoanType loanType, List<Loan> list) throws BusinessException;
 	public boolean currentLoans (Client client) throws BusinessException;
+	public BigDecimal getRequestedAmount(List<Loan> loans);
 	
 }

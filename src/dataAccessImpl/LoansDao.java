@@ -212,7 +212,8 @@ public class LoansDao implements ILoansDao
 		return auxLoansList;
 	}
 	
-	public boolean currentLoans (Client client)  throws SQLException
+	@Override
+	public boolean currentLoans(Client client) throws SQLException
 	{	
 		ResultSet rsLoans;
 

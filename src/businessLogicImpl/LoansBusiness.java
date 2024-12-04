@@ -311,6 +311,7 @@ public class LoansBusiness implements ILoansBusiness
 		}
 	}
 	
+	@Override
 	public boolean currentLoans (Client client) throws BusinessException
 	{
 		try
@@ -325,7 +326,18 @@ public class LoansBusiness implements ILoansBusiness
 		{
 			ex.printStackTrace();
 			throw new BusinessException
-				("Ocurrió un error desconocido al verificar préstamos vigentes o en revisión.");
+				("Ocurrió un error desconocido al verificar préstamos vigentes.");
 		}
+	}
+	
+	@Override
+	public BigDecimal getRequestedAmount(List<Loan> loans) 
+	{
+		BigDecimal totalAmount = BigDecimal.ZERO;
+		for(Loan loan : loans)
+		{
+			totalAmount = totalAmount.add(loan.getRequestedAmount());
+		}
+		return totalAmount;
 	}
 }
