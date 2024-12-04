@@ -3,6 +3,8 @@ package businessLogicImpl;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
+
 import businessLogic.IAccountsBusiness;
 import dataAccessImpl.AccountsDao;
 import dataAccessImpl.ClientsDao;
@@ -122,30 +124,28 @@ public class AccountsBusiness implements IAccountsBusiness
        		if ( accountsList.size() == 1 && loansDao.currentLoans(client))
        		{
        			if (!(account.getBalance().compareTo(BigDecimal.ZERO) >= 0))
-       			{
+       			       			{
        				throw new BusinessException
-                    ( "No se puede dar de baja la cuenta. El cliente registra"
-                    		+ " prestamos vigentes y tiene saldo negativo en su cuenta.");
+                    ( "Existen prestamos vigentes y  saldo negativo en la cuenta N° " + accountId);
        			}
        			else 
-       			{
+            	{
        				throw new BusinessException
-                    ( "No se puede dar de baja la cuenta ya que el cliente registra prestamos vigentes.");
+                    ( "Existen prestamos vigentes.");
        			}
        		}
        		else 
-       		{
+       		{  
        			if (account.getBalance().compareTo(BigDecimal.ZERO) >= 0) 
        			{
        			 return accountsDao.delete(accountId);   
                 }      
                 else
-                {
-                  throw new BusinessException
-                    ( "No se puede eliminar una cuenta con saldo negativo."); 
-       			}
-       		}
-       			
+                	{
+                	 throw new BusinessException
+                     ( "Cuenta con saldo negativo."); 
+        			}
+       			}		
         }
         catch (SQLException ex)
         {
@@ -162,6 +162,34 @@ public class AccountsBusiness implements IAccountsBusiness
                 ("Ocurrió un error desconocido al eliminar la cuenta.");
         }
     }
+	
+	public boolean delete (ArrayList<Account> accounts) throws BusinessException
+	{
+		try 
+		{
+			int countDeleted = 0;
+			
+			 for (Account account : accounts)
+			 {
+			    int accountId = account.getId();
+				AccountsBusiness accountsBusiness = new AccountsBusiness ();;
+				accountsBusiness.delete(accountId);
+				countDeleted ++; 
+		     }
+				 return countDeleted == accounts.size();   
+		}	
+		catch (BusinessException ex)
+		{
+			throw ex;
+		}
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            throw new BusinessException
+                ("Ocurrió un error desconocido al eliminar las cuentas del cliente.");
+        }
+		
+	}
 
 	@Override
 	public ArrayList<Account> list() throws BusinessException
@@ -246,6 +274,4 @@ public class AccountsBusiness implements IAccountsBusiness
 		
 		return entity + branch + firstDV + accNumber + lastDV;
 	}
-
-
 }

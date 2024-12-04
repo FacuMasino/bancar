@@ -104,6 +104,17 @@ public class ClientsDao extends Dao<Client> implements IClientsDao
 			db.getPreparedStatement().setBoolean(1, !currentActiveStatus);
 			db.getPreparedStatement().setInt(2, clientId);
 			rows = db.getPreparedStatement().executeUpdate();
+			AccountsDao accountsDao = new AccountsDao();
+			ArrayList<Account> accountsList = new ArrayList<>();
+				
+				accountsList =	accountsDao.list(clientId);
+			
+			 for (Account account : accountsList) {
+				 
+				 int accountId = account.getId();
+					accountsDao.delete(accountId)  ;
+		        }
+		
 		}
 		catch (SQLException ex)
 		{

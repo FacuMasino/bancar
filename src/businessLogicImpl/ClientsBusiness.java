@@ -137,13 +137,21 @@ public class ClientsBusiness implements IClientsBusiness
 		{
 			if (currentActiveStatus)
 			{
-				validationsBeforeDelete(clientId);
 				
-				// Rechazar todos los préstamos que aún no se aprobaron
-				Client client = read(clientId);
+				Client	client = clientsDao.read(clientId);
+				loansBusiness.currentLoans(client);
+				
+				ArrayList <Account> accounts = new ArrayList <Account> ();
+				accounts = accountsBusiness.list(clientId); 
+				
+				if (accounts.size() > 0)
+				{
+					accountsBusiness.delete(accounts);
+	
+				}			
+				// Rechazar todos los préstamos que aún no se aprobaron (STATUS EN REVISION)
 				loansBusiness.rejectAll(client);
 			}
-			
 			return clientsDao.toggleActiveStatus(clientId, currentActiveStatus);
 		}
 		catch (SQLException ex)
@@ -270,37 +278,16 @@ public class ClientsBusiness implements IClientsBusiness
 	// Cada validación en su negocio correspondiente, ejemplo:
 	// accountsBusiness.delete tendrá sus validaciones y devolverá una excepción
 	// según corresponda. Esto evita validaciones repetidas
-	private void validationsBeforeDelete(int clientId) throws BusinessException
+	/*private void validationsBeforeDelete(int clientId) throws BusinessException
 	{
-		int CountNegativeAccounts = 0;
-		ArrayList<Account> accounts = accountsBusiness.list(clientId);
+		////int CountNegativeAccounts = 0;
+		//////ArrayList<Account> accounts = accountsBusiness.list(clientId);
 		Client client;
 		try
 		{
 			client = clientsDao.read(clientId);
 		
-		for (Account account : accounts)
-		{
-			if (account.getBalance().compareTo(BigDecimal.ZERO) < 0)
-			{
-				CountNegativeAccounts++;
-			}
-		}
-		if (CountNegativeAccounts > 0)
-		{
-			if (CountNegativeAccounts > 1)
-			{
-				throw new BusinessException(
-						"No es posible procesar la baja del cliente. Registra cuentas con deuda.");
-			} 
-			else
-			{
-				throw new BusinessException(
-						"No es posible procesar la baja del cliente. Registra cuenta con deuda.");
-			}
-		}
-		
-		if (loansBusiness.currentLoans(client))
+			if (loansBusiness.currentLoans(client))
         	{
         		throw new BusinessException
         		( "No es posible procesar la baja del cliente. Tiene prestamos vigentes.");
@@ -311,7 +298,7 @@ public class ClientsBusiness implements IClientsBusiness
 			e.printStackTrace();
 			throw new SQLOperationException(e.getMessage());
 		}
-	}
+	}*/
 	
 	// TODO: Eliminar este método y reemplazar todos sus llamados por cliBiz.read(cliBiz.findClientId(userId))
 	// (Doble click en el nombre del método y click en Open Call Hierarchy para ver llamados)
