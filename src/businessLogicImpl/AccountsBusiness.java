@@ -35,7 +35,6 @@ public class AccountsBusiness implements IAccountsBusiness
 	{
 		ArrayList <Account> accounts = new ArrayList <Account> ();
 		
-		
 		try
 		{
 			accounts = accountsDao.list(account.getClient().getClientId());
@@ -207,31 +206,20 @@ public class AccountsBusiness implements IAccountsBusiness
 		}
 	}
 	
+	/**
+	 * Si no tiene cuentas devolverá una lista vacía, se debe verificar
+	 * En cada llamado según corresponda si la lista está vacía o no.
+	 */
 	@Override
 	public ArrayList<Account> list(int clientId) throws BusinessException
 	{
-		//TODO: revisar este list...que pasa si estoy listando todos las cuentas de todos los clientes?
-		//cuando encuentre un cliente sin cuentas me tira la ex?
-		//TODO: parche: Exception comentada para que funcione el listado de clientes
-		// Lo correcto sería que arroje la excepción, Si alguien está llamando a este list para un cliente especifico,
-		// Debe estar activo, y si no está activo entonces no debería estar intentando hacer nada con sus cuentas,
-		// Ya que al darlo de baja tambien deberian haberse dado de baja sus cuentas
 		try
 		{
-			ArrayList<Account> accounts = accountsDao.list(clientId);
-			if(accounts.isEmpty())
-			{
-				throw new NoActiveAccountsException();
-			}
-			return accounts;
+			return accountsDao.list(clientId);
 		}
 		catch (SQLException ex)
 		{
 			throw new SQLOperationException();
-		}
-		catch (NoActiveAccountsException ex)
-		{
-			throw ex;
 		}
 		catch (Exception ex)
 		{
@@ -260,7 +248,8 @@ public class AccountsBusiness implements IAccountsBusiness
 	/*
 	 * Genera un CBU ficticio basado en el nro de cuenta (ID)
 	 */
-	private String generateCBU(int accountId)
+	@Override
+	public String generateCBU(int accountId)
 	{
 		String entity = "919"; // Pos 1-3
 		String branch = "0001"; // Pos 4-7

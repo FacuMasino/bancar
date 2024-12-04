@@ -412,11 +412,6 @@ public class AdminClientsServlet extends HttpServlet
 						.list(client.getClientId());
 				client.setAccounts(accounts);
 			}
-			catch (NoActiveAccountsException ex)
-			{
-				client.setAccounts(Collections.emptyList());
-				continue;
-			}
 			catch (BusinessException ex)
 			{
 				throw new BusinessException(
