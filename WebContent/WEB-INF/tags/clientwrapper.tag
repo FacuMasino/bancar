@@ -98,6 +98,5 @@
   </div>
 </div>
 <script type="text/javascript">
-	setActiveMenuItem('<%=activeMenuItem%>
-	');
+	setActiveMenuItem('<%=activeMenuItem%>');
 </script>
