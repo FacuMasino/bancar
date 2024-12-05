@@ -17,7 +17,7 @@ Cuenta con una plataforma para que los clientes puedan realizar operaciones y lo
 		- [Base de datos MySQL](#base-de-datos-mysql)
 		- [Java Development Kit](#java-development-kit)
 		- [Apache Tomcat](#apache-tomcat)
-		- [Propiedades de conexión](#propiedades-de-conexión)
+		- [Parámetros de configuración](#parámetros-de-configuración)
 		- [Variables de entorno](#variables-de-entorno)
 	- [Licencia y contribuciones](#licencia-y-contribuciones)
 
@@ -93,14 +93,14 @@ Se recomienda instalar la versión 8.5, que puede ser descargada desde el [repos
 La versión 9 del [sitio oficial de Apache Tomcat](https://tomcat.apache.org/download-90.cgi) no fue probada pero podría ser una alternativa viable.
 Versiones posteriores pueden tener problemas de compatibilidad con versiones antiguas del JDK, debido a cambios en los nombres de algunas bibliotecas que necesitan ser importadas en el código fuente.
 
-### <a name="config"></a>Propiedades de conexión
+### <a name="config"></a>Parámetros de configuración
 
 > [!IMPORTANT]
 > &nbsp;
-> Se deben configurar las credenciales de acceso a la base de datos.
+> Se deben configurar las credenciales de acceso a la base de datos y a la API de mensajería.
 
 &nbsp;
-Para ello, hay que crear un archivo llamado `config.properties` en el [**directorio src**](./src) con el siguiente código, reemplazando `tupassword` por la contraseña de la base de datos.
+Crear un archivo llamado `config.properties` en el [**directorio src**](./src) con el siguiente código, reemplazando `tupassword` por la contraseña de la base de datos y `mtmj pylm wvqa ubcl` por la contraseña de la API encargada del envío automático de mails.
 
 ```properties
 # Dirección del host de la base de datos
@@ -114,13 +114,19 @@ db.pass=tupassword
 
 # Nombre de la base de datos
 db.name=bancar_db
+
+# Usuario Email SMTP
+email.user=bancar.sys.info@gmail.com
+
+# Contrasena Email SMTP
+email.pass=mtmj pylm wvqa ubcl
 ```
 
 ### <a name="classpath"></a>Variables de entorno
 
 &nbsp;
 Es necesario descargar MySQL Connector (JDBC) desde el [sitio oficial de MySQL](https://dev.mysql.com/downloads/).
-La biblioteca externa [Standard Tag Library (JSTL)](./jstl-1.2.jar) también es necesaria, y se encuentra en el directorio raíz. En el [siguiente enlace](https://rafacabeza.gitbooks.io/dws/content/java-ee/spring/jstl.html) se encuentra un resumen de su documentación.
+La biblioteca externa [Standard Tag Library (JSTL)](./jstl-1.2.jar) también es necesaria, y se encuentra en el directorio raíz. En el [siguiente enlace](https://rafacabeza.gitbooks.io/dws/content/java-ee/spring/jstl.html) se encuentra un resumen de su documentación. De igual forma, el proyecto utiliza la biblioteca [Java Mail](./javax.mail.jar) que también está disponible en este repositorio.
 
 &nbsp;
 Las rutas a estos archivos deben ser agregadas al Build Path y el Deployment Assembly manualmente desde el IDE.
@@ -130,7 +136,7 @@ Las rutas a estos archivos deben ser agregadas al Build Path y el Deployment Ass
 > El archivo `.classpath` no está siendo versionado para que las rutas no cambien cada vez que otro contribuidor modifica las variables de entorno.
 
 &nbsp;
-Por lo tanto, es necesario crear en el [**directorio raíz**](./) un archivo llamado `.classpath` (sin extensión) que contenga el siguiente código reemplazando `/tu/ruta/al/mysqlconnector.jar` y `/tu/ruta/al/jstl.jar` por las ubicaciones correspondientes.
+Por lo tanto, es necesario crear en el [**directorio raíz**](./) un archivo llamado `.classpath` (sin extensión) que contenga el siguiente código reemplazando `/tu/ruta/al/mysqlconnector.jar`, `/tu/ruta/al/jstl.jar` y `/tu/ruta/al/javax.mail.jar` por las ubicaciones correspondientes.
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -155,6 +161,11 @@ Por lo tanto, es necesario crear en el [**directorio raíz**](./) un archivo lla
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="/tu/ruta/al/jstl.jar">
+		<attributes>
+			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/tu/ruta/al/javax.mail.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
