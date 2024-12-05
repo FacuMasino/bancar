@@ -26,28 +26,28 @@
     <div class="container flex flex-col gap-6 mx-auto my-6 px-2">
       <p class="font-bold text-2xl mb-6">¡Bienvenido/a ${user.username}!</p>
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5">
-        <div class="bg-white rounded rounded-lg flex flex-col justify-between gap-2.5 px-8 py-6 bg-emerald-100">
+        <div class="bg-white rounded rounded-lg flex flex-col justify-between gap-2.5 px-8 py-6">
           <div class="flex justify-between">
             <p>Fondos Totales</p>
             <i data-lucide="landmark"></i>
           </div>
           <p class="text-green-600 text-xl font-bold"><fmt:formatNumber value="${totalFunds}" type="currency"/></p>
         </div>
-        <div class="bg-white rounded rounded-lg flex flex-col justify-between gap-2.5 px-8 py-6 bg-emerald-100">
+        <div class="bg-white rounded rounded-lg flex flex-col justify-between gap-2.5 px-8 py-6">
           <div class="flex justify-between">
             <p>Préstamos Activos</p>
             <i data-lucide="credit-card"></i>
           </div>
           <p class="text-orange-500  text-xl font-bold text-center">${approvedLoansCount}</p>
         </div>
-        <div class="bg-white rounded rounded-lg flex flex-col justify-between gap-2.5 px-8 py-6 bg-emerald-100">
+        <div class="bg-white rounded rounded-lg flex flex-col justify-between gap-2.5 px-8 py-6">
           <div class="flex justify-between ">
             <p>Clientes</p>
             <i data-lucide="user"></i>
           </div>
           <p class="text-green-600 text-xl font-bold text-center">${clientsQty}</p>
         </div>
-        <div class="bg-white rounded rounded-lg flex flex-col justify-between gap-2.5 px-8 py-6 bg-emerald-100">
+        <div class="bg-white rounded rounded-lg flex flex-col justify-between gap-2.5 px-8 py-6">
           <div class="flex justify-between">
             <p>Deuda Clientes</p>
             <i data-lucide="user"></i>

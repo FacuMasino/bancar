@@ -83,7 +83,7 @@ public class EmailBusiness {
 
             Transport.send(message);
 
-            System.out.println("Done");
+            System.out.println("Email enviado.");
 
         } catch (MessagingException ex) {
             ex.printStackTrace();

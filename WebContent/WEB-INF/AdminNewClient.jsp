@@ -77,7 +77,7 @@
               <label for="clientCuil" class="label"> <span class="label-text font-bold">CUIL</span>
               </label>
             </div>
-            <input type="number" name="clientCuil" placeholder="CUIL" class="input input-bordered w-full"
+            <input type="number" id="clientCuil" name="clientCuil" placeholder="CUIL" class="input input-bordered w-full"
               value="${draftClient.cuil}"  min="20000000000" max="28999999999" />
           </div>
         </div>
@@ -103,12 +103,12 @@
               </label>
             </div>
             
-            <select name="clientSex" class="bg-white select select-bordered w-full">
+            <select name="clientSex" class="bg-white select select-bordered w-full" required>
               <option value="" selected disabled>
               Seleccione una opción
                </option>
               <option value="Masculino" ${client.sex=='Masculino' ? 'selected' :''}
-                ${draftClient.sex=='Femenino' ? 'selected' :''}>
+                ${draftClient.sex=='Masculino' ? 'selected' :''}>
                 Masculino
               </option>
               <option value="Femenino" ${client.sex=='Femenino' ? 'selected' :''}
@@ -116,7 +116,7 @@
                 Femenino
               </option>
                <option value="No informa" ${client.sex=='' ? 'selected' :''}
-                ${draftClient.sex=='' ? 'selected' :''}>
+                ${draftClient.sex== null ? 'selected' :''}>
                 No informado
               </option>
             </select>

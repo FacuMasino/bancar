@@ -18,6 +18,20 @@ public class Validator
 	{
 		List<String> invalidFields = new ArrayList<>();
 
+		// Contraseña
+		if (!isValidPassword(client.getPassword()))
+		{
+			invalidFields.add(
+					"La contraseña debe tener al menos 6 caracteres, 1 mayúscula, 1 minúscula y 1 número");
+		}
+		if(client.getPassword().equals(client.getUsername()))
+		{
+			invalidFields.add("La contraseña no puede ser igual al nombre de usuario.");
+		} else if (client.getPassword().contains(client.getUsername()))
+		{
+			invalidFields.add("La contraseña no puede contener el nombre de usuario");
+		}
+		
 		// DNI
 		if (client.getDni() == null || client.getDni().trim().isEmpty())
 		{
@@ -34,6 +48,9 @@ public class Validator
 		} else if (!hasOnlyNumbers(client.getCuil()))
 		{
 			invalidFields.add("El CUIL solo puede contener números");
+		} else if (!hasValidCuil(client))
+		{
+			invalidFields.add("El CUIL ingresado no coincide con el DNI");
 		}
 
 		// Teléfono
@@ -43,11 +60,9 @@ public class Validator
 		} else if (!hasOnlyNumbers(client.getPhone()))
 		{
 			invalidFields.add("El Teléfono solo puede contener números");
-		} /*
-			 * //NO VALIDAMOZ EL LARGO...DEJAD LIBRE LA CANTIDAD... else if
-			 * (client.getPhone().length() != 10) { invalidFields
-			 * .add("El Teléfono es inválido, debe contener 10 dígitos"); }
-			 */
+		} else if (client.getPhone().length() != 10) { 
+			invalidFields.add("El Teléfono es inválido, debe contener 10 dígitos"); 
+		}
 
 		// Nombre
 		if (client.getFirstName() == null
@@ -223,5 +238,37 @@ public class Validator
 				"^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
 				Pattern.CASE_INSENSITIVE);
 		return emailRegex.matcher(email).matches();
+	}
+	
+	private static boolean isValidPassword(String pass)
+	{
+		int upper = 0, lower = 0, number = 0;
+		if(pass.length() < 6) return false;
+		if(hasOnlyNumbers(pass)) return false;
+		if(hasOnlyLetters(pass)) return false;
+		for(char ch : pass.toCharArray())
+		{
+			if(ch >= 'A' && ch <= 'Z')
+			{	
+				upper++;
+			}
+			if(ch >= 'a' && ch <= 'z')
+			{
+				lower++;
+			}
+			if(ch >= '0' && ch <= '9')
+			{
+				number++;
+			}
+		}
+		if(upper == 0 || lower == 0 || number == 0) return false;
+		return true;
+	}
+	
+	private static boolean hasValidCuil(Client client)
+	{
+		String extractedDNI = client.getCuil().substring(2, client.getCuil().length()-1);
+		if(!extractedDNI.equals(client.getDni())) return false;
+		return true;
 	}
 }

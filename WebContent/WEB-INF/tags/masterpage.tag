@@ -54,9 +54,14 @@
           <%-- Si hay atributo "errorList" se muestra la lista de errores --%>
           <c:when test="${not empty msgErrorList}">
               <div id="hiddenErrorList" class="hidden">
-                <c:forEach var="errorItem" items="${msgErrorList}">
-                    ${errorItem}<br>
-                </c:forEach>
+                <ul>
+                  <c:forEach var="errorItem" items="${msgErrorList}">
+                      <li>
+                        <i data-lucide="arrow-right" class="inline"></i>
+                        ${errorItem}
+                      </li>
+                  </c:forEach>
+                </ul>
               </div>
               <script type="module">
               	import { startWindToast } from "${pageContext.request.contextPath}/js/wind-notify/index.js"
