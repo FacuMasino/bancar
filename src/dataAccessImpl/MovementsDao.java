@@ -4,17 +4,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-
 import dataAccess.IAccountsDao;
+import dataAccess.IMovementTypesDao;
 import dataAccess.IMovementsDao;
 import domainModel.Movement;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public class MovementsDao implements IMovementsDao
 {
 	private Database db;
-	private MovementTypesDao movementTypesDao;
+	private IMovementTypesDao movementTypesDao;
 	private IAccountsDao accountsDao;
 	
 	public MovementsDao()
@@ -69,37 +67,6 @@ public class MovementsDao implements IMovementsDao
 
 		return movement;
 	}
-
-	// Para obtener 2 movimientos con el mismo TransactionId (Transferencias)
-	// TODO: No es lo más óptimo, si llegaramos debería haber una tabla de Transferencias 
-	@Override
-	public ArrayList<Movement> list(String transactionId) throws SQLException
-	{
-		ResultSet rs;
-		ArrayList<Movement> movements = new ArrayList<Movement>();
-
-		try
-		{
-			db.setPreparedStatement(
-					"SELECT * FROM Movements where TransactionId = ? ;");
-			db.getPreparedStatement().setString(1, transactionId);
-			rs = db.getPreparedStatement().executeQuery();
-
-			while (rs.next())
-			{
-				Movement movement = new Movement();
-				assignResultSet(movement, rs);
-				movements.add(movement);
-			}
-		}
-		catch (Exception ex)
-		{
-			ex.printStackTrace();
-			throw ex;
-		}
-
-		return movements;
-	}
 	
 	@Override
 	public ArrayList<Movement> list(int accountId) throws SQLException
@@ -110,7 +77,7 @@ public class MovementsDao implements IMovementsDao
 		try
 		{
 			db.setPreparedStatement(
-					"SELECT * FROM Movements where AccountId =?;");
+					"SELECT * FROM Movements where AccountId =?");
 			db.getPreparedStatement().setInt(1, accountId);
 			rs = db.getPreparedStatement().executeQuery();
 
@@ -131,8 +98,7 @@ public class MovementsDao implements IMovementsDao
 	}
 
 	@Override
-	public ArrayList<Movement> list(int accountId, int movTypeId)
-			throws SQLException
+	public ArrayList<Movement> list(int accountId, int movTypeId) throws SQLException
 	{
 		ResultSet rs;
 		ArrayList<Movement> movements = new ArrayList<Movement>();
@@ -140,7 +106,7 @@ public class MovementsDao implements IMovementsDao
 		try
 		{
 			db.setPreparedStatement(
-					"SELECT * FROM Movements WHERE AccountId = ? AND MovementTypeId = ?;");
+					"SELECT * FROM Movements WHERE AccountId = ? AND MovementTypeId = ?");
 			db.getPreparedStatement().setInt(1, accountId);
 			db.getPreparedStatement().setInt(2, movTypeId);
 
@@ -161,8 +127,40 @@ public class MovementsDao implements IMovementsDao
 		return movements;
 	}
 	
-	public ArrayList<Movement> search(int accountId, ArrayList<Movement> movements,
-			String searchInput) throws SQLException
+	// Para obtener 2 movimientos con el mismo TransactionId (Transferencias)
+	// TODO: No es lo más óptimo, si llegaramos debería haber una tabla de Transferencias 
+	@Override
+	public ArrayList<Movement> list(String transactionId) throws SQLException
+	{
+		ResultSet rs;
+		ArrayList<Movement> movements = new ArrayList<Movement>();
+
+		try
+		{
+			db.setPreparedStatement(
+					"SELECT * FROM Movements where TransactionId = ?");
+			db.getPreparedStatement().setString(1, transactionId);
+			rs = db.getPreparedStatement().executeQuery();
+
+			while (rs.next())
+			{
+				Movement movement = new Movement();
+				assignResultSet(movement, rs);
+				movements.add(movement);
+			}
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+			throw ex;
+		}
+
+		return movements;
+	}
+	
+	@Override
+	public ArrayList<Movement> search(int accountId, ArrayList<Movement> movements, String searchInput)
+			throws SQLException
 	{
 		ResultSet rs;
 	    ArrayList<Movement> searchedMovements = new ArrayList<Movement>();
@@ -170,7 +168,7 @@ public class MovementsDao implements IMovementsDao
 	    try
 		{
 			db.setPreparedStatement(
-					"SELECT * FROM Movements WHERE AccountId = ? AND (Details LIKE ? OR Amount LIKE ?);");
+					"SELECT * FROM Movements WHERE AccountId = ? AND (Details LIKE ? OR Amount LIKE ?)");
 			
 			String search = "%" + searchInput + "%";
 			
@@ -195,8 +193,6 @@ public class MovementsDao implements IMovementsDao
 
 		return searchedMovements;
 	}
-	
-	
 
 	private void setParameters(Movement movement)
 			throws SQLException
@@ -212,8 +208,7 @@ public class MovementsDao implements IMovementsDao
 		db.getCallableStatement().setInt(7, movement.getAccount().getId());
 	}
 
-	private void assignResultSet(Movement movement, ResultSet rs)
-			throws SQLException
+	private void assignResultSet(Movement movement, ResultSet rs) throws SQLException
 	{
 		try
 		{

@@ -2,6 +2,7 @@ package businessLogicImpl;
 
 import java.sql.SQLException;
 import businessLogic.IUsersBusiness;
+import dataAccess.IUsersDao;
 import dataAccessImpl.UsersDao;
 import domainModel.User;
 import exceptions.BusinessException;
@@ -9,13 +10,14 @@ import exceptions.SQLOperationException;
 
 public class UsersBusiness implements IUsersBusiness
 {
-	private UsersDao usersDao;
+	private IUsersDao usersDao;
 	
 	public UsersBusiness()
 	{
 		usersDao = new UsersDao();
 	}
 	
+	@Override
 	public User validateCredentials(String username, String password) 
 			throws BusinessException
 	{
@@ -47,6 +49,7 @@ public class UsersBusiness implements IUsersBusiness
 		}
 	}
 
+	@Override
 	public void validateUsername(User user) throws BusinessException
 	{
 		try

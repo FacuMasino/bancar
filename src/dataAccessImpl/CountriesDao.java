@@ -38,7 +38,7 @@ public class CountriesDao extends Dao<Country> implements ICountriesDao
 		
 		try
 		{
-			db.setPreparedStatement("Select * from Countries where CountryId = ?;");
+			db.setPreparedStatement("Select * from Countries where CountryId = ?");
 			db.getPreparedStatement().setInt(1, countryId);
 			rs = db.getPreparedStatement().executeQuery();
 			
@@ -84,13 +84,14 @@ public class CountriesDao extends Dao<Country> implements ICountriesDao
 		return findId(country.getName());
 	}
 	
+	@Override
 	public int findId(String countryName) throws SQLException
 	{
 		ResultSet rs;
 		
 		try
 		{
-			db.setPreparedStatement("SELECT CountryId FROM Countries WHERE CountryName = ?;");
+			db.setPreparedStatement("SELECT CountryId FROM Countries WHERE CountryName = ?");
 			db.getPreparedStatement().setString(1, countryName);
 			rs = db.getPreparedStatement().executeQuery();
 			
@@ -108,13 +109,14 @@ public class CountriesDao extends Dao<Country> implements ICountriesDao
 		}
 	}
 	
+	@Override
 	public int findId(int provinceId) throws SQLException
 	{
 		ResultSet rs;
 		
 		try
 		{
-			db.setPreparedStatement("SELECT CountryId FROM Provinces WHERE ProvinceId = ?;");
+			db.setPreparedStatement("SELECT CountryId FROM Provinces WHERE ProvinceId = ?");
 			db.getPreparedStatement().setInt(1, provinceId);
 			rs = db.getPreparedStatement().executeQuery();
 			
@@ -130,6 +132,12 @@ public class CountriesDao extends Dao<Country> implements ICountriesDao
 			ex.printStackTrace();
 			throw ex;
 		}
+	}
+	
+	@Override
+	public void handleId(Country country) throws SQLException
+	{
+		super.handleId(country);
 	}
 	
 	private void setParameters(Country country, boolean isUpdate) throws SQLException

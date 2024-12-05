@@ -1,7 +1,6 @@
 package businessLogic;
 
 import java.util.List;
-
 import domainModel.LoanType;
 import exceptions.BusinessException;
 

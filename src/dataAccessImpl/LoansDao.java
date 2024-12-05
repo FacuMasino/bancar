@@ -4,7 +4,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import dataAccess.IAccountsDao;
 import dataAccess.IClientsDao;
 import dataAccess.IInstallmentsDao;
@@ -12,10 +11,7 @@ import dataAccess.ILoanStatusesDao;
 import dataAccess.ILoanTypesDao;
 import dataAccess.ILoansDao;
 import domainModel.Client;
-import domainModel.Installment;
 import domainModel.Loan;
-import domainModel.LoanStatus;
-import domainModel.LoanType;
 
 public class LoansDao implements ILoansDao 
 {
@@ -129,63 +125,8 @@ public class LoansDao implements ILoansDao
 		return loans;
 	}
 	
-	private void setParameters(Loan loan) throws SQLException
-	{
-		db.getPreparedStatement().setInt(1, loan.getInstallmentsQuantity());
-		db.getPreparedStatement().setBigDecimal(2, loan.getRequestedAmount());
-		db.getPreparedStatement().setBigDecimal(3, loan.getInterestRate());
-		db.getPreparedStatement().setInt(4, loan.getLoanType().getId());
-		db.getPreparedStatement().setInt(5, loan.getLoanStatus().getId());
-		db.getPreparedStatement().setInt(6, loan.getClient().getClientId());
-		db.getPreparedStatement().setInt(7, loan.getAccount().getId());
-	}
-
-	private void setUpdateParameters(Loan loan) throws SQLException
-	{	
-		//TODO: bug?
-		db.getPreparedStatement().setInt(1, loan.getLoanStatus().getId());
-		db.getPreparedStatement().setInt(2, loan.getLoanId());
-	}
-	
-	//Se cambia a protected para acceder desde otras clases del package(y no repetir codigo)
-	protected Loan getLoan(ResultSet rs) throws SQLException
-	{   
-		Loan auxLoan = new Loan();
-                               
-		try
-		{
-			auxLoan.setLoanId(rs.getInt("LoanId"));
-			auxLoan.setCreationDate(rs.getDate("CreationDate"));
-			auxLoan.setRequestedAmount(rs.getBigDecimal("RequestedAmount"));
-			auxLoan.setInterestRate(rs.getBigDecimal("InterestRate"));
-			auxLoan.setInstallmentsQuantity(rs.getInt("InstallmentsQuantity"));
-			
-			int loanTypeId = rs.getInt("LoanTypeId");
-			auxLoan.setLoanType(loanTypesDao.read(loanTypeId));
-			
-			int loanStatusId = rs.getInt("LoanStatusId");
-			auxLoan.setLoanStatus(loanStatusesDao.read(loanStatusId));
-			
-			int clientId = rs.getInt("ClientId");
-			auxLoan.setClient(clientsDao.read(clientId));
-			
-			int accountId = rs.getInt("AccountId");
-			auxLoan.setAccount(accountsDao.read(accountId));
-			
-			auxLoan.setInstallments(installmentsDao.listByLoanId(auxLoan.getLoanId()));
-			auxLoan.setPendingInstallments(installmentsDao.listPendingsByLoanId(auxLoan.getLoanId()));
-		}
-		catch (SQLException ex) 
-		{
-			ex.printStackTrace();
-			throw ex;
-		}
-
-		return auxLoan;
-	}
-	
 	@Override
-	public List<Loan> list (Client client) throws SQLException
+	public List<Loan> list(Client client) throws SQLException
 	{
 
 		ResultSet rsLoans;
@@ -238,6 +179,60 @@ public class LoansDao implements ILoansDao
 			ex.printStackTrace();
 			throw ex;
 		}
+	}
+
+	@Override
+	public Loan getLoan(ResultSet rs) throws SQLException
+	{   
+		Loan auxLoan = new Loan();
+                               
+		try
+		{
+			auxLoan.setLoanId(rs.getInt("LoanId"));
+			auxLoan.setCreationDate(rs.getDate("CreationDate"));
+			auxLoan.setRequestedAmount(rs.getBigDecimal("RequestedAmount"));
+			auxLoan.setInterestRate(rs.getBigDecimal("InterestRate"));
+			auxLoan.setInstallmentsQuantity(rs.getInt("InstallmentsQuantity"));
+			
+			int loanTypeId = rs.getInt("LoanTypeId");
+			auxLoan.setLoanType(loanTypesDao.read(loanTypeId));
+			
+			int loanStatusId = rs.getInt("LoanStatusId");
+			auxLoan.setLoanStatus(loanStatusesDao.read(loanStatusId));
+			
+			int clientId = rs.getInt("ClientId");
+			auxLoan.setClient(clientsDao.read(clientId));
+			
+			int accountId = rs.getInt("AccountId");
+			auxLoan.setAccount(accountsDao.read(accountId));
+			
+			auxLoan.setInstallments(installmentsDao.listByLoanId(auxLoan.getLoanId()));
+			auxLoan.setPendingInstallments(installmentsDao.listPendingsByLoanId(auxLoan.getLoanId()));
+		}
+		catch (SQLException ex) 
+		{
+			ex.printStackTrace();
+			throw ex;
+		}
+
+		return auxLoan;
+	}
 	
+	private void setParameters(Loan loan) throws SQLException
+	{
+		db.getPreparedStatement().setInt(1, loan.getInstallmentsQuantity());
+		db.getPreparedStatement().setBigDecimal(2, loan.getRequestedAmount());
+		db.getPreparedStatement().setBigDecimal(3, loan.getInterestRate());
+		db.getPreparedStatement().setInt(4, loan.getLoanType().getId());
+		db.getPreparedStatement().setInt(5, loan.getLoanStatus().getId());
+		db.getPreparedStatement().setInt(6, loan.getClient().getClientId());
+		db.getPreparedStatement().setInt(7, loan.getAccount().getId());
+	}
+
+	private void setUpdateParameters(Loan loan) throws SQLException
+	{	
+		//TODO: bug?
+		db.getPreparedStatement().setInt(1, loan.getLoanStatus().getId());
+		db.getPreparedStatement().setInt(2, loan.getLoanId());
 	}
 }

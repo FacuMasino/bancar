@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-
 import businessLogic.IReportsBusiness;
 import dataAccess.IReportsDao;
 import dataAccessImpl.ReportsDao;
@@ -30,14 +29,16 @@ public class ReportsBusiness implements IReportsBusiness
 		try
 		{
 			return reportsDao.getLoansByDateRange(startDate, endDate);
-		} catch (SQLException ex)
+		}
+		catch (SQLException ex)
 		{
 			throw new SQLOperationException();
-		} catch (Exception ex)
+		}
+		catch (Exception ex)
 		{
 			ex.printStackTrace();
 			throw new BusinessException(
-					"Ocurrió un error desconocido al leer los prestamos solicitados...");
+					"Ocurrió un error desconocido al leer los préstamos solicitados.");
 		}
 	}
 
@@ -48,14 +49,16 @@ public class ReportsBusiness implements IReportsBusiness
 		try
 		{
 			return reportsDao.getOutstandingInstallmentsAmount();
-		} catch (SQLException ex)
+		}
+		catch (SQLException ex)
 		{
 			throw new SQLOperationException();
-		} catch (Exception ex)
+		}
+		catch (Exception ex)
 		{
 			ex.printStackTrace();
 			throw new BusinessException(
-					"Ocurrió un error desconocido al obtener la deuda total por préstamos...");
+					"Ocurrió un error desconocido al obtener la deuda total por préstamos.");
 		}
 	}
 
@@ -65,14 +68,16 @@ public class ReportsBusiness implements IReportsBusiness
 		try
 		{
 			return reportsDao.getOverdueLoansCount();
-		} catch (SQLException ex)
+		}
+		catch (SQLException ex)
 		{
 			throw new SQLOperationException();
-		} catch (Exception ex)
+		}
+		catch (Exception ex)
 		{
 			ex.printStackTrace();
 			throw new BusinessException(
-					"Ocurrió un error desconocido al obtener la cantidad de prestamos con cuotas atrasadas...");
+					"Ocurrió un error desconocido al obtener la cantidad de préstamos con cuotas atrasadas.");
 		}
 	}
 
@@ -82,14 +87,16 @@ public class ReportsBusiness implements IReportsBusiness
 		try
 		{
 			return reportsDao.profitsEarned();
-		} catch (SQLException e)
+		}
+		catch (SQLException e)
 		{
 			throw new SQLOperationException();
-		} catch (Exception ex)
+		}
+		catch (Exception ex)
 		{
 			ex.printStackTrace();
 			throw new BusinessException(
-					"Ocurrió un error desconocido al obtener la ganancias obtenidas por prestamos...");
+					"Ocurrió un error desconocido al obtener las ganancias obtenidas por préstamos.");
 		}
 	}
 
@@ -99,14 +106,16 @@ public class ReportsBusiness implements IReportsBusiness
 		try
 		{
 			return reportsDao.profitsToEarn();
-		} catch (SQLException e)
+		}
+		catch (SQLException e)
 		{
 			throw new SQLOperationException();
-		} catch (Exception ex)
+		}
+		catch (Exception ex)
 		{
 			ex.printStackTrace();
 			throw new BusinessException(
-					"Ocurrió un error desconocido al obtener las ganancias futuras por prestamos...");
+					"Ocurrió un error desconocido al obtener las ganancias futuras por prestamos.");
 		}
 	}
 
@@ -125,12 +134,13 @@ public class ReportsBusiness implements IReportsBusiness
 		{
 			ex.printStackTrace();
 			throw new BusinessException(
-					"Ocurrió un error desconocido al obtener los clientes por provincia");
+					"Ocurrió un error desconocido al obtener los clientes por provincia.");
 		}
 	}
 
 	@Override
-	public Map<String, BigDecimal> getLoansAmountByMonthPeriod(LocalDate startDate,LocalDate endDate) throws BusinessException
+	public Map<String, BigDecimal> getLoansAmountByMonthPeriod(
+			LocalDate startDate,LocalDate endDate) throws BusinessException
 	{
 		try
 		{
@@ -144,12 +154,13 @@ public class ReportsBusiness implements IReportsBusiness
 		{
 			ex.printStackTrace();
 			throw new BusinessException(
-					"Ocurrió un error desconocido al obtener los montos de prestamos por periodo(MES)");
+					"Ocurrió un error desconocido al obtener los montos de prestamos por mes.");
 		}
 	}
 
 	@Override
-	public Map<String, BigDecimal> getLoansAmountByDayPeriod(LocalDate startDate, LocalDate endDate) throws BusinessException
+	public Map<String, BigDecimal> getLoansAmountByDayPeriod(
+			LocalDate startDate, LocalDate endDate) throws BusinessException
 	{
 		try
 		{
@@ -163,12 +174,13 @@ public class ReportsBusiness implements IReportsBusiness
 		{
 			ex.printStackTrace();
 			throw new BusinessException(
-					"Ocurrió un error desconocido al obtener los montos de prestamos por periodo(DIA)");
+					"Ocurrió un error desconocido al obtener los montos de préstamos por día.");
 		}
 	}
 
 	@Override
-	public Map<String, BigDecimal> getTransfersAmountByMonthPeriod(LocalDate startDate, LocalDate endDate) throws BusinessException
+	public Map<String, BigDecimal> getTransfersAmountByMonthPeriod(
+			LocalDate startDate, LocalDate endDate) throws BusinessException
 	{
 		try
 		{
@@ -182,12 +194,13 @@ public class ReportsBusiness implements IReportsBusiness
 		{
 			ex.printStackTrace();
 			throw new BusinessException(
-					"Ocurrió un error desconocido al obtener los montos de transferencias por periodo(MES)");
+					"Ocurrió un error desconocido al obtener los montos de transferencias por mes.");
 		}
 	}
 
 	@Override
-	public Map<String, BigDecimal> getTransfersAmountByDayPeriod(LocalDate startDate, LocalDate endDate) throws BusinessException
+	public Map<String, BigDecimal> getTransfersAmountByDayPeriod(
+			LocalDate startDate, LocalDate endDate) throws BusinessException
 	{
 		try
 		{
@@ -201,7 +214,7 @@ public class ReportsBusiness implements IReportsBusiness
 		{
 			ex.printStackTrace();
 			throw new BusinessException(
-					"Ocurrió un error desconocido al obtener los montos de transferencias por periodo(DIA)");
+					"Ocurrió un error desconocido al obtener los montos de transferencias por día.");
 		}
 	}
 }

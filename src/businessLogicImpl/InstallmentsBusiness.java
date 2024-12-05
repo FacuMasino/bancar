@@ -1,7 +1,6 @@
 package businessLogicImpl;
 
 import java.sql.SQLException;
-
 import businessLogic.IAccountsBusiness;
 import businessLogic.IInstallmentsBusiness;
 import businessLogic.IMovementsBusiness;
@@ -21,7 +20,7 @@ public class InstallmentsBusiness implements IInstallmentsBusiness
 	private IMovementsBusiness movementsBusiness;
 	private IAccountsBusiness accountsBusiness;
 	
-	public InstallmentsBusiness() 
+	public InstallmentsBusiness()
 	{
 		installmentsDao = new InstallmentsDao();
 		movementsBusiness = new MovementsBusiness();
@@ -31,7 +30,8 @@ public class InstallmentsBusiness implements IInstallmentsBusiness
 	@Override
 	public Installment read(int installmentId) throws BusinessException
 	{
-		try {
+		try
+		{
 			return installmentsDao.read(installmentId);
 		} 
 		catch (SQLException ex)
@@ -48,7 +48,8 @@ public class InstallmentsBusiness implements IInstallmentsBusiness
 	@Override
 	public Installment read(Movement movement) throws BusinessException
 	{
-		try {
+		try
+		{
 			return installmentsDao.read(movement);
 		} 
 		catch (SQLException ex)
@@ -65,7 +66,8 @@ public class InstallmentsBusiness implements IInstallmentsBusiness
 	@Override
 	public boolean update(Installment installment) throws BusinessException
 	{
-		try {
+		try
+		{
 			return installmentsDao.update(installment);
 		} 
 		catch (SQLException ex)
@@ -82,7 +84,8 @@ public class InstallmentsBusiness implements IInstallmentsBusiness
 	@Override
 	public boolean generate(int loanId) throws BusinessException
 	{
-		try {
+		try
+		{
 			return installmentsDao.generate(loanId);
 		} 
 		catch (SQLException ex)
@@ -137,7 +140,5 @@ public class InstallmentsBusiness implements IInstallmentsBusiness
 			throw new BusinessException(
 					"Ocurrió un error desconocido al procesar el pago de la cuota.");
 		}
-		
 	}
-
 }

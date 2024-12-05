@@ -1,9 +1,7 @@
 package businessLogicImpl;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
-
 import businessLogic.ILoanStatusesBusiness;
 import dataAccess.ILoanStatusesDao;
 import dataAccessImpl.LoanStatusesDao;
@@ -26,15 +24,17 @@ public class LoanStatusesBusiness implements ILoanStatusesBusiness
 		try
 		{
 			return loanStatusesDao.list();
-		} catch (SQLException ex)
+		}
+		catch (SQLException ex)
 		{
 			ex.printStackTrace();
 			throw new SQLOperationException();
-		} catch (Exception ex)
+		}
+		catch (Exception ex)
 		{
 			ex.printStackTrace();
-			throw new BusinessException("Ocurrió un error al obtener "
-					+ "los estados de préstamos disponibles.");
+			throw new BusinessException(
+					"Ocurrió un error al obtener los estados de préstamos disponibles.");
 		}
 	}
 
@@ -49,12 +49,12 @@ public class LoanStatusesBusiness implements ILoanStatusesBusiness
 		{
 			ex.printStackTrace();
 			throw new SQLOperationException();
-		} catch (Exception ex)
+		}
+		catch (Exception ex)
 		{
 			ex.printStackTrace();
-			throw new BusinessException("Ocurrió un error al obtener "
-					+ "el estado de préstamo.");
+			throw new BusinessException(
+					"Ocurrió un error al obtener el estado de préstamo.");
 		}
 	}
-
 }

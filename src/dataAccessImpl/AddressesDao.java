@@ -3,13 +3,16 @@ package dataAccessImpl;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import dataAccess.IAddressesDao;
+import dataAccess.ICitiesDao;
+import dataAccess.ICountriesDao;
+import dataAccess.IProvincesDao;
 import domainModel.Address;
 
 public class AddressesDao extends Dao<Address> implements IAddressesDao
 {
-	private CitiesDao citiesDao;
-	private ProvincesDao provincesDao;
-	private CountriesDao countriesDao;
+	private ICitiesDao citiesDao;
+	private IProvincesDao provincesDao;
+	private ICountriesDao countriesDao;
 	
 	public AddressesDao()
 	{
@@ -102,6 +105,7 @@ public class AddressesDao extends Dao<Address> implements IAddressesDao
 				address.getCity().getId());
 	}
 	
+	@Override
 	public int findId(String streetName, String streetNumber, String flat, int cityId) throws SQLException
 	{
 		ResultSet rs;
@@ -127,6 +131,12 @@ public class AddressesDao extends Dao<Address> implements IAddressesDao
 			ex.printStackTrace();
 			throw ex;
 		}
+	}
+	
+	@Override
+	public void handleId(Address address) throws SQLException
+	{
+		super.handleId(address);
 	}
 
 	private void setParameters(Address address, boolean isUpdate) throws SQLException

@@ -14,12 +14,13 @@ public class CitiesDao extends Dao<City> implements ICitiesDao
 		
 	}
 	
+	@Override
 	public int getProvinceId()
 	{
 		return provinceId;
 	}
 
-
+	@Override
 	public void setProvinceId(int provinceId)
 	{
 		this.provinceId = provinceId;
@@ -109,11 +110,13 @@ public class CitiesDao extends Dao<City> implements ICitiesDao
 		return findId(city, getProvinceId());
 	}
 	
+	@Override
 	public int findId(City city, int provinceId) throws SQLException
 	{
 		return findId(city.getName(), provinceId);
 	}
 	
+	@Override
 	public int findId(String cityName, int provinceId) throws SQLException
 	{
 		ResultSet rs;
@@ -139,6 +142,7 @@ public class CitiesDao extends Dao<City> implements ICitiesDao
 		}
 	}
 	
+	@Override
 	public void handleId(City city, int provinceId) throws SQLException
 	{
 		setProvinceId(provinceId);

@@ -1,9 +1,10 @@
 package businessLogicImpl;
 
 import java.sql.SQLException;
-
+import businessLogic.IMovementTypesBusiness;
 import businessLogic.IMovementsBusiness;
 import businessLogic.ITransfersBusiness;
+import dataAccess.ITransfersDao;
 import dataAccessImpl.TransfersDao;
 import domainModel.Account;
 import domainModel.Client;
@@ -14,8 +15,8 @@ import exceptions.SQLOperationException;
 
 public class TransfersBusiness implements ITransfersBusiness
 {
-	private TransfersDao transfersDao;
-	private MovementTypesBusiness movementTypesBusiness;
+	private ITransfersDao transfersDao;
+	private IMovementTypesBusiness movementTypesBusiness;
 	private IMovementsBusiness movementsBusiness;
 	
 	public TransfersBusiness()
@@ -53,10 +54,10 @@ public class TransfersBusiness implements ITransfersBusiness
 		return false;
 	}
 	
+	@Override
 	public void validate(Movement movement, Account originAccount, Account destinationAccount)
 					throws BusinessException
-	{   
-
+	{
 		if (destinationAccount == null)
 		{
 			throw new BusinessException("La cuenta de destino no existe.");
@@ -64,11 +65,11 @@ public class TransfersBusiness implements ITransfersBusiness
 
 		Client destinationClient = destinationAccount.getClient();
 		
-		//TODO: Evaluar si inactivamos las cuentas al dar de baja cliente, eso va a cambiar la validacion
 		if (!destinationClient.getActiveStatus() && destinationAccount.getActiveStatus())
 		{
 			throw new BusinessException("El destinatario de la transferencia se encuentra dado de baja.");
 		}
+
 		if (!destinationAccount.getActiveStatus()) 
 		{
 			throw new BusinessException("La cuenta de destino se encuentra dada de baja.");

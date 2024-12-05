@@ -10,7 +10,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import businessLogic.IAccountTypesBusiness;
+import businessLogic.IAccountsBusiness;
+import businessLogic.IClientsBusiness;
+import businessLogic.ILoansBusiness;
+import businessLogic.IMovementTypesBusiness;
+import businessLogic.IMovementsBusiness;
 import businessLogicImpl.AccountTypesBusiness;
 import businessLogicImpl.AccountsBusiness;
 import businessLogicImpl.ClientsBusiness;
@@ -31,12 +36,12 @@ import utils.Page;
 public class AdminAccountsServlet extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
-	private AccountsBusiness accountsBusiness;
-	private ClientsBusiness clientsBusiness;
-	private LoansBusiness loansBusiness;
-	private AccountTypesBusiness accountTypesBusiness;
-	private MovementsBusiness movementsBusiness;
-	private MovementTypesBusiness movementTypesBusiness;
+	private IAccountsBusiness accountsBusiness;
+	private IClientsBusiness clientsBusiness;
+	private ILoansBusiness loansBusiness;
+	private IAccountTypesBusiness accountTypesBusiness;
+	private IMovementsBusiness movementsBusiness;
+	private IMovementTypesBusiness movementTypesBusiness;
 
 	public AdminAccountsServlet()
 	{
@@ -47,13 +52,11 @@ public class AdminAccountsServlet extends HttpServlet
 		accountTypesBusiness = new AccountTypesBusiness();
 		movementsBusiness = new MovementsBusiness();
 		movementTypesBusiness = new MovementTypesBusiness();
-
 	}
 
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException
 	{
-
 		int clientId = Optional.ofNullable(request.getParameter("clientId"))
 				.map(Integer::parseInt).orElse(0);
 
@@ -68,7 +71,8 @@ public class AdminAccountsServlet extends HttpServlet
 		{
 			viewClientAccounts(request, response, clientId);
 
-		} else
+		}
+		else
 		{
 			listMovements(request, response);
 		}
@@ -78,7 +82,6 @@ public class AdminAccountsServlet extends HttpServlet
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException
 	{
-
 		int clientId = Optional.ofNullable(request.getParameter("clientId"))
 				.map(Integer::parseInt).orElse(0);
 
@@ -157,6 +160,7 @@ public class AdminAccountsServlet extends HttpServlet
 	{
 		int clientId = Optional.ofNullable(request.getParameter("clientId"))
 				.map(Integer::parseInt).orElse(0);
+
 		int accountId = Optional.ofNullable(request.getParameter("accountId"))
 				.map(Integer::parseInt).orElse(0);
 
@@ -171,6 +175,7 @@ public class AdminAccountsServlet extends HttpServlet
 			auxAccount.setBalance(accountBalance);
 			Boolean success = accountsBusiness.update(auxAccount);
 			Client client = getFullClient(clientId);
+
 			if (success)
 			{
 				Helper.setReqMessage(request, "Cuenta actualizada con éxito!",
@@ -181,10 +186,11 @@ public class AdminAccountsServlet extends HttpServlet
 				Helper.setReqMessage(request, "No se pudo modificar la cuenta",
 						MessageType.ERROR);
 			}
-			 viewClientAccounts(request, response, clientId);
-			 request.setAttribute("client", client);
+			
+			viewClientAccounts(request, response, clientId);
+			request.setAttribute("client", client);
 		
-		} 
+		}
 		catch (BusinessException ex)
 		{   
 			Helper.setReqMessage(request, ex.getMessage(), MessageType.ERROR);
@@ -199,8 +205,10 @@ public class AdminAccountsServlet extends HttpServlet
 	{
 		int clientId = Optional.ofNullable(request.getParameter("clientId"))
 				.map(Integer::parseInt).orElse(0);
+
 		int accountId = Optional.ofNullable(request.getParameter("accountId"))
 				.map(Integer::parseInt).orElse(0);
+
 		Client client = new Client();
 
 		try
@@ -220,7 +228,6 @@ public class AdminAccountsServlet extends HttpServlet
 			}
 
 			viewClientAccounts(request, response, clientId);
-
 		}
 		catch (BusinessException ex)
 		{
@@ -249,8 +256,9 @@ public class AdminAccountsServlet extends HttpServlet
 			request.setAttribute("client", client);
 			request.setAttribute("totalLoansDebt", totalLoansDebt);
 			request.setAttribute("accountTypes", accountTypesBusiness.list());
-			Helper.redirect("/WEB-INF/AdminClientAccounts.jsp", request,
-					response);
+
+			Helper.redirect(
+					"/WEB-INF/AdminClientAccounts.jsp", request, response);
 		}
 		catch (BusinessException ex)
 		{	
@@ -284,8 +292,6 @@ public class AdminAccountsServlet extends HttpServlet
 		}
 	}
 
-	//// PARA LISTAR MOVIMIENTOS EN NUEVO JSP
-
 	private void listMovements(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException
 	{
@@ -294,6 +300,7 @@ public class AdminAccountsServlet extends HttpServlet
 			int accountId = Optional
 					.ofNullable(request.getParameter("accountId"))
 					.map(Integer::parseInt).orElse(0);
+
 			int clientId = Optional.ofNullable(request.getParameter("clientId"))
 					.map(Integer::parseInt).orElse(0);
 
@@ -315,34 +322,33 @@ public class AdminAccountsServlet extends HttpServlet
 
 			if (movementTypeId != null)
 			{
-				movementsList = movementsBusiness.list(accountId,
-						movementTypeId);
+				movementsList = movementsBusiness.list(accountId, movementTypeId);
 			}
 
 			if (transactionDateStr != null)
 			{
 
-				movementsList = movementsBusiness.filterByDate(movementsList,
-						transactionDateStr);
+				movementsList = movementsBusiness.filterByDate(movementsList, transactionDateStr);
 			}
 			
-			if (searchInput != null) {
-				
+			if (searchInput != null)
+			{
 				movementsList = movementsBusiness.search(accountId, movementsList, searchInput);
 			}
 
 			Client client = getFullClient(clientId);
 			Account account = accountsBusiness.read(accountId);
-			Page<Movement> movementsPage = getMovementsPage(request,
-					movementsList);
+
+			Page<Movement> movementsPage = getMovementsPage(request, movementsList);
 
 			request.setAttribute("client", client);
 			request.setAttribute("account", account);
 			request.setAttribute("page", movementsPage);
 			request.setAttribute("movementTypes", movementTypesBusiness.list());
-			Helper.redirect("/WEB-INF/AdminAccountDetails.jsp", request,
-					response);
-		} 
+			
+			Helper.redirect(
+					"/WEB-INF/AdminAccountDetails.jsp", request, response);
+		}
 		catch (BusinessException e)
 		{
 			Helper.setReqMessage(request, e.getMessage(), MessageType.ERROR);
@@ -362,6 +368,7 @@ public class AdminAccountsServlet extends HttpServlet
 
 		Page<Movement> movmentsPage = new Page<Movement>(page, pageSize,
 				movements);
+
 		return movmentsPage;
 	}
 }

@@ -6,13 +6,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import businessLogic.IAccountsBusiness;
 import businessLogic.IInstallmentsBusiness;
 import businessLogic.ILoanStatusesBusiness;
@@ -36,7 +34,8 @@ import utils.Helper;
 import utils.Page;
 
 @WebServlet(urlPatterns = { "/Client/Loans", "/Client/Loans/" })
-public class ClientLoansServlet extends HttpServlet {
+public class ClientLoansServlet extends HttpServlet
+{
 	private static final long serialVersionUID = 1L;
 	private IAccountsBusiness accountsBusiness;
 	private ILoansBusiness loansBusiness;
@@ -45,7 +44,8 @@ public class ClientLoansServlet extends HttpServlet {
 	private IInstallmentsBusiness installmentsBusiness;
 	private Client client;
 
-    public ClientLoansServlet() {
+    public ClientLoansServlet()
+    {
         super();
 		accountsBusiness = new AccountsBusiness();
 		loansBusiness = new LoansBusiness();
@@ -62,7 +62,8 @@ public class ClientLoansServlet extends HttpServlet {
 		try
 		{
 			getSessionClient(req, res); // Obtener cliente y sus datos
-		} catch (BusinessException ex)
+		}
+		catch (BusinessException ex)
 		{
 			Helper.setReqMessage(req, ex.getMessage(), MessageType.ERROR);
 			Helper.redirect("/WEB-INF/Loans.jsp", req, res);
@@ -97,7 +98,8 @@ public class ClientLoansServlet extends HttpServlet {
 		try
 		{
 			getSessionClient(req, res); // Obtener cliente y sus datos
-		} catch (BusinessException ex)
+		}
+		catch (BusinessException ex)
 		{
 			Helper.setReqMessage(req, ex.getMessage(), MessageType.ERROR);
 			Helper.redirect("/WEB-INF/Loans.jsp", req, res);
@@ -131,17 +133,14 @@ public class ClientLoansServlet extends HttpServlet {
 		
 		try
 		{
-			int loanId = Optional.ofNullable(req.getParameter("loanId"))
-					.map(Integer::parseInt)
-					.orElse(0);
+			int loanId = Optional.ofNullable(
+					req.getParameter("loanId")).map(Integer::parseInt).orElse(0);
 			
-			int installmentId = Optional.ofNullable(req.getParameter("installmentId"))
-					.map(Integer::parseInt)
-					.orElse(0);
+			int installmentId = Optional.ofNullable(
+					req.getParameter("installmentId")).map(Integer::parseInt).orElse(0);
 			
-			int debitAccountId = Optional.ofNullable(req.getParameter("debitAccountId"))
-					.map(Integer::parseInt)
-					.orElse(0);
+			int debitAccountId = Optional.ofNullable(
+					req.getParameter("debitAccountId")).map(Integer::parseInt).orElse(0);
 			
 			selectedLoanId = loanId;
 			
@@ -150,7 +149,9 @@ public class ClientLoansServlet extends HttpServlet {
 				Helper.setReqMessage(req,
 						"Debe seleccionar una cuenta para el pago.",
 						MessageType.ERROR);
+
 				viewPayLoan(req,res,loanId);
+
 				return;
 			}
 			
@@ -171,7 +172,9 @@ public class ClientLoansServlet extends HttpServlet {
 			{
 				Helper.setReqMessage(req,
 						"Ocurrió un error al obtener los datos del préstamo.", MessageType.ERROR);
+
 				viewClientLoans(req, res);
+				
 				return;
 			}
 			
@@ -179,9 +182,7 @@ public class ClientLoansServlet extends HttpServlet {
 			
 			if(success)
 			{
-				
 				Installment installment = installmentsBusiness.read(installmentId);
-				
 				req.setAttribute("installment", installment);
 				req.setAttribute("paidLoan", auxLoan);
 				req.setAttribute("movement", installment.getMovement());
@@ -257,10 +258,13 @@ public class ClientLoansServlet extends HttpServlet {
 		{
 			int page = Optional.ofNullable(
 					req.getParameter("page")).map(Integer::parseInt).orElse(1);
+
 			int pageSize = Optional.ofNullable(
 					req.getParameter("pageSize")).map(Integer::parseInt).orElse(10);
+			
 			int loanStatusId = Optional.ofNullable(
 					req.getParameter("loanStatusId")).map(Integer::parseInt).orElse(0);
+			
 			int loanTypeId= Optional.ofNullable(
 					req.getParameter("loanTypeId")).map(Integer::parseInt).orElse(0);
 			
@@ -346,7 +350,8 @@ public class ClientLoansServlet extends HttpServlet {
 			
 			req.setAttribute("outstandingBalance", outstandingBalance);
 			req.setAttribute("loan", auxLoan);
-		} catch (NumberFormatException ex)
+		}
+		catch (NumberFormatException ex)
 		{
 			Helper.setReqMessage(req, "El ID del préstamo tiene un formato inválido.", MessageType.ERROR);
 			viewClientLoans(req,res);
@@ -394,6 +399,7 @@ public class ClientLoansServlet extends HttpServlet {
 			loan.setAccount(account);
 			
 			boolean success = loansBusiness.create(loan);
+
 			if(success)
 			{
 				Helper.setReqMessage(req, 
@@ -401,12 +407,14 @@ public class ClientLoansServlet extends HttpServlet {
 			}
 			
 			getSessionClient(req,res); // Actualiza los datos completos del cliente
-		} catch (BusinessException ex)
+		}
+		catch (BusinessException ex)
 		{
 			Helper.setReqMessage(req, ex.getMessage(), MessageType.ERROR);
 			viewClientLoans(req,res);
 			return;
-		} catch (Exception ex)
+		}
+		catch (Exception ex)
 		{
 			Helper.setReqMessage(req, "Ocurrió un error desconocido.", MessageType.ERROR);
 		}
@@ -422,7 +430,8 @@ public class ClientLoansServlet extends HttpServlet {
 		try
 		{
 			loanTypes = loanTypesBusiness.list();
-		} catch (BusinessException ex)
+		}
+		catch (BusinessException ex)
 		{
 			Helper.setReqMessage(req, ex.getMessage(), MessageType.ERROR);
 			Helper.redirect("/WEB-INF/ApplyForLoan.jsp", req, res);

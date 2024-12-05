@@ -3,11 +3,9 @@ package dataAccessImpl;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
 import dataAccess.IInstallmentsDao;
 import dataAccess.IMovementsDao;
 import domainModel.Installment;
-import domainModel.Loan;
 import domainModel.Movement;
 
 public class InstallmentsDao implements IInstallmentsDao
@@ -116,26 +114,6 @@ public class InstallmentsDao implements IInstallmentsDao
 		}
 	}
 
-	private Installment getInstallment(ResultSet rs)
-			throws SQLException
-	{
-		Installment auxInstallment = new Installment();
-		auxInstallment.setInstallmentId(rs.getInt("InstallmentId"));
-		auxInstallment.setNumber(rs.getInt("InstallmentNumber"));
-		auxInstallment.setAmount(rs.getBigDecimal("Amount"));
-		auxInstallment.setPaymentDueDate(rs.getDate("PaymentDueDate"));
-		auxInstallment.setLoanId(rs.getInt("LoanId"));
-		
-		if(rs.getInt("MovementId") != 0)
-		{
-			Movement auxMovement = new Movement();
-			auxMovement = movementsDao.read(rs.getInt("MovementId"));
-			auxInstallment.setMovement(auxMovement);
-		}
-		
-		return auxInstallment;
-	}
-
 	@Override
 	public ArrayList<Installment> listByLoanId(int loanId) 
 			throws SQLException
@@ -192,4 +170,23 @@ public class InstallmentsDao implements IInstallmentsDao
 		}
 	}
 
+	private Installment getInstallment(ResultSet rs)
+			throws SQLException
+	{
+		Installment auxInstallment = new Installment();
+		auxInstallment.setInstallmentId(rs.getInt("InstallmentId"));
+		auxInstallment.setNumber(rs.getInt("InstallmentNumber"));
+		auxInstallment.setAmount(rs.getBigDecimal("Amount"));
+		auxInstallment.setPaymentDueDate(rs.getDate("PaymentDueDate"));
+		auxInstallment.setLoanId(rs.getInt("LoanId"));
+		
+		if(rs.getInt("MovementId") != 0)
+		{
+			Movement auxMovement = new Movement();
+			auxMovement = movementsDao.read(rs.getInt("MovementId"));
+			auxInstallment.setMovement(auxMovement);
+		}
+		
+		return auxInstallment;
+	}
 }

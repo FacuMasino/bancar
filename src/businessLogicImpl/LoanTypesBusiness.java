@@ -1,9 +1,7 @@
 package businessLogicImpl;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
-
 import businessLogic.ILoanTypesBusiness;
 import dataAccess.ILoanTypesDao;
 import dataAccessImpl.LoanTypesDao;
@@ -13,7 +11,6 @@ import exceptions.SQLOperationException;
 
 public class LoanTypesBusiness implements ILoanTypesBusiness
 {
-
 	private ILoanTypesDao loanTypesDao;
 	
 	public LoanTypesBusiness()
@@ -37,10 +34,7 @@ public class LoanTypesBusiness implements ILoanTypesBusiness
 		{
 			ex.printStackTrace();
 			throw new BusinessException
-				("Ocurrió un error al obtener "
-						+ "los tipos de préstamos disponibles.");
+				("Ocurrió un error al obtener los tipos de préstamos disponibles.");
 		}
-		
 	}
-
 }

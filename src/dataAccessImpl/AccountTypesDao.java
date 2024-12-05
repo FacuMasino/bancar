@@ -44,7 +44,7 @@ public class AccountTypesDao implements IAccountTypesDao
 	}
 	
 	@Override
-	public AccountType readByName(String accountTypeName) throws SQLException
+	public AccountType read(String accountTypeName) throws SQLException
 	{
 		AccountType accountType = new AccountType();
 		ResultSet rs;

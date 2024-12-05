@@ -1,6 +1,7 @@
 package businessLogicImpl;
 
 import businessLogic.IRolesBusiness;
+import dataAccess.IRolesDao;
 import dataAccessImpl.RolesDao;
 import domainModel.Role;
 import java.sql.SQLException;
@@ -9,7 +10,7 @@ import exceptions.SQLOperationException;
 
 public class RolesBusiness implements IRolesBusiness
 {
-	private RolesDao rolesDao;
+	private IRolesDao rolesDao;
 	
 	public RolesBusiness()
 	{

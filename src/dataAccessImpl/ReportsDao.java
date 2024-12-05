@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
+import dataAccess.ILoansDao;
 import dataAccess.IReportsDao;
 import domainModel.Loan;
 import utils.DateRangeFormatter;
@@ -20,7 +20,7 @@ import utils.MapTools;
 public class ReportsDao implements IReportsDao
 {
 	private Database db;
-	private LoansDao loansDao;
+	private ILoansDao loansDao;
 
 	public ReportsDao()
 	{
@@ -41,7 +41,9 @@ public class ReportsDao implements IReportsDao
 			db.getPreparedStatement().setDate(2, endDate);
 
 			rsLoans = db.getPreparedStatement().executeQuery();
-			while (rsLoans.next()) {
+			
+			while (rsLoans.next())
+			{
 				loans.add(loansDao.getLoan(rsLoans));
 			}
 		}
@@ -81,6 +83,7 @@ public class ReportsDao implements IReportsDao
 			{
 				return amount;
 			}
+
 			amount = rs.getBigDecimal("totalPendingAmount");
 		}
 		catch (SQLException ex)
@@ -88,6 +91,7 @@ public class ReportsDao implements IReportsDao
 			ex.printStackTrace();
 			throw ex;
 		}
+
 		return amount;
 	}
 
@@ -112,6 +116,7 @@ public class ReportsDao implements IReportsDao
 			{
 				return count;
 			}
+
 			count  = rs.getInt("overdueLoansCount");
 		}
 		catch(SQLException ex)
@@ -146,7 +151,9 @@ public class ReportsDao implements IReportsDao
 			db.setPreparedStatement(query);
 
 			rs = db.getPreparedStatement().executeQuery();
-			while (rs.next()) {
+			
+			while (rs.next())
+			{
 				profits = profits.add(calculateProfit(rs));
 			}
 		}
@@ -179,7 +186,9 @@ public class ReportsDao implements IReportsDao
 			db.setPreparedStatement(query);
 
 			rs = db.getPreparedStatement().executeQuery();
-			while (rs.next()) {
+			
+			while (rs.next())
+			{
 				profitsToEarn = profitsToEarn.add(calculateProfit(rs));
 			}
 		}
@@ -207,6 +216,7 @@ public class ReportsDao implements IReportsDao
 		BigDecimal auxProfit = BigDecimal.valueOf(0);
 		BigDecimal interest = BigDecimal.valueOf(0);
 		int count = 0;
+
 		try
 		{
 			loan = loansDao.read(rs.getInt("LoanId"));
@@ -219,6 +229,7 @@ public class ReportsDao implements IReportsDao
 		{
 			e.printStackTrace();
 		}
+
 		return auxProfit;
 	}
 
@@ -251,7 +262,8 @@ public class ReportsDao implements IReportsDao
 			db.setPreparedStatement(query);
 			rs = db.getPreparedStatement().executeQuery();
 			
-			while (rs.next()) {
+			while (rs.next())
+			{
 				clientsByProvince.put(rs.getString("ProvinceName"),rs.getInt("ClientCount"));
 			}
 		}
@@ -261,6 +273,7 @@ public class ReportsDao implements IReportsDao
 		}
 		return clientsByProvince;
 	}
+
 	/**
 	 *	Metodo que devuelve un Map del estilo {Mes : Monto_otorgado_porPrestamos} 
 	 *IMPORTANTE: suma un dia a la consulta para obtener la fecha endDate inclusive.Because TimeStamp jode con el horario en las query
@@ -307,6 +320,7 @@ public class ReportsDao implements IReportsDao
 		}
 		return loansAmountByPeriod;
 	}
+
 	//TODO: estos 4 metodos se pueden optimizar en 2 (quizas 1) ver Gonzoo
 	@Override
 	public Map<String, BigDecimal> getLoansAmountByDayPeriod(LocalDate startDate, LocalDate endDate) throws SQLException
@@ -316,8 +330,10 @@ public class ReportsDao implements IReportsDao
 		// Creo un Map que tiene como keys: periodos entre startDate y endDate.
 		// Como values 0.0
 		LinkedHashMap<String, BigDecimal> loansAmountByPeriod = new LinkedHashMap<>();
+
 		loansAmountByPeriod = (LinkedHashMap<String, BigDecimal>) MapTools
 				.assignKeysFromList(periods, BigDecimal.valueOf(0));
+
 		ResultSet rs;
 
 		String query = 
@@ -346,7 +362,8 @@ public class ReportsDao implements IReportsDao
 				loansAmountByPeriod.put(rs.getString("DayMonth"),
 						rs.getBigDecimal("TotalAmount"));
 			}
-		} catch (SQLException e)
+		}
+		catch (SQLException e)
 		{
 			e.printStackTrace();
 		}
@@ -394,6 +411,7 @@ public class ReportsDao implements IReportsDao
 		{
 			e.printStackTrace();
 		}
+
 		return transfersAmountByPeriod;
 	}
 
@@ -434,11 +452,12 @@ public class ReportsDao implements IReportsDao
 				// Si la key ya existe, el metodo PUT actualiza el value.
 				transfersAmountByPeriod.put(rs.getString("DayMonth"),rs.getBigDecimal("TotalAmount"));
 			}
-		} catch (SQLException e)
+		}
+		catch (SQLException e)
 		{
 			e.printStackTrace();
 		}
+		
 		return transfersAmountByPeriod;
 	}
-
 }

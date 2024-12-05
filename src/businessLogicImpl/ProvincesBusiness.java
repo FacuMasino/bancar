@@ -3,6 +3,7 @@ package businessLogicImpl;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import businessLogic.IProvincesBusiness;
+import dataAccess.IProvincesDao;
 import dataAccessImpl.ProvincesDao;
 import domainModel.Province;
 import exceptions.BusinessException;
@@ -10,7 +11,7 @@ import exceptions.SQLOperationException;
 
 public class ProvincesBusiness implements IProvincesBusiness
 {
-	private ProvincesDao provincesDao;
+	private IProvincesDao provincesDao;
 	
 	public ProvincesBusiness()
 	{

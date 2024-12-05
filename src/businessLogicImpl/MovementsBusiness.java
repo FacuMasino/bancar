@@ -5,8 +5,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.UUID;
-
 import businessLogic.IMovementsBusiness;
+import dataAccess.IMovementsDao;
 import dataAccessImpl.MovementsDao;
 import domainModel.Movement;
 import exceptions.BusinessException;
@@ -14,7 +14,7 @@ import exceptions.SQLOperationException;
 
 public class MovementsBusiness implements IMovementsBusiness
 {
-	private MovementsDao movementsDao;
+	private IMovementsDao movementsDao;
 
 	public MovementsBusiness()
 	{
@@ -31,6 +31,7 @@ public class MovementsBusiness implements IMovementsBusiness
 			movement.setTransactionId(generateTrxId());
 			
 			int newMovementId = movementsDao.create(movement);
+
 			if (0 < newMovementId)
 			{
 				movement.setId(newMovementId);
@@ -134,8 +135,9 @@ public class MovementsBusiness implements IMovementsBusiness
 	}
 
 	@Override
-	public ArrayList<Movement> filterByDate(ArrayList<Movement> movements,
-			String filterDate) throws BusinessException
+	public ArrayList<Movement> filterByDate(
+			ArrayList<Movement> movements, String filterDate)
+					throws BusinessException
 	{
 		try
 		{		
@@ -145,7 +147,6 @@ public class MovementsBusiness implements IMovementsBusiness
 			
 			for (Movement movement : movements)
 			{
-				
 				LocalDate movementDate = movement.getDateTime().toLocalDate();
 				
 				if (movementDate.equals(filterDateLocal))
@@ -164,8 +165,9 @@ public class MovementsBusiness implements IMovementsBusiness
 	}
 	
 	@Override
-	public ArrayList<Movement> search(int accountId, ArrayList<Movement> movements,
-			String searchInput) throws BusinessException
+	public ArrayList<Movement> search(
+			int accountId, ArrayList<Movement> movements, String searchInput)
+					throws BusinessException
 	{
 		try
 		{
@@ -187,8 +189,10 @@ public class MovementsBusiness implements IMovementsBusiness
 	// Genera una cadena de 36 caracteres (32 más 4 guiones)
 	// El resultado es un Identificador único, que dificilmente se vaya a
 	// repetir [+ info acá -> https://dub.sh/ersuXW3]
-    public String generateTrxId() {
+	@Override
+    public String generateTrxId()
+    {
         UUID uuid = UUID.randomUUID();
-        return uuid.toString();  // Ejemplo: 123e4567-e89b-12d3-a456-426614174000
+        return uuid.toString(); // Ejemplo: 123e4567-e89b-12d3-a456-426614174000
     }
 }

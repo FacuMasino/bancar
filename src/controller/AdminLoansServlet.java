@@ -5,13 +5,11 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import businessLogic.ILoanStatusesBusiness;
 import businessLogic.ILoanTypesBusiness;
 import businessLogic.ILoansBusiness;
@@ -61,20 +59,21 @@ public class AdminLoansServlet extends HttpServlet
 
 		switch (action)
 		{
-		case "approve":
-			approveLoan(request, response);
-			break;
-		case "reject":
-			rejectLoan(request, response);
-			break;
+			case "approve":
+				approveLoan(request, response);
+				break;
+			case "reject":
+				rejectLoan(request, response);
+				break;
 		}
 	}
 
 	private void approveLoan(HttpServletRequest req,
 			HttpServletResponse res) throws ServletException, IOException
 	{
-		int loanId = Optional.ofNullable(req.getParameter("selectedLoanId"))
-				.map(Integer::parseInt).orElse(0);
+		int loanId = Optional.ofNullable(
+				req.getParameter("selectedLoanId")).map(Integer::parseInt).orElse(0);
+
 		try
 		{
 			
@@ -86,7 +85,8 @@ public class AdminLoansServlet extends HttpServlet
 						MessageType.SUCCESS);
 			}
 			viewAdminLoans(req, res);
-		} catch (BusinessException ex)
+		}
+		catch (BusinessException ex)
 		{
 			Helper.setReqMessage(req, ex.getMessage(), MessageType.ERROR);
 			viewAdminLoans(req, res);
@@ -96,8 +96,9 @@ public class AdminLoansServlet extends HttpServlet
 	private void rejectLoan(HttpServletRequest req,
 			HttpServletResponse res) throws ServletException, IOException
 	{
-		int loanId = Optional.ofNullable(req.getParameter("selectedLoanId"))
-				.map(Integer::parseInt).orElse(0);
+		int loanId = Optional.ofNullable(
+				req.getParameter("selectedLoanId")).map(Integer::parseInt).orElse(0);
+
 		try
 		{
 			Loan loanToReject = loansBusiness.read(loanId);
@@ -111,7 +112,8 @@ public class AdminLoansServlet extends HttpServlet
 			}
 			
 			viewAdminLoans(req, res);
-		} catch (BusinessException ex)
+		}
+		catch (BusinessException ex)
 		{
 			Helper.setReqMessage(req, ex.getMessage(), MessageType.ERROR);
 			viewAdminLoans(req, res);
@@ -155,7 +157,8 @@ public class AdminLoansServlet extends HttpServlet
 			req.setAttribute("pendingsPage", pendingsPage);
 			req.setAttribute("historyPage", historyPage);
 
-		} catch (BusinessException ex)
+		}
+		catch (BusinessException ex)
 		{
 			Helper.setReqMessage(req, ex.getMessage(), MessageType.ERROR);
 		}
@@ -170,10 +173,13 @@ public class AdminLoansServlet extends HttpServlet
 		{
 			int page = Optional.ofNullable(
 					req.getParameter("historyPage")).map(Integer::parseInt).orElse(1);
+			
 			int pageSize = Optional.ofNullable(
 					req.getParameter("historyPageSize")).map(Integer::parseInt).orElse(10);
+			
 			int loanStatusId = Optional.ofNullable(
 					req.getParameter("historyStatusId")).map(Integer::parseInt).orElse(0);
+			
 			int loanTypeId= Optional.ofNullable(
 					req.getParameter("historyTypeId")).map(Integer::parseInt).orElse(0);
 			
@@ -194,8 +200,7 @@ public class AdminLoansServlet extends HttpServlet
 				loansHistory = loansBusiness.filter(loanType, loansHistory);
 			}
 			
-			Page<Loan> loansHistoryPage = new Page<Loan>(page, pageSize,
-					loansHistory);
+			Page<Loan> loansHistoryPage = new Page<Loan>(page, pageSize, loansHistory);
 			
 			return loansHistoryPage;
 		}
@@ -243,5 +248,4 @@ public class AdminLoansServlet extends HttpServlet
 			throw ex;
 		}
 	}
-
 }

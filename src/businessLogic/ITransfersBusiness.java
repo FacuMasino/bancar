@@ -6,5 +6,8 @@ import exceptions.BusinessException;
 
 public interface ITransfersBusiness
 {
-	public boolean create(Movement movement, Account originAccount, Account destinationAccount) throws BusinessException;
+	public boolean create(Movement movement, Account originAccount, Account destinationAccount)
+			throws BusinessException;
+	public void validate(Movement movement, Account originAccount, Account destinationAccount)
+			throws BusinessException;
 }

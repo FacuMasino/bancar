@@ -1,8 +1,8 @@
 package businessLogicImpl;
 
 import java.sql.SQLException;
-
 import businessLogic.ICountriesBusiness;
+import dataAccess.ICountriesDao;
 import dataAccessImpl.CountriesDao;
 import domainModel.Country;
 import exceptions.BusinessException;
@@ -10,7 +10,7 @@ import exceptions.SQLOperationException;
 
 public class CountriesBusiness implements ICountriesBusiness
 {
-	private CountriesDao countriesDao;
+	private ICountriesDao countriesDao;
 	
 	public CountriesBusiness()
 	{

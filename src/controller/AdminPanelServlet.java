@@ -10,14 +10,16 @@ import java.util.List;
 import java.util.Optional;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+import businessLogic.IAccountsBusiness;
+import businessLogic.IClientsBusiness;
+import businessLogic.ILoansBusiness;
+import businessLogic.IReportsBusiness;
 import businessLogicImpl.AccountsBusiness;
 import businessLogicImpl.ClientsBusiness;
 import businessLogicImpl.LoansBusiness;
@@ -35,11 +37,10 @@ import utils.MapTools;
 public class AdminPanelServlet extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
-	private ReportsBusiness reportsBusiness;
-	private ClientsBusiness clientsBusiness;
-	private AccountsBusiness accountsBusiness;
-	private LoansBusiness loansBusiness;
-
+	private IReportsBusiness reportsBusiness;
+	private IClientsBusiness clientsBusiness;
+	private IAccountsBusiness accountsBusiness;
+	private ILoansBusiness loansBusiness;
 	private int clientsQty;
 	private int approvedLoansCount;
 	private int overdueLoansCount;
@@ -60,7 +61,6 @@ public class AdminPanelServlet extends HttpServlet
 
 	public AdminPanelServlet()
 	{
-
 		reportsBusiness = new ReportsBusiness();
 		clientsBusiness = new ClientsBusiness();
 		accountsBusiness = new AccountsBusiness();
@@ -83,8 +83,9 @@ public class AdminPanelServlet extends HttpServlet
 
 	protected void doGet(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException
 	{
-		String loginSuccess = Optional.ofNullable(request.getParameter("login"))
-				.orElse("");
+		String loginSuccess = Optional.ofNullable(
+				request.getParameter("login")).orElse("");
+
 		if (loginSuccess.equals("true"))
 		{
 			Helper.setReqMessage(request, "Iniciaste sesión con éxito!",
@@ -106,16 +107,16 @@ public class AdminPanelServlet extends HttpServlet
 
 	private void manageBarChart(HttpServletRequest request)
 	{
-		// Gestion fechas del barChart:
-		// Por default levanto como fechas todo el año actual, descarto null y cadena vacia ""
 		LocalDate currentDate = LocalDate.now();
 		LocalDate firstDay = currentDate.with(TemporalAdjusters.firstDayOfYear());
 		LocalDate firstDayNextYear = currentDate.with(TemporalAdjusters.lastDayOfYear()).plusDays(1);
 		
-		String startDate = Optional.ofNullable(request.getParameter("startDate")).filter(date -> !date.isEmpty()).orElse(firstDay.toString());
-		String endDate = Optional.ofNullable(request.getParameter("endDate")).filter(date -> !date.isEmpty()).orElse(firstDayNextYear.toString());
+		String startDate = Optional.ofNullable(
+				request.getParameter("startDate")).filter(date -> !date.isEmpty()).orElse(firstDay.toString());
+
+		String endDate = Optional.ofNullable(
+				request.getParameter("endDate")).filter(date -> !date.isEmpty()).orElse(firstDayNextYear.toString());
 		
-		//Pregunto si las fechas estan alvezre
 		if (!LocalDate.parse(endDate).isAfter(LocalDate.parse(startDate)))
 		{
 			startDate = firstDay.toString();
@@ -125,7 +126,6 @@ public class AdminPanelServlet extends HttpServlet
 		
 		try
 		{
-			//Pregunto si la fecha de inicio y fin estan dentro del mismo mes...
 			if(LocalDate.parse(startDate).getYear() == LocalDate.parse(endDate).getYear() && LocalDate.parse(startDate).getMonth() == LocalDate.parse(endDate).getMonth())
 			{
 				loansAmountByPeriod = (LinkedHashMap<String, BigDecimal>) reportsBusiness.getLoansAmountByDayPeriod(LocalDate.parse(startDate), LocalDate.parse(endDate));
@@ -139,7 +139,6 @@ public class AdminPanelServlet extends HttpServlet
 		} 
 		catch (BusinessException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -147,10 +146,8 @@ public class AdminPanelServlet extends HttpServlet
 		loansGivenAmount = MapTools.mapValuesToLiteralString(loansAmountByPeriod);
 		transfersDoneAmount = MapTools.mapValuesToLiteralString(transfersAmountByPeriod);
 
-		// Fechas por defecto
 		request.setAttribute("defaultStartDate", startDate);
 		request.setAttribute("defaultEndDate", endDate);
-		// Muestro Flujo de dinero en prestamos otorgados y en transferencias realizadas
 		request.setAttribute("periods", periods);
 		request.setAttribute("loansGivenAmount", loansGivenAmount);
 		request.setAttribute("transfersDoneAmount", transfersDoneAmount);
@@ -160,12 +157,10 @@ public class AdminPanelServlet extends HttpServlet
 	{
 		try
 		{
-			// Muestro fondos totales, suponemos en principio, la suma de todas
-			// las cuentas..
+			// Muestro fondos totales, suponemos en principio, la suma de todas las cuentas
 			totalFunds = accountsBusiness.list().stream().map(Account::getBalance).reduce(BigDecimal.ZERO, BigDecimal::add);
 
 			// Muestro Cantidad de clientes
-			// clientsQty = clientsBusiness.list().size();
 			clientsQty = clientsBusiness.listActiveClients().size();
 
 			// Muestro Cantidad de prestamos vigentes y vencidas
@@ -187,7 +182,6 @@ public class AdminPanelServlet extends HttpServlet
 			System.out.println("Clientes por Provincia: " + clientsByProvince.toString());
 
 			mapAllDataToFront(request);
-
 		}
 		catch (BusinessException e)
 		{
@@ -209,7 +203,6 @@ public class AdminPanelServlet extends HttpServlet
 		request.setAttribute("provinceClients", provinceClients);
 	}
 
-	
 	private int calculateApprovedLoansCount()
 	{
 		int approvedLoansCount = 0;
@@ -220,36 +213,40 @@ public class AdminPanelServlet extends HttpServlet
 			LoanStatus loanStatus = new LoanStatus();
 			loanStatus.setId(LoanStatusEnum.APPROVED.getId());
 			approvedLoansCount = loansBusiness.filter(loanStatus, loansList).size();
-		} catch (BusinessException e)
+		}
+		catch (BusinessException e)
 		{
 			e.printStackTrace();
 		}
 		return approvedLoansCount;
 	}
-
 	
 	/**
 	 * 
 	 * Metodo que calcula la tasa de morosidad segun la formula: (Cantidad
 	 * prestamos con cuotas impagas) / (Cantidad de prestamos aprobados) * 100
 	 */
-
 	private BigDecimal calculateDefaultRate()
 	{
 		BigDecimal overdueLoansCount = new BigDecimal(0);
 		BigDecimal approvedLoansCount = new BigDecimal(calculateApprovedLoansCount());
+
 		try
 		{
 			overdueLoansCount = new BigDecimal(reportsBusiness.getOverdueLoansCount());
-		} catch (BusinessException e)
+		}
+		catch (BusinessException e)
 		{
 			e.printStackTrace();
 		}
 
 		if (approvedLoansCount == BigDecimal.valueOf(0))
+		{			
 			return new BigDecimal(0);
+		}
 		else
+		{			
 			return overdueLoansCount.divide(approvedLoansCount, 2, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100));
+		}
 	}
-
 }

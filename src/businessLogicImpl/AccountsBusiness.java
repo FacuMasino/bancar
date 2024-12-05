@@ -3,26 +3,22 @@ package businessLogicImpl;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
-
 import businessLogic.IAccountsBusiness;
+import dataAccess.IAccountsDao;
+import dataAccess.ILoansDao;
 import dataAccessImpl.AccountsDao;
-import dataAccessImpl.ClientsDao;
 import dataAccessImpl.LoansDao;
 import domainModel.Account;
 import domainModel.Client;
-import domainModel.Message.MessageType;
 import exceptions.BusinessException;
-import exceptions.NoActiveAccountsException;
 import exceptions.SQLOperationException;
-import utils.Helper;
 
 public class AccountsBusiness implements IAccountsBusiness
 {
-	private AccountsDao accountsDao;
-	private LoansDao loansDao;
+	private IAccountsDao accountsDao;
+	private ILoansDao loansDao;
 	private Client client;
-	private Account account; 
+	private Account account;
 	
 	public AccountsBusiness()
 	{
@@ -156,6 +152,7 @@ public class AccountsBusiness implements IAccountsBusiness
 		}
     }
 	
+	@Override
 	public boolean delete(ArrayList<Account> accounts) throws BusinessException
 	{
 		try
@@ -180,6 +177,7 @@ public class AccountsBusiness implements IAccountsBusiness
 					"Ocurrió un error desconocido al eliminar las cuentas del cliente.");
 		}
 	}
+
 	@Override
 	public ArrayList<Account> list() throws BusinessException
 	{
@@ -221,6 +219,7 @@ public class AccountsBusiness implements IAccountsBusiness
 		}
 	}
 	
+	@Override
 	public int findId(String cbu) throws BusinessException
 	{
 		try

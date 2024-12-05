@@ -7,13 +7,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import businessLogic.IAccountsBusiness;
 import businessLogic.IClientsBusiness;
 import businessLogic.IInstallmentsBusiness;
@@ -62,30 +60,29 @@ public class ClientAccountServlet extends HttpServlet
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException
 	{
-		String loginSuccess = Optional.ofNullable(request.getParameter("login"))
-				.orElse("");
+		String loginSuccess = Optional.ofNullable(
+				request.getParameter("login")).orElse("");
 
-		String action = Optional.ofNullable(request.getParameter("action"))
-				.orElse("");
+		String action = Optional.ofNullable(
+				request.getParameter("action")).orElse("");
 
 		if (loginSuccess.equals("true"))
 		{
-			Helper.setReqMessage(request, "Iniciaste sesión con éxito!",
-					MessageType.SUCCESS);
+			Helper.setReqMessage(
+					request, "Iniciaste sesión con éxito!", MessageType.SUCCESS);
 		}
 
 		switch (action)
 		{
-		case "viewProfile":
-			viewProfile(request, response);
-			break;
-		case "details":
-			showTransactionDetails(request, response);
-			break;
-		default:
-			showMovements(request, response);
+			case "viewProfile":
+				viewProfile(request, response);
+				break;
+			case "details":
+				showTransactionDetails(request, response);
+				break;
+			default:
+				showMovements(request, response);
 		}
-
 	}
 
 	protected void doPost(HttpServletRequest request,
@@ -156,7 +153,8 @@ public class ClientAccountServlet extends HttpServlet
 						transactionDateStr);
 			}
 			
-			if (searchInput != null) {
+			if (searchInput != null)
+			{
 				
 				movementsList = movementsBusiness.search(selectedAccountId, movementsList, searchInput);
 			}
@@ -192,10 +190,12 @@ public class ClientAccountServlet extends HttpServlet
 	{
 		int page = Optional.ofNullable(
 				req.getParameter("page")).map(Integer::parseInt).orElse(1);
+
 		int pageSize = Optional.ofNullable(
 				req.getParameter("pageSize")).map(Integer::parseInt).orElse(10);
 		
 		Page<Movement> movmentsPage = new Page<Movement>(page, pageSize, movements);
+
 		return movmentsPage;
 	}
 
@@ -204,11 +204,11 @@ public class ClientAccountServlet extends HttpServlet
 	{
 		Client client = new Client();
 		client = (Client)req.getSession().getAttribute("client");
+
 		try
 		{
-			int movementId = Optional.ofNullable(req.getParameter("movementId"))
-					.map(Integer::parseInt)
-					.orElse(0);
+			int movementId = Optional.ofNullable(
+					req.getParameter("movementId")).map(Integer::parseInt).orElse(0);
 			
 			if(movementId == 0)
 			{
@@ -220,16 +220,20 @@ public class ClientAccountServlet extends HttpServlet
 			if(movement.getMovementType().getId() == MovementTypeEnum.TRANSFER.getId())
 			{
 				ArrayList<Movement> transferMovements = movementsBusiness.list(movement.getTransactionId());
+				
 				Movement receiverMovement = transferMovements.stream()
 						.filter(m -> m.getId() != movement.getId()).findFirst()
 						.get();
+				
 				if(movement.getAmount().compareTo(BigDecimal.ZERO) < 0)
 				{
 					req.setAttribute("destinationAccount", receiverMovement.getAccount());
 					req.setAttribute("destinationClient", receiverMovement.getAccount().getClient());
 					req.setAttribute("originAccount", movement.getAccount());
 					req.setAttribute("originClient", client);
-				} else {
+				}
+				else
+				{
 					req.setAttribute("destinationAccount", movement.getAccount());
 					req.setAttribute("destinationClient", client);
 					req.setAttribute("originAccount", receiverMovement.getAccount());
@@ -269,5 +273,4 @@ public class ClientAccountServlet extends HttpServlet
 		
 		Helper.redirect("/WEB-INF/TransactionDetails.jsp", req, res);
 	}
-	
 }

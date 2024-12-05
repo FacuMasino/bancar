@@ -2,11 +2,9 @@ package businessLogic;
 
 import java.math.BigDecimal;
 import java.sql.Date;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
-
 import domainModel.Loan;
 import exceptions.BusinessException;
 

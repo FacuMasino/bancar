@@ -2,8 +2,8 @@ package businessLogicImpl;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-
 import businessLogic.IMovementTypesBusiness;
+import dataAccess.IMovementTypesDao;
 import dataAccessImpl.MovementTypesDao;
 import domainModel.MovementType;
 import exceptions.BusinessException;
@@ -11,7 +11,7 @@ import exceptions.SQLOperationException;
 
 public class MovementTypesBusiness implements IMovementTypesBusiness
 {
-	private MovementTypesDao movementTypesDao;
+	private IMovementTypesDao movementTypesDao;
 	
 	public MovementTypesBusiness()
 	{

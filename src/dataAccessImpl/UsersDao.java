@@ -2,12 +2,14 @@ package dataAccessImpl;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import dataAccess.IRolesDao;
 import dataAccess.IUsersDao;
 import domainModel.User;
 
 public class UsersDao extends Dao<User> implements IUsersDao
 {
-	private RolesDao rolesDao;
+	private IRolesDao rolesDao;
 
 	public UsersDao()
 	{
@@ -92,11 +94,13 @@ public class UsersDao extends Dao<User> implements IUsersDao
 		return findUserId(user);
 	}
 	
+	@Override
 	public int findUserId(User user) throws SQLException
 	{
 		return findUserId(user.getUsername());
 	}
 	
+	@Override
 	public int findUserId(String username) throws SQLException
 	{
 		ResultSet rs;
@@ -121,6 +125,7 @@ public class UsersDao extends Dao<User> implements IUsersDao
 		}
 	}
 	
+	@Override
 	public int findUserId(int clientId) throws SQLException
 	{
 		ResultSet rs;
@@ -143,6 +148,12 @@ public class UsersDao extends Dao<User> implements IUsersDao
 			ex.printStackTrace();
 			throw ex;
 		}
+	}
+	
+	@Override
+	public void handleId(User user) throws SQLException
+	{
+		super.handleId(user);
 	}
 	
 	private void setParameters(User user, boolean isUpdate) throws SQLException

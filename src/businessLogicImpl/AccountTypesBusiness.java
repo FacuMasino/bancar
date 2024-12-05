@@ -3,6 +3,7 @@ package businessLogicImpl;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import businessLogic.IAccountTypesBusiness;
+import dataAccess.IAccountTypesDao;
 import dataAccessImpl.AccountTypesDao;
 import domainModel.AccountType;
 import exceptions.BusinessException;
@@ -10,7 +11,7 @@ import exceptions.SQLOperationException;
 
 public class AccountTypesBusiness implements IAccountTypesBusiness
 {
-	private AccountTypesDao accountTypesDao;
+	private IAccountTypesDao accountTypesDao;
 
 	public AccountTypesBusiness()
 	{

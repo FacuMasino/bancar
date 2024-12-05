@@ -1,7 +1,6 @@
 package businessLogic;
 
 import java.util.ArrayList;
-
 import domainModel.MovementType;
 import exceptions.BusinessException;
 

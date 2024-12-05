@@ -1,16 +1,15 @@
 package businessLogicImpl;
 
-import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
-
+import businessLogic.IAccountsBusiness;
 import businessLogic.IClientsBusiness;
 import businessLogic.ILoansBusiness;
+import businessLogic.IUsersBusiness;
+import dataAccess.IClientsDao;
 import dataAccessImpl.ClientsDao;
-import dataAccessImpl.LoansDao;
 import domainModel.Account;
 import domainModel.Client;
 import exceptions.BusinessException;
@@ -20,9 +19,9 @@ import utils.Validator;
 
 public class ClientsBusiness implements IClientsBusiness
 {
-	private ClientsDao clientsDao;
-	private UsersBusiness usersBusiness;
-	private AccountsBusiness accountsBusiness;
+	private IClientsDao clientsDao;
+	private IUsersBusiness usersBusiness;
+	private IAccountsBusiness accountsBusiness;
 	private ILoansBusiness loansBusiness;
 	
 	public ClientsBusiness()
@@ -146,12 +145,11 @@ public class ClientsBusiness implements IClientsBusiness
 				if (accounts.size() > 0)
 				{
 					accountsBusiness.delete(accounts);
-
 				}
-				// Rechazar todos los préstamos que aún no se aprobaron (STATUS
-				// EN REVISION)
+
 				loansBusiness.rejectAll(client);
 			}
+
 			return clientsDao.toggleActiveStatus(clientId, currentActiveStatus);
 		} 
 		catch (SQLException ex)
@@ -174,7 +172,7 @@ public class ClientsBusiness implements IClientsBusiness
 	}
 
 	@Override
-	public ArrayList<Client> list() throws BusinessException 
+	public ArrayList<Client> list() throws BusinessException
 	{
 		try
 		{
@@ -192,7 +190,8 @@ public class ClientsBusiness implements IClientsBusiness
 		}
 	}
 	
-	public ArrayList<Client> listActiveClients() throws BusinessException 
+	@Override
+	public ArrayList<Client> listActiveClients() throws BusinessException
 	{
 		try
 		{	
@@ -211,6 +210,7 @@ public class ClientsBusiness implements IClientsBusiness
 		}
 	}
 	
+	@Override
 	public int findClientId(int userId) throws BusinessException
 	{
 		try
@@ -230,6 +230,7 @@ public class ClientsBusiness implements IClientsBusiness
 		}
 	}
 	
+	@Override
 	public int findClientId(Account account) throws BusinessException
 	{
 		try
@@ -273,12 +274,5 @@ public class ClientsBusiness implements IClientsBusiness
 			throw new BusinessException(
 					"Ocurrió un error desconocido al validar el DNI.");
 		}
-	}
-		
-	// TODO: Eliminar este método y reemplazar todos sus llamados por cliBiz.read(cliBiz.findClientId(userId))
-	// (Doble click en el nombre del método y click en Open Call Hierarchy para ver llamados)
-	public Client findClientByUserId(int userId) throws BusinessException
-	{
-		return read(findClientId(userId));
 	}
 }

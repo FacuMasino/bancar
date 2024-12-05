@@ -3,16 +3,19 @@ package dataAccessImpl;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import dataAccess.IAddressesDao;
 import dataAccess.IClientsDao;
+import dataAccess.ICountriesDao;
+import dataAccess.IUsersDao;
 import domainModel.Account;
 import domainModel.Client;
 import domainModel.User;
 
 public class ClientsDao extends Dao<Client> implements IClientsDao
 {	
-	private CountriesDao countriesDao;
-	private AddressesDao addressesDao;
-	private UsersDao usersDao;
+	private ICountriesDao countriesDao;
+	private IAddressesDao addressesDao;
+	private IUsersDao usersDao;
 
 	public ClientsDao()
 	{
@@ -21,6 +24,7 @@ public class ClientsDao extends Dao<Client> implements IClientsDao
 		usersDao = new UsersDao();
 	}
 	
+	@Override
 	public int create(Client client) throws SQLException
 	{
 		handleUserId(client);
@@ -94,6 +98,7 @@ public class ClientsDao extends Dao<Client> implements IClientsDao
 		return (rows > 0);
 	}
 
+	@Override
 	public boolean toggleActiveStatus(int clientId, boolean currentActiveStatus) throws SQLException
 	{
 		int rows = 0;
@@ -146,6 +151,7 @@ public class ClientsDao extends Dao<Client> implements IClientsDao
 		return findClientId(client.getDni());
 	}
 	
+	@Override
 	public int findClientId(String dni) throws SQLException
 	{
 		ResultSet rs;
@@ -169,7 +175,8 @@ public class ClientsDao extends Dao<Client> implements IClientsDao
 			throw ex;
 		}
 	}
-
+	
+	@Override
 	public int findClientId(int userId) throws SQLException
 	{
 		ResultSet rs;
@@ -194,6 +201,7 @@ public class ClientsDao extends Dao<Client> implements IClientsDao
 		}
 	}
 	
+	@Override
 	public int findClientId(Account account) throws SQLException
 	{
 		ResultSet rs;

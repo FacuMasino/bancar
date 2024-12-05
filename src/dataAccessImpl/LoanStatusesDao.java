@@ -4,7 +4,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import dataAccess.ILoanStatusesDao;
 import domainModel.LoanStatus;
 
@@ -39,23 +38,6 @@ public class LoanStatusesDao implements ILoanStatusesDao
 			throw ex;
 		}
 	}
-	
-	private LoanStatus getLoanStatus(ResultSet rs) throws SQLException
-	{
-		try
-		{
-			LoanStatus auxLoanStatus = new LoanStatus();
-			auxLoanStatus.setId(rs.getInt("LoanStatusId"));
-			auxLoanStatus.setName(rs.getString("LoanStatusName"));
-			
-			return auxLoanStatus;
-		}
-		catch (SQLException ex)
-		{
-			ex.printStackTrace();
-			throw ex;
-		}
-	}
 
 	@Override
 	public List<LoanStatus> list() throws SQLException
@@ -82,4 +64,20 @@ public class LoanStatusesDao implements ILoanStatusesDao
 		return loanStatusList;
 	}
 
+	private LoanStatus getLoanStatus(ResultSet rs) throws SQLException
+	{
+		try
+		{
+			LoanStatus auxLoanStatus = new LoanStatus();
+			auxLoanStatus.setId(rs.getInt("LoanStatusId"));
+			auxLoanStatus.setName(rs.getString("LoanStatusName"));
+			
+			return auxLoanStatus;
+		}
+		catch (SQLException ex)
+		{
+			ex.printStackTrace();
+			throw ex;
+		}
+	}
 }

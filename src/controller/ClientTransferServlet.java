@@ -4,13 +4,15 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Optional;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import businessLogic.IAccountsBusiness;
+import businessLogic.IClientsBusiness;
+import businessLogic.ITransfersBusiness;
 import businessLogicImpl.AccountsBusiness;
 import businessLogicImpl.ClientsBusiness;
 import businessLogicImpl.TransfersBusiness;
@@ -26,9 +28,9 @@ import utils.Helper;
 public class ClientTransferServlet extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
-	private TransfersBusiness transfersBusiness;
-	private ClientsBusiness clientsBusiness;
-	private AccountsBusiness accountsBusiness;
+	private ITransfersBusiness transfersBusiness;
+	private IClientsBusiness clientsBusiness;
+	private IAccountsBusiness accountsBusiness;
 	private boolean success;
 	private Movement movement;
 	private Client originClient;
@@ -79,10 +81,12 @@ public class ClientTransferServlet extends HttpServlet
 		try
 		{
 			success = transfersBusiness.create(movement, originAccount, destinationAccount);
-		} catch (BusinessException ex)
+		}
+		catch (BusinessException ex)
 		{
 			Helper.setReqMessage(req, ex.getMessage(), MessageType.ERROR);
 		}
+
 		setTransferAttributes(req, res);
 		Helper.redirect("/WEB-INF/TransactionDetails.jsp", req, res);
 	}
@@ -101,7 +105,8 @@ public class ClientTransferServlet extends HttpServlet
 				return;
 			}
 			
-		} catch (BusinessException ex)
+		}
+		catch (BusinessException ex)
 		{
 			Helper.setReqMessage(req, ex.getMessage(), MessageType.ERROR);
 			loadTransferPage(req, res);
@@ -114,18 +119,18 @@ public class ClientTransferServlet extends HttpServlet
 	private void loadTransferPage(HttpServletRequest req, HttpServletResponse res)
 			throws ServletException, IOException
 	{
-		// Si el usuario está en esta página es porque inició sesión
-		// En la session va a estar el atributo client, no hace falta comprobarlo
 		HttpSession session = req.getSession(false);
 		originClient = (Client)session.getAttribute("client");
 		
 		try
 		{
 			bindAccountsDDL(req, res);
-		} catch (BusinessException ex)
+		}
+		catch (BusinessException ex)
 		{
 			Helper.setReqMessage(req, ex.getMessage(), MessageType.ERROR);
 		}
+
 		Helper.redirect("/WEB-INF/Transfer.jsp", req, res);
 	}
 	
@@ -148,12 +153,18 @@ public class ClientTransferServlet extends HttpServlet
 	private void fetchControls(HttpServletRequest req, HttpServletResponse res) 
 			throws ServletException, IOException, BusinessException
 	{
-		int originAccountId = Optional.ofNullable(req.getParameter("originAccountId"))
-				.map(Integer::parseInt).orElse(0);
-		String destinationAccountCbu = Optional.ofNullable(req.getParameter("destinationAccountCbu")).orElse("");
-		BigDecimal transferAmount = Optional.ofNullable(req.getParameter("transferAmount"))
-				.map(BigDecimal::new).orElse(BigDecimal.ZERO);
-		String transferDescription = Optional.ofNullable(req.getParameter("transferDescription")).orElse("");
+		int originAccountId = Optional.ofNullable(
+				req.getParameter("originAccountId")).map(Integer::parseInt).orElse(0);
+
+		String destinationAccountCbu = Optional.ofNullable(
+				req.getParameter("destinationAccountCbu")).orElse("");
+
+		BigDecimal transferAmount = Optional.ofNullable(
+				req.getParameter("transferAmount")).map(BigDecimal::new).orElse(BigDecimal.ZERO);
+		
+		String transferDescription = Optional.ofNullable(
+				req.getParameter("transferDescription")).orElse("");
+		
 		String transferType = req.getParameter("transferType");
 		
 		try
@@ -168,9 +179,7 @@ public class ClientTransferServlet extends HttpServlet
 			
 			movement = new Movement();
 			movement.setAmount(transferAmount);
-			
-			movement.setDetails(transferDescription);
-			
+			movement.setDetails(transferDescription);			
 			movement.setDetails(movement.getDetails() + " (" + transferType + ")");
 		}
 		catch (BusinessException ex)

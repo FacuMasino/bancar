@@ -2,10 +2,8 @@ package businessLogicImpl;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import businessLogic.IAccountsBusiness;
 import businessLogic.IInstallmentsBusiness;
 import businessLogic.ILoansBusiness;
@@ -39,8 +37,6 @@ public class LoansBusiness implements ILoansBusiness
 		accountsBusiness = new AccountsBusiness();
 		movementsBusiness = new MovementsBusiness();
 	}
-
-	// TODO: PENDIENTE Ningún método valida las reglas de negocio
 	
 	@Override
 	public boolean create(Loan loan) throws BusinessException 

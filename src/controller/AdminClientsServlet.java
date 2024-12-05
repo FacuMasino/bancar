@@ -1,25 +1,26 @@
 package controller;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.sql.Date;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-
 import javax.mail.MessagingException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import businessLogic.IAccountsBusiness;
+import businessLogic.IClientsBusiness;
+import businessLogic.ICountriesBusiness;
+import businessLogic.ILoansBusiness;
+import businessLogic.IProvincesBusiness;
+import businessLogic.IRolesBusiness;
 import businessLogicImpl.AccountsBusiness;
 import businessLogicImpl.ClientsBusiness;
 import businessLogicImpl.ProvincesBusiness;
 import businessLogicImpl.RolesBusiness;
-import dataAccessImpl.MovementsDao;
 import businessLogicImpl.CountriesBusiness;
 import businessLogicImpl.EmailBusiness;
 import businessLogicImpl.LoansBusiness;
@@ -31,11 +32,8 @@ import domainModel.Country;
 import domainModel.Loan;
 import domainModel.Province;
 import domainModel.Message.MessageType;
-import domainModel.Movement;
-import domainModel.MovementType;
 import exceptions.BusinessException;
 import exceptions.InvalidFieldsException;
-import exceptions.NoActiveAccountsException;
 import utils.Helper;
 import utils.Page;
 
@@ -43,12 +41,12 @@ import utils.Page;
 public class AdminClientsServlet extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
-	private ClientsBusiness clientsBusiness;
-	private AccountsBusiness accountsBusiness;
-	private LoansBusiness loansBusiness;
-	private ProvincesBusiness provincesBusiness;
-	private CountriesBusiness countriesBusiness;
-	private RolesBusiness rolesBusiness;
+	private IClientsBusiness clientsBusiness;
+	private IAccountsBusiness accountsBusiness;
+	private ILoansBusiness loansBusiness;
+	private IProvincesBusiness provincesBusiness;
+	private ICountriesBusiness countriesBusiness;
+	private IRolesBusiness rolesBusiness;
 	private Client client;
 	private EmailBusiness emailBusiness;
 
@@ -368,7 +366,6 @@ public class AdminClientsServlet extends HttpServlet
 			editClient(request, response);
 			ex.printStackTrace();
 		}
-		
 	}
 
 	private void toggleActiveStatus(

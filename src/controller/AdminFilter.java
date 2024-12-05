@@ -5,12 +5,9 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import domainModel.Message;
 import domainModel.User;
 import utils.Helper;
 import domainModel.Message.MessageType;
-
 import java.io.IOException;
 
 /*
@@ -21,8 +18,7 @@ import java.io.IOException;
 @WebFilter("/Admin/*") // Rutas a las que aplica el filtro
 public class AdminFilter implements Filter 
 {
-    public void init(FilterConfig filterConfig) 
-    		throws ServletException 
+    public void init(FilterConfig filterConfig) throws ServletException 
     {
         // Inicialización del filtro
     }
@@ -34,6 +30,7 @@ public class AdminFilter implements Filter
         
         // Castea la solicitud a un tipo de solicitud HTTP para poder obtener la session
         HttpServletRequest req = (HttpServletRequest)request;
+
         // getSession(false) devuelve null si no hay una session creada
 		HttpSession session = req.getSession(false);
 		
@@ -46,11 +43,13 @@ public class AdminFilter implements Filter
 		Boolean hasClientUser = user != null ? 
 				user.getRole().getName().equals("Administrador") : false;
 		
-		if(session == null || !hasClientUser) {
+		if(session == null || !hasClientUser)
+		{
 			Helper.setReqMessage(req,"Debes iniciar sesión como Administrador para acceder a esta sección",MessageType.ERROR);
 			Helper.redirect("/Login", req, (HttpServletResponse)response);
 			return; // salir de el filtro
 		}
+
 		// Si pasa la validación, se deja acceder a la ruta /Client
         chain.doFilter(request, response); // Continúa con el siguiente filtro o servlet
     }

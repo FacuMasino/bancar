@@ -6,7 +6,6 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
-
 import domainModel.Loan;
 
 public interface IReportsDao

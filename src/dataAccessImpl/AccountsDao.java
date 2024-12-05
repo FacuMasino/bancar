@@ -3,6 +3,7 @@ package dataAccessImpl;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import dataAccess.IAccountTypesDao;
 import dataAccess.IAccountsDao;
 import dataAccess.IClientsDao;
 import domainModel.Account;
@@ -11,7 +12,7 @@ import domainModel.AccountType;
 public class AccountsDao implements IAccountsDao
 {
 	private Database db;
-	private AccountTypesDao accountTypesDao;
+	private IAccountTypesDao accountTypesDao;
 	private IClientsDao clientsDao;
 	
 	public AccountsDao()
@@ -27,7 +28,7 @@ public class AccountsDao implements IAccountsDao
 		try
 		{
 			AccountType accountType;
-			accountType = accountTypesDao.readByName(account.getAccountType().getName());
+			accountType = accountTypesDao.read(account.getAccountType().getName());
 			account.setAccountType(accountType);
 
 			db.setCallableStatement("{CALL insert_account(?, ?, ?, ?, ?)}");
@@ -166,6 +167,7 @@ public class AccountsDao implements IAccountsDao
 		return accounts;
 	}
 	
+	@Override
 	public int findId(String cbu) throws SQLException
 	{
 		ResultSet rs;
