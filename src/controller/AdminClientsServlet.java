@@ -281,16 +281,22 @@ public class AdminClientsServlet extends HttpServlet
 		try
 		{
 			clientsBusiness.create(client);
-			emailBusiness.sendWelcome(client);
+			
+			// Enviar mail asincrónicamente
+			new Thread(() -> {
+				try
+				{
+					emailBusiness.sendWelcome(client);
+				} catch (MessagingException ex)
+				{
+					ex.printStackTrace();
+					System.out.println(
+							"No se pudo enviar el mail de bienvenida.");
+				}
+			}).start();
+			
 			Helper.setReqMessage(
 					request, "Cliente creado exitosamente.", MessageType.SUCCESS);
-			listClients(request, response);
-		}
-		catch (MessagingException ex)
-		{
-			Helper.setReqMessage(request,
-					"El cliente fue creado con éxito pero no pudo enviarse el email de bienvenida",
-					MessageType.SUCCESS);
 			listClients(request, response);
 		}
 		catch (InvalidFieldsException ex)
