@@ -7,7 +7,7 @@ import domainModel.Province;
 public interface IProvincesDao
 {
 	public int getCountryId();
-	public void setCountryId(int countryId)
+	public void setCountryId(int countryId);
 	public int create(Province province, int countryId) throws SQLException;
 	public Province read(int provinceId) throws SQLException;
 	public boolean update(Province province, int countryId) throws SQLException;
