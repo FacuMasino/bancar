@@ -18,6 +18,12 @@ public class Validator
 	{
 		List<String> invalidFields = new ArrayList<>();
 
+		// Usuario
+		if(!hasOnlyLettersAndNumbers(client.getUsername(), true))
+		{
+			invalidFields.add("El nombre de usuario solo puede contener letras y números");
+		}
+		
 		// Contraseña
 		if (!isValidPassword(client.getPassword()))
 		{
@@ -117,7 +123,7 @@ public class Validator
 				|| address.getStreetName().trim().isEmpty())
 		{
 			invalidFields.add("El Nombre de la Calle es requerido");
-		} else if (!hasOnlyLettersAndNumbers(address.getStreetName()))
+		} else if (!hasOnlyLettersAndNumbers(address.getStreetName(), false))
 		{
 			invalidFields.add(
 					"El Nombre de la Calle solo puede contener letras y números");
@@ -136,7 +142,7 @@ public class Validator
 
 		// Piso
 		if (address.getFlat() != null && (!address.getFlat().trim().isEmpty()
-				&& !hasOnlyLettersAndNumbers(address.getFlat())))
+				&& !hasOnlyLettersAndNumbers(address.getFlat(), false)))
 		{
 			invalidFields.add("El Piso solo puede contener letras y números");
 		}
@@ -146,7 +152,7 @@ public class Validator
 				|| address.getCity().getName().trim().isEmpty())
 		{
 			invalidFields.add("El Nombre de la Ciudad es requerido");
-		} else if (!hasOnlyLettersAndNumbers(address.getCity().getName()))
+		} else if (!hasOnlyLettersAndNumbers(address.getCity().getName(), false))
 		{
 			invalidFields
 					.add("El Nombre de la Ciudad solo puede contener letras");
@@ -157,7 +163,7 @@ public class Validator
 				|| address.getCity().getZipCode().trim().isEmpty())
 		{
 			invalidFields.add("El Código Postal es requerido");
-		} else if (!hasOnlyLettersAndNumbers(address.getCity().getZipCode()))
+		} else if (!hasOnlyLettersAndNumbers(address.getCity().getZipCode(), true))
 		{
 			invalidFields.add(
 					"El Código Postal solo puede contener letras y números");
@@ -184,14 +190,16 @@ public class Validator
 		return invalidFields;
 	}
 
-	private static boolean hasOnlyLettersAndNumbers(String str)
+	private static boolean hasOnlyLettersAndNumbers(String str, boolean preventSpaces)
 	{
 		for (int i = 0; i < str.length(); i++)
 		{
 			char c = str.charAt(i);
-			if (!(Character.isLetterOrDigit(c) || str.charAt(i) == ' '))
+			if (!Character.isLetterOrDigit(c)) return false;
+			if(preventSpaces)
 			{
-				return false;
+				// No permitir espacios
+				if (Character.isSpaceChar(str.charAt(i))) return false;
 			}
 		}
 		return true;
@@ -213,10 +221,9 @@ public class Validator
 	{
 		for (int i = 0; i < str.length(); i++)
 		{
-			if (!(Character.isLetter(str.charAt(i)) || str.charAt(i) == ' '))
-			{
-				return false;
-			}
+			if (!Character.isLetter(str.charAt(i))) return false;
+			// No permitir espacios
+			if (Character.isSpaceChar(str.charAt(i))) return false;
 		}
 		return true;
 	}

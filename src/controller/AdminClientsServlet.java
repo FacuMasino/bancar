@@ -216,7 +216,8 @@ public class AdminClientsServlet extends HttpServlet
 	{
 		Client client = new Client();
 
-		client.setUsername(request.getParameter("clientUsername"));
+		// El nombre de usuario queda siempre en minúsculas
+		client.setUsername(request.getParameter("clientUsername").toLowerCase());
 		client.setPassword(request.getParameter("clientPassword"));
 
 		try

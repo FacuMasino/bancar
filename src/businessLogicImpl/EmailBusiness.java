@@ -27,7 +27,7 @@ public class EmailBusiness {
 
 		try
 		{
-			InputStream is = Database.class.getClassLoader().getResourceAsStream("config.properties");
+			InputStream is = EmailBusiness.class.getClassLoader().getResourceAsStream("config.properties");
 			
 			if (is == null)
 			{
