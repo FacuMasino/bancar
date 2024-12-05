@@ -136,31 +136,53 @@ VALUES
 INSERT INTO Loans (CreationDate, InstallmentsQuantity, RequestedAmount, InterestRate, LoanTypeId, LoanStatusId, ClientId, AccountId)
 VALUES
     ('2023-01-10', 10, 5000.00, 5.5, 1, 1, 1, 1),
-    ('2024-10-10', 12, 50000.00, 5.5, 1, 2, 1, 1),
+    ('2024-10-10', 12, 50000.00, 5.5, 1, 2, 1, 1), -- Vigente 2
     ('2023-01-11', 10, 100000.00, 5.5, 1, 3, 1, 1),
-    ('2023-02-20', 24, 15000.00, 6.8, 2, 2, 2, 2),
+    ('2023-02-20', 24, 15000.00, 6.8, 2, 2, 2, 2), -- Vigente 4
     ('2023-03-15', 36, 20000.00, 7.2, 1, 3, 3, 3),
     ('2023-04-01', 18, 7500.00, 5.0, 3, 1, 4, 4),
-    ('2023-05-22', 12, 3000.00, 4.5, 2, 2, 5, 5),
+    ('2023-05-22', 12, 300000.00, 4.5, 2, 2, 5, 5), -- Vigente 7
     ('2023-06-30', 24, 12000.00, 6.0, 3, 1, 6, 6),
     ('2023-07-05', 48, 25000.00, 8.5, 1, 3, 7, 7),
-    ('2023-08-12', 36, 18000.00, 7.0, 2, 2, 8, 8),
+    ('2023-08-12', 36, 80000.00, 7.0, 2, 2, 8, 8), -- Vigente 10
     ('2023-09-18', 12, 10000.00, 5.8, 3, 1, 9, 9),
-    ('2023-10-25', 24, 5000.00, 6.2, 1, 2, 10, 10),
+    ('2023-10-25', 24, 50000.00, 6.2, 1, 2, 10, 10), -- Vigente 12
     ('2023-11-15', 18, 8000.00, 5.3, 2, 1, 11, 11),
     ('2023-12-01', 36, 22000.00, 7.5, 3, 3, 12, 12),
-    ('2024-01-10', 12, 4500.00, 4.8, 1, 2, 13, 13),
+    ('2024-01-10', 12, 150000.00, 4.8, 1, 2, 13, 13), -- Vigente 15
     ('2024-02-22', 24, 15500.00, 6.9, 2, 1, 14, 14),
     ('2024-03-05', 18, 6500.00, 5.4, 3, 1, 15, 15),
     ('2024-04-18', 48, 27000.00, 8.1, 1, 3, 16, 16),
-    ('2024-05-30', 12, 4000.00, 5.1, 2, 2, 2, 2),
+    ('2024-05-30', 12, 200000.00, 5.1, 2, 2, 2, 2), -- Vigente 19
     ('2024-06-12', 24, 13000.00, 6.3, 3, 1, 3, 3),
-    ('2024-07-20', 36, 16000.00, 6.7, 1, 2, 4, 4),
+    ('2024-07-20', 36, 160000.00, 6.7, 1, 2, 4, 4), -- Vigente 21
     ('2024-08-25', 18, 7000.00, 5.2, 2, 1, 5, 5),
-    ('2024-09-10', 12, 9500.00, 4.9, 3, 2, 6, 6),
+    ('2024-09-10', 12, 95000.00, 4.9, 3, 2, 6, 6), -- Vigente 23
     ('2024-10-02', 24, 14000.00, 6.4, 1, 3, 7, 7),
     ('2024-11-14', 48, 21000.00, 7.8, 2, 1, 8, 8),
-    ('2024-12-05', 36, 25000.00, 7.1, 3, 2, 9, 9);
+    ('2024-12-05', 36, 250000.00, 7.1, 3, 2, 9, 9); -- Vigente 26
+
+-- Generación de cuotas para préstamos vigentes
+SET @GeneratedInstallments = 0; -- Es requerida para poder llamar al SP
+
+CALL generate_installments(@GeneratedInstallments, 2);
+CALL generate_installments(@GeneratedInstallments, 4);
+CALL generate_installments(@GeneratedInstallments, 7);
+CALL generate_installments(@GeneratedInstallments, 10);
+CALL generate_installments(@GeneratedInstallments, 12);
+CALL generate_installments(@GeneratedInstallments, 15);
+CALL generate_installments(@GeneratedInstallments, 19);
+CALL generate_installments(@GeneratedInstallments, 21);
+CALL generate_installments(@GeneratedInstallments, 23);
+CALL generate_installments(@GeneratedInstallments, 26);
+
+SET @NewMovementId = 0; -- Requerida para el SP de transfers
+
+CALL generate_transfer(@NewMovementId, UUID(), '2024-04-09 00:00:00', 'Depto Carlos (Alquileres)', 100000, 4, 1, 8);
+CALL generate_transfer(@NewMovementId, UUID(), '2024-06-19 00:00:00', 'Bici (Varios)', 75000, 4, 1, 9);
+CALL generate_transfer(@NewMovementId, UUID(), '2024-09-25 00:00:00', 'Curso C# (Varios)', 65000, 4, 1, 13);
+CALL generate_transfer(@NewMovementId, UUID(), '2024-11-11 00:00:00', 'Desarrollo Web (Haberes)', 250000, 4, 17, 1);
+CALL generate_transfer(@NewMovementId, UUID(), '2024-03-05 00:00:00', 'Consultoria (Varios)', 100000, 4, 20, 1);
 
 -- Movimientos 
 -- Variable para compartir el UUID de 2 Transferencias
@@ -170,59 +192,25 @@ SET @SharedTransactionId2 = UUID();
 -- Inserciones
 INSERT INTO Movements (TransactionId, Details, Amount, MovementTypeId, AccountId)
 VALUES 
-    (@SharedTransactionId1, 'Transferencia saliente - cuenta 1', -5000.00, 4, 1),
-    (@SharedTransactionId1, 'Transferencia entrante - cuenta 2', 5000.00, 4, 2),
-    (@SharedTransactionId2, 'Transferencia saliente - cuenta 3', -3000.00, 4, 3),
-    (@SharedTransactionId2, 'Transferencia entrante - cuenta 4', 3000.00, 4, 4),
-    (UUID(), 'Apertura de cuenta - Cta. 1', 10000.00, 1, 1),
-    (UUID(), 'Alta de préstamo - Cta. 1', 1000.00, 2, 1),
-    (UUID(), 'Alta de préstamo - Cta. 1', 1000.00, 2, 1),
-    (UUID(), 'Alta de préstamo - Cta. 1', 1000.00, 2, 1),
-    (UUID(), 'Alta de préstamo - Cta. 1', 1000.00, 2, 1),
-    (UUID(), 'Alta de préstamo - Cta. 1', 1000.00, 2, 1),
-    (UUID(), 'Alta de préstamo - Cta. 1', 1000.00, 2, 1),
-    (UUID(), 'Alta de préstamo - Cta. 1', 1000.00, 2, 1),
-    (UUID(), 'Alta de préstamo - Cta. 1', 1000.00, 2, 1),
-    (UUID(), 'Alta de préstamo - Cta. 1', 1000.00, 2, 1),
-    (UUID(), 'Alta de préstamo - Cta. 1', 1000.00, 2, 1),
-    (UUID(), 'Alta de préstamo - Cta. 1', 1000.00, 2, 1),
-    (UUID(), 'Alta de préstamo - Cta. 1', 1000.00, 2, 1),
-    (UUID(), 'Alta de préstamo - cuenta 1', 5000.00, 2, 1),
-    (UUID(), 'Pago parcial préstamo - cuenta 1', -1000.00, 3, 1),
-    (UUID(), 'Pago de préstamo - cuenta 3', -1500.00, 3, 3),
-    (UUID(), 'Alta de cuenta - cuenta 3', 2000.00, 1, 3),
-    (UUID(), 'Apertura de cuenta - cuenta 4', 3000.00, 1, 4),
-    (UUID(), 'Alta de préstamo - cuenta 4', 4000.00, 2, 4),
-    (UUID(), 'Pago de préstamo - cuenta 4', -500.00, 3, 4),
-    (UUID(), 'Pago parcial préstamo - cuenta 5', -700.00, 3, 5),
-    (UUID(), 'Apertura de cuenta - cuenta 6', 1500.00, 1, 6),
-    (UUID(), 'Alta de préstamo - cuenta 6', 2500.00, 2, 6),
-    (UUID(), 'Pago total préstamo - cuenta 6', -2500.00, 3, 6),
-    (UUID(), 'Apertura de cuenta - cuenta 8', 2000.00, 1, 8),
-    (UUID(), 'Alta de préstamo - cuenta 8', 3000.00, 2, 8),
-    (UUID(), 'Pago parcial préstamo - cuenta 8', -1000.00, 3, 8),
-    (UUID(), 'Alta de cuenta - cuenta 10', 3000.00, 1, 10),
-    (UUID(), 'Alta de préstamo - cuenta 10', 4500.00, 2, 10),
-    (UUID(), 'Pago de préstamo - cuenta 10', -1200.00, 3, 10),
-    (UUID(), 'Apertura de cuenta - cuenta 11', 1800.00, 1, 11),
-    (UUID(), 'Pago parcial préstamo - cuenta 11', -600.00, 3, 11),
-    (UUID(), 'Pago de préstamo - cuenta 13', -700.00, 3, 13),
-    (UUID(), 'Alta de cuenta - cuenta 13', 3500.00, 1, 13),
-    (UUID(), 'Apertura de cuenta - cuenta 14', 1500.00, 1, 14),
-    (UUID(), 'Alta de préstamo - cuenta 15', 2800.00, 2, 15),
-    (UUID(), 'Pago parcial préstamo - cuenta 15', -900.00, 3, 15);
+    (UUID(), 'Apertura de cuenta', 10000.00, 1, 1),
+    (UUID(), 'Apertura de cuenta', 2000.00, 1, 3),
+    (UUID(), 'Apertura de cuenta', 3000.00, 1, 4),
+    (UUID(), 'Apertura de cuenta', 1500.00, 1, 6),
+    (UUID(), 'Apertura de cuenta', 2000.00, 1, 8),
+    (UUID(), 'Alta de cuenta', 3000.00, 1, 10),
+    (UUID(), 'Apertura de cuenta', 1800.00, 1, 11),
+    (UUID(), 'Alta de cuenta', 3500.00, 1, 13),
+    (UUID(), 'Apertura de cuenta', 1500.00, 1, 14);
 
-INSERT INTO Installments (InstallmentNumber, Amount, PaymentDueDate, LoanId)
+INSERT INTO Movements (TransactionId, MovementDateTime, Details, Amount, MovementTypeId, AccountId)
 VALUES
-    ('1', 4395.83, '2024-11-10', 2),
-    ('2', 4395.83, '2024-12-10', 2),
-    ('3', 4395.83, '2025-01-10', 2),
-    ('4', 4395.83, '2025-02-10', 2),
-    ('5', 4395.83, '2025-03-10', 2),
-    ('6', 4395.83, '2025-04-10', 2),
-    ('7', 4395.83, '2025-05-10', 2),
-    ('8', 4395.83, '2025-06-10', 2),
-    ('9', 4395.83, '2025-07-10', 2),
-    ('10',4395.83, '2025-08-10', 2),
-    ('11',4395.83, '2025-09-10', 2),
-    ('12',4395.83, '2025-10-10', 2);
+    (UUID(), '2024-03-09 00:00:00', 'Préstamo Nro. 2', 50000.00, 2, 1),
+    (UUID(), '2024-10-16 00:00:00', 'Préstamo Nro. 4', 15000.00, 2, 2),
+    (UUID(), '2024-12-09 00:00:00', 'Préstamo Nro. 7', 300000.00, 2, 5),
+    (UUID(), '2024-03-03 00:00:00', 'Préstamo Nro. 10', 80000.00, 2, 8),
+    (UUID(), '2024-09-01 00:00:00', 'Préstamo Nro. 12', 50000.00, 2, 10),
+    (UUID(), '2024-05-10 00:00:00', 'Préstamo Nro. 15', 150000.00, 2, 13),
+    (UUID(), '2024-06-28 00:00:00', 'Préstamo Nro. 19', 200000.00, 2, 2),
+    (UUID(), '2024-07-20 00:00:00', 'Préstamo Nro. 21', 160000.00, 2, 4),
+    (UUID(), '2024-03-14 00:00:00', 'Préstamo Nro. 23', 95000.00, 2, 6),
+    (UUID(), '2024-11-18 00:00:00', 'Préstamo Nro. 26', 250000.00, 2, 9);

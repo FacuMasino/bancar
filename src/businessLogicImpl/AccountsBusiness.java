@@ -4,12 +4,16 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import businessLogic.IAccountsBusiness;
+import businessLogic.IMovementsBusiness;
 import dataAccess.IAccountsDao;
 import dataAccess.ILoansDao;
 import dataAccessImpl.AccountsDao;
 import dataAccessImpl.LoansDao;
 import domainModel.Account;
 import domainModel.Client;
+import domainModel.Movement;
+import domainModel.MovementType;
+import domainModel.MovementTypeEnum;
 import exceptions.BusinessException;
 import exceptions.SQLOperationException;
 
@@ -19,11 +23,13 @@ public class AccountsBusiness implements IAccountsBusiness
 	private ILoansDao loansDao;
 	private Client client;
 	private Account account;
+	private IMovementsBusiness movementsBusiness;
 	
 	public AccountsBusiness()
 	{
 		accountsDao = new AccountsDao();
 		loansDao = new LoansDao();
+		movementsBusiness = new MovementsBusiness();
 	}
 	
 	@Override
@@ -42,9 +48,21 @@ public class AccountsBusiness implements IAccountsBusiness
 
 			int newAccountId = accountsDao.getLastId() + 1;
 			account.setCbu(generateCBU(newAccountId));
-
+			
 			if (0 < accountsDao.create(account))
 			{
+				account.setId(newAccountId);
+				
+				Movement movement = new Movement();
+				MovementType movementType = new MovementType();
+				movementType.setId(MovementTypeEnum.NEW_ACCOUNT.getId());
+				
+				movement.setMovementType(movementType);
+				movement.setAmount(account.getBalance());
+				movement.setDetails("Apertura de cuenta");
+				movement.setAccount(account);
+				movementsBusiness.create(movement);
+				
 				return true;
 			}
 		}
