@@ -120,6 +120,10 @@ public class ClientsBusiness implements IClientsBusiness
 		{
 			throw new SQLOperationException();
 		}
+		catch (BusinessException ex)
+		{
+			throw ex;
+		}
 		catch (Exception ex)
 		{
 			ex.printStackTrace();
