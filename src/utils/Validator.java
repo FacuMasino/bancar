@@ -75,7 +75,7 @@ public class Validator
 				|| client.getFirstName().trim().isEmpty())
 		{
 			invalidFields.add("El Nombre es requerido");
-		} else if (!hasOnlyLetters(client.getFirstName()))
+		} else if (!hasOnlyLetters(client.getFirstName(), false))
 		{
 			invalidFields.add("El Nombre solo puede contener letras");
 		}
@@ -85,7 +85,7 @@ public class Validator
 				|| client.getLastName().trim().isEmpty())
 		{
 			invalidFields.add("El Apellido es requerido");
-		} else if (!hasOnlyLetters(client.getLastName()))
+		} else if (!hasOnlyLetters(client.getLastName(), false))
 		{
 			invalidFields.add("El Apellido solo puede contener letras");
 		}
@@ -173,7 +173,7 @@ public class Validator
 		if (address.getCountry() == null	|| address.getCountry().getName() == null	|| address.getCountry().getName().trim().isEmpty())
 		{
 			invalidFields.add("La Nacionalidad es requerida");
-		} else if (!hasOnlyLetters(address.getCountry().getName()))
+		} else if (!hasOnlyLetters(address.getCountry().getName(), true))
 		{
 			invalidFields.add("La Nacionalidad solo puede contener letras");
 		}
@@ -182,7 +182,7 @@ public class Validator
 				|| address.getProvince().getName().trim().isEmpty())
 		{
 			invalidFields.add("La provincia es un campo requerido");
-		} else if (!hasOnlyLetters(address.getProvince().getName()))
+		} else if (!hasOnlyLetters(address.getProvince().getName(), false))
 		{
 			invalidFields.add("La provincia solo puede contener letras");
 		}
@@ -195,12 +195,9 @@ public class Validator
 		for (int i = 0; i < str.length(); i++)
 		{
 			char c = str.charAt(i);
-			if (!Character.isLetterOrDigit(c)) return false;
-			if(preventSpaces)
-			{
-				// No permitir espacios
-				if (Character.isSpaceChar(str.charAt(i))) return false;
-			}
+			if (!(Character.isLetterOrDigit(c) || Character.isSpaceChar(c))) return false;
+			// No permitir espacios
+			if(preventSpaces && Character.isSpaceChar(c)) return false;
 		}
 		return true;
 	}
@@ -217,13 +214,13 @@ public class Validator
 		return true;
 	}
 
-	private static boolean hasOnlyLetters(String str)
+	private static boolean hasOnlyLetters(String str, boolean preventSpaces)
 	{
 		for (int i = 0; i < str.length(); i++)
 		{
-			if (!Character.isLetter(str.charAt(i))) return false;
-			// No permitir espacios
-			if (Character.isSpaceChar(str.charAt(i))) return false;
+			char c = str.charAt(i);
+			if (!(Character.isLetter(c) || Character.isSpaceChar(c))) return false;
+			if(preventSpaces && Character.isSpaceChar(c)) return false;
 		}
 		return true;
 	}
@@ -252,7 +249,7 @@ public class Validator
 		int upper = 0, lower = 0, number = 0;
 		if(pass.length() < 6) return false;
 		if(hasOnlyNumbers(pass)) return false;
-		if(hasOnlyLetters(pass)) return false;
+		if(hasOnlyLetters(pass, true)) return false;
 		for(char ch : pass.toCharArray())
 		{
 			if(ch >= 'A' && ch <= 'Z')
