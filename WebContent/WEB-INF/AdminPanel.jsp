@@ -55,6 +55,52 @@
           <p class="text-red-600 text-xl font-bold"> <fmt:formatNumber value="${totalPendingAmount}" type="currency"/></p>
         </div>
       </div>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-2.5">
+        <!-- TASA DE MOROSIDAD -->
+        <div class="flex flex-col bg-white py-6 px-8 rounded">
+          <div class="flex justify-between">
+            <span class="font-semibold">Tasa de morosidad</span>
+            <i data-lucide="info"></i>
+          </div>
+          <div class="flex justify-between items-center">
+            <div class="space-y-1">
+              <p class="text-xs text-muted">Préstamos con cuotas vencidas</p>
+              <p class="text-xl font-bold">${overdueLoansCount}</p>
+            </div>
+            <div class="self-end text-2xl font-bold text-red-500">${defaultRate}%</div>
+          </div>
+          <div class="mt-4 h-1 w-full bg-red-200 rounded-full overflow-hidden">
+            <div class="h-full bg-red-500 w-[${defaultRate}%]"></div>
+          </div>
+          <span class="mt-2 text-xs text-muted text-end">
+            ${overdueLoansCount} de ${approvedLoansCount} préstamos vigentes
+          </span>
+        </div>
+        <!-- BENEFICIOS -->
+        <div class="flex flex-col bg-white py-6 px-8 rounded">
+          <div class="flex justify-between">
+            <span class="font-semibold">Beneficios de Préstamos</span>
+            <i data-lucide="dollar-sign"></i>
+          </div>
+          <div class="flex flex-col gap-4">
+            <div class="space-y-1">
+              <p class="text-xs text-muted">Intereses de cuotas pagadas</p>
+              <p class="text-xl font-bold text-green-600">
+                <fmt:formatNumber value="${profitsEarned}" type="currency"/>
+              </p>
+            </div>
+            <div class="space-y-1">
+              <p class="text-xs text-muted">Intereses de cuotas por pagar</p>
+              <div class="flex items-center gap-2">
+                <p class="text-xl font-bold text-red-500">
+                  <fmt:formatNumber value="${profitsToEarn}" type="currency"/>
+                </p>
+                <i data-lucide="trending-up"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="grid gap-6 xl:grid-cols-12">
         <div class="xl:col-span-7">
           <div class="flex flex-col gap-4 rounded-lg p-8 bg-white">
@@ -76,29 +122,11 @@
           </div>
         </div>
         <div class="xl:col-span-5">
-          <div class="bg-white rounded-lg flex flex-col gap-4 p-8">
+          <div class="bg-white rounded-lg flex flex-col gap-4 p-8 h-[100%]">
             <p class="font-semibold text-center text-2xl">Clientes por provincia</p>
-            <div class="flex flex-col items-center">
-              <div id="chartDonut"></div>
+            <div class="flex flex-col items-center grow">
+              <div id="chartDonut" class="flex items-center w-[100%] h-[100%]"></div>
             </div>
-          </div>
-        </div>
-        <div class="xl:col-span-5">
-          <div class="bg-white rounded-lg flex flex-col gap-4 p-8">
-            <p class="font-semibold font-mono">Tasa de Morosidad (Préstamos con cuotas vencidas / Préstamos vigentes):</p>
-            <h3 class="font-semibold font-mono">Préstamos con cuotas vencidas: ${overdueLoansCount}</h3>
-            <h3 class="font-semibold font-mono">Préstamos vigentes: ${approvedLoansCount}</h3>
-            <div class="flex flex-col items-center">
-              <span class="text-xl font-bold text-red-600">${defaultRate}% </span>
-            </div>
-          </div>
-        </div>
-        <div class="xl:col-span-5">
-          <div class="bg-white rounded-lg flex flex-col gap-4 p-8">
-            <h3 class="text-l font-semibold font-mono">Beneficios de Préstamos (intereses de cuotas pagadas):</h3> 
-            <h3 class="text-l font-bold text-green-600 text-center"> <fmt:formatNumber value="${profitsEarned}" type="currency"/></h3>
-            <h3 class="text-l font-semibold font-mono">Beneficio de Préstamos futuro (intereses de cuotas por pagar):</h3> 
-            <h3 class="text-l font-bold text-red-600 text-center"><fmt:formatNumber value="${profitsToEarn}" type="currency"/></h3>
           </div>
         </div>
       </div>

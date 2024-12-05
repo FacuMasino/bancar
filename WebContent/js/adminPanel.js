@@ -24,22 +24,11 @@ const drawDonutChart = async (divId, clients, provinces) => {
 	var options = {
 	  series: clients,
 	  chart: {
-	  width: 400,
+	  width: "100%",
 	  type: 'pie',
 	},
 	labels: provinces,
-	responsive: [{
-	  breakpoint: 480,
-	  options: {
-	    chart: {
-	      width: 200
-	    },
-	    legend: {
-	      position: 'bottom'
-	        }
-	      }
-	    }]
-	    };
+	};
 	
 	// No se dibuja el chart hasta que todos los SVGs de Lucide se hayan 
 	// renderizado, asi ApexCharts calcula correctamente el ancho maximo disponible
