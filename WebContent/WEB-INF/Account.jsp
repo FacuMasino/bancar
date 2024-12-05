@@ -19,7 +19,7 @@
   <t:clientwrapper activeMenuItem="accountMenu">
     <form method="get" action="Client" class="container flex flex-col gap-4 mx-auto p-4 max-w-7xl mb-8">
       <h1 class="font-bold text-3xl mb-2">
-        Bienvenido/a ${client.firstName} ${client.lastName}
+        ¡Bienvenido/a ${client.firstName} ${client.lastName}!
       </h1>
       <div class="flex items-center justify-between mb-4">
         <h2 class="font-bold text-lg">Mi Cuenta</h2>

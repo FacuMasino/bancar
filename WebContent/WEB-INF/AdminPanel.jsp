@@ -1,6 +1,11 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags/"%>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+
+<!-- Necesario para el formato de números como moneda -->
+<fmt:setLocale value="es_AR"/>
+
 
 <c:set var="clientsQty"  value="${requestScope.clientsQty != null ? requestScope.clientsQty : 0}" />
 <c:set var="approvedLoansCount"  value="${requestScope.approvedLoansCount != null ? requestScope.approvedLoansCount : 0}" />
@@ -19,41 +24,41 @@
   <t:adminwrapper activeMenuItem="adminPanelMenu">
     <script async src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <div class="container flex flex-col gap-6 mx-auto my-6 px-2">
-      <p class="font-bold text-2xl mb-6">Bienvenido/a!</p>
+      <p class="font-bold text-2xl mb-6">¡Bienvenido/a ${user.username}!</p>
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5">
-        <div class="bg-white rounded rounded-lg flex flex-col justify-between gap-2.5 px-8 py-6">
+        <div class="bg-white rounded rounded-lg flex flex-col justify-between gap-2.5 px-8 py-6 bg-emerald-100">
           <div class="flex justify-between">
             <p>Fondos Totales</p>
             <i data-lucide="landmark"></i>
           </div>
-          <p class="text-green-600 text-xl font-bold">$${totalFunds}</p>
+          <p class="text-green-600 text-xl font-bold"><fmt:formatNumber value="${totalFunds}" type="currency"/></p>
         </div>
-        <div class="bg-white rounded rounded-lg flex flex-col justify-between gap-2.5 px-8 py-6">
+        <div class="bg-white rounded rounded-lg flex flex-col justify-between gap-2.5 px-8 py-6 bg-emerald-100">
           <div class="flex justify-between">
             <p>Préstamos Activos</p>
             <i data-lucide="credit-card"></i>
           </div>
-          <p class="text-red-600 text-xl font-bold">${approvedLoansCount}</p>
+          <p class="text-orange-500  text-xl font-bold text-center">${approvedLoansCount}</p>
         </div>
-        <div class="bg-white rounded rounded-lg flex flex-col justify-between gap-2.5 px-8 py-6">
-          <div class="flex justify-between">
+        <div class="bg-white rounded rounded-lg flex flex-col justify-between gap-2.5 px-8 py-6 bg-emerald-100">
+          <div class="flex justify-between ">
             <p>Clientes</p>
             <i data-lucide="user"></i>
           </div>
-          <p class="text-green-600 text-xl font-bold">${clientsQty}</p>
+          <p class="text-green-600 text-xl font-bold text-center">${clientsQty}</p>
         </div>
-        <div class="bg-white rounded rounded-lg flex flex-col justify-between gap-2.5 px-8 py-6">
+        <div class="bg-white rounded rounded-lg flex flex-col justify-between gap-2.5 px-8 py-6 bg-emerald-100">
           <div class="flex justify-between">
             <p>Deuda Clientes</p>
             <i data-lucide="user"></i>
           </div>
-          <p class="text-red-600 text-xl font-bold">$ ${totalPendingAmount}</p>
+          <p class="text-red-600 text-xl font-bold"> <fmt:formatNumber value="${totalPendingAmount}" type="currency"/></p>
         </div>
       </div>
       <div class="grid gap-6 xl:grid-cols-12">
         <div class="xl:col-span-7">
           <div class="flex flex-col gap-4 rounded-lg p-8 bg-white">
-            <p class="font-semibold">Flujo de dinero</p>
+            <p class="font-semibold text-center text-2xl">Flujo de dinero</p>
             <div class="flex justify-between">
               <p class="font-semibold">Período</p>
               <form method="get" action="Admin" class="flex justify-between gap-4">
@@ -72,7 +77,7 @@
         </div>
         <div class="xl:col-span-5">
           <div class="bg-white rounded-lg flex flex-col gap-4 p-8">
-            <p class="font-semibold">Clientes por provincia</p>
+            <p class="font-semibold text-center text-2xl">Clientes por provincia</p>
             <div class="flex flex-col items-center">
               <div id="chartDonut"></div>
             </div>
@@ -80,9 +85,9 @@
         </div>
         <div class="xl:col-span-5">
           <div class="bg-white rounded-lg flex flex-col gap-4 p-8">
-            <p class="font-semibold">Tasa de Morosidad : Préstamos con cuotas vencidas / Préstamos vigentes</p>
-            <h3 class="font-semibold">Préstamos con cuotas vencidas: ${overdueLoansCount}</h3>
-            <h3 class="font-semibold">Préstamos vigentes: ${approvedLoansCount}</h3>
+            <p class="font-semibold font-mono">Tasa de Morosidad (Préstamos con cuotas vencidas / Préstamos vigentes):</p>
+            <h3 class="font-semibold font-mono">Préstamos con cuotas vencidas: ${overdueLoansCount}</h3>
+            <h3 class="font-semibold font-mono">Préstamos vigentes: ${approvedLoansCount}</h3>
             <div class="flex flex-col items-center">
               <span class="text-xl font-bold text-red-600">${defaultRate}% </span>
             </div>
@@ -90,10 +95,10 @@
         </div>
         <div class="xl:col-span-5">
           <div class="bg-white rounded-lg flex flex-col gap-4 p-8">
-            <h3 class="text-l font-bold">Beneficios de Préstamos (intereses de cuotas pagadas):</h3> 
-            <h3 class="text-l font-bold text-green-600">$ ${profitsEarned}</h3>
-            <h3 class="text-l font-bold">Beneficio de Préstamos futuro (intereses de cuotas por pagar):</h3> 
-            <h3 class="text-l font-bold text-red-600">$ ${profitsToEarn}</h3>
+            <h3 class="text-l font-semibold font-mono">Beneficios de Préstamos (intereses de cuotas pagadas):</h3> 
+            <h3 class="text-l font-bold text-green-600 text-center"> <fmt:formatNumber value="${profitsEarned}" type="currency"/></h3>
+            <h3 class="text-l font-semibold font-mono">Beneficio de Préstamos futuro (intereses de cuotas por pagar):</h3> 
+            <h3 class="text-l font-bold text-red-600 text-center"><fmt:formatNumber value="${profitsToEarn}" type="currency"/></h3>
           </div>
         </div>
       </div>
