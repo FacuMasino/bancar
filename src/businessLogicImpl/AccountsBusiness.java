@@ -126,8 +126,7 @@ public class AccountsBusiness implements IAccountsBusiness
 				if (account.getBalance().compareTo(BigDecimal.ZERO) < 0)
 				{
 					throw new BusinessException(
-							"Existen prestamos vigentes y saldo negativo en la cuenta N° "
-									+ accountId);
+							"Existen prestamos vigentes y la cuenta tiene saldo negativo.");
 				}
 				throw new BusinessException("El cliente posee prestamos sin saldar.");
 			}

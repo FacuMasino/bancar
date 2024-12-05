@@ -224,7 +224,7 @@ public class AdminAccountsServlet extends HttpServlet
 		}
 		catch (BusinessException ex)
 		{
-			Helper.setReqMessage(request, ex.getMessage(), MessageType.ERROR);
+			Helper.setReqMessage(request," No es posible dar de baja la cuenta N° "  + accountId + ". " + ex.getMessage(), MessageType.ERROR);
 			ex.printStackTrace();
 		    viewClientAccounts (request, response, clientId); 
 		}
